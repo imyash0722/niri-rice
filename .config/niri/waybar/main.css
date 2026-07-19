@@ -21,7 +21,7 @@ window>box {
 }
 
 #workspaces button {
-  padding: 0px 4px;
+  padding: 0px 8px;
   color: @fg;
   background: transparent;
   border-radius: 2px;
@@ -37,7 +37,7 @@ window>box {
 #workspaces button.active,
 #workspaces button.focused {
   background-color: @fg;
-  color: black;
+  color: @bg;
 }
 
 
@@ -55,6 +55,8 @@ window>box {
   padding: 0 10px;
   border-right: none;
   color: @fg;
+  background: transparent;
+  box-shadow: none;
 }
 
 
@@ -101,6 +103,11 @@ window>box {
   margin-left: 8px;
 }
 
-#battery {
+#battery,
+#battery * {
   margin-left: 5px;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
 }
