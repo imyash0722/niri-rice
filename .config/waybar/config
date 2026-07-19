@@ -107,10 +107,10 @@
     "on-click": "foot --app-id=foot.bluetui --window-size-chars=81x34 -e bluetui"
   },
   "pulseaudio": {
-    "format": "{volume}% {icon}   {format_source}",
-    "format-bluetooth": "{volume}% {icon}󰂯   {format_source}",
-    "format-bluetooth-muted": " {icon}󰂯   {format_source}",
-    "format-muted": "󰝟   {format_source}",
+    "format": "{volume}% {icon}      {format_source}",
+    "format-bluetooth": "{volume}% {icon}󰂯      {format_source}",
+    "format-bluetooth-muted": " {icon}󰂯      {format_source}",
+    "format-muted": "󰝟      {format_source}",
     "format-source": "{volume}% 󰍬",
     "format-source-muted": "󰍭",
     "format-icons": {

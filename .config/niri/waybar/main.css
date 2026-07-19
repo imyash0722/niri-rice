@@ -53,10 +53,13 @@ window>box {
 #bluetooth,
 #network {
   padding: 0 10px;
+  margin: 0 4px;
   border-right: none;
   color: @fg;
-  background: transparent;
+  background-color: transparent;
+  background-image: none;
   box-shadow: none;
+  border: none;
 }
 
 
@@ -103,8 +106,7 @@ window>box {
   margin-left: 8px;
 }
 
-#battery,
-#battery * {
+#battery {
   margin-left: 5px;
   background-color: transparent;
   background-image: none;
