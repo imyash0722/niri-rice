@@ -240,7 +240,7 @@ binds {
     Mod+Shift+Q { spawn "sh" "-c" "~/.config/niri/scripts/power.sh"; }
 
     // Lock screen
-    Mod+L allow-inhibiting=false { spawn "swaylock"; }
+    Mod+L allow-inhibiting=false { spawn "sh" "-c" "~/.config/niri/scripts/lock.sh"; }
 
     // Browser
     Mod+B { spawn "firefox-developer-edition"; }
