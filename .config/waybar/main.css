@@ -103,7 +103,8 @@ window>box {
   margin-left: 8px;
 }
 
-#battery {
+#battery,
+#battery * {
   margin-left: 5px;
   background: transparent !important;
   background-color: transparent !important;
