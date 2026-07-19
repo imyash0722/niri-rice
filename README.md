@@ -119,7 +119,7 @@ niri-rice/
 | Browser | `Mod+Shift+E` |
 | File Manager | `Mod+E` |
 | Overview | `Mod+Tab` |
-| Float ↔ Tile Focus | `Mod+\`` |
+| Float ↔ Tile Focus | <kbd>Mod</kbd>+<kbd>`</kbd> |
 | Screenshot (region) | `Mod+Shift+S` |
 | Screenshot (screen) | `Mod+S` |
 | Screenshot (window) | `Mod+Ctrl+S` |
