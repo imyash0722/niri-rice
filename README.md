@@ -9,6 +9,7 @@
 ![Theme](https://img.shields.io/badge/Theme-Tokyo%20Night-1a1b26?style=for-the-badge&logoColor=white)
 ![Shell](https://img.shields.io/badge/Shell-ZSH-89b4fa?style=for-the-badge&logo=gnu-bash&logoColor=white)
 ![Migrated](https://img.shields.io/badge/Migrated%20from-SwayFX-a9b1d6?style=for-the-badge)
+![Distro](https://img.shields.io/badge/Distro-CachyOS-00b4d8?style=for-the-badge&logo=archlinux&logoColor=white)
 
 *A scrollable, tiling Wayland desktop built on the niri compositor — migrated from SwayFX. Animated wallpapers, Tokyo Night colours, and a fully custom Waybar.*
 
@@ -154,6 +155,6 @@ This means your lockscreen always matches your wallpaper without any manual conf
 
 <div align="center">
 
-*Made with 💙 on Arch Linux*
+*Made with 💙 on CachyOS*
 
 </div>
