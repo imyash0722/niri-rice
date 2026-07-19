@@ -22,7 +22,7 @@
 - 🌊 **niri** — Scrollable, infinite-canvas tiling Wayland compositor
 - 🎬 **mpvpaper** — Animated GIF / video wallpapers rendered by MPV
 - 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
-- 🚀 **Rofi** — App launcher with a squared-nord dark theme
+- 🚀 **Rofi** — App launcher with a custom 'blues' dark theme
 - 📸 **Satty** — Screenshot annotation tool (Niri native screenshot support via `Mod+Shift+S`)
 - 🔒 **Swaylock-effects** — Modern lockscreen: auto-captures and blurs your current screen, featuring a bold digital clock
 - 🎵 **Cava** — Audio spectrum visualizer
@@ -138,6 +138,14 @@ The `lock.sh` script automatically detects your current wallpaper:
 - If it's a **static image** (`swaybg`) → uses it directly
 
 This means your lockscreen always matches your wallpaper without any manual configuration.
+
+---
+
+## 🔧 System Scripts (Hardware Fixes)
+
+Inside the `system-scripts/` directory at the root of this repo, you will find a fix for the **MediaTek mt7921e Wi-Fi card** failing to wake from sleep:
+
+- `mt7921e-sleep.sh`: Must be copied to `/usr/lib/systemd/system-sleep/` and made executable (`chmod +x`). It safely unloads the driver before sleep and reloads it on wake to prevent the card from dropping off the PCIe bus.
 
 ---
 

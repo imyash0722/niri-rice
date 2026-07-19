@@ -18,6 +18,7 @@
     "custom/keep-alive",
     "bluetooth",
     "pulseaudio",
+    "pulseaudio#microphone",
     "network",
     "battery"
   ],
@@ -107,12 +108,10 @@
     "on-click": "foot --app-id=foot.bluetui --window-size-chars=81x34 -e bluetui"
   },
   "pulseaudio": {
-    "format": "{volume}% {icon}  {format_source}",
-    "format-bluetooth": "{volume}% {icon}󰂯  {format_source}",
-    "format-bluetooth-muted": " {icon}󰂯  {format_source}",
-    "format-muted": "󰝟  {format_source}",
-    "format-source": "{volume}% 󰍬",
-    "format-source-muted": "󰍭",
+    "format": "{volume}% {icon}",
+    "format-bluetooth": "{volume}% {icon}󰂯",
+    "format-bluetooth-muted": " {icon}󰂯",
+    "format-muted": "󰝟",
     "format-icons": {
       "headphone": "󰋋",
       "hands-free": "󰥰",
@@ -126,8 +125,13 @@
         "󰕾"
       ]
     },
+    "on-click": "foot --app-id=foot.pipemixer --window-size-chars=72x24 -e pipemixer"
+  },
+  "pulseaudio#microphone": {
+    "format": "{format_source}",
+    "format-source": "{volume}% 󰍬",
+    "format-source-muted": "󰍭",
     "on-right-click": "~/.config/niri/waybar/scripts/mic-toggle --toggle",
-    "on-middle-click": "nautilus /home/pineapple",
     "on-click": "foot --app-id=foot.pipemixer --window-size-chars=72x24 -e pipemixer"
   },
   "custom/updates": {

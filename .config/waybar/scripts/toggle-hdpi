@@ -1,24 +1,22 @@
 #!/bin/sh
-# toggle-hdpi — niri version
-# Uses niri msg --json outputs instead of swaymsg to detect current resolution
+CURRENT=$(swaymsg -t get_outputs --raw | jq '.[] | [.current_mode.width, .current_mode.height] | join("x")')
 
 HIGH="ﳍ"
 STANDARD="ﳭ"
 
-CURRENT=$(niri msg --json outputs 2>/dev/null | jq -r '.[].current_mode | "\(.width)x\(.height)"' | head -1)
-
-if [ "$CURRENT" = "3840x2160" ]; then
-    if [ "$1" = "--toggle" ]; then
-        sed -i '/output "eDP-1"/,/^}/s/scale .*/scale 1.0/' ~/.config/niri/config.kdl
-        niri msg action do reload-config 2>/dev/null || true
-        pkill -x waybar; nohup waybar &
-    fi
-    echo "$HIGH"
-elif [ "$CURRENT" = "1920x1080" ]; then
-    if [ "$1" = "--toggle" ]; then
-        sed -i '/output "eDP-1"/,/^}/s/scale .*/scale 2.0/' ~/.config/niri/config.kdl
-        niri msg action do reload-config 2>/dev/null || true
-        pkill -x waybar; nohup waybar &
-    fi
-    echo "$STANDARD"
+if [ "$CURRENT" = '"3840x2160"' ]; then
+  if [ "$1" = "--toggle" ]; then
+    swaymsg "output eDP-1 mode --custom 1920x1080@60Hz"
+    killall waybar
+    nohup waybar
+  fi
+  echo $HIGH
+elif [ "$CURRENT" = '"1920x1080"' ]; then
+  if [ "$1" = "--toggle" ]; then
+    swaymsg "output eDP-1 mode --custom 3840x2160@60Hz"
+    killall waybar
+    nohup waybar
+  fi
+  echo $STANDARD
 fi
+
