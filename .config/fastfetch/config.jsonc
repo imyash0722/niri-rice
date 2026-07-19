@@ -38,7 +38,8 @@
     },
     {
       "type": "packages",
-      "key": "Pkgs "
+      "key": "Pkgs ",
+      "format": "{all}"
     },
     {
       "type": "shell",
