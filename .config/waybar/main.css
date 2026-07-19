@@ -55,6 +55,8 @@ window>box {
   padding: 0 10px;
   border-right: none;
   color: @fg;
+  background: transparent;
+  box-shadow: none;
 }
 
 
