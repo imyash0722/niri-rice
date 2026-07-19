@@ -24,7 +24,7 @@
 - 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
 - 🚀 **Rofi** — App launcher with a squared-nord dark theme
 - 📸 **Satty** — Screenshot annotation tool (Niri native screenshot support via `Mod+Shift+S`)
-- 🔒 **Swaylock** — Smart lockscreen: auto-extracts a frame from your animated wallpaper as the lock background
+- 🔒 **Swaylock-effects** — Modern lockscreen: auto-captures and blurs your current screen, featuring a bold digital clock
 - 🎵 **Cava** — Audio spectrum visualizer
 - 🐾 **Foot** — Fast, GPU-rendered Wayland terminal
 - ⭐ **Starship** — Cross-shell prompt
