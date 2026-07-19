@@ -23,6 +23,10 @@ window {
     location:   center;
     width:      480;
 
+    border:     1px;
+    border-color: #688B87;
+    border-radius: 4px;
+
     background-color:   @bg0;
 }
 
