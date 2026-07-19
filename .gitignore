@@ -1,0 +1,17 @@
+# Wallpapers - too large for git (stored locally only)
+Wallpapers/*.gif
+Wallpapers/*.mp4
+Wallpapers/*.webm
+Wallpapers/*.webp
+Wallpapers/*.jpg
+Wallpapers/*.jpeg
+Wallpapers/*.png
+
+# Secrets / sensitive
+.env
+*.secret
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,59 @@
+# btop theme — matched to ii QuickShell bar (Material You, dark)
+# Generated from ~/.local/state/quickshell/user/generated/material_colors.scss
+
+# Backgrounds
+theme[main_bg]="#131314"
+theme[selected_bg]="#1F2021"
+
+# Foregrounds
+theme[main_fg]="#E4E2E3"
+theme[title]="#D2E5F5"
+theme[selected_fg]="#E4E2E3"
+theme[inactive_fg]="#8D9195"
+theme[proc_misc]="#C3C7CB"
+
+# Box borders — outline / outlineVariant
+theme[cpu_box]="#43474B"
+theme[mem_box]="#43474B"
+theme[net_box]="#43474B"
+theme[proc_box]="#43474B"
+theme[div_line]="#292A2B"
+
+# Highlight / interactive accent
+theme[hi_fg]="#B6C9D8"
+
+# Temperature gradient: cool → warm → hot
+theme[temp_start]="#B6C9D8"
+theme[temp_mid]="#C1C7CE"
+theme[temp_end]="#FFB4AB"
+
+# CPU gradient: primary → secondary → tertiary
+theme[cpu_start]="#B6C9D8"
+theme[cpu_mid]="#C1C7CE"
+theme[cpu_end]="#D4C0D9"
+
+# Memory
+theme[free_start]="#B5CCBA"
+theme[free_mid]="#B6C9D8"
+theme[free_end]="#C1C7CE"
+
+theme[cached_start]="#C1C7CE"
+theme[cached_mid]="#B6C9D8"
+theme[cached_end]="#D4C0D9"
+
+theme[available_start]="#B6C9D8"
+theme[available_mid]="#C1C7CE"
+theme[available_end]="#D4C0D9"
+
+theme[used_start]="#B6C9D8"
+theme[used_mid]="#C1C7CE"
+theme[used_end]="#FFB4AB"
+
+# Network
+theme[download_start]="#B6C9D8"
+theme[download_mid]="#C1C7CE"
+theme[download_end]="#D4C0D9"
+
+theme[upload_start]="#B5CCBA"
+theme[upload_mid]="#C1C7CE"
+theme[upload_end]="#B6C9D8"

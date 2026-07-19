@@ -1,0 +1,362 @@
+// ─────────────────────────────────────────────────────────
+//  niri config — pineapple rice
+//  KDL format: https://kdl.dev
+//  Full reference: https://niri-wm.github.io/niri/Configuration:-Introduction
+// ─────────────────────────────────────────────────────────
+
+// ── Input ────────────────────────────────────────────────
+input {
+    keyboard {
+        xkb {
+            layout "us"
+        }
+        numlock
+    }
+
+    touchpad {
+        tap
+        natural-scroll
+        dwt             // disable while typing
+    }
+
+    mouse {}
+}
+
+// ── Outputs (mirrors your Sway output block) ─────────────
+output "DP-1" {
+    scale 1.5
+}
+
+output "eDP-1" {
+    scale 1.0
+}
+
+// ── Layout ───────────────────────────────────────────────
+layout {
+    gaps 6
+
+    // Center focused column when it doesn't fit alongside the previous one
+    center-focused-column "on-overflow"
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    default-column-width { proportion 0.5; }
+
+    focus-ring {
+        width 1
+        active-color   "#688B87"   // dimmed version of rofi accent
+        inactive-color "#0D0F18"   // your bg colour
+    }
+
+    border {
+        off
+    }
+
+    shadow {
+        on
+        softness 20
+        spread   3
+        offset x=0 y=4
+        color "#0007"
+    }
+}
+
+// ── Animations ───────────────────────────────────────────
+animations {
+    // Feels close to your Sway animation_duration_ms 300
+    slowdown 0.9
+}
+
+// ── Screenshot path (same folder as Sway) ────────────────
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+// ── Prefer server-side decorations ───────────────────────
+prefer-no-csd
+
+// ── Startup daemons ──────────────────────────────────────
+
+// Waybar
+spawn-at-startup "waybar" "-c" "/home/pineapple/.config/niri/waybar/config" "-s" "/home/pineapple/.config/niri/waybar/style.css"
+
+// Animated wallpaper (same gif + flags as Sway)
+spawn-sh-at-startup "pkill mpvpaper; mpvpaper -o 'no-audio loop panscan=1.0' '*' /home/pineapple/Pictures/Wallpapers/4000x4000__Hakui_By-pass-ezgif.com-crop.gif"
+
+// Clipboard history (cliphist)
+spawn-sh-at-startup "pkill wl-paste; wl-paste --type text --watch cliphist store & wl-paste --type image --watch cliphist store &"
+
+// Notifications
+spawn-at-startup "dunst"
+
+// KDE Connect
+spawn-at-startup "kdeconnectd"
+
+// KDE Wallet (keyring)
+spawn-at-startup "kwalletd5"
+
+// Kanshi (display hotplug)
+spawn-at-startup "kanshi"
+
+// Idle manager (same timeouts as Sway)
+spawn-at-startup "swayidle" "-w" "timeout" "300" "/home/pineapple/.config/niri/scripts/lock.sh" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors" "before-sleep" "/home/pineapple/.config/niri/scripts/lock.sh"
+
+// ── Window rules ─────────────────────────────────────────
+
+// WezTerm initial configure workaround
+window-rule {
+    match app-id="foot.floating"
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+
+// Firefox Picture-in-Picture
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+// Firefox Developer Edition PiP
+window-rule {
+    match app-id=r#"firefox-developer-edition$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+// Bitwarden popup
+window-rule {
+    match app-id="firefox" title="Bitwarden"
+    open-floating true
+}
+
+// Floating utility windows
+window-rule {
+    match app-id="blueman-manager"
+    open-floating true
+}
+
+window-rule {
+    match app-id="org.pulseaudio.pavucontrol"
+    open-floating true
+}
+
+window-rule {
+    match app-id="kcalc"
+    open-floating true
+}
+
+window-rule {
+    match app-id="qalculate-gtk"
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^io\.github\.tasks$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^com\.github\.gi_lom\.dialect$"#
+    open-floating true
+}
+
+// Foot floating app-ids (nmtui, pipemixer, bluetui, batctl)
+window-rule {
+    match app-id="foot.nmtui"
+    open-floating true
+}
+
+window-rule {
+    match app-id="foot.pipemixer"
+    open-floating true
+}
+
+window-rule {
+    match app-id="foot.bluetui"
+    open-floating true
+}
+
+window-rule {
+    match app-id="foot.batctl"
+    open-floating true
+}
+
+window-rule {
+    match app-id="wezterm.floating.notes"
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^org\.twosheds\.iwgtk$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id="iwgtk"
+    open-floating true
+}
+
+// Zoom meeting sharing indicator
+window-rule {
+    match title=r#"^Zoom Meeting"#
+    open-floating false
+}
+
+// Rounded corners for everything
+window-rule {
+    geometry-corner-radius 2
+    clip-to-geometry true
+}
+
+// ── Binds ────────────────────────────────────────────────
+// NOTE: Shortcuts are intentionally minimal here.
+// Full reference of your Sway shortcuts: /mnt/SHARED/LINUX/dotfiles/sway_shortcuts.txt
+// Add your personal keybinds here when you're ready.
+
+binds {
+    // Show overview
+    Mod+Tab { toggle-overview; }
+    // Switch focus between floating and tiling
+    Mod+Grave { switch-focus-between-floating-and-tiling; }
+    // Show hotkey overlay
+    Mod+Slash { show-hotkey-overlay; }
+
+    // Terminal
+    Mod+Return { spawn "foot"; }
+    Mod+Shift+Return { spawn-sh "foot --app-id=foot.floating"; }
+
+    // App launcher
+    Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
+
+    // Kill window
+    Mod+Q repeat=false { close-window; }
+
+    // Power menu
+    Mod+Shift+Q { spawn "sh" "-c" "~/.config/niri/scripts/power.sh"; }
+
+    // Lock screen
+    Mod+L allow-inhibiting=false { spawn "swaylock"; }
+
+    // Browser
+    Mod+B { spawn "firefox-developer-edition"; }
+
+    // File manager
+    Mod+E { spawn-sh "env QT_QPA_PLATFORMTHEME=kde dolphin"; }
+
+    // Quick notes (WezTerm nvim)
+    Mod+N { spawn-sh "wezterm start --cwd ~/Notes --class wezterm.floating.notes -- zsh -i -c nvim"; }
+
+    // Clipboard history
+    Mod+V { spawn-sh "cliphist list | rofi -dmenu -p 'Clipboard' | cliphist decode | wl-copy"; }
+
+    // Password manager
+    Mod+P { spawn-sh "rofi-rbw --selector rofi --typer wtype --clipboarder wl-copy"; }
+
+    // Settings
+
+    // Bluetooth
+    Mod+Shift+B { spawn "blueman-manager"; }
+
+    // Network (nmtui)
+    Mod+Shift+W { spawn-sh "foot --app-id=foot.nmtui --window-size-chars=81x34 -e nmtui"; }
+
+    // Screenshots
+    Mod+S             { screenshot-screen; }
+    Mod+Shift+S       { screenshot; }
+    Mod+Ctrl+S        { screenshot-window; }
+
+    // Screen recording
+    Mod+R { spawn "obs"; }
+
+    // Color picker
+    Mod+Shift+P { spawn-sh "grim -g \"$(slurp -p)\" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy"; }
+
+
+
+    // Focus movement
+    // Mod+H     { focus-column-left; }
+    // Mod+J     { focus-window-down; }
+    // Mod+K     { focus-window-up; }
+    // Mod+L     { focus-column-right; }
+    Mod+Left  { focus-column-left; }
+    Mod+Down  { focus-window-down; }
+    Mod+Up    { focus-window-up; }
+    Mod+Right { focus-column-right; }
+
+    // Move column
+    Mod+Shift+Left  { move-column-left; }
+    Mod+Shift+Right { move-column-right; }
+    Mod+Shift+Up    { move-window-up; }
+    Mod+Shift+Down  { move-window-down; }
+    // Mod+Shift+H     { move-column-left; }
+    // Mod+Shift+L     { move-column-right; }
+    // Mod+Shift+K     { move-window-up; }
+    // Mod+Shift+J     { move-window-down; }
+
+    // Move to monitor
+    Mod+Ctrl+Shift+Left  { move-column-to-monitor-left; }
+    Mod+Ctrl+Shift+Right { move-column-to-monitor-right; }
+
+    // Workspaces
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+
+    Mod+Alt+1 { move-column-to-workspace 1; }
+    Mod+Alt+2 { move-column-to-workspace 2; }
+    Mod+Alt+3 { move-column-to-workspace 3; }
+    Mod+Alt+4 { move-column-to-workspace 4; }
+    Mod+Alt+5 { move-column-to-workspace 5; }
+    Mod+Alt+6 { move-column-to-workspace 6; }
+    Mod+Alt+7 { move-column-to-workspace 7; }
+    Mod+Alt+8 { move-column-to-workspace 8; }
+    Mod+Alt+9 { move-column-to-workspace 9; }
+
+    // Scroll through workspaces
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
+
+    // Float / unfloat
+    Mod+Space { toggle-window-floating; }
+
+    // Fullscreen
+    Mod+F { maximize-column; }
+
+    // Column width
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+    Mod+W     { switch-preset-column-width; }
+
+    // Audio
+    XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"; }
+    XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; }
+    XF86AudioMute         allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioMicMute      allow-when-locked=true { spawn-sh "~/.config/niri/scripts/mic-debounce"; }
+    XF86AudioPlay         allow-when-locked=true { spawn "playerctl" "play-pause"; }
+    XF86AudioPrev         allow-when-locked=true { spawn "playerctl" "previous"; }
+    XF86AudioNext         allow-when-locked=true { spawn "playerctl" "next"; }
+
+    // Brightness
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "+5%"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
+
+    // Reload Config
+    Mod+Shift+R { spawn "/home/pineapple/.config/niri/scripts/reload.sh"; }
+
+    // Quit niri (with confirmation dialog)
+    Mod+Escape { quit; }
+
+    // Escape hatch for shortcut inhibitors
+    Mod+Shift+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+}

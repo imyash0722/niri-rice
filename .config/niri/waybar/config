@@ -1,0 +1,159 @@
+{
+  "spacing": 4,
+  "bar_id": "bar-0",
+  "ipc": true,
+  "hidden_state": "show",
+  "modules-left": [
+    "clock",
+    "mpris",
+    "custom/updates"
+  ],
+  "modules-center": [
+    "niri/workspaces"
+  ],
+  "modules-right": [
+    "tray",
+    "custom/power-profile",
+    "custom/dpi",
+    "custom/keep-alive",
+    "bluetooth",
+    "pulseaudio",
+    "network",
+    "battery"
+  ],
+  "custom/keep-alive": {
+    "exec": "~/.config/niri/waybar/scripts/keep-alive",
+    "on-click": "~/.config/niri/waybar/scripts/keep-alive --toggle",
+    "return-type": "json",
+    "interval": 2
+  },
+  "custom/power-consumption": {
+    "exec": "~/.config/niri/waybar/scripts/power-consumption"
+  },
+  "custom/power-profile": {
+    "exec": "~/.config/niri/waybar/scripts/power-profile",
+    "on-click": "~/.config/niri/waybar/scripts/power-profile --toggle",
+    "interval": 2
+  },
+  "custom/dpi": {
+    "exec": "~/.config/niri/waybar/scripts/toggle-hdpi",
+    "on-click": "~/.config/niri/waybar/scripts/toggle-hdpi --toggle",
+    "restart-interval": 2
+  },
+  "clock": {
+    "interval": 60,
+    "format": "{:%H:%M}",
+    "on-click": "gnome-calendar",
+    "max-length": 25
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon}",
+    "format-charging": "",
+    "format-plugged": "",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "on-click": "foot --app-id=foot.batctl --window-size-chars=81x34 -e sudo batctl"
+  },
+  "wlr/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "",
+      "5": "",
+      "urgent": "",
+      "active": "",
+      "default": ""
+    },
+    "sort-by-number": true
+  },
+  "niri/workspaces": {
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": []
+    },
+    "format": " {index} "
+  },
+  "network": {
+    "format-wifi": "󰤨",
+    "on-click": "foot --app-id=foot.nmtui --window-size-chars=81x34 -e nmtui",
+    "format-ethernet": "󰈀   {ipaddr}/{cidr}",
+    "format-linked": "󰈀   {ifname} (No IP)",
+    "format-disconnected": "󱚵   Disconnected",
+    "tooltip-format": "{ifname} via {gwaddr}"
+  },
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱",
+    "format-connected-battery": "󰂱",
+    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+    "on-click": "foot --app-id=foot.bluetui --window-size-chars=81x34 -e bluetui"
+  },
+  "pulseaudio": {
+    "format": "{volume}% {icon}   {format_source}",
+    "format-bluetototh": "{volume}% {icon}   {format_source}",
+    "format-bluetooth-muted": " {icon}   {format_source}",
+    "format-muted": "󰝟   {format_source}",
+    "format-source": "{volume}% ",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "󰋋",
+      "hands-free": "󰥰",
+      "headset": "󰋎",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [
+        "",
+        "",
+        ""
+      ]
+    },
+    "on-right-click": "~/.config/niri/waybar/scripts/mic-toggle --toggle",
+    "on-middle-click": "nautilus /home/pineapple",
+    "on-click": "foot --app-id=foot.pipemixer --window-size-chars=72x24 -e pipemixer"
+  },
+  "custom/updates": {
+    "exec": "~/.config/niri/waybar/scripts/check-updates",
+    "interval": 3600, // 3600 seconds = 1 hour
+    "return-type": "json",
+    "tooltip": true,
+    "on-click": "~/.config/niri/waybar/scripts/check-updates update"
+  },
+  "mpris": {
+    "format": "{player_icon} {dynamic}",
+    "format-paused": "{status_icon} <i>{dynamic}</i>",
+     "title-len": 32,
+     "album-len": 0,
+     "artist-len": 0,
+    "player-icons": {
+      "default": "⏸",
+      "mpv": "🎵"
+    },
+    "status-icons": {
+      "paused": "▶"
+    }
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 0
+  }
+}
+// vi: ft=jsonc

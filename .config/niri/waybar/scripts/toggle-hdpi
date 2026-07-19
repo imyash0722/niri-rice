@@ -1,0 +1,24 @@
+#!/bin/sh
+# toggle-hdpi — niri version
+# Uses niri msg --json outputs instead of swaymsg to detect current resolution
+
+HIGH="ﳍ"
+STANDARD="ﳭ"
+
+CURRENT=$(niri msg --json outputs 2>/dev/null | jq -r '.[].modes[.[].current_mode] | "\(.width)x\(.height)"' | head -1)
+
+if [ "$CURRENT" = "3840x2160" ]; then
+    if [ "$1" = "--toggle" ]; then
+        sed -i '/output "eDP-1"/,/^}/s/scale .*/scale 1.0/' ~/.config/niri/config.kdl
+        niri msg action do reload-config 2>/dev/null || true
+        pkill -x waybar; nohup waybar -c ~/.config/niri/waybar/config -s ~/.config/niri/waybar/style.css &
+    fi
+    echo "$HIGH"
+elif [ "$CURRENT" = "1920x1080" ]; then
+    if [ "$1" = "--toggle" ]; then
+        sed -i '/output "eDP-1"/,/^}/s/scale .*/scale 2.0/' ~/.config/niri/config.kdl
+        niri msg action do reload-config 2>/dev/null || true
+        pkill -x waybar; nohup waybar -c ~/.config/niri/waybar/config -s ~/.config/niri/waybar/style.css &
+    fi
+    echo "$STANDARD"
+fi

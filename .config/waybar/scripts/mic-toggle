@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ "$1" == "--toggle" ]; then
+  # Toggle mute state
+  wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+fi
+
+# Check current mute state using wpctl
+if wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -q "MUTED"; then
+    echo '{"text": "", "tooltip": "Microphone is muted", "class": "muted"}'
+else
+    echo '{"text": "", "tooltip": "Microphone is active", "class": "active"}'
+fi

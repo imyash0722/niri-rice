@@ -1,0 +1,17 @@
+#!/bin/bash
+LOCKFILE="/tmp/mic_mute.lock"
+
+# If the lockfile exists, exit immediately (debounce)
+if [ -e "$LOCKFILE" ]; then
+    exit 0
+fi
+
+# Create lockfile
+touch "$LOCKFILE"
+
+# Toggle the microphone
+wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+
+# Remove lockfile after 0.2 seconds to allow the next intentional press
+sleep 0.2
+rm -f "$LOCKFILE"

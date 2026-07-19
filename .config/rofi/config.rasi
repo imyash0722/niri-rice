@@ -1,0 +1,6 @@
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    terminal: "foot";
+}
+@theme "squared-nord"
