@@ -1,6 +1,6 @@
 * {
   border: none;
-  font-family: SFMono Nerd Font, Font Awesome, Hack Nerd Font Mono;
+  font-family: JetBrainsMono Nerd Font Mono, SFMono Nerd Font, Font Awesome;
   font-weight: 600;
 }
 
@@ -47,6 +47,7 @@ window>box {
 #custom-dpi,
 #custom-theme,
 #pulseaudio,
+#pulseaudio-microphone,
 #battery,
 #tray,
 #custom-pacman,
