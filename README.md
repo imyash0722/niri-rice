@@ -155,6 +155,7 @@ This means your lockscreen always matches your wallpaper without any manual conf
 
 <div align="center">
 
+*Original Sway dotfiles base by [jim-fx](https://github.com/jim-fx/.dotfiles).*<br>
 *Made with 💙 on CachyOS*
 
 </div>
