@@ -106,8 +106,8 @@ window>box {
 #battery,
 #battery * {
   margin-left: 5px;
-  background: transparent !important;
   background-color: transparent !important;
+  background-image: none !important;
   box-shadow: none !important;
   border: none !important;
 }
