@@ -9,7 +9,7 @@
     "custom/updates"
   ],
   "modules-center": [
-    "sway/workspaces"
+    "niri/workspaces"
   ],
   "modules-right": [
     "tray",
@@ -22,22 +22,22 @@
     "battery"
   ],
   "custom/keep-alive": {
-    "exec": "~/.config/waybar/scripts/keep-alive",
-    "on-click": "~/.config/waybar/scripts/keep-alive --toggle",
+    "exec": "~/.config/niri/waybar/scripts/keep-alive",
+    "on-click": "~/.config/niri/waybar/scripts/keep-alive --toggle",
     "return-type": "json",
     "interval": 2
   },
   "custom/power-consumption": {
-    "exec": "~/.config/waybar/scripts/power-consumption"
+    "exec": "~/.config/niri/waybar/scripts/power-consumption"
   },
   "custom/power-profile": {
-    "exec": "~/.config/waybar/scripts/power-profile",
-    "on-click": "~/.config/waybar/scripts/power-profile --toggle",
+    "exec": "~/.config/niri/waybar/scripts/power-profile",
+    "on-click": "~/.config/niri/waybar/scripts/power-profile --toggle",
     "interval": 2
   },
   "custom/dpi": {
-    "exec": "~/.config/waybar/scripts/toggle-hdpi",
-    "on-click": "~/.config/waybar/scripts/toggle-hdpi --toggle",
+    "exec": "~/.config/niri/waybar/scripts/toggle-hdpi",
+    "on-click": "~/.config/niri/waybar/scripts/toggle-hdpi --toggle",
     "restart-interval": 2
   },
   "clock": {
@@ -67,33 +67,25 @@
     "format": "{icon}",
     "on-click": "activate",
     "format-icons": {
-      "1": "",
-      "2": "",
-      "3": "",
-      "4": "",
-      "5": "",
-      "urgent": "",
-      "active": "",
-      "default": ""
+      "1": "󰆍",
+      "2": "󰊯",
+      "3": "󰨞",
+      "4": "󰓃",
+      "5": "󰭹",
+      "urgent": "󰀪",
+      "active": "󰪥",
+      "default": "󰝤"
     },
     "sort-by-number": true
   },
-  "sway/workspaces": {
+  "niri/workspaces": {
     "persistent-workspaces": {
-      "1: Code": [],
-      "2: Browser": [],
-      "3: Chat": [],
-      "4: Files": []
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": []
     },
-    "format": "{icon}{name}",
-    "format-icons": {
-      "1: Code": "",
-      "2: Browser": "󰖟",
-      "3: Chat": "",
-      "4: Files": "",
-      "urgent": "",
-      "default": ""
-    }
+    "format": " {index} "
   },
   "network": {
     "format-wifi": "󰤨",
@@ -116,34 +108,34 @@
   },
   "pulseaudio": {
     "format": "{volume}% {icon}   {format_source}",
-    "format-bluetototh": "{volume}% {icon}   {format_source}",
-    "format-bluetooth-muted": " {icon}   {format_source}",
+    "format-bluetooth": "{volume}% {icon}󰂯   {format_source}",
+    "format-bluetooth-muted": " {icon}󰂯   {format_source}",
     "format-muted": "󰝟   {format_source}",
-    "format-source": "{volume}% ",
-    "format-source-muted": "",
+    "format-source": "{volume}% 󰍬",
+    "format-source-muted": "󰍭",
     "format-icons": {
       "headphone": "󰋋",
       "hands-free": "󰥰",
       "headset": "󰋎",
-      "phone": "",
-      "portable": "",
-      "car": "",
+      "phone": "󰏲",
+      "portable": "󰏲",
+      "car": "󰄋",
       "default": [
-        "",
-        "",
-        ""
+        "󰕿",
+        "󰖀",
+        "󰕾"
       ]
     },
-    "on-right-click": "~/.config/waybar/scripts/mic-toggle --toggle",
+    "on-right-click": "~/.config/niri/waybar/scripts/mic-toggle --toggle",
     "on-middle-click": "nautilus /home/pineapple",
     "on-click": "foot --app-id=foot.pipemixer --window-size-chars=72x24 -e pipemixer"
   },
   "custom/updates": {
-    "exec": "~/.config/waybar/scripts/check-updates",
+    "exec": "~/.config/niri/waybar/scripts/check-updates",
     "interval": 3600, // 3600 seconds = 1 hour
     "return-type": "json",
     "tooltip": true,
-    "on-click": "~/.config/waybar/scripts/check-updates update"
+    "on-click": "~/.config/niri/waybar/scripts/check-updates update"
   },
   "mpris": {
     "format": "{player_icon} {dynamic}",

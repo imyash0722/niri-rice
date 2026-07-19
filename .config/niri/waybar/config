@@ -67,14 +67,14 @@
     "format": "{icon}",
     "on-click": "activate",
     "format-icons": {
-      "1": "",
-      "2": "",
-      "3": "",
-      "4": "",
-      "5": "",
-      "urgent": "",
-      "active": "",
-      "default": ""
+      "1": "󰆍",
+      "2": "󰊯",
+      "3": "󰨞",
+      "4": "󰓃",
+      "5": "󰭹",
+      "urgent": "󰀪",
+      "active": "󰪥",
+      "default": "󰝤"
     },
     "sort-by-number": true
   },
@@ -108,22 +108,22 @@
   },
   "pulseaudio": {
     "format": "{volume}% {icon}   {format_source}",
-    "format-bluetototh": "{volume}% {icon}   {format_source}",
-    "format-bluetooth-muted": " {icon}   {format_source}",
+    "format-bluetooth": "{volume}% {icon}󰂯   {format_source}",
+    "format-bluetooth-muted": " {icon}󰂯   {format_source}",
     "format-muted": "󰝟   {format_source}",
-    "format-source": "{volume}% ",
-    "format-source-muted": "",
+    "format-source": "{volume}% 󰍬",
+    "format-source-muted": "󰍭",
     "format-icons": {
       "headphone": "󰋋",
       "hands-free": "󰥰",
       "headset": "󰋎",
-      "phone": "",
-      "portable": "",
-      "car": "",
+      "phone": "󰏲",
+      "portable": "󰏲",
+      "car": "󰄋",
       "default": [
-        "",
-        "",
-        ""
+        "󰕿",
+        "󰖀",
+        "󰕾"
       ]
     },
     "on-right-click": "~/.config/niri/waybar/scripts/mic-toggle --toggle",
