@@ -9,7 +9,7 @@
     "custom/updates"
   ],
   "modules-center": [
-    "niri/workspaces"
+    "sway/workspaces"
   ],
   "modules-right": [
     "tray",
@@ -52,14 +52,14 @@
       "critical": 15
     },
     "format": "{icon}",
-    "format-charging": "",
-    "format-plugged": "",
+    "format-charging": "󰂄",
+    "format-plugged": "󰚥",
     "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
+      "󰂎",
+      "󰁼",
+      "󰁾",
+      "󰂀",
+      "󰁹"
     ],
     "on-click": "foot --app-id=foot.batctl --window-size-chars=81x34 -e sudo batctl"
   },
@@ -78,7 +78,7 @@
     },
     "sort-by-number": true
   },
-  "niri/workspaces": {
+  "sway/workspaces": {
     "persistent-workspaces": {
       "1: Code": [],
       "2: Browser": [],
