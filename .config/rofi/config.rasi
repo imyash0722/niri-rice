@@ -3,4 +3,4 @@ configuration {
     show-icons: true;
     terminal: "foot";
 }
-@theme "squared-nord"
+@theme "blues"
