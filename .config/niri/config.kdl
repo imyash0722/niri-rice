@@ -332,6 +332,7 @@ binds {
 
     // Fullscreen
     Mod+F { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
 
     // Column width
     Mod+Minus { set-column-width "-10%"; }

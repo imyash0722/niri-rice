@@ -5,8 +5,7 @@
   "hidden_state": "show",
   "modules-left": [
     "clock",
-    "mpris",
-    "custom/updates"
+    "mpris"
   ],
   "modules-center": [
     "niri/workspaces"
@@ -120,13 +119,7 @@
     "on-right-click": "~/.config/niri/waybar/scripts/mic-toggle --toggle",
     "on-click": "foot --app-id=foot.pipemixer --window-size-chars=72x24 -e pipemixer"
   },
-  "custom/updates": {
-    "exec": "~/.config/niri/waybar/scripts/check-updates",
-    "interval": 3600, // 3600 seconds = 1 hour
-    "return-type": "json",
-    "tooltip": true,
-    "on-click": "~/.config/niri/waybar/scripts/check-updates update"
-  },
+
   "mpris": {
     "format": "{player_icon} {dynamic}",
     "format-paused": "{status_icon} <i>{dynamic}</i>",
