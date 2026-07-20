@@ -2,8 +2,8 @@
 # toggle-hdpi — niri version
 # Uses niri msg --json outputs instead of swaymsg to detect current resolution
 
-HIGH="ﳍ"
-STANDARD="ﳭ"
+HIGH="󰍹 4K"
+STANDARD="󰍹 HD"
 
 CURRENT=$(niri msg --json outputs 2>/dev/null | jq -r '.[].modes[.[].current_mode] | "\(.width)x\(.height)"' | head -1)
 

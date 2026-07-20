@@ -83,7 +83,7 @@ prefer-no-csd
 spawn-at-startup "waybar" "-c" "/home/pineapple/.config/niri/waybar/config" "-s" "/home/pineapple/.config/niri/waybar/style.css"
 
 // Animated wallpaper (same gif + flags as Sway)
-spawn-sh-at-startup "pkill mpvpaper; mpvpaper -o 'no-audio loop panscan=1.0' '*' /home/pineapple/Pictures/Wallpapers/4000x4000__Hakui_By-pass-ezgif.com-crop.gif"
+spawn-sh-at-startup "pkill mpvpaper; mpvpaper -o 'no-audio loop panscan=1.0' '*' /mnt/shared/PROJECTS/niri-rice/Wallpapers/4000x4000__Hakui_By-pass-ezgif.com-crop.gif"
 
 // Clipboard history (cliphist)
 spawn-sh-at-startup "pkill wl-paste; wl-paste --type text --watch cliphist store & wl-paste --type image --watch cliphist store &"
