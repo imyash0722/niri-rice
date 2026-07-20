@@ -64,21 +64,7 @@
     ],
     "on-click": "foot --app-id=foot.batctl --window-size-chars=81x34 -e sudo batctl"
   },
-  "wlr/workspaces": {
-    "format": "{icon}",
-    "on-click": "activate",
-    "format-icons": {
-      "1": "󰆍",
-      "2": "󰊯",
-      "3": "󰨞",
-      "4": "󰓃",
-      "5": "󰭹",
-      "urgent": "󰀪",
-      "active": "󰪥",
-      "default": "󰝤"
-    },
-    "sort-by-number": true
-  },
+
   "niri/workspaces": {
     "persistent-workspaces": {
       "1": [],
