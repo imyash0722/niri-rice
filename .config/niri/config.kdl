@@ -48,6 +48,7 @@ layout {
     preset-column-widths {
         proportion 0.5      // Exactly 2 windows fit perfectly
         proportion 0.33333  // Exactly 3 windows fit perfectly
+        proportion 1.0      // Exactly 1 window fits perfectly
     }
 
     default-column-width { proportion 0.5; }
