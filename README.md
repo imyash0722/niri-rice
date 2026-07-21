@@ -51,7 +51,7 @@ paru -S niri waybar rofi-wayland foot fastfetch ly networkmanager \
         grim slurp wl-clipboard cliphist wl-paste \
         cava starship dunst swayidle ffmpeg jq \
         brightnessctl playerctl ungoogled-chromium-bin dolphin \
-        konsole typora-free-with-plugin vesktop wezterm rofi-rbw wtype blueman \
+        konsole typora-free-with-plugin vesktop rofi-rbw wtype blueman \
         obs-studio imagemagick kdeconnect kwallet kanshi \
         ttf-jetbrains-mono ttf-roboto ttf-font-awesome \
         ttf-meslo-nerd eza bat fzf zoxide ripgrep fd \

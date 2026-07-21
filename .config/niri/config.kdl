@@ -117,11 +117,6 @@ window-rule {
     open-floating true
 }
 
-window-rule {
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    default-column-width {}
-}
-
 // Firefox Picture-in-Picture
 window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
@@ -193,7 +188,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id="wezterm.floating.notes"
+    match app-id="foot.floating.notes"
     open-floating true
 }
 
@@ -254,8 +249,8 @@ binds {
     // File manager
     Mod+E { spawn-sh "env QT_QPA_PLATFORMTHEME=kde dolphin"; }
 
-    // Quick notes (WezTerm nvim)
-    Mod+N { spawn-sh "wezterm start --cwd ~/Notes --class wezterm.floating.notes -- zsh -i -c nvim"; }
+    // Quick notes (Foot nvim)
+    Mod+N { spawn-sh "cd ~/Notes && foot --app-id=foot.floating.notes -e nvim"; }
 
     // Clipboard history
     Mod+V { spawn-sh "cliphist list | rofi -dmenu -p 'Clipboard' | cliphist decode | wl-copy"; }

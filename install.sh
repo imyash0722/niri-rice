@@ -7,7 +7,7 @@ echo "=========================================="
 
 echo "[1/4] Installing required dependencies..."
 # This command requires paru (AUR helper) to be installed
-paru -S --needed --noconfirm ungoogled-chromium-bin dolphin konsole typora-free-with-plugin vesktop niri waybar rofi-wayland foot fastfetch ly networkmanager bluetui pipemixer satty btop neovim zsh firefox-developer-edition mpvpaper swaylock-effects grim slurp wl-clipboard cliphist cava starship dunst swayidle ffmpeg jq brightnessctl playerctl wezterm rofi-rbw wtype blueman obs-studio imagemagick kdeconnect kwallet kanshi ttf-jetbrains-mono ttf-roboto eza bat fzf zoxide ripgrep fd ttf-font-awesome ttf-meslo-nerd breeze breeze-icons plasma-integration power-profiles-daemon iwd iwgtk
+paru -S --needed --noconfirm ungoogled-chromium-bin dolphin konsole typora-free-with-plugin vesktop niri waybar rofi-wayland foot fastfetch ly networkmanager bluetui pipemixer satty btop neovim zsh firefox-developer-edition mpvpaper swaylock-effects grim slurp wl-clipboard cliphist cava starship dunst swayidle ffmpeg jq brightnessctl playerctl rofi-rbw wtype blueman obs-studio imagemagick kdeconnect kwallet kanshi ttf-jetbrains-mono ttf-roboto eza bat fzf zoxide ripgrep fd ttf-font-awesome ttf-meslo-nerd breeze breeze-icons plasma-integration power-profiles-daemon iwd iwgtk
 
 echo "[2/4] Copying config files..."
 mkdir -p ~/.config

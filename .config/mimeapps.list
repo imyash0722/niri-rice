@@ -1,3 +1,8 @@
 
 [Default Applications]
 x-scheme-handler/discord=vesktop.desktop
+x-scheme-handler/terminal=foot.desktop
+x-scheme-handler/http=firefox-developer-edition.desktop
+x-scheme-handler/https=firefox-developer-edition.desktop
+inode/directory=org.kde.dolphin.desktop
+text/plain=typora.desktop
