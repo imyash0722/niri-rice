@@ -25,7 +25,8 @@ source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 
 # Plugins
 zcomet load zsh-users/zsh-autosuggestions
-zcomet load zsh-users/zsh-syntax-highlighting
+zcomet load zdharma-continuum/fast-syntax-highlighting
+zcomet load Aloxaf/fzf-tab
 zcomet load jeffreytse/zsh-vi-mode
 # # zcomet load romkatv/powerlevel10k
 zcomet compinit   # faster completions
@@ -187,6 +188,31 @@ esac
 
 # Added by Antigravity CLI installer
 export PATH="$HOME/.local/bin:$PATH"
+
+# Smart Wrappers for modern CLI tools
+exists lazygit && {
+  git() {
+    if [ $# -eq 0 ]; then
+      lazygit
+    else
+      command git "$@"
+    fi
+  }
+}
+
+exists tlrc && {
+  man() {
+    if [ $# -eq 1 ]; then
+      tlrc "$1" || command man "$1"
+    else
+      command man "$@"
+    fi
+  }
+}
+
+exists yazi && {
+  alias yy="yazi"
+}
 
 # Run fastfetch on startup
 exists fastfetch && fastfetch

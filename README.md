@@ -32,6 +32,34 @@
 
 ---
 
+### 📦 Core Components
+    * **Window Manager:** `niri`
+    * **Status Bar:** `waybar`
+    * **App Launcher:** `rofi-wayland`
+    * **Wallpaper:** `swww`
+    * **Lock Screen:** `hyprlock` & `hypridle`
+    * **Notifications:** `swaync`
+
+### 🔧 Dependencies
+You can install all necessary packages using `paru` or `yay`.
+
+```bash
+paru -S niri waybar rofi-wayland foot fastfetch ly networkmanager \
+        bluetui pipemixer satty btop neovim zsh \
+        firefox-developer-edition swww hyprlock \
+        grim slurp wl-clipboard cliphist wl-paste \
+        cava starship swaync hypridle ffmpeg jq \
+        brightnessctl playerctl ungoogled-chromium-bin dolphin \
+        konsole typora-free-with-plugin vesktop rofi-rbw wtype blueman \
+        obs-studio imagemagick kdeconnect kwallet kanshi \
+        ttf-jetbrains-mono ttf-roboto ttf-font-awesome \
+        ttf-meslo-nerd eza bat fzf zoxide ripgrep fd \
+        breeze breeze-icons plasma-integration power-profiles-daemon iwd iwgtk \
+        lazygit yazi tealdeer
+```
+
+---
+
 ## 📸 Screenshots
 
 > *Add your screenshots to `.github/screenshots/` and they'll appear here.*
@@ -39,24 +67,6 @@
 | Desktop | Waybar | Overview |
 |:---:|:---:|:---:|
 | *(coming soon)* | *(coming soon)* | *(coming soon)* |
-
----
-
-## 📦 Dependencies
-
-```bash
-paru -S niri waybar rofi-wayland foot fastfetch ly networkmanager \
-        bluetui pipemixer satty btop neovim zsh \
-        firefox-developer-edition mpvpaper swaylock-effects \
-        grim slurp wl-clipboard cliphist wl-paste \
-        cava starship dunst swayidle ffmpeg jq \
-        brightnessctl playerctl ungoogled-chromium-bin dolphin \
-        konsole typora-free-with-plugin vesktop rofi-rbw wtype blueman \
-        obs-studio imagemagick kdeconnect kwallet kanshi \
-        ttf-jetbrains-mono ttf-roboto ttf-font-awesome \
-        ttf-meslo-nerd eza bat fzf zoxide ripgrep fd \
-        breeze breeze-icons plasma-integration power-profiles-daemon iwd iwgtk
-```
 
 ---
 
