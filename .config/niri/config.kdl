@@ -90,7 +90,8 @@ prefer-no-csd
 spawn-at-startup "sh" "-c" "waybar -c ~/.config/niri/waybar/config -s ~/.config/niri/waybar/style.css"
 
 // Animated wallpaper (swww)
-spawn-at-startup "sh" "-c" "swww-daemon & sleep 1 && swww img ~/Wallpapers/4000x4000__Hakui_By-pass-ezgif.com-crop.gif"
+spawn-at-startup "swww-daemon"
+spawn-at-startup "sh" "-c" "sleep 1 && swww img ~/Wallpapers/4000x4000__Hakui_By-pass-ezgif.com-crop.gif"
 
 // Clipboard history (cliphist)
 spawn-at-startup "sh" "-c" "pkill wl-paste; wl-paste --type text --watch cliphist store & wl-paste --type image --watch cliphist store &"
