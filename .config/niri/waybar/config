@@ -38,7 +38,8 @@
   "custom/dpi": {
     "exec": "~/.config/niri/waybar/scripts/toggle-hdpi",
     "on-click": "~/.config/niri/waybar/scripts/toggle-hdpi --toggle",
-    "restart-interval": 2
+    "interval": 2,
+    "signal": 8
   },
   "clock": {
     "interval": 60,

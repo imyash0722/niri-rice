@@ -10,36 +10,40 @@ fi
 
 CONFIG_FILE="$HOME/.config/niri/config.kdl"
 
-# Extract current scale for this output from config.kdl
-CURRENT_SCALE=$(awk -v out="output \"$OUTPUT\" {" '
-    $0 ~ out { found=1; next }
-    found && /scale / { print $2; exit }
-    found && /}/ { print "1.0"; exit }
-' "$CONFIG_FILE")
+# Get current scale directly from niri's live state (extremely fast and accurate!)
+CURRENT_SCALE=$(niri msg -j outputs | jq -r '."'"$OUTPUT"'".logical.scale')
 
-# Default if not found in the block
-if [ -z "$CURRENT_SCALE" ]; then
+# Default if not found (e.g. jq failed or monitor disconnected)
+if [ -z "$CURRENT_SCALE" ] || [ "$CURRENT_SCALE" = "null" ]; then
     CURRENT_SCALE="1.0"
 fi
 
 if [ "$1" = "--toggle" ]; then
     # Cycle logic
     case "$CURRENT_SCALE" in
+        "2.0") NEXT_SCALE="1.5" ;;
         "1.5") NEXT_SCALE="1.25" ;;
         "1.25") NEXT_SCALE="1.0" ;;
         "1.0") NEXT_SCALE="0.75" ;;
-        "0.75") NEXT_SCALE="1.5" ;;
+        "0.75") NEXT_SCALE="2.0" ;;
         *) NEXT_SCALE="1.5" ;;
     esac
 
-    # Replace the scale line in the specific output block
-    sed -i "/output \"$OUTPUT\" {/,/^}/ s/scale .*/scale $NEXT_SCALE/" "$CONFIG_FILE"
+    # Set scale instantly via Niri IPC! (No config reload needed for visual update)
+    niri msg output "$OUTPUT" scale $NEXT_SCALE >/dev/null 2>&1
     
-    # Reload Niri seamlessly
-    niri msg action do reload-config >/dev/null 2>&1 || true
+    # Try to persist it in config if an exact output block exists
+    if grep -q "output \"$OUTPUT\" {" "$CONFIG_FILE"; then
+        sed -i "/output \"$OUTPUT\" {/,/^}/ s/scale .*/scale $NEXT_SCALE/" "$CONFIG_FILE"
+    fi
     
     CURRENT_SCALE="$NEXT_SCALE"
+    
+    # Send signal 8 to waybar to instantly refresh the module's text
+    pkill -RTMIN+8 waybar
 fi
 
 # Print plain text output for Waybar
-echo "󰍹 ${CURRENT_SCALE}x"
+# Remove decimal if it ends in .0 for cleaner look (e.g. 1.0 -> 1, 1.5 -> 1.5)
+FORMATTED_SCALE=$(echo "$CURRENT_SCALE" | sed 's/\.0$//')
+echo "󰍹 ${FORMATTED_SCALE}x"
