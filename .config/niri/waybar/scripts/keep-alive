@@ -24,13 +24,14 @@ toggle() {
         kill "$(cat "$PIDFILE")"
         rm -f "$PIDFILE"
     else
-        nohup systemd-inhibit --what=idle --who="waybar-keep-alive" --why="Manual toggle" wayinhibit >/dev/null 2>&1 &
+        nohup systemd-inhibit --what=idle --who="waybar-keep-alive" --why="Manual toggle" sleep infinity >/dev/null 2>&1 &
         echo $! > "$PIDFILE"
     fi
 }
 
 if [ "$1" == "--toggle" ]; then
     toggle
+    pkill -RTMIN+10 waybar
     exit 0
 fi
 

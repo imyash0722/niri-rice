@@ -25,7 +25,8 @@
     "exec": "~/.config/niri/waybar/scripts/keep-alive",
     "on-click": "~/.config/niri/waybar/scripts/keep-alive --toggle",
     "return-type": "json",
-    "interval": 2
+    "interval": 2,
+    "signal": 10
   },
   "custom/power-consumption": {
     "exec": "~/.config/niri/waybar/scripts/power-consumption"
@@ -33,7 +34,8 @@
   "custom/power-profile": {
     "exec": "~/.config/niri/waybar/scripts/power-profile",
     "on-click": "~/.config/niri/waybar/scripts/power-profile --toggle",
-    "interval": 2
+    "interval": 2,
+    "signal": 9
   },
   "custom/dpi": {
     "exec": "~/.config/niri/waybar/scripts/toggle-hdpi",
