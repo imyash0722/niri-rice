@@ -53,7 +53,9 @@ paru -S niri waybar rofi-wayland foot fastfetch ly networkmanager \
         brightnessctl playerctl ungoogled-chromium-bin dolphin \
         konsole typora vesktop wezterm rofi-rbw wtype blueman \
         obs-studio imagemagick kdeconnect kwallet kanshi \
-        ttf-jetbrains-mono ttf-roboto
+        ttf-jetbrains-mono ttf-roboto ttf-font-awesome \
+        ttf-meslo-nerd eza bat fzf zoxide ripgrep fd \
+        breeze breeze-icons
 ```
 
 ---
