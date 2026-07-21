@@ -200,10 +200,10 @@ exists lazygit && {
   }
 }
 
-exists tlrc && {
+exists tldr && {
   man() {
     if [ $# -eq 1 ]; then
-      tlrc "$1" || command man "$1"
+      tldr "$1" || command man "$1"
     else
       command man "$@"
     fi
