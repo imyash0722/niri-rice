@@ -8,6 +8,7 @@
 environment {
     QT_QPA_PLATFORMTHEME "kde"
     GTK_THEME "Adwaita:dark"
+    GTK_USE_PORTAL "1"
 }
 
 // ── Input ────────────────────────────────────────────────
@@ -45,9 +46,8 @@ layout {
     center-focused-column "on-overflow"
 
     preset-column-widths {
-        proportion 0.33333
-        proportion 0.5
-        proportion 0.66667
+        proportion 0.5      // Exactly 2 windows fit perfectly
+        proportion 0.33333  // Exactly 3 windows fit perfectly
     }
 
     default-column-width { proportion 0.5; }
