@@ -20,11 +20,11 @@
 ## ✨ Features
 
 - 🌊 **niri** — Scrollable, infinite-canvas tiling Wayland compositor
-- 🎬 **mpvpaper** — Animated GIF / video wallpapers rendered by MPV
+- 🎬 **swww** — Fast and lightweight Wayland wallpaper daemon
 - 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
 - 🚀 **Rofi** — App launcher with a custom 'blues' dark theme
 - 📸 **Satty** — Screenshot annotation tool (Niri native screenshot support via `Mod+Shift+S`)
-- 🔒 **Swaylock-effects** — Modern lockscreen: auto-captures and blurs your current screen, featuring a bold digital clock
+- 🔒 **hyprlock** — Modern lockscreen: beautifully blurred static backgrounds, dynamic battery module, and bold digital clock
 - 🎵 **Cava** — Audio spectrum visualizer
 - 🐾 **Foot** — Fast, GPU-rendered Wayland terminal
 - ⭐ **Starship** — Cross-shell prompt
@@ -88,7 +88,7 @@ rm ~/.config/nvim.tar.gz
 chmod +x ~/.config/niri/scripts/*.sh
 
 # 5. Set your wallpaper path in config.kdl
-#    Search for "mpvpaper" in ~/.config/niri/config.kdl and update the path
+#    Search for "swww" in ~/.config/niri/config.kdl and update the path
 
 # 6. Start niri from your display manager (Ly auto-detects it)
 ```
@@ -105,16 +105,16 @@ niri-rice/
 │   ├── niri/
 │   │   ├── config.kdl          # Compositor config (keybinds, autostart, rules)
 │   │   ├── scripts/
-│   │   │   ├── lock.sh         # Smart lockscreen (extracts wallpaper frame)
+│   │   │   ├── lock.sh         # Smart lockscreen script
 │   │   │   ├── power.sh        # Rofi power menu (lock/suspend/reboot/shutdown)
-│   │   │   └── reload.sh       # Reload Waybar + mpvpaper (Mod+Shift+R)
+│   │   │   └── reload.sh       # Reload Waybar + swww (Mod+Shift+R)
 │   │   └── waybar/             # Niri-specific Waybar config + CSS
 │   ├── waybar/                 # Shared Waybar modules and scripts
 │   ├── rofi/                   # App launcher theme and config
 │   ├── foot/                   # Terminal emulator (Tokyo Night theme)
-│   ├── dunst/                  # Notification daemon
-│   ├── swaylock/               # Lock screen config
-│   ├── cava/                   # Audio visualizer
+│   ├── hypr/                   # Hyprlock and hypridle configurations
+│   ├── swaync/                 # Notification center daemon
+│   ├── cava/                   # Audio spectrum visualizer
 │   ├── mpv/                    # Media player config
 │   ├── btop/                   # System monitor themes
 │   ├── fastfetch/              # System info fetch
@@ -142,17 +142,16 @@ niri-rice/
 | Hotkey Overlay | `Mod+/` |
 | Lock Screen | `Mod+Shift+Q` → Lock |
 | Reload Waybar + Wallpaper | `Mod+Shift+R` |
+| Toggle Waybar Visibility| `Mod+A` |
 | Close Window | `Mod+Q` |
 
 ---
 
 ## 🔐 Smart Lockscreen
 
-The `lock.sh` script automatically detects your current wallpaper:
-- If it's a **GIF or video** (`mpvpaper`) → extracts a single frame with `ffmpeg` and uses it as the lockscreen background
-- If it's a **static image** (`swaybg`) → uses it directly
+The `hyprlock` configuration automatically uses a perfectly static, pre-extracted background from your wallpaper to keep the blur effect fast and smooth. It completely replaces the old `swaylock` screenshot method, avoiding any screen-tearing or see-through glitches! 
 
-This means your lockscreen always matches your wallpaper without any manual configuration.
+It also actively hooks into your system's raw battery capacity (via `BAT0`) using a custom script to display dynamic battery icons directly underneath the password prompt.
 
 ---
 
