@@ -12,30 +12,36 @@
   ],
   "modules-right": [
     "tray",
-    "custom/power-profile",
+    "power-profiles-daemon",
     "custom/dpi",
-    "custom/keep-alive",
+    "idle_inhibitor",
     "bluetooth",
     "pulseaudio",
     "pulseaudio#microphone",
     "network",
     "battery"
   ],
-  "custom/keep-alive": {
-    "exec": "~/.config/niri/waybar/scripts/keep-alive",
-    "on-click": "~/.config/niri/waybar/scripts/keep-alive --toggle",
-    "return-type": "json",
-    "interval": 2,
-    "signal": 10
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+        "activated": "☕",
+        "deactivated": "😴"
+    },
+    "tooltip": true
   },
   "custom/power-consumption": {
     "exec": "~/.config/niri/waybar/scripts/power-consumption"
   },
-  "custom/power-profile": {
-    "exec": "~/.config/niri/waybar/scripts/power-profile",
-    "on-click": "~/.config/niri/waybar/scripts/power-profile --toggle",
-    "interval": 2,
-    "signal": 9
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "",
+      "performance": "🐇",
+      "balanced": "☯️",
+      "power-saver": "🐢"
+    }
   },
   "custom/dpi": {
     "exec": "~/.config/niri/waybar/scripts/toggle-hdpi",
