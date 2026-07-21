@@ -355,6 +355,7 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
 
     // Reload Config
+    Mod+A       { spawn "killall" "-SIGUSR1" "waybar"; }
     Mod+Shift+R { spawn "~/.config/niri/scripts/reload.sh"; }
 
     // Quit niri (with confirmation dialog)
