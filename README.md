@@ -20,7 +20,7 @@
 ## ✨ Features
 
 - 🌊 **niri** — Scrollable, infinite-canvas tiling Wayland compositor
-- 🎬 **swww** — Fast and lightweight Wayland wallpaper daemon
+- 🎬 **awww** — Fast and lightweight Wayland wallpaper daemon
 - 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
 - 🚀 **Rofi** — App launcher with a custom 'blues' dark theme
 - 📸 **Satty** — Screenshot annotation tool (Niri native screenshot support via `Mod+Shift+S`)
@@ -36,7 +36,7 @@
     * **Window Manager:** `niri`
     * **Status Bar:** `waybar`
     * **App Launcher:** `rofi-wayland`
-    * **Wallpaper:** `swww`
+    * **Wallpaper:** `awww`
     * **Lock Screen:** `hyprlock` & `hypridle`
     * **Notifications:** `swaync`
 
@@ -46,7 +46,7 @@ You can install all necessary packages using `paru` or `yay`.
 ```bash
 paru -S niri waybar rofi-wayland foot fastfetch ly networkmanager \
         bluetui pipemixer satty btop neovim zsh \
-        firefox-developer-edition swww hyprlock \
+        firefox-developer-edition awww hyprlock \
         grim slurp wl-clipboard cliphist wl-paste \
         cava starship swaync hypridle ffmpeg jq \
         brightnessctl playerctl ungoogled-chromium-bin dolphin \
@@ -88,7 +88,7 @@ rm ~/.config/nvim.tar.gz
 chmod +x ~/.config/niri/scripts/*.sh
 
 # 5. Set your wallpaper path in config.kdl
-#    Search for "swww" in ~/.config/niri/config.kdl and update the path
+#    Search for "awww" in ~/.config/niri/config.kdl and update the path
 
 # 6. Start niri from your display manager (Ly auto-detects it)
 ```
@@ -107,7 +107,7 @@ niri-rice/
 │   │   ├── scripts/
 │   │   │   ├── lock.sh         # Smart lockscreen script
 │   │   │   ├── power.sh        # Rofi power menu (lock/suspend/reboot/shutdown)
-│   │   │   └── reload.sh       # Reload Waybar + swww (Mod+Shift+R)
+│   │   │   └── reload.sh       # Reload Waybar + awww (Mod+Shift+R)
 │   │   └── waybar/             # Niri-specific Waybar config + CSS
 │   ├── waybar/                 # Shared Waybar modules and scripts
 │   ├── rofi/                   # App launcher theme and config
