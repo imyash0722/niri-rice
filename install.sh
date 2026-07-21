@@ -12,6 +12,10 @@ paru -S --needed --noconfirm ungoogled-chromium-bin dolphin konsole typora-free-
 echo "[2/4] Copying config files..."
 mkdir -p ~/.config
 rsync -a .config/ ~/.config/
+if [ -d ".local" ]; then
+    mkdir -p ~/.local
+    rsync -a .local/ ~/.local/
+fi
 
 if [ -f ".zshrc" ]; then
     cp .zshrc ~/
