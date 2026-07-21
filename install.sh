@@ -17,12 +17,19 @@ if [ -f ".zshrc" ]; then
     cp .zshrc ~/
 fi
 
+if [ -f "ly/config.ini" ]; then
+    echo "  Applying Tokyo Night Ly theme (requires sudo)..."
+    sudo cp ly/config.ini /etc/ly/config.ini
+    sudo systemctl enable ly.service || true
+fi
+
 echo "[3/4] Copying wallpapers..."
 mkdir -p ~/Wallpapers
 rsync -a Wallpapers/ ~/Wallpapers/
 
 echo "[4/5] Setting script permissions..."
 chmod +x ~/.config/niri/scripts/*.sh
+chmod +x ~/.config/hypr/scripts/*.sh
 
 echo "[5/5] Enabling system services..."
 sudo systemctl enable --now power-profiles-daemon || true
