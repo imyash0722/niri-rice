@@ -55,7 +55,7 @@ paru -S niri waybar rofi-wayland foot fastfetch ly networkmanager \
         ttf-jetbrains-mono ttf-roboto ttf-font-awesome \
         ttf-meslo-nerd eza bat fzf zoxide ripgrep fd \
         breeze breeze-icons plasma-integration power-profiles-daemon iwd iwgtk \
-        lazygit yazi tealdeer
+        lazygit yazi tealdeer qimgv haruna ark okular
 ```
 
 ---
