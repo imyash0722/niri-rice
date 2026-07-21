@@ -55,7 +55,7 @@ paru -S niri waybar rofi-wayland foot fastfetch ly networkmanager \
         obs-studio imagemagick kdeconnect kwallet kanshi \
         ttf-jetbrains-mono ttf-roboto ttf-font-awesome \
         ttf-meslo-nerd eza bat fzf zoxide ripgrep fd \
-        breeze breeze-icons
+        breeze breeze-icons plasma-integration
 ```
 
 ---
