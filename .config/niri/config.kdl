@@ -4,6 +4,12 @@
 //  Full reference: https://niri-wm.github.io/niri/Configuration:-Introduction
 // ─────────────────────────────────────────────────────────
 
+// Enforce dark mode globally
+environment {
+    QT_QPA_PLATFORMTHEME "kde"
+    GTK_THEME "Adwaita:dark"
+}
+
 // ── Input ────────────────────────────────────────────────
 input {
     keyboard {
