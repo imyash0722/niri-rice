@@ -80,10 +80,10 @@ prefer-no-csd
 // ── Startup daemons ──────────────────────────────────────
 
 // Waybar
-spawn-at-startup "waybar" "-c" "/home/pineapple/.config/niri/waybar/config" "-s" "/home/pineapple/.config/niri/waybar/style.css"
+spawn-at-startup "waybar" "-c" "~/.config/niri/waybar/config" "-s" "~/.config/niri/waybar/style.css"
 
 // Animated wallpaper (same gif + flags as Sway)
-spawn-sh-at-startup "pkill mpvpaper; mpvpaper -o 'no-audio loop panscan=1.0' '*' /mnt/shared/PROJECTS/niri-rice/Wallpapers/4000x4000__Hakui_By-pass-ezgif.com-crop.gif"
+spawn-sh-at-startup "pkill mpvpaper; mpvpaper -o 'no-audio loop panscan=1.0' '*' ~/Wallpapers/4000x4000__Hakui_By-pass-ezgif.com-crop.gif"
 
 // Clipboard history (cliphist)
 spawn-sh-at-startup "pkill wl-paste; wl-paste --type text --watch cliphist store & wl-paste --type image --watch cliphist store &"
@@ -101,7 +101,7 @@ spawn-at-startup "kwalletd5"
 spawn-at-startup "kanshi"
 
 // Idle manager (same timeouts as Sway)
-spawn-at-startup "swayidle" "-w" "timeout" "300" "/home/pineapple/.config/niri/scripts/lock.sh" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors" "before-sleep" "/home/pineapple/.config/niri/scripts/lock.sh"
+spawn-at-startup "swayidle" "-w" "timeout" "300" "~/.config/niri/scripts/lock.sh" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors" "before-sleep" "~/.config/niri/scripts/lock.sh"
 
 // ── Window rules ─────────────────────────────────────────
 
@@ -353,7 +353,7 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
 
     // Reload Config
-    Mod+Shift+R { spawn "/home/pineapple/.config/niri/scripts/reload.sh"; }
+    Mod+Shift+R { spawn "~/.config/niri/scripts/reload.sh"; }
 
     // Quit niri (with confirmation dialog)
     Mod+Escape { quit; }
