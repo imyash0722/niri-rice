@@ -70,7 +70,8 @@ window>box {
 #clock,
 #custom-updates,
 #custom-waybar-mpris {
-  margin: 0px 5px 0px 5px;
+  padding: 0 5px;
+  margin: 0 2px;
   color: @fg;
 }
 
@@ -103,14 +104,4 @@ window>box {
   margin-right: 0px;
 }
 
-#network {
-  margin-left: 4px;
-}
 
-#battery {
-  margin-left: 2px;
-  background-color: transparent;
-  background-image: none;
-  box-shadow: none;
-  border: none;
-}
