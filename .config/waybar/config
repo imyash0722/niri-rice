@@ -59,7 +59,7 @@
       "󰂀",
       "󰁹"
     ],
-    "on-click": "foot --app-id=foot.btop --window-size-chars=81x34 -e btop"
+    "on-click": "foot --app-id=foot.batctl --window-size-chars=81x34 -e sudo batctl"
   },
   "wlr/workspaces": {
     "format": "{icon}",
