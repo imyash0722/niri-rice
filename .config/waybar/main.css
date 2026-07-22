@@ -53,8 +53,8 @@ window>box {
 #custom-pacman,
 #bluetooth,
 #network {
-  padding: 0 5px;
-  margin: 0 2px;
+  padding: 0 4px;
+  margin: 0;
   border-right: none;
   color: @fg;
   background-color: transparent;
@@ -70,8 +70,8 @@ window>box {
 #clock,
 #custom-updates,
 #custom-waybar-mpris {
-  padding: 0 5px;
-  margin: 0 2px;
+  padding: 0 4px;
+  margin: 0;
   color: @fg;
 }
 

@@ -22,22 +22,22 @@
     "battery"
   ],
   "custom/keep-alive": {
-    "exec": "~/.config/niri/waybar/scripts/keep-alive",
-    "on-click": "~/.config/niri/waybar/scripts/keep-alive --toggle",
+    "exec": "~/.config/waybar/scripts/keep-alive",
+    "on-click": "~/.config/waybar/scripts/keep-alive --toggle",
     "return-type": "json",
     "interval": 2
   },
   "custom/power-consumption": {
-    "exec": "~/.config/niri/waybar/scripts/power-consumption"
+    "exec": "~/.config/waybar/scripts/power-consumption"
   },
   "custom/power-profile": {
-    "exec": "~/.config/niri/waybar/scripts/power-profile",
-    "on-click": "~/.config/niri/waybar/scripts/power-profile --toggle",
+    "exec": "~/.config/waybar/scripts/power-profile",
+    "on-click": "~/.config/waybar/scripts/power-profile --toggle",
     "interval": 2
   },
   "custom/dpi": {
-    "exec": "~/.config/niri/waybar/scripts/toggle-hdpi",
-    "on-click": "~/.config/niri/waybar/scripts/toggle-hdpi --toggle",
+    "exec": "~/.config/waybar/scripts/toggle-hdpi",
+    "on-click": "~/.config/waybar/scripts/toggle-hdpi --toggle",
     "restart-interval": 2
   },
   "clock": {
@@ -107,10 +107,10 @@
     "on-click": "foot --app-id=foot.bluetui --window-size-chars=81x34 -e bluetui"
   },
   "pulseaudio": {
-    "format": "{volume}% {icon}  {format_source}",
-    "format-bluetooth": "{volume}% {icon}󰂯  {format_source}",
-    "format-bluetooth-muted": " {icon}󰂯  {format_source}",
-    "format-muted": "󰝟  {format_source}",
+    "format": "{volume}% {icon} {format_source}",
+    "format-bluetooth": "{volume}% {icon}󰂯 {format_source}",
+    "format-bluetooth-muted": " {icon}󰂯 {format_source}",
+    "format-muted": "󰝟 {format_source}",
     "format-source": "{volume}% 󰍬",
     "format-source-muted": "󰍭",
     "format-icons": {
@@ -126,16 +126,16 @@
         "󰕾"
       ]
     },
-    "on-right-click": "~/.config/niri/waybar/scripts/mic-toggle --toggle",
+    "on-right-click": "~/.config/waybar/scripts/mic-toggle --toggle",
     "on-middle-click": "nautilus /home/pineapple",
     "on-click": "foot --app-id=foot.pipemixer --window-size-chars=72x24 -e pipemixer"
   },
   "custom/updates": {
-    "exec": "~/.config/niri/waybar/scripts/check-updates",
+    "exec": "~/.config/waybar/scripts/check-updates",
     "interval": 3600, // 3600 seconds = 1 hour
     "return-type": "json",
     "tooltip": true,
-    "on-click": "~/.config/niri/waybar/scripts/check-updates update"
+    "on-click": "~/.config/waybar/scripts/check-updates update"
   },
   "mpris": {
     "format": "{player_icon} {dynamic}",
