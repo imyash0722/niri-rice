@@ -1,8 +1,8 @@
-background-color=#1a1b26
+background-color=#0D0F18
 text-color=#c0caf5
-border-color=#7fc8ff
-border-size=2
-border-radius=8
+border-color=#1F2F53
+border-size=1
+border-radius=4
 icons=1
 max-icon-size=64
 default-timeout=5000
