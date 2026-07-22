@@ -100,7 +100,7 @@ spawn-at-startup "sh" "-c" "sleep 1 && awww img ~/Wallpapers/4000x4000__Hakui_By
 spawn-at-startup "sh" "-c" "pkill wl-paste; wl-paste --type text --watch cliphist store & wl-paste --type image --watch cliphist store &"
 
 // Notifications
-spawn-at-startup "swaync"
+spawn-at-startup "mako"
 
 // KDE Connect
 spawn-at-startup "kdeconnectd"

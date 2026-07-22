@@ -1,0 +1,14 @@
+background-color=#1a1b26
+text-color=#c0caf5
+border-color=#7fc8ff
+border-size=2
+border-radius=8
+icons=1
+max-icon-size=64
+default-timeout=5000
+ignore-timeout=1
+font=JetBrains Mono 10
+width=300
+height=100
+margin=20
+padding=10

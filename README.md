@@ -38,7 +38,7 @@
     * **App Launcher:** `rofi-wayland`
     * **Wallpaper:** `awww`
     * **Lock Screen:** `hyprlock` & `hypridle`
-    * **Notifications:** `swaync`
+    * **Notifications:** `mako`
 
 ### 🔧 Dependencies
 You can install all necessary packages using `paru` or `yay`.
@@ -48,7 +48,7 @@ paru -S niri waybar rofi-wayland foot fastfetch ly networkmanager \
         bluetui pipemixer satty btop neovim zsh \
         firefox-developer-edition awww hyprlock \
         grim slurp wl-clipboard cliphist wl-paste \
-        cava starship swaync hypridle ffmpeg jq \
+        cava starship mako hypridle ffmpeg jq \
         brightnessctl playerctl ungoogled-chromium-bin dolphin \
         konsole typora-free-with-plugin vesktop rofi-rbw wtype blueman \
         obs-studio imagemagick kdeconnect kwallet kanshi \
@@ -113,7 +113,7 @@ niri-rice/
 │   ├── rofi/                   # App launcher theme and config
 │   ├── foot/                   # Terminal emulator (Tokyo Night theme)
 │   ├── hypr/                   # Hyprlock and hypridle configurations
-│   ├── swaync/                 # Notification center daemon
+│   ├── mako/                   # Notification daemon
 │   ├── cava/                   # Audio spectrum visualizer
 │   ├── mpv/                    # Media player config
 │   ├── btop/                   # System monitor themes
