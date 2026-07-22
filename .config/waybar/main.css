@@ -21,7 +21,7 @@ window>box {
 }
 
 #workspaces button {
-  padding: 0px 8px;
+  padding: 0px 4px;
   color: @fg;
   background: transparent;
   border-radius: 2px;
@@ -53,8 +53,8 @@ window>box {
 #custom-pacman,
 #bluetooth,
 #network {
-  padding: 0 10px;
-  margin: 0 4px;
+  padding: 0 5px;
+  margin: 0 2px;
   border-right: none;
   color: @fg;
   background-color: transparent;
@@ -70,7 +70,7 @@ window>box {
 #clock,
 #custom-updates,
 #custom-waybar-mpris {
-  margin: 0px 10px 0px 10px;
+  margin: 0px 5px 0px 5px;
   color: @fg;
 }
 
@@ -96,7 +96,7 @@ window>box {
 
 
 #tray>widget>* {
-  margin-right: 8px;
+  margin-right: 4px;
 }
 
 #tray>widget:last-child>* {
@@ -104,11 +104,11 @@ window>box {
 }
 
 #network {
-  margin-left: 8px;
+  margin-left: 4px;
 }
 
 #battery {
-  margin-left: 5px;
+  margin-left: 2px;
   background-color: transparent;
   background-image: none;
   box-shadow: none;
