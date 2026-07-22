@@ -19,20 +19,7 @@
     "network",
     "battery"
   ],
-  "custom/keep-alive": {
-    "exec": "~/.config/waybar/scripts/keep-alive",
-    "on-click": "~/.config/waybar/scripts/keep-alive --toggle",
-    "return-type": "json",
-    "interval": 2
-  },
-  "custom/power-consumption": {
-    "exec": "~/.config/waybar/scripts/power-consumption"
-  },
-  "custom/power-profile": {
-    "exec": "~/.config/waybar/scripts/power-profile",
-    "on-click": "~/.config/waybar/scripts/power-profile --toggle",
-    "interval": 2
-  },
+
   "custom/dpi": {
     "exec": "~/.config/waybar/scripts/toggle-hdpi",
     "on-click": "~/.config/waybar/scripts/toggle-hdpi --toggle",
@@ -61,21 +48,7 @@
     ],
     "on-click": "foot --app-id=foot.batctl --window-size-chars=81x34 -e sudo batctl"
   },
-  "wlr/workspaces": {
-    "format": "{icon}",
-    "on-click": "activate",
-    "format-icons": {
-      "1": "󰆍",
-      "2": "󰊯",
-      "3": "󰨞",
-      "4": "󰓃",
-      "5": "󰭹",
-      "urgent": "󰀪",
-      "active": "󰪥",
-      "default": "󰝤"
-    },
-    "sort-by-number": true
-  },
+
   "niri/workspaces": {
     "persistent-workspaces": {
       "1": [],
