@@ -13,9 +13,7 @@
   ],
   "modules-right": [
     "tray",
-    "custom/power-profile",
     "custom/dpi",
-    "custom/keep-alive",
     "bluetooth",
     "pulseaudio",
     "network",
@@ -61,7 +59,7 @@
       "󰂀",
       "󰁹"
     ],
-    "on-click": "foot --app-id=foot.batctl --window-size-chars=81x34 -e sudo batctl"
+    "on-click": "foot --app-id=foot.btop --window-size-chars=81x34 -e btop"
   },
   "wlr/workspaces": {
     "format": "{icon}",
