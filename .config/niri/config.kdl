@@ -102,8 +102,6 @@ spawn-at-startup "sh" "-c" "pkill wl-paste; wl-paste --type text --watch cliphis
 // Notifications
 spawn-at-startup "mako"
 
-// KDE Connect
-spawn-at-startup "kdeconnectd"
 
 // KDE Wallet (keyring)
 spawn-at-startup "kwalletd5"
@@ -197,15 +195,6 @@ window-rule {
     open-floating true
 }
 
-window-rule {
-    match app-id=r#"^org\.twosheds\.iwgtk$"#
-    open-floating true
-}
-
-window-rule {
-    match app-id="iwgtk"
-    open-floating true
-}
 
 // Zoom meeting sharing indicator
 window-rule {
