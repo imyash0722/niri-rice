@@ -89,9 +89,6 @@ prefer-no-csd
 // Waybar
 spawn-at-startup "sh" "-c" "waybar"
 
-// Bongocat
-spawn-at-startup "sh" "-c" "bongocat --config ~/.config/bongocat/bongocat.conf &"
-
 // Animated wallpaper (awww)
 spawn-at-startup "awww-daemon"
 spawn-at-startup "sh" "-c" "sleep 1 && awww img ~/Wallpapers/4000x4000__Hakui_By-pass-ezgif.com-crop.gif"

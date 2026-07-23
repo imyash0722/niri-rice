@@ -4,7 +4,7 @@
 echo "Pulling live configurations into the repository..."
 
 # Pull specific tracked folders from .config (excluding vesktop to avoid Discord tokens)
-for item in bongocat btop cava fastfetch foot gtk-3.0 gtk-4.0 hypr mako niri rofi satty waybar xdg-desktop-portal zsh; do
+for item in btop cava fastfetch foot gtk-3.0 gtk-4.0 hypr mako niri rofi satty waybar xdg-desktop-portal zsh; do
     if [ -d "$HOME/.config/$item" ]; then
         cp -r "$HOME/.config/$item" .config/
     fi
