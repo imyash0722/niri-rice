@@ -177,6 +177,15 @@ window-rule {
     open-floating true
 }
 
+// KDE Settings popup
+window-rule {
+    match app-id="kcmshell6"
+    match app-id="systemsettings"
+    open-floating true
+    default-column-width { proportion 0.5; }
+    default-window-height { proportion 0.5; }
+}
+
 window-rule {
     match app-id="foot.floating.notes"
     open-floating true
