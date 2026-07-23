@@ -60,7 +60,7 @@
   },
   "network": {
     "format-wifi": "󰤨",
-    "on-click": "foot --app-id=foot.nmtui --window-size-chars=81x34 -e nmtui",
+    "on-click": "kcmshell6 kcm_networkmanagement",
     "format-ethernet": "󰈀   {ipaddr}/{cidr}",
     "format-linked": "󰈀   {ifname} (No IP)",
     "format-disconnected": "󱚵   Disconnected",

@@ -166,11 +166,7 @@ window-rule {
     open-floating true
 }
 
-// Foot floating app-ids (nmtui, batctl)
-window-rule {
-    match app-id="foot.nmtui"
-    open-floating true
-}
+// Foot floating app-ids (batctl)
 
 window-rule {
     match app-id="foot.batctl"
