@@ -166,19 +166,9 @@ window-rule {
     open-floating true
 }
 
-// Foot floating app-ids (nmtui, pipemixer, bluetui, batctl)
+// Foot floating app-ids (nmtui, batctl)
 window-rule {
     match app-id="foot.nmtui"
-    open-floating true
-}
-
-window-rule {
-    match app-id="foot.pipemixer"
-    open-floating true
-}
-
-window-rule {
-    match app-id="foot.bluetui"
     open-floating true
 }
 
