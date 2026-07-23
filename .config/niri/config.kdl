@@ -87,7 +87,7 @@ prefer-no-csd
 // ── Startup daemons ──────────────────────────────────────
 
 // Waybar
-spawn-at-startup "sh" "-c" "waybar -c ~/.config/niri/waybar/config -s ~/.config/niri/waybar/style.css"
+spawn-at-startup "sh" "-c" "waybar"
 
 // Bongocat
 spawn-at-startup "sh" "-c" "bongocat --config ~/.config/bongocat/bongocat.conf &"
