@@ -175,7 +175,7 @@ window-rule {
 
 // KDE Settings popup
 window-rule {
-    match app-id="kcmshell6"
+    match app-id="org.kde.kcmshell6"
     match app-id="systemsettings"
     open-floating true
     default-column-width { proportion 0.5; }
