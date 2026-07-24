@@ -25,8 +25,8 @@ audio/mpeg=org.kde.haruna.desktop
 audio/x-wav=org.kde.haruna.desktop
 audio/flac=org.kde.haruna.desktop
 
-application/pdf=org.kde.okular.desktop
-application/epub+zip=org.kde.okular.desktop
+application/pdf=okularApplication_pdf.desktop
+application/epub+zip=okularApplication_epub.desktop
 
 application/zip=org.kde.ark.desktop
 application/x-tar=org.kde.ark.desktop
