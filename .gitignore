@@ -6,3 +6,5 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+# Wallpapers are stored on the shared partition at /mnt/shared/wallpaper/
+Wallpapers/
