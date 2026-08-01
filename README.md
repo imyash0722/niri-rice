@@ -17,6 +17,17 @@
 
 ---
 
+> [!WARNING]
+> **KDE Plasma / Display Manager Notice**
+>
+> This rice was originally built with **Ly** as the display manager. However, because this setup runs on **CachyOS with KDE Plasma**, the default **KDE Display Manager (SDDM)** is used instead of Ly — and that is the recommended setup here.
+>
+> The `ly/` directory has been renamed to **`ly.unused/`** in this repository to keep the Ly config archived but inactive. To re-enable Ly, simply rename `ly.unused/` back to `ly/` — `install.sh` will then automatically detect and apply the Tokyo Night Ly theme.
+>
+> **Do not install or enable `ly` unless you intend to replace SDDM/KDE login manager.**
+
+---
+
 ## ✨ Features
 
 - 🌊 **niri** — Scrollable, infinite-canvas tiling Wayland compositor
@@ -43,8 +54,11 @@
 ### 🔧 Dependencies
 You can install all necessary packages using `paru` or `yay`.
 
+> [!NOTE]
+> `ly` is **not** listed here — this setup uses the KDE/SDDM login manager. See the warning block at the top of this page.
+
 ```bash
-paru -S niri waybar rofi-wayland foot fastfetch ly networkmanager \
+paru -S niri waybar rofi-wayland foot fastfetch networkmanager \
         bluetui pipemixer satty btop neovim zsh \
         firefox-developer-edition awww hyprlock \
         grim slurp wl-clipboard cliphist wl-paste \
@@ -55,7 +69,7 @@ paru -S niri waybar rofi-wayland foot fastfetch ly networkmanager \
         ttf-jetbrains-mono ttf-roboto ttf-font-awesome \
         ttf-meslo-nerd eza bat fzf zoxide ripgrep fd \
         breeze breeze-icons plasma-integration power-profiles-daemon iwd iwgtk \
-        lazygit yazi tealdeer qimgv haruna ark okular
+        lazygit yazi tealdeer qimgv haruna ark okular xwayland-satellite
 ```
 
 ---
@@ -90,7 +104,8 @@ chmod +x ~/.config/niri/scripts/*.sh
 # 5. Set your wallpaper path in config.kdl
 #    Search for "awww" in ~/.config/niri/config.kdl and update the path
 
-# 6. Start niri from your display manager (Ly auto-detects it)
+# 6. Start niri from your display manager (SDDM / KDE Login Manager auto-detects it)
+#    NOTE: To use Ly instead, rename ly.unused/ -> ly/ before running install.sh
 ```
 
 ---
@@ -101,6 +116,8 @@ chmod +x ~/.config/niri/scripts/*.sh
 niri-rice/
 ├── .gitignore
 ├── README.md
+├── install.sh
+├── update.sh
 ├── .config/
 │   ├── niri/
 │   │   ├── config.kdl          # Compositor config (keybinds, autostart, rules)
@@ -120,6 +137,8 @@ niri-rice/
 │   ├── fastfetch/              # System info fetch
 │   ├── satty/                  # Screenshot annotation
 │   └── starship.toml           # Shell prompt config
+├── ly.unused/                  # Ly display manager config (archived — rename to ly/ to activate)
+├── system-scripts/             # Hardware-specific system scripts
 └── Wallpapers/                 # Wallpapers (gitignored — store locally)
 ```
 
