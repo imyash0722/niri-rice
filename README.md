@@ -20,7 +20,7 @@
 > [!WARNING]
 > **KDE Plasma / Display Manager Notice**
 >
-> This rice was originally built with **Ly** as the display manager. However, because this setup runs on **CachyOS with KDE Plasma**, the default **KDE Display Manager (SDDM)** is used instead of Ly — and that is the recommended setup here.
+> This rice was originally built with **Ly** as the display manager. However, because my setup now runs on **CachyOS with KDE Plasma**, the default **KDE Display Manager (SDDM)** is used instead of Ly — and that is the recommended setup here.
 >
 > The `ly/` directory has been renamed to **`ly.unused/`** in this repository to keep the Ly config archived but inactive. To re-enable Ly, simply rename `ly.unused/` back to `ly/` — `install.sh` will then automatically detect and apply the Tokyo Night Ly theme.
 >
