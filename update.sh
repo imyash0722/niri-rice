@@ -27,6 +27,8 @@ done
 
 # Pull .local tracked content
 cp -r "$HOME/.local/share/color-schemes/"* .local/share/color-schemes/ 2>/dev/null || true
+mkdir -p .local/share/konsole
+cp -r "$HOME/.local/share/konsole/"* .local/share/konsole/ 2>/dev/null || true
 
 # Pull standalone configs and wallpapers
 cp "$HOME/.zshrc" .zshrc

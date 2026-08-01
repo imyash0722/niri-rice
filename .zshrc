@@ -216,3 +216,8 @@ exists yazi && {
 
 # Run fastfetch on startup
 exists fastfetch && fastfetch
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/pineapple/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
