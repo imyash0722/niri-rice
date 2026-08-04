@@ -20,6 +20,8 @@ done
 
 # Pull specific tracked files from .config
 for file in dolphinrc kdeglobals konsolerc mimeapps.list starship.toml; do
+mkdir -p .local/share/dbus-1/services
+cp -a "$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service" .local/share/dbus-1/services/ 2>/dev/null || true
     if [ -f "$HOME/.config/$file" ]; then
         cp "$HOME/.config/$file" .config/
     fi
@@ -28,7 +30,11 @@ done
 # Pull .local tracked content
 cp -r "$HOME/.local/share/color-schemes/"* .local/share/color-schemes/ 2>/dev/null || true
 mkdir -p .local/share/konsole
+mkdir -p .local/share/dbus-1/services
+cp -a "$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service" .local/share/dbus-1/services/ 2>/dev/null || true
 cp -r "$HOME/.local/share/konsole/"* .local/share/konsole/ 2>/dev/null || true
+mkdir -p .local/share/dbus-1/services
+cp -a "$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service" .local/share/dbus-1/services/ 2>/dev/null || true
 
 # Pull standalone configs and wallpapers
 cp "$HOME/.zshrc" .zshrc
