@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 
 echo "Starting installation of tools for your coursework..."
 
@@ -37,10 +38,10 @@ if [ ! -d "$HOME/gem5" ]; then
     sudo pacman -S --needed scons m4 protobuf hdf5 python-pydot pkgconf
     git clone https://gem5.googlesource.com/public/gem5 "$HOME/gem5"
     
-    read -p "Do you want to compile gem5 now? (Warning: takes a long time, 20-30+ mins) [y/N]: " compile_gem5
+    read -rp "Do you want to compile gem5 now? (Warning: takes a long time, 20-30+ mins) [y/N]: " compile_gem5
     if [[ "$compile_gem5" =~ ^[Yy]$ ]]; then
         echo "Compiling gem5..."
-        cd "$HOME/gem5" && scons build/X86/gem5.opt -j$(nproc)
+        (cd "$HOME/gem5" && scons build/X86/gem5.opt -j"$(nproc)")
     else
         echo "gem5 cloned to ~/gem5. To build it later, run:"
         echo "cd ~/gem5 && scons build/X86/gem5.opt -j\$(nproc)"
