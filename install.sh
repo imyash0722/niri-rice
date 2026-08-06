@@ -40,6 +40,14 @@ sudo systemctl enable --now power-profiles-daemon || true
 
 
 echo "=========================================="
-echo " Installation Complete!"
-echo " Restart or log out and select Niri from your display manager."
+echo " Niri Rice Installation Complete!"
+echo "=========================================="
+
+read -p "Do you want to run the coursework tools installation script (install_tools.sh)? [y/N]: " run_tools
+if [[ "$run_tools" =~ ^[Yy]$ ]]; then
+    ./install_tools.sh
+fi
+
+echo "=========================================="
+echo " Setup complete! Restart or log out and select Niri from your display manager."
 echo "=========================================="
