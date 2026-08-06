@@ -6,5 +6,28 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+
 # Wallpapers are stored on the shared partition at /mnt/shared/wallpaper/
 Wallpapers/
+
+# KDE — sensitive / volatile files (do NOT commit these)
+.config/kwalletrc
+.config/kdeconnect/
+.config/chromium/
+.config/mozilla/
+.config/discord/
+.config/vesktop/Default/
+.config/gh/
+.config/pulse/
+.config/dconf/
+.config/libaccounts-glib/
+.config/session/
+.config/autostart/
+.config/KDE/UserFeedback.conf
+.config/kate/lspclient/
+.config/kconf_updaterc
+.config/baloofileinformationrc
+.config/kactivitymanagerdrc
+.config/trashrc
+.config/user-dirs.locale
+.config/systemmonitorrc

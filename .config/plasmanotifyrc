@@ -1,0 +1,11 @@
+[Applications][discord]
+Seen=true
+
+[Applications][firefox-developer-edition]
+Seen=true
+
+[Applications][vesktop]
+Seen=true
+
+[DoNotDisturb]
+Until=2026,8,6,16,5,0.684
