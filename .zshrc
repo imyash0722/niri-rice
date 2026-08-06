@@ -162,7 +162,7 @@ exists pnpm && {
   export PATH="$PNPM_HOME:$PATH"
 }
 
-exists dircolors && {
+exists dircolors && [[ -f ~/.dircolors ]] && {
   eval "$(dircolors ~/.dircolors)"
   alias ls='ls --color=auto'
 }
