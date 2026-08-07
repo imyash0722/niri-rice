@@ -66,7 +66,7 @@ paru -S --needed --noconfirm \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd ttf-font-awesome \
     ttf-meslo-nerd breeze breeze-icons plasma-integration power-profiles-daemon \
     lazygit yazi tealdeer qimgv haruna ark okular libreoffice-still zapzap \
-    xcb-util-cursor xwayland-satellite || echo "  [!] Some packages failed to install — continuing anyway..."
+    xcb-util-cursor xwayland-satellite tokyonight-gtk-theme-git || echo "  [!] Some packages failed to install — continuing anyway..."
 
 # ---------------------------------------------------------------------------
 # 2. Symlink config files (live — git pull auto-updates everything)
