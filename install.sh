@@ -138,6 +138,15 @@ if [[ "$run_tools" =~ ^[Yy]$ ]]; then
 fi
 
 echo ""
+read -rp "Do you want to install Fingwit (fingerprint authentication utility)? [y/N]: " run_fingwit
+if [[ "$run_fingwit" =~ ^[Yy]$ ]]; then
+    echo "Installing Fingwit and fprintd..."
+    paru -S --needed --noconfirm fingwit fprintd
+    sudo systemctl enable --now fprintd || true
+    echo "Fingwit installed! You can run 'fingwit' from your app launcher to configure your fingerprints."
+fi
+
+echo ""
 echo "=========================================="
 echo " Setup complete! Restart or log out and"
 echo " select Niri/KDE from your display manager."
