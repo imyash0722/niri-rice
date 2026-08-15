@@ -58,9 +58,9 @@ link_dir_contents() {
 echo "[1/5] Installing required dependencies..."
 paru -S --needed --noconfirm \
     google-chrome dolphin konsole vesktop \
-    niri waybar rofi-wayland foot fastfetch ly networkmanager plasma-nm \
+    niri waybar rofi-wayland foot fastfetch networkmanager plasma-nm \
     kde-cli-tools plasma-pa bluedevil bt-dualboot satty btop neovim zsh \
-    firefox-developer-edition awww hyprlock grim slurp wl-clipboard cliphist \
+    firefox-developer-edition awww grim slurp wl-clipboard cliphist \
     starship mako hypridle ffmpeg jq brightnessctl playerctl rofi-rbw \
     wtype obs-studio imagemagick kwallet kanshi ttf-jetbrains-mono ttf-roboto \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd ttf-font-awesome \
@@ -107,16 +107,12 @@ if [ -f "$REPO_DIR/.zshrc" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# 3. Ly display manager theme (needs sudo — copy, not symlink)
+# 3. Enable Display Manager (SDDM)
 # ---------------------------------------------------------------------------
-if [ -f "$REPO_DIR/ly.unused/config.ini" ]; then
-    echo ""
-    echo "[3/5] Applying Tokyo Night Ly theme (requires sudo)..."
-    sudo cp "$REPO_DIR/ly.unused/config.ini" /etc/ly/config.ini
-    sudo systemctl enable ly@tty2.service || true
-else
-    echo "[3/5] Ly config not found, skipping..."
-fi
+echo ""
+echo "[3/5] Enabling SDDM display manager..."
+sudo systemctl disable ly.service || true
+sudo systemctl enable sddm.service || true
 
 # ---------------------------------------------------------------------------
 # 4. Script permissions
