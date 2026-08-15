@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# Define the servers you manage
+SERVICES=("suwayomi-server" "port-manager-dash" "tailscaled")
+
+generate_menu() {
+    for srv in "${SERVICES[@]}"; do
+        if systemctl is-active --quiet "$srv"; then
+            echo -e "\033[32m${srv} (UP)\033[0m"
+        else
+            echo -e "\033[90m${srv} (DOWN)\033[0m"
+        fi
+    done
+    echo -e "\033[31mShutdown All & Disable Tailscale\033[0m"
+}
+
+while true; do
+    CHOICE=$(generate_menu | fzf --ansi --prompt="Select server to toggle: " --height=10 --layout=reverse --border)
+
+    # Exit if user presses ESC or Ctrl+C
+    if [[ -z "$CHOICE" ]]; then
+        exit 0
+    fi
+
+    # Strip ANSI colors to get raw string
+    RAW_CHOICE=$(echo "$CHOICE" | sed 's/\x1b\[[0-9;]*m//g')
+
+    if [[ "$RAW_CHOICE" == "Shutdown All & Disable Tailscale" ]]; then
+        echo "Shutting down all servers and Tailscale..."
+        sudo systemctl stop suwayomi-server port-manager-dash tailscaled
+        echo "Done! Press Enter to exit."
+        read
+        exit 0
+    else
+        # Extract the exact service name (first word)
+        SRV=$(echo "$RAW_CHOICE" | awk '{print $1}')
+        
+        if systemctl is-active --quiet "$SRV"; then
+            echo "Stopping $SRV..."
+            sudo systemctl stop "$SRV"
+        else
+            echo "Starting $SRV..."
+            sudo systemctl start "$SRV"
+        fi
+    fi
+done
