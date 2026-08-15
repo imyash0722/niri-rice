@@ -57,16 +57,16 @@ link_dir_contents() {
 # ---------------------------------------------------------------------------
 echo "[1/5] Installing required dependencies..."
 paru -S --needed --noconfirm \
-    google-chrome dolphin konsole typora-free-with-plugin vesktop \
+    google-chrome dolphin konsole vesktop \
     niri waybar rofi-wayland foot fastfetch ly networkmanager plasma-nm \
     kde-cli-tools plasma-pa bluedevil bt-dualboot satty btop neovim zsh \
     firefox-developer-edition awww hyprlock grim slurp wl-clipboard cliphist \
-    cava starship mako hypridle ffmpeg jq brightnessctl playerctl rofi-rbw \
+    starship mako hypridle ffmpeg jq brightnessctl playerctl rofi-rbw \
     wtype obs-studio imagemagick kwallet kanshi ttf-jetbrains-mono ttf-roboto \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd ttf-font-awesome \
     ttf-meslo-nerd breeze breeze-icons plasma-integration power-profiles-daemon \
     lazygit yazi tealdeer qimgv haruna ark okular libreoffice-still zapzap \
-    xcb-util-cursor xwayland-satellite tokyonight-gtk-theme-git || echo "  [!] Some packages failed to install — continuing anyway..."
+    xcb-util-cursor xwayland-satellite kde-applications-meta || echo "  [!] Some packages failed to install — continuing anyway..."
 
 # ---------------------------------------------------------------------------
 # 2. Symlink config files (live — git pull auto-updates everything)
