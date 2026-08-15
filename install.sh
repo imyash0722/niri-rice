@@ -57,7 +57,7 @@ link_dir_contents() {
 # ---------------------------------------------------------------------------
 echo "[1/5] Installing required dependencies..."
 paru -S --needed --noconfirm \
-    google-chrome dolphin konsole vesktop \
+    google-chrome dolphin konsole \
     niri waybar rofi-wayland foot fastfetch networkmanager plasma-nm \
     kde-cli-tools plasma-pa bluedevil bt-dualboot satty btop neovim zsh \
     firefox-developer-edition awww grim slurp wl-clipboard cliphist \
