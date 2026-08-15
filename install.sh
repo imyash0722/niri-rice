@@ -66,7 +66,21 @@ paru -S --needed --noconfirm \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd ttf-font-awesome \
     ttf-meslo-nerd breeze breeze-icons plasma-integration power-profiles-daemon \
     lazygit yazi tealdeer qimgv haruna ark okular libreoffice-still zapzap \
-    xcb-util-cursor xwayland-satellite kde-applications-meta || echo "  [!] Some packages failed to install — continuing anyway..."
+    xcb-util-cursor xwayland-satellite kde-applications-meta \
+    sddm quickshell qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
+    qt6-multimedia-ffmpeg gst-plugins-base gst-plugins-good gst-plugins-bad \
+    gst-plugins-ugly || echo "  [!] Some packages failed to install — continuing anyway..."
+
+# ---------------------------------------------------------------------------
+# 1.5. Clone qylock themes
+# ---------------------------------------------------------------------------
+echo -e "\n[1.5/5] Cloning qylock lockscreens/SDDM themes..."
+if [ ! -d "$HOME/.local/share/qylock" ]; then
+    git clone https://github.com/Darkkal44/qylock "$HOME/.local/share/qylock"
+else
+    echo "  qylock already exists in ~/.local/share/qylock, pulling latest..."
+    git -C "$HOME/.local/share/qylock" pull
+fi
 
 # ---------------------------------------------------------------------------
 # 2. Symlink config files (live — git pull auto-updates everything)
