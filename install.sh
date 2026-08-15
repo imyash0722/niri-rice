@@ -164,6 +164,19 @@ if [[ "$run_fingwit" =~ ^[Yy]$ ]]; then
 fi
 
 echo ""
+read -rp "Do you want to configure your qylock lockscreen and SDDM themes now? [Y/n]: " config_qylock
+if [[ -z "$config_qylock" || "$config_qylock" =~ ^[Yy]$ ]]; then
+    if [ -d "$HOME/.local/share/qylock" ]; then
+        echo "Launching SDDM theme selector..."
+        (cd "$HOME/.local/share/qylock" && chmod +x sddm.sh && ./sddm.sh)
+        echo "Launching Quickshell lockscreen selector..."
+        (cd "$HOME/.local/share/qylock" && chmod +x quickshell.sh && ./quickshell.sh)
+    else
+        echo "qylock repository not found in ~/.local/share/qylock."
+    fi
+fi
+
+echo ""
 echo "=========================================="
 echo " Setup complete! Restart or log out and"
 echo " select Niri/KDE from your display manager."
