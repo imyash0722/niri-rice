@@ -17,7 +17,7 @@ plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
 
 [Containments][130][Wallpaper][org.kde.image][General]
-Image=file:///mnt/shared/stuff/projects/niri-rice/Wallpapers/40750047f3ad179496e047a6c0f0f2a7.gif
+Image=file:///mnt/shared/stuff/projects/niri-rice/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.gif
 SlidePaths=/usr/share/wallpapers/
 
 [Containments][131]
@@ -56,7 +56,7 @@ DialogWidth=810
 
 [Containments][131][Applets][133][Configuration][General]
 highlightWindows=true
-launchers=applications:org.kde.konsole.desktop,preferred://filemanager,preferred://browser,applications:systemsettings.desktop
+launchers=applications:org.kde.konsole.desktop,preferred://filemanager,preferred://browser,applications:libreoffice-startcenter.desktop
 
 [Containments][131][Applets][134]
 immutability=1

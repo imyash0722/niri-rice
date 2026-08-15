@@ -19,4 +19,5 @@ ScrollFactor=2
 ScrollMethod=4
 
 [Mouse]
+cursorSize=32
 cursorTheme=HadesII-Cursors
