@@ -30,7 +30,8 @@
     },
     {
       "type": "kernel",
-      "key": "Kern "
+      "key": "Kern ",
+      "format": "{2}"
     },
     {
       "type": "uptime",
