@@ -22,12 +22,17 @@ generate_menu() {
         fi
     done
     
-    echo "4. Turn (OFF/ON) all servers"
-    echo "5. Turn (OFF/ON) all servers + Tailscale"
+    if [ "$any_up" = true ]; then
+        echo "4. Turn OFF all servers"
+        echo "5. Turn OFF all servers + Tailscale"
+    else
+        echo "4. Turn ON all servers"
+        echo "5. Turn ON all servers + Tailscale"
+    fi
 }
 
 while true; do
-    CHOICE=$(generate_menu | fzf --ansi --prompt="Select server to toggle: " --height=10 --layout=reverse --border)
+    CHOICE=$(generate_menu | fzf --ansi --prompt="Select action: " --height=10 --layout=reverse --border)
 
     # Exit if user presses ESC or Ctrl+C
     if [[ -z "$CHOICE" ]]; then
@@ -37,9 +42,8 @@ while true; do
     # Extract raw choice (strip ANSI and icons)
     RAW_CHOICE=$(echo "$CHOICE" | sed -r 's/\x1B\[[0-9;]*[mK]//g' | sed 's/ (🟢)//g' | sed 's/ (⭕)//g' | xargs)
 
-    if [[ "$RAW_CHOICE" == "4. Turn (OFF/ON) all servers" ]]; then
+    if [[ "$RAW_CHOICE" == 4.* ]]; then
         echo "Toggling all servers..."
-        # If any server is up, stop them all. Otherwise, start them all.
         local any_active=false
         for srv in "${SERVICES[@]}"; do
             if systemctl is-active --quiet "$srv"; then any_active=true; fi
@@ -51,7 +55,7 @@ while true; do
             sudo systemctl start suwayomi-server sshd tor
         fi
         
-    elif [[ "$RAW_CHOICE" == "5. Turn (OFF/ON) all servers + Tailscale" ]]; then
+    elif [[ "$RAW_CHOICE" == 5.* ]]; then
         echo "Toggling all servers and Tailscale..."
         local any_active=false
         for srv in "${SERVICES[@]}" tailscaled; do
