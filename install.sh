@@ -14,7 +14,7 @@ echo ""
 # wasn't already a symlink pointing at our repo).
 # Usage: safe_link <abs-source> <abs-dest>
 # ---------------------------------------------------------------------------
-safe_link() {
+force_link() {
     local src="$1"
     local dst="$2"
 
@@ -23,10 +23,10 @@ safe_link() {
         return 0
     fi
 
-    # Something else is there — back it up
+    # Forcefully remove whatever is currently there (no backups)
     if [ -e "$dst" ] || [ -L "$dst" ]; then
-        echo "  Backing up existing: $dst -> ${dst}.bak"
-        mv "$dst" "${dst}.bak"
+        echo "  Overwriting existing: $dst"
+        rm -rf "$dst"
     fi
 
     mkdir -p "$(dirname "$dst")"
@@ -48,7 +48,7 @@ link_dir_contents() {
         [ -e "$src_item" ] || continue   # skip if glob matched nothing
         local name
         name="$(basename "$src_item")"
-        safe_link "$src_item" "$dst_dir/$name"
+        force_link "$src_item" "$dst_dir/$name"
     done
 }
 
@@ -89,7 +89,7 @@ fi
 
 # ~/.zshrc
 if [ -f "$REPO_DIR/.zshrc" ]; then
-    safe_link "$REPO_DIR/.zshrc" "$HOME/.zshrc"
+    force_link "$REPO_DIR/.zshrc" "$HOME/.zshrc"
 fi
 
 # ---------------------------------------------------------------------------
