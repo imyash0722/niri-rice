@@ -65,7 +65,7 @@ paru -S --needed --noconfirm \
     wtype obs-studio imagemagick kwallet kanshi ttf-jetbrains-mono ttf-roboto \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd ttf-font-awesome \
     ttf-meslo-nerd breeze breeze-icons plasma-integration power-profiles-daemon \
-    lazygit yazi tealdeer qimgv haruna ark okular libreoffice-still zapzap \
+    lazygit yazi tealdeer qimgv haruna ark okular libreoffice-still zapzap video2gif \
     xcb-util-cursor xwayland-satellite kde-applications-meta \
     sddm quickshell qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
     qt6-multimedia-ffmpeg gst-plugins-base gst-plugins-good gst-plugins-bad \
@@ -158,7 +158,7 @@ echo ""
 read -rp "Do you want to install Fingwit (fingerprint authentication utility)? [y/N]: " run_fingwit
 if [[ "$run_fingwit" =~ ^[Yy]$ ]]; then
     echo "Installing Fingwit and fprintd..."
-    paru -S --needed --noconfirm fingwit fprintd
+    paru -S --needed --noconfirm fingwit fprintd || echo "  [!] Failed to install Fingwit — continuing anyway..."
     sudo systemctl enable --now fprintd || true
     echo "Fingwit installed! You can run 'fingwit' from your app launcher to configure your fingerprints."
 fi
@@ -168,9 +168,9 @@ read -rp "Do you want to configure your qylock lockscreen and SDDM themes now? [
 if [[ -z "$config_qylock" || "$config_qylock" =~ ^[Yy]$ ]]; then
     if [ -d "$HOME/.local/share/qylock" ]; then
         echo "Launching SDDM theme selector..."
-        (cd "$HOME/.local/share/qylock" && chmod +x sddm.sh && ./sddm.sh)
+        (cd "$HOME/.local/share/qylock" && chmod +x sddm.sh && ./sddm.sh || true)
         echo "Launching Quickshell lockscreen selector..."
-        (cd "$HOME/.local/share/qylock" && chmod +x quickshell.sh && ./quickshell.sh)
+        (cd "$HOME/.local/share/qylock" && chmod +x quickshell.sh && ./quickshell.sh || true)
     else
         echo "qylock repository not found in ~/.local/share/qylock."
     fi
