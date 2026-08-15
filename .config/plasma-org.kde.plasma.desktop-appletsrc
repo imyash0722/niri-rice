@@ -17,7 +17,7 @@ plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
 
 [Containments][130][Wallpaper][org.kde.image][General]
-Image=file:///home/pineapple/Wallpapers/40750047f3ad179496e047a6c0f0f2a7.gif
+Image=file:///mnt/shared/stuff/projects/niri-rice/Wallpapers/40750047f3ad179496e047a6c0f0f2a7.gif
 SlidePaths=/usr/share/wallpapers/
 
 [Containments][131]
@@ -37,8 +37,14 @@ plugin=org.kde.plasma.kickoff
 popupHeight=509
 popupWidth=647
 
+[Containments][131][Applets][132][Configuration][ConfigDialog]
+DialogHeight=630
+DialogWidth=810
+
 [Containments][131][Applets][132][Configuration][General]
 favoritesPortedToKAstats=true
+icon=/home/pineapple/Pictures/icons/pineapple-2.png
+systemFavorites=suspend\\,hibernate\\,reboot\\,shutdown
 
 [Containments][131][Applets][133]
 immutability=1
