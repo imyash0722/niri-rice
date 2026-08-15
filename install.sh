@@ -101,6 +101,13 @@ if [ -d "$REPO_DIR/.local" ]; then
     done
 fi
 
+# Extract custom cursor themes
+if [ -f "$REPO_DIR/setup_assets/cursors.tar.gz" ]; then
+    echo "  Extracting custom cursor themes..."
+    mkdir -p "$HOME/.local/share/icons"
+    tar -xzf "$REPO_DIR/setup_assets/cursors.tar.gz" -C "$HOME/.local/share/icons/"
+fi
+
 # ~/.zshrc
 if [ -f "$REPO_DIR/.zshrc" ]; then
     force_link "$REPO_DIR/.zshrc" "$HOME/.zshrc"
