@@ -1,17 +1,29 @@
 #!/usr/bin/env bash
 
-# Define the servers you manage
-SERVICES=("suwayomi-server" "port-manager-dash" "tailscaled")
+# Map friendly names to systemd services
+declare -A SERVICES=(
+    ["1. Suwayomi Server"]="suwayomi-server"
+    ["2. Secure Shell"]="sshd"
+    ["3. Tor Proxy Network"]="tor"
+)
+
+# Preserve order since associative arrays are unordered in bash
+ORDER=("1. Suwayomi Server" "2. Secure Shell" "3. Tor Proxy Network")
 
 generate_menu() {
-    for srv in "${SERVICES[@]}"; do
+    local any_up=false
+    for name in "${ORDER[@]}"; do
+        local srv="${SERVICES[$name]}"
         if systemctl is-active --quiet "$srv"; then
-            echo -e "\033[32m${srv} (UP)\033[0m"
+            echo -e "${name} \033[32m(🟢)\033[0m"
+            any_up=true
         else
-            echo -e "\033[90m${srv} (DOWN)\033[0m"
+            echo -e "${name} \033[90m(⭕)\033[0m"
         fi
     done
-    echo -e "\033[31mShutdown All & Disable Tailscale\033[0m"
+    
+    echo "4. Turn (OFF/ON) all servers"
+    echo "5. Turn (OFF/ON) all servers + Tailscale"
 }
 
 while true; do
@@ -22,25 +34,47 @@ while true; do
         exit 0
     fi
 
-    # Strip ANSI colors to get raw string
-    RAW_CHOICE=$(echo "$CHOICE" | sed 's/\x1b\[[0-9;]*m//g')
+    # Extract raw choice (strip ANSI and icons)
+    RAW_CHOICE=$(echo "$CHOICE" | sed -r 's/\x1B\[[0-9;]*[mK]//g' | sed 's/ (🟢)//g' | sed 's/ (⭕)//g' | xargs)
 
-    if [[ "$RAW_CHOICE" == "Shutdown All & Disable Tailscale" ]]; then
-        echo "Shutting down all servers and Tailscale..."
-        sudo systemctl stop suwayomi-server port-manager-dash tailscaled
-        echo "Done! Press Enter to exit."
-        read
-        exit 0
-    else
-        # Extract the exact service name (first word)
-        SRV=$(echo "$RAW_CHOICE" | awk '{print $1}')
+    if [[ "$RAW_CHOICE" == "4. Turn (OFF/ON) all servers" ]]; then
+        echo "Toggling all servers..."
+        # If any server is up, stop them all. Otherwise, start them all.
+        local any_active=false
+        for srv in "${SERVICES[@]}"; do
+            if systemctl is-active --quiet "$srv"; then any_active=true; fi
+        done
         
-        if systemctl is-active --quiet "$SRV"; then
-            echo "Stopping $SRV..."
-            sudo systemctl stop "$SRV"
+        if [ "$any_active" = true ]; then
+            sudo systemctl stop suwayomi-server sshd tor
         else
-            echo "Starting $SRV..."
-            sudo systemctl start "$SRV"
+            sudo systemctl start suwayomi-server sshd tor
+        fi
+        
+    elif [[ "$RAW_CHOICE" == "5. Turn (OFF/ON) all servers + Tailscale" ]]; then
+        echo "Toggling all servers and Tailscale..."
+        local any_active=false
+        for srv in "${SERVICES[@]}" tailscaled; do
+            if systemctl is-active --quiet "$srv"; then any_active=true; fi
+        done
+        
+        if [ "$any_active" = true ]; then
+            sudo systemctl stop suwayomi-server sshd tor tailscaled
+        else
+            sudo systemctl start suwayomi-server sshd tor tailscaled
+        fi
+        
+    else
+        # It's an individual service
+        SRV="${SERVICES[$RAW_CHOICE]}"
+        if [[ -n "$SRV" ]]; then
+            if systemctl is-active --quiet "$SRV"; then
+                echo "Stopping $RAW_CHOICE..."
+                sudo systemctl stop "$SRV"
+            else
+                echo "Starting $RAW_CHOICE..."
+                sudo systemctl start "$SRV"
+            fi
         fi
     fi
 done
