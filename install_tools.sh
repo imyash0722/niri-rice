@@ -28,7 +28,7 @@ paru -S --needed \
     python-cs50 \
     mininet \
     freecad \
-    krita
+    krita || echo "  [!] Some tools failed to install — continuing anyway..."
 
 # 2. Build gem5 from source
 echo "Setting up gem5..."
