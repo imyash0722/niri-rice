@@ -4,11 +4,16 @@ Id_2=4233998f-f4df-4ac8-8de9-0ffbb34fd328
 Number=2
 Rows=1
 
+[Effect-mousemark]
+Color=255,128,128
+
 [Plugins]
 blurEnabled=false
+cubeEnabled=true
 diminactiveEnabled=true
 hidecursorEnabled=true
 minimizeallEnabled=true
+mousemarkEnabled=true
 wobblywindowsEnabled=true
 
 [Tiling][4233998f-f4df-4ac8-8de9-0ffbb34fd328][40f305f5-4d64-4ed0-8fa3-8e1e30a3d66e]
@@ -16,6 +21,10 @@ padding=4
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][57f83b39-bce7-4d4f-ab0e-18fdfea7b624][40f305f5-4d64-4ed0-8fa3-8e1e30a3d66e]
+padding=4
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][6815acaf-da27-4235-9e0d-c64384dd2f79][40f305f5-4d64-4ed0-8fa3-8e1e30a3d66e]
 padding=4
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 

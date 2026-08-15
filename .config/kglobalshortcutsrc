@@ -3,8 +3,8 @@ _k_friendly_name=Activity Manager
 switch-to-activity-9cf0aaf4-12b7-4fb2-a15d-7d593e2f0f95=none,none,Switch to activity "Default"
 
 [KDE Keyboard Layout Switcher]
-Switch to Last-Used Keyboard Layout=Meta+Alt+L,Meta+Alt+L,
-Switch to Next Keyboard Layout=Meta+Alt+K,Meta+Alt+K,
+Switch to Last-Used Keyboard Layout=Meta+Alt+L,Meta+Alt+L,Switch to Last-Used Keyboard Layout
+Switch to Next Keyboard Layout=Meta+Alt+K,Meta+Alt+K,Switch to Next Keyboard Layout
 _k_friendly_name=Keyboard Layout Switcher
 
 [kaccess]
@@ -26,7 +26,7 @@ push_to_talk=none,none,Push to talk
 [ksmserver]
 Halt Without Confirmation=none,none,Shut Down Without Confirmation
 Lock Session=Screensaver\tMeta+L,Screensaver\tMeta+L,Lock Session
-Log Out=Ctrl+Alt+Del,Ctrl+Alt+Del,Show Logout Screen
+Log Out=Meta+Esc,Ctrl+Alt+Del,Show Logout Screen
 Log Out Without Confirmation=none,none,Log Out Without Confirmation
 LogOut=none,none,Log Out
 Reboot=none,none,Reboot
@@ -36,6 +36,9 @@ _k_friendly_name=Session Management
 
 [kwin]
 Activate Window Demanding Attention=Meta+Ctrl+A,Meta+Ctrl+A,Activate Window Demanding Attention
+ClearLastMouseMark=Meta+Shift+F12,Meta+Shift+F12,Clear Last Mouse Mark
+ClearMouseMarks=Meta+Shift+F11,Meta+Shift+F11,Clear All Mouse Marks
+Cube=Meta+C,none,Toggle Cube
 Cycle Overview=none,none,Cycle through Overview and Grid View
 Cycle Overview Opposite=none,none,Cycle through Grid View and Overview
 Decrease Opacity=none,none,Decrease Opacity of Active Window by 5%
@@ -243,7 +246,7 @@ powerProfile=Battery\tMeta+B,Battery\tMeta+B,Switch Power Profile
 [plasmashell]
 Slideshow Wallpaper Next Image=none,none,Next Wallpaper Image
 _k_friendly_name=plasmashell
-activate application launcher=Meta\tAlt+F1,Meta\tAlt+F1,Activate Application Launcher
+activate application launcher=Meta,Meta\tAlt+F1,Activate Application Launcher
 activate task manager entry 1=Meta+1,Meta+1,Activate Task Manager Entry 1
 activate task manager entry 10=none,none,Activate Task Manager Entry 10
 activate task manager entry 2=Meta+2,Meta+2,Activate Task Manager Entry 2
@@ -254,6 +257,8 @@ activate task manager entry 6=Meta+6,Meta+6,Activate Task Manager Entry 6
 activate task manager entry 7=Meta+7,Meta+7,Activate Task Manager Entry 7
 activate task manager entry 8=Meta+8,Meta+8,Activate Task Manager Entry 8
 activate task manager entry 9=Meta+9,Meta+9,Activate Task Manager Entry 9
+activate widget 129=none,none,Activate Digital Clock Widget
+activate widget 52=Alt+F1,none,Activate Application Launcher Widget
 clear history=none,none,Clear Notification History
 clear-history=none,none,Clear Clipboard History
 clipboard_action=Meta+Ctrl+X,Meta+Ctrl+X,Automatic Action Popup Menu
@@ -271,3 +276,9 @@ show-on-mouse-pos=Meta+V,Meta+V,Show Clipboard Items at Mouse Position
 switch to next activity=none,none,Switch to Next Activity
 switch to previous activity=none,none,Switch to Previous Activity
 toggle do not disturb=none,none,Toggle do not disturb
+
+[services][org.kde.konsole.desktop]
+_launch=Meta+Return
+
+[services][org.kde.plasma-systemmonitor.desktop]
+_launch=none

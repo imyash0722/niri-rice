@@ -1,2 +1,23 @@
+[Keyboard]
+NumLock=0
+
 [Libinput][1267][12926][ELAN06FA:00 04F3:327E Touchpad]
-Enabled=false
+ClickMethod=2
+DisableWhileTyping=true
+Enabled=true
+MiddleButtonEmulation=true
+NaturalScroll=false
+ScrollFactor=3
+ScrollMethod=1
+TapDragLock=true
+
+[Libinput][5426][156][Razer Razer DeathAdder V2 X HyperSpeed]
+NaturalScroll=true
+PointerAcceleration=0.000
+PointerAccelerationProfile=1
+ScrollFactor=2
+ScrollMethod=4
+
+[Mouse]
+cursorSize=32
+cursorTheme=HadesII-Cursors-HighContrast
