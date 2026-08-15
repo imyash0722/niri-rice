@@ -8,7 +8,7 @@
 environment {
     XDG_MENU_PREFIX "plasma-"
     QT_QPA_PLATFORMTHEME "kde"
-    GTK_THEME "Adwaita:dark"
+    GTK_THEME "Breeze"
     GTK_USE_PORTAL "1"
 }
 
