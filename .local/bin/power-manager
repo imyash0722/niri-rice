@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Get current profile
+CURRENT=$(powerprofilesctl get)
+
+generate_menu() {
+    local profiles=("performance" "balanced" "power-saver")
+    
+    for profile in "${profiles[@]}"; do
+        if [[ "$profile" == "$CURRENT" ]]; then
+            echo -e "${profile} \033[32m(Active 🟢)\033[0m"
+        else
+            echo -e "${profile} \033[90m(⭕)\033[0m"
+        fi
+    done
+}
+
+# Run fzf to select
+CHOICE=$(generate_menu | fzf --ansi --prompt="Select Power Profile: " --height=10 --layout=reverse --border)
+
+# Exit if user presses ESC or Ctrl+C
+if [[ -z "$CHOICE" ]]; then
+    exit 0
+fi
+
+# Extract raw choice (strip ANSI and icons)
+RAW_CHOICE=$(echo "$CHOICE" | awk '{print $1}')
+
+if [[ -n "$RAW_CHOICE" ]]; then
+    echo "Setting power profile to $RAW_CHOICE..."
+    powerprofilesctl set "$RAW_CHOICE"
+fi
