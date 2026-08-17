@@ -11,26 +11,29 @@ declare -A SERVICES=(
 ORDER=("1. Suwayomi Server" "2. Secure Shell" "3. Tor Proxy Network")
 
 generate_menu() {
-    local any_up=false
-    for srv in "${SERVICES[@]}" tailscaled; do
-        if systemctl is-active --quiet "$srv"; then any_up=true; fi
-    done
-    
+    local any_servers_up=false
     for name in "${ORDER[@]}"; do
         local srv="${SERVICES[$name]}"
         if systemctl is-active --quiet "$srv"; then
             echo -e "${name} \033[32m(🟢)\033[0m"
+            any_servers_up=true
         else
             echo -e "${name} \033[90m(⭕)\033[0m"
         fi
     done
     
-    if [ "$any_up" = true ]; then
+    # Servers Mass Toggle
+    if [ "$any_servers_up" = true ]; then
         echo "4. Turn OFF all servers"
-        echo "5. Turn OFF all servers + Tailscale"
     else
         echo "4. Turn ON all servers"
-        echo "5. Turn ON all servers + Tailscale"
+    fi
+
+    # Tailscale Toggle
+    if systemctl is-active --quiet "tailscaled"; then
+        echo "5. Turn OFF Tailscale"
+    else
+        echo "5. Turn ON Tailscale"
     fi
 }
 
@@ -50,15 +53,17 @@ while true; do
         if [[ "$RAW_CHOICE" == *"Turn OFF"* ]]; then
             sudo systemctl stop suwayomi-server sshd tor
         else
-            sudo systemctl start suwayomi-server sshd tor
+            # Turning on any server also turns on Tailscale
+            sudo systemctl start suwayomi-server sshd tor tailscaled
         fi
         
     elif [[ "$RAW_CHOICE" == 5.* ]]; then
-        echo "Toggling all servers and Tailscale..."
+        echo "Toggling Tailscale..."
         if [[ "$RAW_CHOICE" == *"Turn OFF"* ]]; then
-            sudo systemctl stop suwayomi-server sshd tor tailscaled
+            # Turning off Tailscale also turns off all servers
+            sudo systemctl stop tailscaled suwayomi-server sshd tor
         else
-            sudo systemctl start suwayomi-server sshd tor tailscaled
+            sudo systemctl start tailscaled
         fi
         
     else
@@ -69,8 +74,9 @@ while true; do
                 echo "Stopping $RAW_CHOICE..."
                 sudo systemctl stop "$SRV"
             else
-                echo "Starting $RAW_CHOICE..."
-                sudo systemctl start "$SRV"
+                echo "Starting $RAW_CHOICE (and Tailscale)..."
+                # Turning on any individual server also turns on Tailscale
+                sudo systemctl start "$SRV" tailscaled
             fi
         fi
     fi
