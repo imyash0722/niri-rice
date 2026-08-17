@@ -12,11 +12,14 @@ ORDER=("1. Suwayomi Server" "2. Secure Shell" "3. Tor Proxy Network")
 
 generate_menu() {
     local any_up=false
+    for srv in "${SERVICES[@]}" tailscaled; do
+        if systemctl is-active --quiet "$srv"; then any_up=true; fi
+    done
+    
     for name in "${ORDER[@]}"; do
         local srv="${SERVICES[$name]}"
         if systemctl is-active --quiet "$srv"; then
             echo -e "${name} \033[32m(🟢)\033[0m"
-            any_up=true
         else
             echo -e "${name} \033[90m(⭕)\033[0m"
         fi
@@ -44,12 +47,7 @@ while true; do
 
     if [[ "$RAW_CHOICE" == 4.* ]]; then
         echo "Toggling all servers..."
-        local any_active=false
-        for srv in "${SERVICES[@]}"; do
-            if systemctl is-active --quiet "$srv"; then any_active=true; fi
-        done
-        
-        if [ "$any_active" = true ]; then
+        if [[ "$RAW_CHOICE" == *"Turn OFF"* ]]; then
             sudo systemctl stop suwayomi-server sshd tor
         else
             sudo systemctl start suwayomi-server sshd tor
@@ -57,12 +55,7 @@ while true; do
         
     elif [[ "$RAW_CHOICE" == 5.* ]]; then
         echo "Toggling all servers and Tailscale..."
-        local any_active=false
-        for srv in "${SERVICES[@]}" tailscaled; do
-            if systemctl is-active --quiet "$srv"; then any_active=true; fi
-        done
-        
-        if [ "$any_active" = true ]; then
+        if [[ "$RAW_CHOICE" == *"Turn OFF"* ]]; then
             sudo systemctl stop suwayomi-server sshd tor tailscaled
         else
             sudo systemctl start suwayomi-server sshd tor tailscaled
