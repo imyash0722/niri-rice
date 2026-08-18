@@ -70,7 +70,7 @@ paru -S --needed --noconfirm \
     xcb-util-cursor xwayland-satellite kde-applications-meta \
     sddm quickshell qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
     qt6-multimedia-ffmpeg gst-plugins-base gst-plugins-good gst-plugins-bad \
-    gst-plugins-ugly waybar-module-pacman-updates || echo "  [!] Some packages failed to install — continuing anyway..."
+    gst-plugins-ugly waybar-module-pacman-updates mpvpaper || echo "  [!] Some packages failed to install — continuing anyway..."
 
 # ---------------------------------------------------------------------------
 # 1.5. Clone qylock themes
@@ -152,9 +152,8 @@ sudo systemctl enable --now power-profiles-daemon || true
 echo ""
 echo "[6/6] Applying wallpaper..."
 if command -v awww &>/dev/null; then
-    awww-daemon &
-    sleep 1
-    awww img "$HOME/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.gif" || true
+    mpvpaper -o 'no-audio loop hwdec=auto' '*' "$HOME/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4" &
+    
     echo "  Wallpaper applied!"
 else
     echo "  [!] awww not found, wallpaper will apply on next login."

@@ -4,5 +4,7 @@
 pkill -x waybar
 nohup waybar >/dev/null 2>&1 &
 
-# Reload Wallpaper
-awww img ~/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.gif
+# Reload Wallpaper (mpvpaper - GPU hardware decoded)
+pkill mpvpaper || true
+sleep 0.5
+mpvpaper -o 'no-audio loop hwdec=auto' '*' ~/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4 &
