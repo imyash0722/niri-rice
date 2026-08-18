@@ -76,7 +76,7 @@
   },
     "custom/omarchy": {
     "format": "",
-    "on-click": "omarchy-menu system",
+    "on-click": "systemsettings",
     "on-click-right": "xdg-terminal-exec",
     "tooltip-format": "Omarchy System menu\n\nSuper + Alt + Space"
   },
@@ -126,7 +126,7 @@
  "cpu": {
     "interval": 5,
     "format": "",
-    "on-click": "omarchy-launch-or-focus-tui btop",
+    "on-click": "foot btop",
     "states": {
         "warning": 50,
         "critical": 80
@@ -170,7 +170,7 @@
     "tooltip-format-disconnected": "Disconnected",
     "interval": 3,
     "spacing": 1,
-    "on-click": "omarchy-launch-wifi"
+    "on-click": "kcmshell6 kcm_networkmanagement"
   },
 "battery": {
     "format": "{capacity}% {icon}",
@@ -184,7 +184,7 @@
     "tooltip-format-discharging": "{power:>1.0f}W↓ {timeTo}",
     "tooltip-format-charging": "{power:>1.0f}W↑ {timeTo}",
     "interval": 5,
-    "on-click": "omarchy-menu power",
+    "on-click": "kcmshell6 kcm_powerdevilprofilesconfig",
     "on-click-right": "notify-send -u low \"$(omarchy-battery-status)\"",
     "states": {
       "warning": 30,
@@ -196,11 +196,11 @@
     "format-disabled": "󰂲 {status}",
     "format-connected": "󰂱 {num_connections}",
     "tooltip-format": "Devices connected: {num_connections}",
-    "on-click": "omarchy-launch-bluetooth"
+    "on-click": "kcmshell6 kcm_bluetooth"
   },
 "pulseaudio": {
     "format": "{icon}",
-    "on-click": "omarchy-launch-audio",
+    "on-click": "kcmshell6 kcm_pulseaudio",
     "on-click-right": "pamixer -t",
     "tooltip-format": "Playing at {volume}%",
     "scroll-step": 5,
