@@ -24,7 +24,6 @@
   ],
   "modules-right": [
     "battery",
-    "backlight",
     "pulseaudio",
     "network",
     "cpu",
@@ -135,17 +134,6 @@
         "critical": 80
     }
   },
-"backlight": {
-        "device": "intel_backlight",
-        "format": "{icon}",
-        "tooltip": true,
-        "tooltip-format": "Brightness:  {percent}%",
-        "format-alt": "{percent}% {icon}",
-        "format-alt-click": "click-right",
-        "format-icons": ["󰃜", "󰃝", "󰃞", "󰃟", "󰃠"],
-        "on-scroll-down": "brightnessctl s 5%-",
-        "on-scroll-up": "brightnessctl s +5%"
-    },
    "clock": {
     "format": "<span color='#857C86'>{0:%H:%M}</span> <span size='small' color='#616367'><i>{0:%a, %b %d}</i></span>",
     "format-alt": "{:L%d %B W%V %Y}",
