@@ -5,4 +5,4 @@ pkill -x waybar
 nohup waybar >/dev/null 2>&1 &
 
 # Reload Wallpaper
-awww img ~/Wallpapers/4000x4000__Hakui_By-pass-ezgif.com-crop.gif
+awww img ~/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.gif
