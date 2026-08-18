@@ -1,7 +1,7 @@
 /* ROFI SQUARED THEME USING THE OMARCHY BATOU PALETTE  */
 
 * {
-    font:   "FiraCode Nerd Font 13";
+    font:   "JetBrainsMono Nerd Font 13";
 
     bg0:     #121212;
     bg1:     #121212;
@@ -80,7 +80,7 @@ element alternate active {
 
 element selected {
     text-color: @bg0;
-    font: "FiraCode Nerd Font Bold 13";
+    font: "JetBrainsMono Nerd Font Bold 13";
 }
 
 element selected normal, element selected active {
