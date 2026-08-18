@@ -77,7 +77,7 @@
   },
     "custom/omarchy": {
     "format": "",
-    "on-click": "systemsettings",
+    "on-click": "~/.config/niri/scripts/power.sh",
     "on-click-right": "xdg-terminal-exec",
     "tooltip-format": "Omarchy System menu\n\nSuper + Alt + Space"
   },
