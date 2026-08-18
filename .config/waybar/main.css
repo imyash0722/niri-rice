@@ -283,3 +283,8 @@ color: @fg;
   animation-direction: alternate;
 }
 
+
+#battery, #backlight, #pulseaudio, #network, #cpu, #bluetooth, #idle_inhibitor, #power-profiles-daemon {
+    font-size: 15px;
+}
+
