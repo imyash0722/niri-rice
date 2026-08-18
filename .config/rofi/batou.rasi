@@ -1,14 +1,14 @@
-/* ROFI SQUARED THEME USING THE OMARCHY BATOU PALETTE  */
+/* ROFI SQUARED THEME EXTRACTED VIA PYWAL  */
 
 * {
     font:   "JetBrainsMono Nerd Font 13";
 
-    bg0:     #121212;
-    bg1:     #121212;
-    fg0:     #bcb9b2;
+    bg0:     #080814;
+    bg1:     #080814;
+    fg0:     #c7c3c7;
 
-    accent-color:     #df6124;
-    urgent-color:     #8f4445;
+    accent-color:     #3C465A;
+    urgent-color:     #50474F;
 
     background-color:   transparent;
     text-color:         @fg0;
@@ -23,7 +23,7 @@ window {
     width:      480;
 
     border:     1px;
-    border-color: #383735;
+    border-color: #443C45;
     border-radius: 4px;
 
     background-color:   @bg0;
