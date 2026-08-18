@@ -114,7 +114,7 @@
     "return-type": "json"
   },
 "power-profiles-daemon": {
-    "format": "<span font=\"24px\">{icon}</span>",
+    "format": "{icon}",
     "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
     "tooltip": true,
     "format-icons": {
@@ -125,7 +125,7 @@
   },
  "cpu": {
     "interval": 5,
-    "format": "<span font=\"24px\"></span>",
+    "format": "",
     "on-click": "omarchy-launch-or-focus-tui btop",
     "states": {
         "warning": 50,
@@ -134,7 +134,7 @@
   },
 "backlight": {
         "device": "intel_backlight",
-        "format": "<span font=\"24px\">{icon}</span>",
+        "format": "{icon}",
         "tooltip": true,
         "tooltip-format": "Brightness:  {percent}%",
         "format-alt": "{percent}% {icon}",
@@ -160,11 +160,11 @@
     "on-click-right": "omarchy-launch-floating-terminal-with-presentation omarchy-tz-select"
 },
   "network": {
-    "format": "<span font=\"24px\">󰤭</span>",
+    "format": "󰤭",
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-    "format-wifi": "<span font=\"24px\">{icon}</span> {essid}",
-    "format-ethernet": "<span font=\"24px\">󰈀</span>",
-    "format-disconnected": "<span font=\"24px\">󰤭</span>",
+    "format-wifi": "{icon} {essid}",
+    "format-ethernet": "󰈀",
+    "format-disconnected": "󰤭",
     "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
     "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
     "tooltip-format-disconnected": "Disconnected",
@@ -173,9 +173,9 @@
     "on-click": "omarchy-launch-wifi"
   },
 "battery": {
-    "format": "{capacity}% <span font=\"24px\">{icon}</span>",
-    "format-charging": "{capacity}% <span font=\"24px\">{icon}</span>",
-    "format-plugged": "{capacity}% <span font=\"24px\"></span>",
+    "format": "{capacity}% {icon}",
+    "format-charging": "{capacity}% {icon}",
+    "format-plugged": "{capacity}% ",
     "format-icons": {
       "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
       "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
@@ -192,14 +192,14 @@
     }
   },
  "bluetooth": {
-    "format": "<span font=\"24px\"></span> {num_connections}",
-    "format-disabled": "<span font=\"24px\">󰂲</span> {status}",
-    "format-connected": "<span font=\"24px\">󰂱</span> {num_connections}",
+    "format": "{num_connections}",
+    "format-disabled": "󰂲 {status}",
+    "format-connected": "󰂱 {num_connections}",
     "tooltip-format": "Devices connected: {num_connections}",
     "on-click": "omarchy-launch-bluetooth"
   },
 "pulseaudio": {
-    "format": "<span font=\"24px\">{icon}</span>",
+    "format": "{icon}",
     "on-click": "omarchy-launch-audio",
     "on-click-right": "pamixer -t",
     "tooltip-format": "Playing at {volume}%",
@@ -219,7 +219,7 @@
     "tooltip": false
 	},
   "idle_inhibitor": {
-    "format": "<span font=\"24px\">{icon}</span>",
+    "format": "{icon}",
     "tooltip-format-activated": "Stay Awake: ON",
     "tooltip-format-deactivated": "Stay Awake: OFF",
     "format-icons": {
