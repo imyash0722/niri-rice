@@ -184,19 +184,36 @@ Inside the `system-scripts/` directory at the root of this repo, you will find a
 
 ## 🎨 Colour Palette
 
+Colours are extracted from the wallpaper via **pywal** and applied to Waybar and Rofi automatically.
+
 | Role | Hex |
 |------|-----|
-| Background | `#1a1b26` |
-| Foreground | `#c0caf5` |
-| Blue | `#7fc8ff` |
-| Orange | `#ffc87f` |
-| Selection | `#2a2c3e` |
+| Background | `#080814` |
+| Foreground | `#c7c3c7` |
+| Accent (Steel Blue) | `#3C465A` |
+| Muted Purple | `#443C45` |
+| Dark Mauve | `#50474F` |
+| Mid Grey | `#857C86` |
+
+---
+
+## 🖼️ Wallpaper Credits
+
+| Asset | Source |
+|:------|:-------|
+| **Silent Katana — Forest Samurai** (animated, used as desktop wallpaper) | [WallsFlow](https://wallsflow.com/live-wallpapers/anime/761-silent-katana-forest-samurai-live-wallpaper.html) |
+
+> The wallpaper is **not bundled** in this repository due to its large file size (~361 MB GIF / ~44 MB MP4). Download it manually from the link above and place the GIF at:
+> ```
+> ~/niri-rice/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.gif
+> ```
+> The install script will then symlink `~/Wallpapers` and apply it automatically.
 
 ---
 
 <div align="center">
 
-*Original Sway dotfiles base by [jim-fx](https://github.com/jim-fx/.dotfiles).*<br>
+*Original Sway dotfiles base by [jim-fx](https://github.com/.dotfiles).*<br>
 *Made with 💙 on CachyOS*
 
 </div>

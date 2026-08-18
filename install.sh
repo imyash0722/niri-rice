@@ -55,7 +55,7 @@ link_dir_contents() {
 # ---------------------------------------------------------------------------
 # 1. Dependencies
 # ---------------------------------------------------------------------------
-echo "[1/5] Installing required dependencies..."
+echo "[1/6] Installing required dependencies..."
 paru -S --needed --noconfirm \
     google-chrome dolphin konsole \
     niri waybar rofi-wayland foot fastfetch networkmanager plasma-nm \
@@ -64,12 +64,13 @@ paru -S --needed --noconfirm \
     starship mako hypridle ffmpeg jq brightnessctl playerctl rofi-rbw \
     wtype obs-studio imagemagick kwallet kanshi ttf-jetbrains-mono ttf-roboto \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd ttf-font-awesome \
-    ttf-meslo-nerd breeze breeze-icons plasma-integration power-profiles-daemon \
+    ttf-meslo-nerd ttf-jetbrains-mono-nerd python-pywal \
+    breeze breeze-icons plasma-integration power-profiles-daemon plasma-powerdevil \
     lazygit yazi tealdeer qimgv haruna ark okular libreoffice-still zapzap video2gif \
     xcb-util-cursor xwayland-satellite kde-applications-meta \
     sddm quickshell qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
     qt6-multimedia-ffmpeg gst-plugins-base gst-plugins-good gst-plugins-bad \
-    gst-plugins-ugly || echo "  [!] Some packages failed to install — continuing anyway..."
+    gst-plugins-ugly waybar-module-pacman-updates || echo "  [!] Some packages failed to install — continuing anyway..."
 
 # ---------------------------------------------------------------------------
 # 1.5. Clone qylock themes
@@ -86,7 +87,7 @@ fi
 # 2. Symlink config files (live — git pull auto-updates everything)
 # ---------------------------------------------------------------------------
 echo ""
-echo "[2/5] Symlinking config files..."
+echo "[2/6] Symlinking config files..."
 
 # ~/.config/* -> repo/.config/*
 link_dir_contents "$REPO_DIR/.config" "$HOME/.config"
@@ -114,10 +115,18 @@ if [ -f "$REPO_DIR/.zshrc" ]; then
 fi
 
 # ---------------------------------------------------------------------------
+# 2.5. Wallpaper symlink
+# ---------------------------------------------------------------------------
+echo ""
+echo "[2.5/6] Setting up wallpaper..."
+force_link "$REPO_DIR/Wallpapers" "$HOME/Wallpapers"
+echo "  Wallpaper: Silent Katana Forest Samurai (WallsFlow)"
+
+# ---------------------------------------------------------------------------
 # 3. Enable Display Manager (SDDM)
 # ---------------------------------------------------------------------------
 echo ""
-echo "[3/5] Enabling SDDM display manager..."
+echo "[3/6] Enabling SDDM display manager..."
 sudo systemctl disable ly.service || true
 sudo systemctl enable sddm.service || true
 
@@ -125,16 +134,31 @@ sudo systemctl enable sddm.service || true
 # 4. Script permissions
 # ---------------------------------------------------------------------------
 echo ""
-echo "[4/5] Setting script permissions..."
+echo "[4/6] Setting script permissions..."
 [ -d "$HOME/.config/niri/scripts" ] && chmod +x "$HOME/.config/niri/scripts"/*.sh 2>/dev/null || true
 [ -d "$HOME/.config/hypr/scripts" ] && chmod +x "$HOME/.config/hypr/scripts"/*.sh 2>/dev/null || true
+chmod +x "$HOME/.local/bin/"* 2>/dev/null || true
 
 # ---------------------------------------------------------------------------
 # 5. System services
 # ---------------------------------------------------------------------------
 echo ""
-echo "[5/5] Enabling system services..."
+echo "[5/6] Enabling system services..."
 sudo systemctl enable --now power-profiles-daemon || true
+
+# ---------------------------------------------------------------------------
+# 6. Apply wallpaper immediately (awww must be installed)
+# ---------------------------------------------------------------------------
+echo ""
+echo "[6/6] Applying wallpaper..."
+if command -v awww &>/dev/null; then
+    awww-daemon &
+    sleep 1
+    awww img "$HOME/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.gif" || true
+    echo "  Wallpaper applied!"
+else
+    echo "  [!] awww not found, wallpaper will apply on next login."
+fi
 
 # ---------------------------------------------------------------------------
 # Done
