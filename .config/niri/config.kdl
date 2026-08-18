@@ -88,6 +88,7 @@ prefer-no-csd
 // ── Startup daemons ──────────────────────────────────────
 
 // Waybar
+spawn-at-startup "/usr/lib/org_kde_powerdevil"
 spawn-at-startup "sh" "-c" "waybar"
 
 // Animated wallpaper (awww)

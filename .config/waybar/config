@@ -42,6 +42,7 @@
     "all-outputs": true,
     "cursor": true,
     "format": "{icon}",
+    "on-click-right": "kcmshell6 kcm_powerdevilprofilesconfig",
     "format-icons": {
     "1": "1",
     "2": "2",
@@ -92,6 +93,7 @@
     "exec": "omarchy-voxtype-status",
     "return-type": "json",
     "format": "{icon}",
+    "on-click-right": "kcmshell6 kcm_powerdevilprofilesconfig",
     "format-icons": {
       "idle": "",
       "recording": "󰍬",
@@ -117,6 +119,7 @@
     "format": "{icon}",
     "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
     "tooltip": true,
+    "on-click-right": "kcmshell6 kcm_powerdevilprofilesconfig",
     "format-icons": {
       "performance": "",
       "balanced": " ",
@@ -176,6 +179,7 @@
     "format": "{capacity}% {icon}",
     "format-charging": "{capacity}% {icon}",
     "format-plugged": "{capacity}% ",
+    "on-click-right": "kcmshell6 kcm_powerdevilprofilesconfig",
     "format-icons": {
       "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
       "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
@@ -205,6 +209,7 @@
     "tooltip-format": "Playing at {volume}%",
     "scroll-step": 5,
     "format-muted": "",
+    "on-click-right": "kcmshell6 kcm_powerdevilprofilesconfig",
     "format-icons": {
       "headphone": "",
       "headset": "",
@@ -222,6 +227,7 @@
     "format": "{icon}",
     "tooltip-format-activated": "Stay Awake: ON",
     "tooltip-format-deactivated": "Stay Awake: OFF",
+    "on-click-right": "kcmshell6 kcm_powerdevilprofilesconfig",
     "format-icons": {
       "activated": "󰛨",
       "deactivated": "󰛩"
@@ -230,6 +236,7 @@
  "custom/updatespacman": {
     "format": "{}{icon}",
     "return-type": "json",
+    "on-click-right": "kcmshell6 kcm_powerdevilprofilesconfig",
     "format-icons": {
       "has-updates": "󰏖",
       "updated": ""
