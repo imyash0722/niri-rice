@@ -60,7 +60,7 @@ button:hover {
     margin: 0px 2px;
     min-height: 20px;
     color: @fg;
-    opacity: 0.6;
+    opacity: 0.9;
     border: none;
     border-radius: 10px;
     transition: 0.15s ease-in-out;
@@ -74,7 +74,7 @@ button:hover {
 }
 
 #workspaces button.empty {
-    color: alpha(@fg, 0.25);
+    color: alpha(@fg, 0.5);
     opacity: 1;
 }
 
