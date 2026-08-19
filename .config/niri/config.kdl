@@ -175,9 +175,9 @@ window-rule {
     open-floating true
 }
 
-// KDE Settings popup
+// KDE Settings popup (kcmshell6 launches modules dynamically)
 window-rule {
-    match app-id="org.kde.kcmshell6"
+    match app-id=r#"^kcm_"#
     match app-id="systemsettings"
     open-floating true
     default-column-width { proportion 0.5; }
