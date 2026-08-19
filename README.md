@@ -35,7 +35,7 @@
 - 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
 - 🚀 **Rofi** — App launcher with a custom 'blues' dark theme
 - 📸 **Satty** — Screenshot annotation tool (Niri native screenshot support via `Mod+Shift+S`)
-- 🔒 **hyprlock** — Modern lockscreen: beautifully blurred static backgrounds, dynamic battery module, and bold digital clock
+- 🔒 **qylock (quickshell)** — Modern lockscreen: beautifully blurred static backgrounds, dynamic battery module, and bold digital clock
 - 🎵 **Cava** — Audio spectrum visualizer
 - 🐾 **Foot** — Fast, GPU-rendered Wayland terminal
 - ⭐ **Starship** — Cross-shell prompt
@@ -48,7 +48,7 @@
     * **Status Bar:** `waybar`
     * **App Launcher:** `rofi-wayland`
     * **Wallpaper:** `awww`
-    * **Lock Screen:** `hyprlock` & `hypridle`
+    * **Lock Screen:** `qylock (quickshell)` & `hypridle`
     * **Notifications:** `mako`
 
 ### 🔧 Dependencies
@@ -60,7 +60,7 @@ You can install all necessary packages using `paru` or `yay`.
 ```bash
 paru -S niri waybar rofi-wayland foot fastfetch networkmanager \
         bluetui pipemixer satty btop neovim zsh \
-        firefox-developer-edition awww hyprlock \
+        firefox-developer-edition awww qylock (quickshell) \
         grim slurp wl-clipboard cliphist wl-paste \
         cava starship mako hypridle ffmpeg jq \
         brightnessctl playerctl ungoogled-chromium-bin dolphin \
@@ -168,7 +168,7 @@ niri-rice/
 
 ## 🔐 Smart Lockscreen
 
-The `hyprlock` configuration automatically uses a perfectly static, pre-extracted background from your wallpaper to keep the blur effect fast and smooth. It completely replaces the old `swaylock` screenshot method, avoiding any screen-tearing or see-through glitches! 
+The `qylock` configuration automatically uses a beautifully animated video background (via Quickshell) from your wallpaper to keep the blur effect fast and smooth. It completely replaces the old `swaylock` screenshot method, avoiding any screen-tearing or see-through glitches! 
 
 It also actively hooks into your system's raw battery capacity (via `BAT0`) using a custom script to display dynamic battery icons directly underneath the password prompt.
 
