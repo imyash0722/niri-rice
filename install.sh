@@ -153,6 +153,14 @@ wifi.powersave = 2
 EOF'
 sudo systemctl restart NetworkManager || true
 
+# Fix Disable-While-Typing (DWT) for keyd virtual keyboards
+sudo bash -c 'mkdir -p /etc/libinput && cat << EOF > /etc/libinput/local-overrides.quirks
+[keyd virtual keyboard]
+MatchName=keyd virtual keyboard
+MatchUdevType=keyboard
+AttrKeyboardIntegration=internal
+EOF'
+
 # Enable Powertop auto-tuning on boot (while exempting the buggy Wi-Fi card)
 sudo bash -c 'cat << EOF > /etc/systemd/system/powertop.service
 [Unit]
