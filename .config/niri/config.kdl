@@ -254,6 +254,35 @@ binds {
     // Network (nmtui)
     Mod+Shift+W { spawn-sh "foot --app-id=foot.nmtui --window-size-chars=81x34 -e nmtui"; }
 
+    // F12 & Keypad Special Keys
+    XF86Calculator       { spawn "kcalc"; }
+    XF86Search           { spawn "rofi" "-show" "drun"; }
+    XF86Explorer         { spawn "dolphin"; }
+    XF86Sleep            { spawn "sh" "-c" "~/.config/niri/scripts/lock.sh"; }
+    XF86Standby          { spawn "sh" "-c" "~/.config/niri/scripts/lock.sh"; }
+
+    // ── Function Row (Lenovo ThinkBook Special Keys) ──
+    Print                { screenshot; }
+    Shift+Print          { screenshot-screen; }
+    Ctrl+Print           { screenshot-window; }
+    
+    XF86Display          { spawn "kcmshell6" "kcm_kscreen"; }
+    XF86WLAN             { spawn-sh "rfkill toggle all"; }
+    XF86RFKill           { spawn-sh "rfkill toggle all"; }
+    
+    XF86Favorites        { spawn "systemsettings"; }
+    XF86Tools            { spawn "systemsettings"; }
+    XF86Launch1          { spawn "systemsettings"; }
+    
+    XF86Go               { spawn "kcmshell6" "kcm_bluetooth"; }
+    XF86Bluetooth        { spawn "kcmshell6" "kcm_bluetooth"; }
+    XF86Phone            { spawn "kcmshell6" "kcm_bluetooth"; }
+    
+    // The Copilot Key (Hardware Macro: Super + Shift + F23)
+    Mod+Shift+F23        { spawn "rofi" "-show" "drun"; }
+    Mod+F23              { spawn "rofi" "-show" "drun"; }
+    XF86Copilot          { spawn "rofi" "-show" "drun"; }
+
     // Screenshots
     Mod+S             { screenshot-screen; }
     Mod+Shift+S       { screenshot; }
@@ -331,7 +360,7 @@ binds {
     // Audio
     XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"; }
     XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; }
-    XF86AudioMute         allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioMute         allow-when-locked=true { spawn-sh "~/.config/niri/scripts/mute-debounce"; }
     XF86AudioMicMute      allow-when-locked=true { spawn-sh "~/.config/niri/scripts/mic-debounce"; }
     XF86AudioPlay         allow-when-locked=true { spawn "playerctl" "play-pause"; }
     XF86AudioPrev         allow-when-locked=true { spawn "playerctl" "previous"; }

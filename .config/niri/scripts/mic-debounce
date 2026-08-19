@@ -1,17 +1,16 @@
 #!/bin/bash
 LOCKFILE="/tmp/mic_mute.lock"
-
-# If the lockfile exists, exit immediately (debounce)
-if [ -e "$LOCKFILE" ]; then
-    exit 0
-fi
-
-# Create lockfile
+if [ -e "$LOCKFILE" ]; then exit 0; fi
 touch "$LOCKFILE"
 
-# Toggle the microphone
 wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 
-# Remove lockfile after 0.2 seconds to allow the next intentional press
+# Update the hardware LED
+if wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -q "\[MUTED\]"; then
+    brightnessctl --device='platform::micmute' set 1 >/dev/null 2>&1
+else
+    brightnessctl --device='platform::micmute' set 0 >/dev/null 2>&1
+fi
+
 sleep 0.2
 rm -f "$LOCKFILE"
