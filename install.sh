@@ -70,7 +70,7 @@ paru -S --needed --noconfirm \
     xcb-util-cursor xwayland-satellite kde-applications-meta \
     sddm quickshell qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
     qt6-multimedia-ffmpeg gst-plugins-base gst-plugins-good gst-plugins-bad \
-    gst-plugins-ugly waybar-module-pacman-updates mpvpaper || echo "  [!] Some packages failed to install — continuing anyway..."
+    gst-plugins-ugly waybar-module-pacman-updates mpvpaper powertop || echo "  [!] Some packages failed to install — continuing anyway..."
 
 # ---------------------------------------------------------------------------
 # 1.5. Clone qylock themes
@@ -140,11 +140,36 @@ echo "[4/6] Setting script permissions..."
 chmod +x "$HOME/.local/bin/"* 2>/dev/null || true
 
 # ---------------------------------------------------------------------------
-# 5. System services
+# 5. System services & Battery Optimization
 # ---------------------------------------------------------------------------
 echo ""
-echo "[5/6] Enabling system services..."
+echo "[5/6] Enabling system services & battery fixes..."
 sudo systemctl enable --now power-profiles-daemon || true
+
+# Fix MediaTek Wi-Fi crashing during idle (disable NM powersave globally)
+sudo bash -c 'cat << EOF > /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
+[connection]
+wifi.powersave = 2
+EOF'
+sudo systemctl restart NetworkManager || true
+
+# Enable Powertop auto-tuning on boot (while exempting the buggy Wi-Fi card)
+sudo bash -c 'cat << EOF > /etc/systemd/system/powertop.service
+[Unit]
+Description=Powertop tunings
+After=multi-user.target network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/powertop --auto-tune
+ExecStartPost=/usr/bin/iw dev wlan0 set power_save off
+
+[Install]
+WantedBy=multi-user.target
+EOF'
+sudo systemctl daemon-reload || true
+sudo systemctl enable --now powertop.service || true
 
 # ---------------------------------------------------------------------------
 # 6. Apply wallpaper immediately (awww must be installed)
@@ -152,7 +177,7 @@ sudo systemctl enable --now power-profiles-daemon || true
 echo ""
 echo "[6/6] Applying wallpaper..."
 if command -v awww &>/dev/null; then
-    mpvpaper -o 'no-audio loop hwdec=auto' '*' "$HOME/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4" &
+    mpvpaper powertop -o 'no-audio loop hwdec=auto' '*' "$HOME/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4" &
     
     echo "  Wallpaper applied!"
 else
