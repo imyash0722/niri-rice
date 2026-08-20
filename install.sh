@@ -169,6 +169,15 @@ EOF'
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
+# Fix Numpad Enter by remapping it to standard Enter at the kernel level
+sudo bash -c 'cat << EOF > /etc/udev/hwdb.d/99-numpad-enter.hwdb
+evdev:atkbd:*
+ KEYBOARD_KEY_9c=enter
+ KEYBOARD_KEY_e01c=enter
+EOF'
+sudo systemd-hwdb update
+sudo udevadm trigger
+
 # Enable Powertop auto-tuning on boot (while exempting the buggy Wi-Fi card)
 sudo bash -c 'cat << EOF > /etc/systemd/system/powertop.service
 [Unit]
