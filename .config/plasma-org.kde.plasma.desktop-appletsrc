@@ -124,14 +124,18 @@ plugin=org.kde.plasma.bluetooth
 immutability=1
 plugin=org.kde.plasma.diskquota
 
+[Containments][131][Applets][136][Applets][157]
+immutability=1
+plugin=org.kde.merkuro.contact.applet
+
 [Containments][131][Applets][136][ConfigDialog]
 DialogHeight=630
 DialogWidth=804
 
 [Containments][131][Applets][136][General]
-extraItems=org.kde.plasma.volume,org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.devicenotifier,org.kde.kscreen,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.plasma.diskquota,org.kde.plasma.notifications
+extraItems=org.kde.plasma.volume,org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.devicenotifier,org.kde.kscreen,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.plasma.diskquota,org.kde.plasma.notifications,org.kde.plasma.kclock_1x2,org.kde.merkuro.contact.applet
 hiddenItems=Arch-Update,org.kde.plasma.bluetooth,org.kde.plasma.devicenotifier,org.kde.kscreen,org.kde.plasma.clipboard,org.kde.plasma.diskquota
-knownItems=org.kde.kdeconnect,org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.mediacontroller,org.kde.plasma.notifications,org.kde.plasma.keyboardindicator,org.kde.plasma.weather,org.kde.kscreen,org.kde.plasma.battery,org.kde.plasma.brightness,org.kde.plasma.keyboardlayout,org.kde.plasma.networkmanagement,org.kde.plasma.volume
+knownItems=org.kde.kdeconnect,org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.mediacontroller,org.kde.plasma.notifications,org.kde.plasma.keyboardindicator,org.kde.plasma.weather,org.kde.kscreen,org.kde.plasma.battery,org.kde.plasma.brightness,org.kde.plasma.keyboardlayout,org.kde.plasma.networkmanagement,org.kde.plasma.volume,org.kde.plasma.kclock_1x2,org.kde.merkuro.contact.applet
 shownItems=discord_status_icon_1,org.kde.plasma.volume,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.battery,org.kde.plasma.notifications
 
 [Containments][131][Applets][149]

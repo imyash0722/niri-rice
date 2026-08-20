@@ -12,7 +12,7 @@ Toggle Screen Reader On and Off=Meta+Alt+S,Meta+Alt+S,Toggle Screen Reader On an
 _k_friendly_name=Accessibility
 
 [kmix]
-_k_friendly_name=Audio Volume
+_k_friendly_name=KMix
 decrease_microphone_volume=Microphone Volume Down,Microphone Volume Down,Decrease Microphone Volume
 decrease_volume=Volume Down,Volume Down,Decrease Volume
 decrease_volume_small=Shift+Volume Down,Shift+Volume Down,Decrease Volume by 1%
@@ -282,3 +282,7 @@ _launch=Meta+Return
 
 [services][org.kde.plasma-systemmonitor.desktop]
 _launch=none
+
+[services][org.kde.spectacle.desktop]
+CurrentMonitorScreenShot=none
+OpenWithoutScreenshot=none
