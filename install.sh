@@ -63,7 +63,7 @@ paru -S --needed --noconfirm \
     firefox-developer-edition grim slurp wl-clipboard cliphist \
     starship mako hypridle ffmpeg jq brightnessctl playerctl rofi-rbw \
     wtype obs-studio imagemagick kwallet kanshi ttf-jetbrains-mono ttf-roboto \
-    ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd ttf-font-awesome6 \
+    ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd otf-font-awesome \
     ttf-meslo-nerd ttf-jetbrains-mono-nerd python-pywal \
     noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-dejavu ttf-liberation \
     breeze breeze-gtk breeze-icons plasma-integration power-profiles-daemon powerdevil \
