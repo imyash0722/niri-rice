@@ -60,17 +60,26 @@ paru -S --needed --noconfirm \
     google-chrome dolphin konsole \
     niri waybar rofi-wayland foot fastfetch networkmanager plasma-nm \
     kde-cli-tools plasma-pa bluedevil bt-dualboot satty btop neovim zsh \
-    firefox-developer-edition awww grim slurp wl-clipboard cliphist \
+    firefox-developer-edition grim slurp wl-clipboard cliphist \
     starship mako hypridle ffmpeg jq brightnessctl playerctl rofi-rbw \
     wtype obs-studio imagemagick kwallet kanshi ttf-jetbrains-mono ttf-roboto \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd ttf-font-awesome \
     ttf-meslo-nerd ttf-jetbrains-mono-nerd python-pywal \
-    breeze breeze-icons plasma-integration power-profiles-daemon plasma-powerdevil \
+    noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-dejavu ttf-liberation \
+    breeze breeze-gtk breeze-icons plasma-integration power-profiles-daemon plasma-powerdevil \
+    kde-gtk-config kscreen kwalletmanager kwallet-pam kdialog kio-admin \
+    kdeconnect kdegraphics-thumbnailers gwenview spectacle kate kcalc krita meld \
     lazygit yazi tealdeer qimgv haruna ark okular libreoffice-still zapzap video2gif \
     xcb-util-cursor xwayland-satellite kde-applications-meta \
     sddm quickshell qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
     qt6-multimedia-ffmpeg gst-plugins-base gst-plugins-good gst-plugins-bad \
-    gst-plugins-ugly waybar-module-pacman-updates mpvpaper powertop || echo "  [!] Some packages failed to install — continuing anyway..."
+    gst-plugins-ugly gst-libav gst-plugin-pipewire gst-plugin-va \
+    waybar-module-pacman-updates mpvpaper powertop keyd \
+    pavucontrol wireplumber pipewire-alsa pipewire-pulse \
+    tailscale openssh ufw rsync wget unzip unrar \
+    xdg-user-dirs xdg-desktop-portal-gtk \
+    vscodium nodejs npm python python-pynvim \
+    libinput-tools || echo "  [!] Some packages failed to install — continuing anyway..."
 
 # ---------------------------------------------------------------------------
 # 1.5. Clone qylock themes
