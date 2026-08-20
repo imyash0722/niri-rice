@@ -58,15 +58,15 @@ link_dir_contents() {
 echo "[1/6] Installing required dependencies..."
 paru -S --needed --noconfirm \
     google-chrome dolphin konsole \
-    niri waybar rofi-wayland foot fastfetch networkmanager plasma-nm \
+    niri waybar rofi foot fastfetch networkmanager plasma-nm \
     kde-cli-tools plasma-pa bluedevil bt-dualboot satty btop neovim zsh \
     firefox-developer-edition grim slurp wl-clipboard cliphist \
     starship mako hypridle ffmpeg jq brightnessctl playerctl rofi-rbw \
     wtype obs-studio imagemagick kwallet kanshi ttf-jetbrains-mono ttf-roboto \
-    ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd ttf-font-awesome \
+    ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd ttf-font-awesome6 \
     ttf-meslo-nerd ttf-jetbrains-mono-nerd python-pywal \
     noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-dejavu ttf-liberation \
-    breeze breeze-gtk breeze-icons plasma-integration power-profiles-daemon plasma-powerdevil \
+    breeze breeze-gtk breeze-icons plasma-integration power-profiles-daemon powerdevil \
     kde-gtk-config kscreen kwalletmanager kwallet-pam kdialog kio-admin \
     kdeconnect kdegraphics-thumbnailers gwenview spectacle kate kcalc krita meld \
     lazygit yazi tealdeer qimgv haruna ark okular libreoffice-still zapzap video2gif \
@@ -74,7 +74,7 @@ paru -S --needed --noconfirm \
     sddm quickshell qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
     qt6-multimedia-ffmpeg gst-plugins-base gst-plugins-good gst-plugins-bad \
     gst-plugins-ugly gst-libav gst-plugin-pipewire gst-plugin-va \
-    waybar-module-pacman-updates mpvpaper powertop keyd \
+    waybar-module-pacman-updates-git mpvpaper powertop keyd \
     pavucontrol wireplumber pipewire-alsa pipewire-pulse \
     tailscale openssh ufw rsync wget unzip unrar \
     xdg-user-dirs xdg-desktop-portal-gtk \
