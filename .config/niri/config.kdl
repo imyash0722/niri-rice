@@ -281,7 +281,6 @@ binds {
     // The Copilot Key (Hardware Macro: Super + Shift + F23)
     Mod+Shift+F23        { spawn "rofi" "-show" "drun"; }
     Mod+F23              { spawn "rofi" "-show" "drun"; }
-    XF86Copilot          { spawn "rofi" "-show" "drun"; }
 
     // Screenshots
     Mod+S             { screenshot-screen; }
