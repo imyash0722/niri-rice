@@ -279,8 +279,8 @@ binds {
     XF86Phone            { spawn "kcmshell6" "kcm_bluetooth"; }
     
     // The Copilot Key (Hardware Macro: Super + Shift + F23)
-    Mod+Shift+F23        { spawn "rofi" "-show" "drun" "-kb-cancel" "Escape,Super+Shift+F23,Super+F23,F23"; }
-    Mod+F23              { spawn "rofi" "-show" "drun" "-kb-cancel" "Escape,Super+Shift+F23,Super+F23,F23"; }
+    Mod+Shift+F23        { spawn-sh "pkill -x rofi || rofi -show drun"; }
+    Mod+F23              { spawn-sh "pkill -x rofi || rofi -show drun"; }
 
     // Screenshots
     Mod+S             { screenshot-screen; }
