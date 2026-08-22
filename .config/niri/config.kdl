@@ -105,8 +105,8 @@ spawn-at-startup "mako"
 // KDE Wallet (keyring)
 spawn-at-startup "kwalletd5"
 
-// Kanshi (display hotplug)
-spawn-at-startup "kanshi"
+// Monitor auto-scaling (4K=1.5, 2K=1.25, 1080p=1.0)
+spawn-at-startup "bash" "-c" "sleep 2 && ~/.config/niri/scripts/monitor-setup.sh"
 
 // Idle manager (hypridle)
 spawn-at-startup "hypridle"

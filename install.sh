@@ -178,6 +178,16 @@ EOF'
 sudo systemd-hwdb update
 sudo udevadm trigger
 
+# Monitor auto-scaling on hotplug (triggers niri-monitor-hotplug.service in user session)
+sudo bash -c 'cat << EOF > /etc/udev/rules.d/95-monitor-hotplug.rules
+ACTION=="change", SUBSYSTEM=="drm", TAG+="systemd", ENV{SYSTEMD_USER_WANTS}="niri-monitor-hotplug.service"
+EOF'
+sudo udevadm control --reload-rules
+
+# Enable monitor scaling systemd user service
+systemctl --user daemon-reload
+systemctl --user enable niri-monitor-setup.service || true
+
 # Enable Powertop auto-tuning on boot (while exempting the buggy Wi-Fi card)
 sudo bash -c 'cat << EOF > /etc/systemd/system/powertop.service
 [Unit]

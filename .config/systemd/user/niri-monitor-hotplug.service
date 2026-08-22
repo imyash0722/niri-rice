@@ -1,0 +1,9 @@
+[Unit]
+Description=Re-run Niri monitor setup on DRM hotplug
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sleep 1
+ExecStart=%h/.config/niri/scripts/monitor-setup.sh
+Restart=no
