@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Terminal Mode
+Comment=A minimal fullscreen terminal session
+Exec=cage alacritty
+Type=Application

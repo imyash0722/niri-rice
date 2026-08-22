@@ -59,6 +59,7 @@ echo "[1/6] Syncing databases, updating system, and installing required dependen
 paru -Syu --needed --noconfirm \
     google-chrome dolphin konsole \
     niri waybar rofi foot fastfetch networkmanager plasma-nm \
+    cage alacritty \
     kde-cli-tools plasma-pa bluedevil bt-dualboot satty btop neovim zsh \
     firefox-developer-edition grim slurp wl-clipboard cliphist \
     starship mako hypridle ffmpeg jq brightnessctl playerctl rofi-rbw \
@@ -138,6 +139,8 @@ echo ""
 echo "[3/6] Enabling SDDM display manager..."
 sudo systemctl disable ly.service || true
 sudo systemctl enable sddm.service || true
+sudo mkdir -p /usr/share/wayland-sessions
+sudo cp "$REPO_DIR/setup_assets/terminal.desktop" "/usr/share/wayland-sessions/terminal.desktop"
 
 # ---------------------------------------------------------------------------
 # 4. Script permissions
