@@ -371,7 +371,7 @@ binds {
 
     // Reload Config
     Mod+A       { spawn "killall" "-SIGUSR1" "waybar"; }
-    Mod+Shift+R { spawn "~/.config/niri/scripts/reload.sh"; }
+    Mod+Shift+R { spawn-sh "~/.config/niri/scripts/reload.sh"; }
 
     // Quit niri (with confirmation dialog)
     Mod+Escape { quit; }

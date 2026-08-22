@@ -25,4 +25,3 @@ alias pls='sudo -E env "PATH=$PATH"'
 alias keep-awake="nohup systemd-inhibit --what=idle --who=\"manual\" --why=\"Manual toggle\" wayinhibit >/dev/null 2>&1 &"
 alias keep-awake-stop="pkill wayinhibit"
 alias power="power-manager"
-alias servers="server-manager"
