@@ -20,28 +20,34 @@
 ## ✨ Features
 
 - 🌊 **niri** — Scrollable, infinite-canvas tiling Wayland compositor
-- 📺 **Dynamic Display Scaling** — Custom multi-monitor daemon automatically scales outputs based on native resolution (`1.5x` for 4K, `1.25x` for 1440p, `1.0x` for 1080p).
-- 🎬 **awww** — Fast and lightweight Wayland wallpaper daemon
+- 📺 **Dynamic Display Scaling** — Monitor daemon auto-scales outputs on connect (`1.5x` for 4K, `1.25x` for 1440p, `1.0x` for 1080p)
+- 🎬 **mpvpaper** — GPU-accelerated animated wallpapers (MP4/GIF) via mpv
 - 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
-- 🚀 **Rofi** — App launcher with a custom 'blues' dark theme. Support for toggling and hardware keys (e.g. Copilot button).
-- 📸 **Satty** — Screenshot annotation tool (Niri native screenshot support via `Mod+Shift+S`)
-- 🔒 **qylock (quickshell)** — Modern lockscreen: beautifully blurred static backgrounds, dynamic battery module, and bold digital clock
+- 🚀 **Rofi** — App launcher with a custom dark theme; toggles instantly via hardware Copilot key
+- 📸 **Satty** — Screenshot annotation tool (native Niri screenshot support via `Mod+Shift+S`)
+- 🔒 **qylock (quickshell)** — Modern lockscreen with blurred background, dynamic battery indicator, and digital clock
 - 🐾 **Foot** — Fast, GPU-rendered Wayland terminal
 - ⭐ **Starship** — Cross-shell prompt
 - 📋 **cliphist** — Clipboard history manager (`Mod+V` to open)
+- 💻 **TTY Session** — Minimal fullscreen terminal session via `cage` — selectable from the SDDM login screen dropdown
 
 ---
 
 ### 📦 Core Components
-* **Window Manager:** `niri`
-* **Status Bar:** `waybar`
-* **App Launcher:** `rofi-wayland`
-* **Wallpaper:** `awww`
-* **Lock Screen:** `qylock (quickshell)` & `hypridle`
-* **Notifications:** `mako`
+
+| Role | Component |
+|------|-----------|
+| Window Manager | `niri` |
+| Status Bar | `waybar` |
+| App Launcher | `rofi` |
+| Wallpaper | `mpvpaper` |
+| Lock Screen | `qylock (quickshell)` + `hypridle` |
+| Notifications | `mako` |
+| Terminal | `foot` + `alacritty` (TTY session) |
 
 ### 🔧 Dependencies
-You don't need to install dependencies manually! The included `install.sh` handles pulling everything from CachyOS/AUR natively, along with fonts, KDE utilities, gstreamer codecs, and display drivers.
+
+You don't need to install dependencies manually! The included `install.sh` handles everything — packages, fonts, KDE utilities, GStreamer codecs, display drivers, udev rules, and system services.
 
 ---
 
@@ -57,8 +63,6 @@ You don't need to install dependencies manually! The included `install.sh` handl
 
 ## 🚀 Installation
 
-This rice now features a **fully automated installation script** (`install.sh`) that installs dependencies, symlinks all configs, applies system-level hardware fixes, and configures powermanagement.
-
 ```bash
 # 1. Clone the repo
 git clone https://github.com/imyash0722/niri-rice.git ~/niri-rice
@@ -67,8 +71,12 @@ cd ~/niri-rice
 # 2. Run the automated installer
 ./install.sh
 
-# 3. Log out of your current session and select "niri" from the SDDM menu.
+# 3. Log out and select "niri" from the SDDM menu
+#    Or select "Terminal Mode" for the minimal TTY session
 ```
+
+> [!NOTE]
+> The animated wallpaper (MP4) is **not bundled** due to file size. Download it from the [Wallpaper Credits](#️-wallpaper-credits) section and place the `.mp4` file in `~/niri-rice/Wallpapers/` before running the installer.
 
 ---
 
@@ -77,22 +85,35 @@ cd ~/niri-rice
 ```
 niri-rice/
 ├── install.sh                  # One-click automated installer
-├── update.sh
+├── update.sh                   # Pull latest changes
 ├── .config/
 │   ├── niri/
 │   │   ├── config.kdl          # Compositor config (keybinds, autostart, rules)
 │   │   ├── scripts/
-│   │   │   ├── lock.sh         # Smart lockscreen script
-│   │   │   ├── power.sh        # Rofi power menu
-│   │   │   └── monitor-setup.sh# Dynamic display auto-scaling
+│   │   │   ├── lock.sh         # Smart lockscreen invoker
+│   │   │   ├── power.sh        # Rofi power menu (lock/suspend/reboot/shutdown)
+│   │   │   ├── reload.sh       # Reload Waybar + wallpaper
+│   │   │   ├── monitor-setup.sh# Dynamic display auto-scaling
+│   │   │   ├── mute-debounce   # Mute LED sync debounce helper
+│   │   │   └── mic-debounce    # Mic mute LED sync debounce helper
 │   │   └── waybar/             # Niri-specific Waybar config + CSS
 │   ├── waybar/                 # Shared Waybar modules and scripts
 │   ├── rofi/                   # App launcher theme and config
-│   ├── foot/                   # Terminal emulator (Dynamic Pywal colors)
-│   ├── mako/                   # Notification daemon
+│   ├── foot/                   # Foot terminal config
+│   ├── hypr/                   # hypridle config (idle/lock daemon)
+│   ├── mako/                   # Notification daemon config
+│   ├── mpv/                    # mpv player config (used by mpvpaper)
+│   ├── btop/                   # System monitor themes
+│   ├── fastfetch/              # System info fetch config
+│   ├── satty/                  # Screenshot annotation config
+│   ├── vesktop/                # Discord (Vesktop) config
 │   ├── nvim/                   # LazyVim Neovim configuration
 │   └── systemd/user/           # Background services (monitor hotplug)
+├── setup_assets/
+│   ├── cursors.tar.gz          # Custom cursor themes
+│   └── terminal.desktop        # SDDM "Terminal Mode" session (cage + alacritty)
 ├── system-scripts/             # Hardware-specific system scripts
+│   └── mt7921e-sleep.sh        # MediaTek Wi-Fi sleep fix
 └── Wallpapers/                 # Wallpapers (gitignored — store locally)
 ```
 
@@ -113,32 +134,42 @@ niri-rice/
 | Screenshot (window) | `Mod+Ctrl+S` |
 | Color Picker | `Mod+Shift+P` |
 | Hotkey Overlay | `Mod+/` |
-| Lock Screen | `Mod+Shift+Q` → Lock |
+| Lock Screen | `Mod+Shift+Q` |
 | Reload Waybar + Wallpaper | `Mod+Shift+R` |
-| Toggle Waybar Visibility| `Mod+A` |
+| Toggle Waybar | `Mod+A` |
 | Close Window | `Mod+Q` |
 
-> *Note: Dedicated laptop hardware keys (e.g., Copilot, Calculator, Screen Lock, Mic Mute) are natively mapped in `config.kdl` to automatically trigger these same features.*
+> *Hardware keys (Copilot, Calculator, Screen Lock, Mic Mute, Volume) are natively mapped in `config.kdl`.*
 
 ---
 
 ## 🔐 Smart Lockscreen
 
-The `qylock` configuration automatically uses a beautifully animated video background (via Quickshell) from your wallpaper to keep the blur effect fast and smooth. It completely replaces the old `swaylock` screenshot method, avoiding any screen-tearing or see-through glitches! 
+`qylock` (quickshell) provides a modern lockscreen with a blurred wallpaper background, a bold digital clock, and a dynamic battery indicator sourced directly from `/sys/class/power_supply/BAT0/capacity`.
 
-It also actively hooks into your system's raw battery capacity (via `BAT0`) using a custom script to display dynamic battery icons directly underneath the password prompt.
+`hypridle` manages automatic lock and screen-off timeouts.
+
+---
+
+## 💻 TTY / Terminal Session
+
+A minimal **"Terminal Mode"** session is available directly from the SDDM login screen. It launches `alacritty` inside a `cage` Wayland kiosk compositor — giving you a clean fullscreen terminal without loading any desktop environment. Useful for server administration, recovery, or lightweight work.
 
 ---
 
 ## 🔧 System & Hardware Fixes Included
 
-The automated installer and configurations natively apply several kernel and driver-level fixes for standard Lenovo ThinkBook / HP hardware:
+The installer automatically applies several kernel and driver-level fixes:
 
-- **Hardware Numpad Enter:** Remaps the Numpad Enter key natively to `Return` at the kernel level using `systemd-hwdb` to bypass Wayland virtual keyboard lockscreen bugs.
-- **MediaTek mt7921e Wi-Fi:** Unloads the driver before sleep and reloads it on wake to prevent the card from dropping off the PCIe bus.
-- **Hardware Audio LEDs:** Uses `brightnessctl` bound directly to SysFS `platform::mute` and `platform::micmute` variables to physically sync the LED indicators on the keyboard with Wireplumber volumes.
-- **Copilot Key:** Wayland natively interprets the hardware macro (`Super+Shift+F23`) and maps it to a fast-toggling `rofi` app launcher instance.
-- **Power Delivery:** Sets `systemd-logind` to ignore lid-switch suspension when connected to AC power to keep background servers (e.g., Tailscale) alive remotely.
+| Fix | Description |
+|-----|-------------|
+| **Numpad Enter** | Remapped to `Return` at kernel level via `systemd-hwdb`, fixing quickshell lockscreen hang |
+| **MediaTek mt7921e Wi-Fi** | Driver unloads before sleep, reloads on wake to prevent PCIe drop |
+| **Hardware Audio LEDs** | `brightnessctl` syncs physical mute/mic-mute LEDs with Wireplumber state via SysFS |
+| **Copilot Key** | `Super+Shift+F23` mapped to fast-toggling `rofi` app launcher via Niri `spawn-sh` |
+| **Wi-Fi Power Save** | NetworkManager powersave disabled globally to prevent MediaTek crashes |
+| **Monitor Auto-scaling** | udev hotplug triggers `niri-monitor-hotplug.service` to re-apply scale on plug/unplug |
+| **Lid Switch** | `systemd-logind` ignores lid close on AC power to keep Tailscale/SSH alive |
 
 ---
 
@@ -161,13 +192,13 @@ Colours are extracted from the wallpaper via **pywal** and applied to Waybar and
 
 | Asset | Source |
 |:------|:-------|
-| **Silent Katana — Forest Samurai** (animated, used as desktop wallpaper) | [WallsFlow](https://wallsflow.com/live-wallpapers/anime/761-silent-katana-forest-samurai-live-wallpaper.html) |
+| **Silent Katana — Forest Samurai** (animated MP4, used as desktop wallpaper) | [WallsFlow](https://wallsflow.com/live-wallpapers/anime/761-silent-katana-forest-samurai-live-wallpaper.html) |
 
-> The wallpaper is **not bundled** in this repository due to its large file size (~361 MB GIF / ~44 MB MP4). Download it manually from the link above and place the GIF at:
+> Download the `.mp4` and place it at:
 > ```
-> ~/niri-rice/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.gif
+> ~/niri-rice/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4
 > ```
-> The install script will then symlink `~/Wallpapers` and apply it automatically.
+> The installer will symlink `~/Wallpapers` and play it via `mpvpaper` automatically.
 
 ---
 

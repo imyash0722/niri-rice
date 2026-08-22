@@ -75,7 +75,7 @@ paru -Syu --needed --noconfirm \
     sddm quickshell qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
     qt6-multimedia-ffmpeg gst-plugins-base gst-plugins-good gst-plugins-bad \
     gst-plugins-ugly gst-libav gst-plugin-pipewire gst-plugin-va \
-    waybar-module-pacman-updates-git mpvpaper powertop keyd \
+    waybar-module-pacman-updates-git mpvpaper powertop \
     pavucontrol wireplumber pipewire-alsa pipewire-pulse \
     tailscale openssh ufw rsync wget unzip unrar \
     xdg-user-dirs xdg-desktop-portal-gtk \
@@ -165,13 +165,6 @@ wifi.powersave = 2
 EOF'
 sudo systemctl restart NetworkManager || true
 
-# Fix Disable-While-Typing (DWT) for keyd virtual keyboards by spoofing the hardware device group
-sudo bash -c 'cat << EOF > /etc/udev/rules.d/99-keyd-touchpad-dwt.rules
-ACTION=="add|change", KERNEL=="event[0-9]*", ATTRS{name}=="keyd virtual keyboard", ENV{LIBINPUT_DEVICE_GROUP}="11/1/1:isa0060/serio0"
-EOF'
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-
 # Fix Numpad Enter by remapping it to standard Enter at the kernel level
 sudo bash -c 'cat << EOF > /etc/udev/hwdb.d/99-numpad-enter.hwdb
 evdev:atkbd:*
@@ -210,16 +203,15 @@ sudo systemctl daemon-reload || true
 sudo systemctl enable --now powertop.service || true
 
 # ---------------------------------------------------------------------------
-# 6. Apply wallpaper immediately (awww must be installed)
+# 6. Apply wallpaper immediately (mpvpaper must be installed)
 # ---------------------------------------------------------------------------
 echo ""
 echo "[6/6] Applying wallpaper..."
-if command -v awww &>/dev/null; then
-    mpvpaper powertop -o 'no-audio loop hwdec=auto' '*' "$HOME/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4" &
-    
+if command -v mpvpaper &>/dev/null; then
+    mpvpaper -o 'no-audio loop hwdec=auto' '*' "$HOME/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4" &
     echo "  Wallpaper applied!"
 else
-    echo "  [!] awww not found, wallpaper will apply on next login."
+    echo "  [!] mpvpaper not found, wallpaper will apply on next login."
 fi
 
 # ---------------------------------------------------------------------------
