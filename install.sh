@@ -77,7 +77,7 @@ paru -Syu --needed --noconfirm \
     gst-plugins-ugly gst-libav gst-plugin-pipewire gst-plugin-va \
     waybar-module-pacman-updates-git mpvpaper powertop \
     pavucontrol wireplumber pipewire-alsa pipewire-pulse \
-    tailscale openssh ufw rsync wget unzip unrar \
+    openssh ufw rsync wget unzip unrar \
     xdg-user-dirs xdg-desktop-portal-gtk \
     vscodium nodejs npm python python-pynvim \
     libinput-tools || echo "  [!] Some packages failed to install — continuing anyway..."

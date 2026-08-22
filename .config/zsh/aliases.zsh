@@ -21,7 +21,5 @@ alias dots="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias lazydots="lazygit --git-dir=$HOME/.dotfiles --work-tree=$HOME"
 alias pls='sudo -E env "PATH=$PATH"'
 
-# Power Profile and Keep-Awake aliases
-alias keep-awake="nohup systemd-inhibit --what=idle --who=\"manual\" --why=\"Manual toggle\" wayinhibit >/dev/null 2>&1 &"
-alias keep-awake-stop="pkill wayinhibit"
+# Power profile switcher
 alias power="power-manager"
