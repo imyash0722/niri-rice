@@ -6,12 +6,12 @@
 
 ![niri](https://img.shields.io/badge/niri-26.04-7fc8ff?style=for-the-badge&logo=wayland&logoColor=white)
 ![Waybar](https://img.shields.io/badge/Waybar-customised-ffc87f?style=for-the-badge)
-![Theme](https://img.shields.io/badge/Theme-Tokyo%20Night-1a1b26?style=for-the-badge&logoColor=white)
+![Theme](https://img.shields.io/badge/Theme-Pywal%20Dynamic-ff69b4?style=for-the-badge&logoColor=white)
 ![Shell](https://img.shields.io/badge/Shell-ZSH-89b4fa?style=for-the-badge&logo=gnu-bash&logoColor=white)
 ![Migrated](https://img.shields.io/badge/Migrated%20from-SwayFX-a9b1d6?style=for-the-badge)
 ![Distro](https://img.shields.io/badge/Distro-CachyOS-00b4d8?style=for-the-badge&logo=archlinux&logoColor=white)
 
-*A scrollable, tiling Wayland desktop built on the niri compositor — migrated from SwayFX. Animated wallpapers, Tokyo Night colours, and a fully custom Waybar.*
+*A scrollable, tiling Wayland desktop built on the niri compositor. Features animated wallpapers, dynamic Pywal colours, and a fully custom Waybar.*
 
 </div>
 
@@ -89,7 +89,7 @@ niri-rice/
 │   │   └── waybar/             # Niri-specific Waybar config + CSS
 │   ├── waybar/                 # Shared Waybar modules and scripts
 │   ├── rofi/                   # App launcher theme and config
-│   ├── foot/                   # Terminal emulator (Tokyo Night theme)
+│   ├── foot/                   # Terminal emulator (Dynamic Pywal colors)
 │   ├── mako/                   # Notification daemon
 │   ├── nvim/                   # LazyVim Neovim configuration
 │   └── systemd/user/           # Background services (monitor hotplug)
