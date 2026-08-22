@@ -26,7 +26,6 @@
 - 🚀 **Rofi** — App launcher with a custom 'blues' dark theme. Support for toggling and hardware keys (e.g. Copilot button).
 - 📸 **Satty** — Screenshot annotation tool (Niri native screenshot support via `Mod+Shift+S`)
 - 🔒 **qylock (quickshell)** — Modern lockscreen: beautifully blurred static backgrounds, dynamic battery module, and bold digital clock
-- 🎵 **Cava** — Audio spectrum visualizer
 - 🐾 **Foot** — Fast, GPU-rendered Wayland terminal
 - ⭐ **Starship** — Cross-shell prompt
 - 📋 **cliphist** — Clipboard history manager (`Mod+V` to open)
