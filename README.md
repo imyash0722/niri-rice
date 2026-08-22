@@ -174,6 +174,6 @@ Colours are extracted from the wallpaper via **pywal** and applied to Waybar and
 <div align="center">
 
 *Original Sway dotfiles base by [jim-fx](https://github.com/.dotfiles).*<br>
-*Made with ❤️ on CachyOS*
+*Made with love on CachyOS*
 
 </div>
