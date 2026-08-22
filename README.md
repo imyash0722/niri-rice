@@ -23,17 +23,16 @@
 > This rice was originally built with **Ly** as the display manager. However, because my setup now runs on **CachyOS with KDE Plasma**, the default **KDE Display Manager (SDDM)** is used instead of Ly — and that is the recommended setup here.
 >
 > The `ly/` directory has been renamed to **`ly.unused/`** in this repository to keep the Ly config archived but inactive. To re-enable Ly, simply rename `ly.unused/` back to `ly/` — `install.sh` will then automatically detect and apply the Tokyo Night Ly theme.
->
-> **Do not install or enable `ly` unless you intend to replace SDDM/KDE login manager.**
 
 ---
 
 ## ✨ Features
 
 - 🌊 **niri** — Scrollable, infinite-canvas tiling Wayland compositor
+- 📺 **Dynamic Display Scaling** — Custom multi-monitor daemon automatically scales outputs based on native resolution (`1.5x` for 4K, `1.25x` for 1440p, `1.0x` for 1080p).
 - 🎬 **awww** — Fast and lightweight Wayland wallpaper daemon
 - 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
-- 🚀 **Rofi** — App launcher with a custom 'blues' dark theme
+- 🚀 **Rofi** — App launcher with a custom 'blues' dark theme. Support for toggling and hardware keys (e.g. Copilot button).
 - 📸 **Satty** — Screenshot annotation tool (Niri native screenshot support via `Mod+Shift+S`)
 - 🔒 **qylock (quickshell)** — Modern lockscreen: beautifully blurred static backgrounds, dynamic battery module, and bold digital clock
 - 🎵 **Cava** — Audio spectrum visualizer
@@ -44,33 +43,15 @@
 ---
 
 ### 📦 Core Components
-    * **Window Manager:** `niri`
-    * **Status Bar:** `waybar`
-    * **App Launcher:** `rofi-wayland`
-    * **Wallpaper:** `awww`
-    * **Lock Screen:** `qylock (quickshell)` & `hypridle`
-    * **Notifications:** `mako`
+* **Window Manager:** `niri`
+* **Status Bar:** `waybar`
+* **App Launcher:** `rofi-wayland`
+* **Wallpaper:** `awww`
+* **Lock Screen:** `qylock (quickshell)` & `hypridle`
+* **Notifications:** `mako`
 
 ### 🔧 Dependencies
-You can install all necessary packages using `paru` or `yay`.
-
-> [!NOTE]
-> `ly` is **not** listed here — this setup uses the KDE/SDDM login manager. See the warning block at the top of this page.
-
-```bash
-paru -S niri waybar rofi-wayland foot fastfetch networkmanager \
-        bluetui pipemixer satty btop neovim zsh \
-        firefox-developer-edition awww qylock (quickshell) \
-        grim slurp wl-clipboard cliphist wl-paste \
-        cava starship mako hypridle ffmpeg jq \
-        brightnessctl playerctl ungoogled-chromium-bin dolphin \
-        konsole typora-free-with-plugin vesktop rofi-rbw wtype blueman \
-        obs-studio imagemagick kdeconnect kwallet kanshi \
-        ttf-jetbrains-mono ttf-roboto ttf-font-awesome \
-        ttf-meslo-nerd eza bat fzf zoxide ripgrep fd \
-        breeze breeze-icons plasma-integration power-profiles-daemon iwd iwgtk \
-        lazygit yazi tealdeer qimgv haruna ark okular xwayland-satellite
-```
+You don't need to install dependencies manually! The included `install.sh` handles pulling everything from CachyOS/AUR natively, along with fonts, KDE utilities, gstreamer codecs, and display drivers.
 
 ---
 
@@ -86,26 +67,17 @@ paru -S niri waybar rofi-wayland foot fastfetch networkmanager \
 
 ## 🚀 Installation
 
+This rice now features a **fully automated installation script** (`install.sh`) that installs dependencies, symlinks all configs, applies system-level hardware fixes, and configures powermanagement.
+
 ```bash
 # 1. Clone the repo
 git clone https://github.com/imyash0722/niri-rice.git ~/niri-rice
 cd ~/niri-rice
 
-# 2. Copy configs
-rsync -a .config/ ~/.config/
+# 2. Run the automated installer
+./install.sh
 
-# 3. Extract Neovim config
-tar -xzf ~/.config/nvim.tar.gz -C ~/.config/
-rm ~/.config/nvim.tar.gz
-
-# 4. Make scripts executable
-chmod +x ~/.config/niri/scripts/*.sh
-
-# 5. Set your wallpaper path in config.kdl
-#    Search for "awww" in ~/.config/niri/config.kdl and update the path
-
-# 6. Start niri from your display manager (SDDM / KDE Login Manager auto-detects it)
-#    NOTE: To use Ly instead, rename ly.unused/ -> ly/ before running install.sh
+# 3. Log out of your current session and select "niri" from the SDDM menu.
 ```
 
 ---
@@ -114,30 +86,22 @@ chmod +x ~/.config/niri/scripts/*.sh
 
 ```
 niri-rice/
-├── .gitignore
-├── README.md
-├── install.sh
+├── install.sh                  # One-click automated installer
 ├── update.sh
 ├── .config/
 │   ├── niri/
 │   │   ├── config.kdl          # Compositor config (keybinds, autostart, rules)
 │   │   ├── scripts/
 │   │   │   ├── lock.sh         # Smart lockscreen script
-│   │   │   ├── power.sh        # Rofi power menu (lock/suspend/reboot/shutdown)
-│   │   │   └── reload.sh       # Reload Waybar + awww (Mod+Shift+R)
+│   │   │   ├── power.sh        # Rofi power menu
+│   │   │   └── monitor-setup.sh# Dynamic display auto-scaling
 │   │   └── waybar/             # Niri-specific Waybar config + CSS
 │   ├── waybar/                 # Shared Waybar modules and scripts
 │   ├── rofi/                   # App launcher theme and config
 │   ├── foot/                   # Terminal emulator (Tokyo Night theme)
-│   ├── hypr/                   # Hyprlock and hypridle configurations
 │   ├── mako/                   # Notification daemon
-│   ├── cava/                   # Audio spectrum visualizer
-│   ├── mpv/                    # Media player config
-│   ├── btop/                   # System monitor themes
-│   ├── fastfetch/              # System info fetch
-│   ├── satty/                  # Screenshot annotation
-│   └── starship.toml           # Shell prompt config
-├── ly.unused/                  # Ly display manager config (archived — rename to ly/ to activate)
+│   ├── nvim/                   # LazyVim Neovim configuration
+│   └── systemd/user/           # Background services (monitor hotplug)
 ├── system-scripts/             # Hardware-specific system scripts
 └── Wallpapers/                 # Wallpapers (gitignored — store locally)
 ```
@@ -164,6 +128,8 @@ niri-rice/
 | Toggle Waybar Visibility| `Mod+A` |
 | Close Window | `Mod+Q` |
 
+> *Note: Dedicated laptop hardware keys (e.g., Copilot, Calculator, Screen Lock, Mic Mute) are natively mapped in `config.kdl` to automatically trigger these same features.*
+
 ---
 
 ## 🔐 Smart Lockscreen
@@ -174,11 +140,15 @@ It also actively hooks into your system's raw battery capacity (via `BAT0`) usin
 
 ---
 
-## 🔧 System Scripts (Hardware Fixes)
+## 🔧 System & Hardware Fixes Included
 
-Inside the `system-scripts/` directory at the root of this repo, you will find a fix for the **MediaTek mt7921e Wi-Fi card** failing to wake from sleep:
+The automated installer and configurations natively apply several kernel and driver-level fixes for standard Lenovo ThinkBook / HP hardware:
 
-- `mt7921e-sleep.sh`: Must be copied to `/usr/lib/systemd/system-sleep/` and made executable (`chmod +x`). It safely unloads the driver before sleep and reloads it on wake to prevent the card from dropping off the PCIe bus.
+- **Hardware Numpad Enter:** Remaps the Numpad Enter key natively to `Return` at the kernel level using `systemd-hwdb` to bypass Wayland virtual keyboard lockscreen bugs.
+- **MediaTek mt7921e Wi-Fi:** Unloads the driver before sleep and reloads it on wake to prevent the card from dropping off the PCIe bus.
+- **Hardware Audio LEDs:** Uses `brightnessctl` bound directly to SysFS `platform::mute` and `platform::micmute` variables to physically sync the LED indicators on the keyboard with Wireplumber volumes.
+- **Copilot Key:** Wayland natively interprets the hardware macro (`Super+Shift+F23`) and maps it to a fast-toggling `rofi` app launcher instance.
+- **Power Delivery:** Sets `systemd-logind` to ignore lid-switch suspension when connected to AC power to keep background servers (e.g., Tailscale) alive remotely.
 
 ---
 
