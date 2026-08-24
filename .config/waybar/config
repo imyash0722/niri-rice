@@ -72,6 +72,14 @@
     "return-type": "json"
   },
 
+  "custom/music-stopped": {
+    "format": "󰝛",
+    "exec": "playerctl status 2>/dev/null | grep -qv Playing && echo '' || exit 1",
+    "exec-if": "! playerctl status 2>/dev/null | grep -q Playing",
+    "interval": 3,
+    "tooltip": false
+  },
+
   "custom/power": {
     "format": "",
     "on-click": "~/.config/niri/scripts/power.sh",
