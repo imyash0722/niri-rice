@@ -31,7 +31,6 @@
     "group/tray-expander",
     "custom/power"
   ],
-
   "niri/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
@@ -53,17 +52,14 @@
       "*": 10
     }
   },
-
   "custom/separator": {
     "format": "|",
     "tooltip": false
   },
-
   "custom/separator2": {
     "format": "•",
     "tooltip": false
   },
-
   "custom/weather": {
     "format": "{}°",
     "tooltip": true,
@@ -71,7 +67,6 @@
     "exec": "wttrbar --nerd",
     "return-type": "json"
   },
-
   "custom/music-stopped": {
     "format": "󰝛",
     "exec": "playerctl status 2>/dev/null | grep -qv Playing && echo '' || exit 1",
@@ -79,26 +74,23 @@
     "interval": 3,
     "tooltip": false
   },
-
   "custom/power": {
-    "format": "",
+    "format": "⏻",
     "on-click": "~/.config/niri/scripts/power.sh",
     "on-click-right": "power-manager",
     "tooltip-format": "Left: Power menu\nRight: Switch power profile"
   },
-
   "power-profiles-daemon": {
     "format": "{icon}",
     "tooltip-format": "Power profile: {profile}\nDriver: {driver}\nLeft: Cycle profile",
     "tooltip": true,
     "on-click": "cycle-power-profile",
     "format-icons": {
-      "performance": "",
-      "balanced": " ",
-      "power-saver": ""
+      "performance": "",
+      "balanced": "≈",
+      "power-saver": "♥"
     }
   },
-
   "cpu": {
     "interval": 5,
     "format": "",
@@ -108,7 +100,6 @@
       "critical": 80
     }
   },
-
   "clock": {
     "format": "<span color='#857C86'>{0:%H:%M}</span> <span size='small' color='#616367'><i>{0:%a, %b %d}</i></span>",
     "format-alt": "{:L%d %B W%V %Y}",
@@ -124,10 +115,15 @@
       }
     }
   },
-
   "network": {
     "format": "󰤭",
-    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
     "format-wifi": "{icon} {essid}",
     "format-ethernet": "󰈀",
     "format-disconnected": "󰤭",
@@ -138,14 +134,35 @@
     "spacing": 1,
     "on-click": "foot --app-id=foot.nmtui --window-size-chars=81x34 -e nmtui"
   },
-
   "battery": {
     "format": "{capacity}% {icon}",
     "format-charging": "{capacity}% {icon}",
     "format-plugged": "{capacity}% ",
     "format-icons": {
-      "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
-      "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+      "charging": [
+        "󰢜",
+        "󰂆",
+        "󰂇",
+        "󰂈",
+        "󰢝",
+        "󰂉",
+        "󰢞",
+        "󰂊",
+        "󰂋",
+        "󰂅"
+      ],
+      "default": [
+        "󰁺",
+        "󰁻",
+        "󰁼",
+        "󰁽",
+        "󰁾",
+        "󰁿",
+        "󰂀",
+        "󰂁",
+        "󰂂",
+        "󰁹"
+      ]
     },
     "format-full": "󱊦 {capacity}%",
     "tooltip-format-discharging": "{power:>1.0f}W↓ {timeTo}",
@@ -157,7 +174,6 @@
       "critical": 15
     }
   },
-
   "bluetooth": {
     "format": "{num_connections}",
     "format-disabled": "󰂲 {status}",
@@ -165,7 +181,6 @@
     "tooltip-format": "Devices connected: {num_connections}",
     "on-click": "blueman-manager"
   },
-
   "pulseaudio": {
     "format": "{icon}",
     "on-click": "pavucontrol",
@@ -176,10 +191,13 @@
     "format-icons": {
       "headphone": "",
       "headset": "",
-      "default": ["", "", ""]
+      "default": [
+        "",
+        "",
+        ""
+      ]
     }
   },
-
   "custom/mpris": {
     "exec": "python3 -u ~/.config/waybar/scrolling-mpris.py",
     "format": "{text}",
@@ -187,7 +205,6 @@
     "on-click": "playerctl play-pause",
     "tooltip": false
   },
-
   "idle_inhibitor": {
     "format": "{icon}",
     "tooltip-format-activated": "Stay Awake: ON",
@@ -197,7 +214,6 @@
       "deactivated": "󰛩"
     }
   },
-
   "custom/updatespacman": {
     "format": "{}{icon}",
     "return-type": "json",
@@ -208,7 +224,6 @@
     "exec-if": "which waybar-module-pacman-updates",
     "exec": "waybar-module-pacman-updates --no-zero-output"
   },
-
   "group/tray-expander": {
     "orientation": "inherit",
     "drawer": {
@@ -220,12 +235,10 @@
       "tray"
     ]
   },
-
   "custom/expand-icon": {
-    "format": "",
+    "format": "",
     "tooltip": false
   },
-
   "tray": {
     "icon-size": 13,
     "spacing": 2
