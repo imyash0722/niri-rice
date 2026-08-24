@@ -75,7 +75,7 @@
     "tooltip": false
   },
   "custom/power": {
-    "format": "⏻",
+    "format": "",
     "on-click": "~/.config/niri/scripts/power.sh",
     "on-click-right": "power-manager",
     "tooltip-format": "Left: Power menu\nRight: Switch power profile"
@@ -86,9 +86,9 @@
     "tooltip": true,
     "on-click": "cycle-power-profile",
     "format-icons": {
-      "performance": "",
-      "balanced": "≈",
-      "power-saver": "♥"
+      "performance": "",
+      "balanced": " ",
+      "power-saver": ""
     }
   },
   "cpu": {
@@ -236,7 +236,7 @@
     ]
   },
   "custom/expand-icon": {
-    "format": "",
+    "format": "",
     "tooltip": false
   },
   "tray": {
