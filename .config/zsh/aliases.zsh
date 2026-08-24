@@ -23,3 +23,7 @@ alias pls='sudo -E env "PATH=$PATH"'
 
 # Power profile switcher
 alias power="power-manager"
+
+# Battery health (ideapad conservation mode — charges to ~60%)
+alias battery-save="echo 1 | sudo tee /sys/bus/platform/drivers/ideapad_acpi/*/conservation_mode"
+alias battery-full="echo 0 | sudo tee /sys/bus/platform/drivers/ideapad_acpi/*/conservation_mode"

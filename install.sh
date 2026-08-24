@@ -67,7 +67,7 @@ paru -Syu --needed --noconfirm \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd otf-font-awesome \
     ttf-meslo-nerd ttf-jetbrains-mono-nerd python-pywal \
     noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-dejavu ttf-liberation \
-    breeze breeze-gtk breeze-icons plasma-integration power-profiles-daemon powerdevil \
+    breeze breeze-gtk breeze-icons plasma-integration tlp tlp-rdw powerdevil \
     kde-gtk-config kscreen kwalletmanager kwallet-pam kdialog kio-admin \
     kdeconnect kdegraphics-thumbnailers gwenview spectacle kate kcalc krita meld \
     lazygit yazi tealdeer qimgv haruna ark okular libreoffice-still zapzap video2gif \
@@ -156,7 +156,8 @@ chmod +x "$HOME/.local/bin/"* 2>/dev/null || true
 # ---------------------------------------------------------------------------
 echo ""
 echo "[5/6] Enabling system services & battery fixes..."
-sudo systemctl enable --now power-profiles-daemon || true
+sudo systemctl enable --now tlp || true
+sudo systemctl mask power-profiles-daemon || true
 
 # Fix MediaTek Wi-Fi crashing during idle (disable NM powersave globally)
 sudo bash -c 'cat << EOF > /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf

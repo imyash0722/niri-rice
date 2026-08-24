@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-# Get current profile
-CURRENT=$(powerprofilesctl get)
+# Get current profile from sysfs
+CURRENT=$(cat /sys/firmware/acpi/platform_profile 2>/dev/null || echo "balanced")
 
 generate_menu() {
-    local profiles=("performance" "balanced" "power-saver")
+    local profiles=("performance" "balanced" "low-power")
     
     for profile in "${profiles[@]}"; do
         if [[ "$profile" == "$CURRENT" ]]; then
@@ -28,5 +28,6 @@ RAW_CHOICE=$(echo "$CHOICE" | awk '{print $1}')
 
 if [[ -n "$RAW_CHOICE" ]]; then
     echo "Setting power profile to $RAW_CHOICE..."
-    powerprofilesctl set "$RAW_CHOICE"
+    echo "$RAW_CHOICE" | sudo tee /sys/firmware/acpi/platform_profile > /dev/null
+    pkill -RTMIN+2 waybar 2>/dev/null || true
 fi

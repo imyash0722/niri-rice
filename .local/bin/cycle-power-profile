@@ -1,8 +1,11 @@
 #!/bin/bash
-# Cycles through KDE Powerdevil power profiles via powerprofilesctl
-CURRENT=$(powerprofilesctl get)
+# cycle-power-profile — cycles platform profile via sysfs (no ppd dependency)
+CURRENT=$(cat /sys/firmware/acpi/platform_profile 2>/dev/null || echo "balanced")
 case "$CURRENT" in
-    performance) powerprofilesctl set balanced ;;
-    balanced)    powerprofilesctl set power-saver ;;
-    power-saver) powerprofilesctl set performance ;;
+    performance) NEXT="balanced" ;;
+    balanced)    NEXT="low-power" ;;
+    low-power)   NEXT="performance" ;;
+    *)           NEXT="balanced" ;;
 esac
+echo "$NEXT" | sudo tee /sys/firmware/acpi/platform_profile > /dev/null
+pkill -RTMIN+2 waybar 2>/dev/null || true  # refresh waybar module

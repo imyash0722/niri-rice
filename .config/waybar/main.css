@@ -105,7 +105,7 @@ button:hover {
 #custom-updatespacman,
 #custom-screenrecording-indicator,
 #custom-update,
-#power-profiles-daemon,
+#custom-platform-profile,
 #custom-power {
   min-width: 12px;
   color: @fg;
@@ -141,20 +141,20 @@ button:hover {
 margin-top: 1px;
 }
 
-#power-profiles-daemon {
+#custom-platform-profile {
   margin: 0px 2px 0 2px;
   padding: 0px 4px;
 }
 
-#power-profiles-daemon.performance {
+#custom-platform-profile.performance {
   color: @red;
 }
 
-#power-profiles-daemon.balanced {
+#custom-platform-profile.balanced {
   color: @fg;
 }
 
-#power-profiles-daemon.power-saver {
+#custom-platform-profile.low-power {
   color: #25e712;
 }
 

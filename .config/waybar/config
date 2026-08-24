@@ -26,7 +26,7 @@
     "bluetooth",
     "custom/updatespacman",
     "idle_inhibitor",
-    "power-profiles-daemon",
+    "custom/platform-profile",
     "custom/separator",
     "group/tray-expander",
     "custom/power"
@@ -79,17 +79,6 @@
     "on-click": "~/.config/niri/scripts/power.sh",
     "on-click-right": "power-manager",
     "tooltip-format": "Left: Power menu\nRight: Switch power profile"
-  },
-  "power-profiles-daemon": {
-    "format": "{icon}",
-    "tooltip-format": "Power profile: {profile}\nDriver: {driver}\nLeft: Cycle profile",
-    "tooltip": true,
-    "on-click": "cycle-power-profile",
-    "format-icons": {
-      "performance": "",
-      "balanced": " ",
-      "power-saver": ""
-    }
   },
   "cpu": {
     "interval": 5,
@@ -242,5 +231,18 @@
   "tray": {
     "icon-size": 13,
     "spacing": 2
+  },
+  "custom/platform-profile": {
+    "exec": "~/.config/waybar/scripts/platform-profile",
+    "return-type": "json",
+    "format": "{icon}",
+    "format-icons": {
+      "performance": "",
+      "balanced": " ",
+      "low-power": ""
+    },
+    "interval": 3,
+    "on-click": "cycle-power-profile",
+    "tooltip": true
   }
 }
