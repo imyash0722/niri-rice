@@ -20,6 +20,7 @@
   ],
   "modules-right": [
     "battery",
+    "backlight",
     "pulseaudio",
     "network",
     "cpu",
@@ -67,27 +68,54 @@
     "exec": "wttrbar --nerd",
     "return-type": "json"
   },
-  "custom/music-stopped": {
-    "format": "󰝛",
-    "exec": "playerctl status 2>/dev/null | grep -qv Playing && echo '' || exit 1",
-    "exec-if": "! playerctl status 2>/dev/null | grep -q Playing",
-    "interval": 3,
-    "tooltip": false
-  },
   "custom/power": {
     "format": "",
     "on-click": "~/.config/niri/scripts/power.sh",
-    "on-click-right": "power-manager",
-    "tooltip-format": "Left: Power menu\nRight: Switch power profile"
+    "on-click-right": "foot",
+    "tooltip-format": "Left: Power menu\nRight: Terminal"
+  },
+  "custom/platform-profile": {
+    "exec": "~/.config/waybar/scripts/platform-profile",
+    "return-type": "json",
+    "format": "{icon}",
+    "format-icons": {
+      "performance": "",
+      "balanced": " ",
+      "low-power": ""
+    },
+    "interval": 3,
+    "on-click": "cycle-power-profile",
+    "tooltip": true
+  },
+  "custom/music-stopped": {
+    "exec-if": "! playerctl status 2>/dev/null | grep -q Playing",
+    "exec": "echo ''",
+    "format": "󰝛",
+    "interval": 3,
+    "tooltip": false
   },
   "cpu": {
     "interval": 5,
-    "format": "",
+    "format": "",
     "on-click": "foot btop",
     "states": {
       "warning": 50,
       "critical": 80
     }
+  },
+  "backlight": {
+    "format": "{icon}",
+    "tooltip": true,
+    "tooltip-format": "Brightness: {percent}%",
+    "format-icons": [
+      "󰃜",
+      "󰃝",
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ],
+    "on-scroll-down": "brightnessctl s 5%-",
+    "on-scroll-up": "brightnessctl s +5%"
   },
   "clock": {
     "format": "<span color='#857C86'>{0:%H:%M}</span> <span size='small' color='#616367'><i>{0:%a, %b %d}</i></span>",
@@ -126,7 +154,7 @@
   "battery": {
     "format": "{capacity}% {icon}",
     "format-charging": "{capacity}% {icon}",
-    "format-plugged": "{capacity}% ",
+    "format-plugged": "{capacity}% 󰽔",
     "format-icons": {
       "charging": [
         "󰢜",
@@ -164,7 +192,7 @@
     }
   },
   "bluetooth": {
-    "format": "{num_connections}",
+    "format": "{num_connections}",
     "format-disabled": "󰂲 {status}",
     "format-connected": "󰂱 {num_connections}",
     "tooltip-format": "Devices connected: {num_connections}",
@@ -176,14 +204,14 @@
     "on-click-right": "pamixer -t",
     "tooltip-format": "Volume: {volume}%",
     "scroll-step": 5,
-    "format-muted": "",
+    "format-muted": "",
     "format-icons": {
-      "headphone": "",
-      "headset": "",
+      "headphone": "",
+      "headset": "",
       "default": [
-        "",
-        "",
-        ""
+        "",
+        "",
+        ""
       ]
     }
   },
@@ -231,18 +259,5 @@
   "tray": {
     "icon-size": 13,
     "spacing": 2
-  },
-  "custom/platform-profile": {
-    "exec": "~/.config/waybar/scripts/platform-profile",
-    "return-type": "json",
-    "format": "{icon}",
-    "format-icons": {
-      "performance": "",
-      "balanced": " ",
-      "low-power": ""
-    },
-    "interval": 3,
-    "on-click": "cycle-power-profile",
-    "tooltip": true
   }
 }
