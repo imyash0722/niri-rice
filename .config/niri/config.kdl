@@ -111,6 +111,9 @@ spawn-at-startup "bash" "-c" "sleep 2 && ~/.config/niri/scripts/monitor-setup.sh
 // Idle manager (hypridle)
 spawn-at-startup "hypridle"
 
+// Wacom One tablet driver (OpenTabletDriver)
+spawn-at-startup "sh" "-c" "sleep 1 && otd-daemon"
+
 // ── Window rules ─────────────────────────────────────────
 
 // WezTerm initial configure workaround
