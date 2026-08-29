@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=OpenTabletDriver Daemon
+Comment=Wacom One tablet driver (userspace)
+Exec=otd-daemon
+Icon=/usr/share/pixmaps/otd.png
+Terminal=false
+Type=Application
+Categories=Settings;
+X-KDE-autostart-phase=1
+X-KDE-StartupNotify=false
