@@ -93,7 +93,7 @@ spawn-at-startup "sh" "-c" "waybar"
 
 // Animated wallpaper (mpvpaper - GPU hardware decoded)
 
-spawn-at-startup "sh" "-c" "sleep 1 && mpvpaper -o 'no-audio loop-file=inf hwdec=auto panscan=1.0 scale=lanczos cscale=lanczos dscale=lanczos correct-downscaling=yes linear-downscaling=yes sigmoid-upscaling=yes' '*' ~/Pictures/Wall/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4"
+spawn-at-startup "sh" "-c" "sleep 1 && mpvpaper -o 'no-audio loop-file=inf hwdec=auto video-unscaled=yes' '*' ~/Pictures/Wall/samurai-1200p-optimized.mp4"
 
 // Clipboard history (cliphist)
 spawn-at-startup "sh" "-c" "pkill wl-paste; wl-paste --type text --watch cliphist store & wl-paste --type image --watch cliphist store &"

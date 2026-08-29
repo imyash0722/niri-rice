@@ -85,6 +85,7 @@
                 "hdrIccProfilePath": "",
                 "highDynamicRange": false,
                 "iccProfilePath": "",
+                "maxBitsPerColor": 0,
                 "mode": {
                     "flags": 1,
                     "height": 2160,
@@ -129,8 +130,8 @@
                         "enabled": true,
                         "outputIndex": 0,
                         "position": {
-                            "x": 2560,
-                            "y": 0
+                            "x": 365,
+                            "y": 1440
                         },
                         "priority": 1,
                         "replicationSource": ""

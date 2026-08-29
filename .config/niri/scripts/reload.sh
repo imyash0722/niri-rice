@@ -13,4 +13,4 @@ nohup waybar >/dev/null 2>&1 &
 # Reload Wallpaper (mpvpaper - GPU hardware decoded)
 pkill mpvpaper || true
 sleep 0.5
-mpvpaper -o 'no-audio loop-file=inf hwdec=auto panscan=1.0 scale=lanczos cscale=lanczos dscale=lanczos correct-downscaling=yes linear-downscaling=yes sigmoid-upscaling=yes' '*' ~/Pictures/Wall/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4 &
+mpvpaper -o 'no-audio loop-file=inf hwdec=auto video-unscaled=yes' '*' ~/Pictures/Wall/samurai-1200p-optimized.mp4 &

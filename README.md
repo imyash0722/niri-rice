@@ -196,7 +196,7 @@ Colours are extracted from the wallpaper via **pywal** and applied to Waybar and
 
 > Download the `.mp4` and place it at:
 > ```
-> ~/niri-rice/Pictures/Wall/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4
+> ~/niri-rice/Pictures/Wall/samurai-1200p-optimized.mp4
 > ```
 > The installer will symlink `~/Wallpapers` and play it via `mpvpaper` automatically.
 

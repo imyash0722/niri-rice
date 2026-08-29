@@ -18,10 +18,10 @@ wallpaperplugin=luisbocanegra.smart.video.wallpaper.reborn
 
 [Containments][210][Wallpaper][luisbocanegra.smart.video.wallpaper.reborn][General]
 LastVideo=file:///home/pineapple/Pictures/Wall/2825711-ezgif.com-gif-to-mp4-converter.mp4
-LastVideoPosition=840
+LastVideoPosition=880
 SlidePaths=/usr/share/wallpapers/
-Video=file:///home/pineapple/Pictures/Wall/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4
-VideoUrls=[{"filename":"file:///home/pineapple/Pictures/Wall/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Pictures/Wall/6364914-ezgif.com-gif-to-mp4-converter.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Pictures/Wall/2825711-ezgif.com-gif-to-mp4-converter.mp4","enabled":true,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false}]
+Video=file:///home/pineapple/Pictures/Wall/samurai-1200p-optimized.mp4
+VideoUrls=[{"filename":"file:///home/pineapple/Pictures/Wall/samurai-1200p-optimized.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Pictures/Wall/6364914-ezgif.com-gif-to-mp4-converter.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Pictures/Wall/2825711-ezgif.com-gif-to-mp4-converter.mp4","enabled":true,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false}]
 
 [Containments][211]
 activityId=
@@ -137,7 +137,7 @@ DialogWidth=810
 
 [Containments][211][Applets][216][General]
 extraItems=org.kde.plasma.cameraindicator,org.kde.plasma.mediacontroller,org.kde.plasma.volume,org.kde.plasma.bluetooth,org.kde.plasma.devicenotifier,org.kde.kscreen,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.plasma.diskquota,org.kde.plasma.notifications
-hiddenItems=KGpg,org.kde.plasma.devicenotifier,org.kde.kscreen,KMix,org.kde.plasma.diskquota
+hiddenItems=KGpg,org.kde.plasma.devicenotifier,org.kde.kscreen,KMix,org.kde.plasma.diskquota,blueman
 knownItems=org.kde.kdeconnect,org.kde.plasma.kclock_1x2,org.kde.plasma.bluetooth,org.kde.kscreen,org.kde.plasma.keyboardlayout,org.kde.plasma.networkmanagement,org.kde.plasma.volume,org.kde.merkuro.contact.applet,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.mediacontroller,org.kde.plasma.notifications,org.kde.plasma.keyboardindicator,org.kde.plasma.weather,org.kde.plasma.battery,org.kde.plasma.brightness
 shownItems=org.kde.plasma.volume,org.kde.plasma.bluetooth,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.plasma.notifications
 
@@ -155,6 +155,15 @@ plugin=org.kde.plasma.showdesktop
 
 [Containments][211][General]
 AppletOrder=212;213;214;215;216;230;231
+
+[Containments][236]
+activityId=9cf0aaf4-12b7-4fb2-a15d-7d593e2f0f95
+formfactor=0
+immutability=1
+lastScreen=1
+location=0
+plugin=org.kde.plasma.folder
+wallpaperplugin=org.kde.image
 
 [ScreenMapping]
 itemsOnDisabledScreens=
