@@ -13,4 +13,4 @@ nohup waybar >/dev/null 2>&1 &
 # Reload Wallpaper (mpvpaper - GPU hardware decoded)
 pkill mpvpaper || true
 sleep 0.5
-mpvpaper -o 'no-audio loop-file=inf hwdec=auto video-unscaled=yes' '*' ~/Pictures/Wall/samurai-1200p-optimized.mp4 &
+mpvpaper -o 'no-audio loop-file=inf hwdec=auto video-unscaled=yes' '*' ~/Pictures/Wall/2825711-1200p-optimized.mp4 &
