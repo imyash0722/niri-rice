@@ -1,23 +1,20 @@
 #!/bin/bash
-# Reset MT7922 (mt7921e) via direct PCI sysfs unbind/bind.
-# This prevents the firmware crash on resume by completely powering
-# off the PCIe device state at the lowest kernel level.
+# Reset MT7922 (mt7921e) via PCI Hot-Unplug / Rescan
+# This fully physically cuts the device from the PCI bus before sleep
+# and forces a cold boot of the Wi-Fi card after wake.
 
-PCI_ID="0000:02:00.0"
-PCI_DIR="/sys/bus/pci/drivers/mt7921e"
+PCI_DEV="/sys/bus/pci/devices/0000:02:00.0"
 
 case "$1" in
     pre)
-        # Forcefully detach the Wi-Fi card from the kernel driver
-        if [ -d "$PCI_DIR" ]; then
-            echo "$PCI_ID" > "$PCI_DIR/unbind" 2>/dev/null || true
+        # Forcefully hot-unplug the Wi-Fi card from the PCI bus
+        if [ -d "$PCI_DEV" ]; then
+            echo "1" > "$PCI_DEV/remove" 2>/dev/null || true
         fi
         ;;
     post)
-        # Reattach the Wi-Fi card to the kernel driver
-        if [ -d "$PCI_DIR" ]; then
-            echo "$PCI_ID" > "$PCI_DIR/bind" 2>/dev/null || true
-        fi
+        # Rescan the PCI bus to hot-plug the card back in
+        echo "1" > /sys/bus/pci/rescan 2>/dev/null || true
         
         # Wait for the device to initialize and the interface to appear
         for i in {1..10}; do
