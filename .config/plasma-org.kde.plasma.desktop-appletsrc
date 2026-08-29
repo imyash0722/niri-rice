@@ -18,7 +18,7 @@ wallpaperplugin=luisbocanegra.smart.video.wallpaper.reborn
 
 [Containments][210][Wallpaper][luisbocanegra.smart.video.wallpaper.reborn][General]
 LastVideo=file:///home/pineapple/Pictures/Wall/2825711-ezgif.com-gif-to-mp4-converter.mp4
-LastVideoPosition=1040
+LastVideoPosition=840
 SlidePaths=/usr/share/wallpapers/
 Video=file:///home/pineapple/Pictures/Wall/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4
 VideoUrls=[{"filename":"file:///home/pineapple/Pictures/Wall/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Pictures/Wall/6364914-ezgif.com-gif-to-mp4-converter.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Pictures/Wall/2825711-ezgif.com-gif-to-mp4-converter.mp4","enabled":true,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false}]
@@ -59,7 +59,7 @@ DialogWidth=810
 
 [Containments][211][Applets][213][Configuration][General]
 highlightWindows=true
-launchers=applications:org.kde.konsole.desktop,preferred://filemanager,preferred://browser,applications:libreoffice-startcenter.desktop
+launchers=applications:org.kde.konsole.desktop,preferred://filemanager,preferred://browser,applications:libreoffice-startcenter.desktop,applications:com.github.flxzt.rnote.desktop,applications:vscodium.desktop
 
 [Containments][211][Applets][214]
 immutability=1

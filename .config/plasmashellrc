@@ -9,7 +9,7 @@ alignment=132
 floating=1
 panelLengthMode=2
 panelOpacity=1
-panelVisibility=3
+panelVisibility=2
 shell=org.kde.plasma.desktop
 
 [PlasmaViews][Panel 211][Defaults]
