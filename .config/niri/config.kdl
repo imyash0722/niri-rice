@@ -54,11 +54,7 @@ layout {
 
     default-column-width { proportion 0.49999; }
 
-    focus-ring {
-        width 1
-        active-color   "#688B87"   // dimmed version of rofi accent
-        inactive-color "#0D0F18"   // your bg colour
-    }
+    include "./themes/active-niri.kdl"
 
     border {
         off
@@ -93,7 +89,7 @@ spawn-at-startup "sh" "-c" "waybar"
 
 // Animated wallpaper (mpvpaper - GPU hardware decoded)
 
-spawn-at-startup "sh" "-c" "sleep 1 && mpvpaper -o 'no-audio loop-file=inf hwdec=auto video-unscaled=yes' '*' ~/Pictures/Wall/6364907-1200p-optimized.mp4"
+spawn-at-startup "sh" "-c" "sleep 1 && mpvpaper -o 'no-audio loop-file=inf hwdec=auto video-unscaled=yes' '*' \"$(cat ~/.config/niri/themes/active-wallpaper.txt)\""
 
 // Clipboard history (cliphist)
 spawn-at-startup "sh" "-c" "pkill wl-paste; wl-paste --type text --watch cliphist store & wl-paste --type image --watch cliphist store &"
