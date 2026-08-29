@@ -20,7 +20,7 @@
                 ],
                 "autoRotation": "InTabletMode",
                 "automaticBrightness": false,
-                "brightness": 0.3,
+                "brightness": 1,
                 "colorPowerTradeoff": "PreferEfficiency",
                 "colorProfileSource": "EDID",
                 "connectorName": "eDP-1",
@@ -85,6 +85,7 @@
                 "hdrIccProfilePath": "",
                 "highDynamicRange": false,
                 "iccProfilePath": "",
+                "maxBitsPerColor": 0,
                 "mode": {
                     "flags": 1,
                     "height": 2160,
@@ -132,7 +133,7 @@
                             "x": 2560,
                             "y": 0
                         },
-                        "priority": 2,
+                        "priority": 1,
                         "replicationSource": ""
                     },
                     {
@@ -142,7 +143,7 @@
                             "x": 0,
                             "y": 0
                         },
-                        "priority": 1,
+                        "priority": 2,
                         "replicationSource": ""
                     }
                 ]

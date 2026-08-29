@@ -20,6 +20,10 @@ wobblywindowsEnabled=true
 padding=4
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
+[Tiling][4233998f-f4df-4ac8-8de9-0ffbb34fd328][6ce03efd-610c-480b-92d1-18aea50c929d]
+padding=4
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
 [Tiling][57f83b39-bce7-4d4f-ab0e-18fdfea7b624][40f305f5-4d64-4ed0-8fa3-8e1e30a3d66e]
 padding=4
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}

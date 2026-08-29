@@ -282,7 +282,3 @@ _launch=Meta+Return
 
 [services][org.kde.plasma-systemmonitor.desktop]
 _launch=none
-
-[services][org.kde.spectacle.desktop]
-CurrentMonitorScreenShot=none
-OpenWithoutScreenshot=none

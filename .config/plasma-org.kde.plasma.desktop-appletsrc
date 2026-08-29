@@ -5,7 +5,7 @@ RightButton;NoModifier=org.kde.contextmenu
 [ActionPlugins][1]
 RightButton;NoModifier=org.kde.contextmenu
 
-[Containments][130]
+[Containments][210]
 ItemGeometries-1920x1200=
 ItemGeometriesHorizontal=
 activityId=9cf0aaf4-12b7-4fb2-a15d-7d593e2f0f95
@@ -14,59 +14,62 @@ immutability=1
 lastScreen=0
 location=0
 plugin=org.kde.plasma.folder
-wallpaperplugin=org.kde.image
+wallpaperplugin=luisbocanegra.smart.video.wallpaper.reborn
 
-[Containments][130][Wallpaper][org.kde.image][General]
-Image=file:///mnt/shared/stuff/projects/niri-rice/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.gif
+[Containments][210][Wallpaper][luisbocanegra.smart.video.wallpaper.reborn][General]
+LastVideo=file:///home/pineapple/Wallpapers/2825711-ezgif.com-gif-to-mp4-converter.mp4
+LastVideoPosition=1040
 SlidePaths=/usr/share/wallpapers/
+Video=file:///home/pineapple/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4
+VideoUrls=[{"filename":"file:///home/pineapple/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Wallpapers/6364914-ezgif.com-gif-to-mp4-converter.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Wallpapers/2825711-ezgif.com-gif-to-mp4-converter.mp4","enabled":true,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false}]
 
-[Containments][131]
+[Containments][211]
 activityId=
 formfactor=2
 immutability=1
 lastScreen=0
 location=4
 plugin=org.kde.panel
-wallpaperplugin=org.kde.image
+wallpaperplugin=luisbocanegra.smart.video.wallpaper.reborn
 
-[Containments][131][Applets][132]
+[Containments][211][Applets][212]
 immutability=1
 plugin=org.kde.plasma.kickoff
 
-[Containments][131][Applets][132][Configuration]
+[Containments][211][Applets][212][Configuration]
 popupHeight=509
 popupWidth=647
 
-[Containments][131][Applets][132][Configuration][ConfigDialog]
+[Containments][211][Applets][212][Configuration][ConfigDialog]
 DialogHeight=630
 DialogWidth=810
 
-[Containments][131][Applets][132][Configuration][General]
+[Containments][211][Applets][212][Configuration][General]
 favoritesPortedToKAstats=true
 icon=/home/pineapple/Pictures/icons/pineapple-2.png
 systemFavorites=suspend\\,hibernate\\,reboot\\,shutdown
 
-[Containments][131][Applets][133]
+[Containments][211][Applets][213]
 immutability=1
 plugin=org.kde.plasma.icontasks
 
-[Containments][131][Applets][133][Configuration][ConfigDialog]
+[Containments][211][Applets][213][Configuration][ConfigDialog]
 DialogHeight=630
 DialogWidth=810
 
-[Containments][131][Applets][133][Configuration][General]
+[Containments][211][Applets][213][Configuration][General]
 highlightWindows=true
 launchers=applications:org.kde.konsole.desktop,preferred://filemanager,preferred://browser,applications:libreoffice-startcenter.desktop
 
-[Containments][131][Applets][134]
+[Containments][211][Applets][214]
 immutability=1
 plugin=org.kde.plasma.pager
 
-[Containments][131][Applets][135]
+[Containments][211][Applets][215]
 immutability=1
 plugin=org.kde.plasma.marginsseparator
 
-[Containments][131][Applets][136]
+[Containments][211][Applets][216]
 activityId=
 formfactor=0
 immutability=1
@@ -77,81 +80,81 @@ popupHeight=432
 popupWidth=432
 wallpaperplugin=org.kde.image
 
-[Containments][131][Applets][136][Applets][137]
+[Containments][211][Applets][216][Applets][217]
 immutability=1
 plugin=org.kde.kdeconnect
 
-[Containments][131][Applets][136][Applets][138]
-immutability=1
-plugin=org.kde.plasma.cameraindicator
-
-[Containments][131][Applets][136][Applets][139]
-immutability=1
-plugin=org.kde.plasma.clipboard
-
-[Containments][131][Applets][136][Applets][140]
-immutability=1
-plugin=org.kde.plasma.devicenotifier
-
-[Containments][131][Applets][136][Applets][142]
-immutability=1
-plugin=org.kde.plasma.notifications
-
-[Containments][131][Applets][136][Applets][145]
+[Containments][211][Applets][216][Applets][218]
 immutability=1
 plugin=org.kde.kscreen
 
-[Containments][131][Applets][136][Applets][147]
+[Containments][211][Applets][216][Applets][220]
 immutability=1
 plugin=org.kde.plasma.networkmanagement
 
-[Containments][131][Applets][136][Applets][148]
+[Containments][211][Applets][216][Applets][221]
 immutability=1
 plugin=org.kde.plasma.volume
 
-[Containments][131][Applets][136][Applets][148][Configuration][General]
+[Containments][211][Applets][216][Applets][221][Configuration][General]
 migrated=true
 
-[Containments][131][Applets][136][Applets][152]
+[Containments][211][Applets][216][Applets][223]
 immutability=1
-plugin=org.kde.plasma.battery
+plugin=org.kde.plasma.cameraindicator
 
-[Containments][131][Applets][136][Applets][154]
+[Containments][211][Applets][216][Applets][224]
+immutability=1
+plugin=org.kde.plasma.clipboard
+
+[Containments][211][Applets][216][Applets][225]
+immutability=1
+plugin=org.kde.plasma.devicenotifier
+
+[Containments][211][Applets][216][Applets][227]
+immutability=1
+plugin=org.kde.plasma.notifications
+
+[Containments][211][Applets][216][Applets][232]
 immutability=1
 plugin=org.kde.plasma.bluetooth
 
-[Containments][131][Applets][136][Applets][156]
+[Containments][211][Applets][216][Applets][233]
+immutability=1
+plugin=org.kde.plasma.battery
+
+[Containments][211][Applets][216][Applets][235]
 immutability=1
 plugin=org.kde.plasma.diskquota
 
-[Containments][131][Applets][136][Applets][157]
+[Containments][211][Applets][216][Applets][236]
 immutability=1
-plugin=org.kde.merkuro.contact.applet
+plugin=org.kde.plasma.mediacontroller
 
-[Containments][131][Applets][136][ConfigDialog]
+[Containments][211][Applets][216][ConfigDialog]
 DialogHeight=630
-DialogWidth=804
+DialogWidth=810
 
-[Containments][131][Applets][136][General]
-extraItems=org.kde.plasma.volume,org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.devicenotifier,org.kde.kscreen,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.plasma.diskquota,org.kde.plasma.notifications,org.kde.plasma.kclock_1x2,org.kde.merkuro.contact.applet
-hiddenItems=Arch-Update,org.kde.plasma.bluetooth,org.kde.plasma.devicenotifier,org.kde.kscreen,org.kde.plasma.clipboard,org.kde.plasma.diskquota
-knownItems=org.kde.kdeconnect,org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.mediacontroller,org.kde.plasma.notifications,org.kde.plasma.keyboardindicator,org.kde.plasma.weather,org.kde.kscreen,org.kde.plasma.battery,org.kde.plasma.brightness,org.kde.plasma.keyboardlayout,org.kde.plasma.networkmanagement,org.kde.plasma.volume,org.kde.plasma.kclock_1x2,org.kde.merkuro.contact.applet
-shownItems=discord_status_icon_1,org.kde.plasma.volume,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.battery,org.kde.plasma.notifications
+[Containments][211][Applets][216][General]
+extraItems=org.kde.plasma.cameraindicator,org.kde.plasma.mediacontroller,org.kde.plasma.volume,org.kde.plasma.bluetooth,org.kde.plasma.devicenotifier,org.kde.kscreen,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.plasma.diskquota,org.kde.plasma.notifications
+hiddenItems=KGpg,org.kde.plasma.devicenotifier,org.kde.kscreen,KMix,org.kde.plasma.diskquota
+knownItems=org.kde.kdeconnect,org.kde.plasma.kclock_1x2,org.kde.plasma.bluetooth,org.kde.kscreen,org.kde.plasma.keyboardlayout,org.kde.plasma.networkmanagement,org.kde.plasma.volume,org.kde.merkuro.contact.applet,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.mediacontroller,org.kde.plasma.notifications,org.kde.plasma.keyboardindicator,org.kde.plasma.weather,org.kde.plasma.battery,org.kde.plasma.brightness
+shownItems=org.kde.plasma.volume,org.kde.plasma.bluetooth,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.plasma.notifications
 
-[Containments][131][Applets][149]
+[Containments][211][Applets][230]
 immutability=1
 plugin=org.kde.plasma.digitalclock
 
-[Containments][131][Applets][149][Configuration]
+[Containments][211][Applets][230][Configuration]
 popupHeight=451
 popupWidth=560
 
-[Containments][131][Applets][150]
+[Containments][211][Applets][231]
 immutability=1
 plugin=org.kde.plasma.showdesktop
 
-[Containments][131][General]
-AppletOrder=132;133;134;135;136;149;150
+[Containments][211][General]
+AppletOrder=212;213;214;215;216;230;231
 
 [ScreenMapping]
 itemsOnDisabledScreens=

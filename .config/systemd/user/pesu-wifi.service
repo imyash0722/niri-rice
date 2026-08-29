@@ -1,0 +1,13 @@
+[Unit]
+Description=PESU WiFi Simple Login Manager
+After=network.target
+
+[Service]
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/mnt/shared/stuff/projects/pesu-wifi/pesu_wifi.py daemon
+Restart=always
+RestartSec=5
+StandardOutput=journal
+
+[Install]
+WantedBy=default.target
