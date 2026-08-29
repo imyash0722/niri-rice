@@ -1,0 +1,6 @@
+include "../animations/glitch_01.kdl"
+focus-ring {
+    width 1
+    active-color "#639AAD"
+    inactive-color "#070A0E"
+}

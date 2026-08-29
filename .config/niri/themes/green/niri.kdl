@@ -1,5 +1,6 @@
+include "../animations/dither-glitch.kdl"
 focus-ring {
     width 1
-    active-color "#a9b665"
-    inactive-color "#07120c"
+    active-color "#91AFAA"
+    inactive-color "#0a1e22"
 }
