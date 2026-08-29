@@ -216,7 +216,7 @@ sudo systemctl enable --now powertop.service || true
 echo ""
 echo "[6/6] Applying wallpaper..."
 if command -v mpvpaper &>/dev/null; then
-    mpvpaper -o 'no-audio loop hwdec=auto' '*' "$HOME/Pictures/Wall/2825711-1200p-optimized.mp4" &
+    mpvpaper -o 'no-audio loop hwdec=auto' '*' "$HOME/Pictures/Wall/6364907-1200p-optimized.mp4" &
     echo "  Wallpaper applied!"
 else
     echo "  [!] mpvpaper not found, wallpaper will apply on next login."
