@@ -17,11 +17,11 @@ plugin=org.kde.plasma.folder
 wallpaperplugin=luisbocanegra.smart.video.wallpaper.reborn
 
 [Containments][210][Wallpaper][luisbocanegra.smart.video.wallpaper.reborn][General]
-LastVideo=file:///home/pineapple/Wallpapers/2825711-ezgif.com-gif-to-mp4-converter.mp4
+LastVideo=file:///home/pineapple/Pictures/Wall/2825711-ezgif.com-gif-to-mp4-converter.mp4
 LastVideoPosition=1040
 SlidePaths=/usr/share/wallpapers/
-Video=file:///home/pineapple/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4
-VideoUrls=[{"filename":"file:///home/pineapple/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Wallpapers/6364914-ezgif.com-gif-to-mp4-converter.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Wallpapers/2825711-ezgif.com-gif-to-mp4-converter.mp4","enabled":true,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false}]
+Video=file:///home/pineapple/Pictures/Wall/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4
+VideoUrls=[{"filename":"file:///home/pineapple/Pictures/Wall/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Pictures/Wall/6364914-ezgif.com-gif-to-mp4-converter.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Pictures/Wall/2825711-ezgif.com-gif-to-mp4-converter.mp4","enabled":true,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false}]
 
 [Containments][211]
 activityId=

@@ -38,6 +38,6 @@ cp -a "$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service"
 
 # Pull standalone configs and wallpapers
 cp "$HOME/.zshrc" .zshrc
-cp -r "$HOME/Wallpapers/"* Wallpapers/ 2>/dev/null || true
+cp -r "$HOME/Wallpapers/"* Pictures/Wall/ 2>/dev/null || true
 
 echo "Done! Run 'git status' to see what changed, then commit and push."

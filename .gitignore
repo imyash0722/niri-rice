@@ -8,7 +8,7 @@ Thumbs.db
 desktop.ini
 
 # Wallpapers are stored on the shared partition at /mnt/shared/wallpaper/
-Wallpapers/
+Pictures/Wall/
 
 # KDE — sensitive / volatile files (do NOT commit these)
 .config/kwalletrc

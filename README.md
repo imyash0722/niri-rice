@@ -76,7 +76,7 @@ cd ~/niri-rice
 ```
 
 > [!NOTE]
-> The animated wallpaper (MP4) is **not bundled** due to file size. Download it from the [Wallpaper Credits](#️-wallpaper-credits) section and place the `.mp4` file in `~/niri-rice/Wallpapers/` before running the installer.
+> The animated wallpaper (MP4) is **not bundled** due to file size. Download it from the [Wallpaper Credits](#️-wallpaper-credits) section and place the `.mp4` file in `~/niri-rice/Pictures/Wall/` before running the installer.
 
 ---
 
@@ -196,7 +196,7 @@ Colours are extracted from the wallpaper via **pywal** and applied to Waybar and
 
 > Download the `.mp4` and place it at:
 > ```
-> ~/niri-rice/Wallpapers/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4
+> ~/niri-rice/Pictures/Wall/silent-katana-forest-samurai-live-wallpaper-wallsflow-com.mp4
 > ```
 > The installer will symlink `~/Wallpapers` and play it via `mpvpaper` automatically.
 
