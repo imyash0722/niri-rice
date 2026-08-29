@@ -120,6 +120,12 @@ if [ -f "$REPO_DIR/setup_assets/cursors.tar.gz" ]; then
     tar -xzf "$REPO_DIR/setup_assets/cursors.tar.gz" -C "$HOME/.local/share/icons/"
 fi
 
+# Copy start icons
+if [ -d "$REPO_DIR/setup_assets/icons" ]; then
+    echo "  Copying custom start icons..."
+    cp -r "$REPO_DIR/setup_assets/icons/"* "$HOME/.local/share/icons/" 2>/dev/null || true
+fi
+
 # ~/.zshrc
 if [ -f "$REPO_DIR/.zshrc" ]; then
     force_link "$REPO_DIR/.zshrc" "$HOME/.zshrc"

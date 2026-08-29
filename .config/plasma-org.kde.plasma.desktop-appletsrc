@@ -46,7 +46,7 @@ DialogWidth=810
 
 [Containments][211][Applets][212][Configuration][General]
 favoritesPortedToKAstats=true
-icon=/home/pineapple/Pictures/icons/pineapple-2.png
+icon=/home/pineapple/.local/share/icons/pineapple-2.png
 systemFavorites=suspend\\,hibernate\\,reboot\\,shutdown
 
 [Containments][211][Applets][213]
