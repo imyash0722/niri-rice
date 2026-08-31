@@ -22,7 +22,7 @@ window#waybar.hidden {
 }
 
 .modules-left {
-    padding: 0 4px 0 2px;
+    padding: 0 4px 0 1px;
 }
 
 .modules-center {
@@ -30,14 +30,14 @@ window#waybar.hidden {
 }
 
 .modules-right {
-    padding: 0 2px 0 4px;
+    padding: 0 1px 0 4px;
 }
 
 #custom-spacer-left,
 #custom-spacer-right {
     padding: 0;
     margin: 0;
-    min-width: 2px;
+    min-width: 1px;
     font-size: 1px;
     color: transparent;
     background-color: transparent;
