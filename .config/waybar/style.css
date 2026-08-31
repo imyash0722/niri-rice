@@ -52,40 +52,48 @@ window#waybar.hidden {
 #custom-steam {
     padding: 0 4px;
 }
-/* ===== WORKSPACES ===== */
+/* ===== WORKSPACES (THEMED FROSTED GLASS) ===== */
 #workspaces {
-    border-radius: 4px;
-    margin: 4px 0;
-    padding: 0 6px;
-    background-color: alpha(@secondary, 0.100);
+    border-radius: 1px;
+    margin: 3px 0;
+    padding: 1px 3px;
+    background-color: alpha(@secondary, 0.12);
+    border: 1px solid alpha(@text, 0.05);
 }
 
 #workspaces button {
-    padding: 0 8px;
-    color: @primary;
+    padding: 0 7px;
+    margin: 0 1px;
+    color: @text;
     background-color: transparent;
+    border-radius: 1px;
     box-shadow: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
 }
 
 #workspaces button.empty {
-    color: @text;
-    opacity: 0.35;
+    color: alpha(@text, 0.35);
 }
 
 #workspaces button:hover {
     color: @primary;
-    opacity: 1;
+    background-color: alpha(@primary, 0.15);
+    border-radius: 1px;
 }
 
 #workspaces button.active {
     background: @primary;
     color: @base;
-    border-radius: 3px;
+    border-radius: 1px;
+    font-weight: 700;
 }
 
 #workspaces button.urgent {
-    color: @text;
-    border-bottom: 2px solid alpha(@text, 0.70);
+    background: @error;
+    color: @base;
+    border-radius: 1px;
     animation: blink 0.8s step-end infinite;
 }
 
@@ -97,9 +105,9 @@ window#waybar.hidden {
 /* ===== BATTERY ===== */
 #battery {
     background-color: alpha(@secondary, 0.10);
-    margin: 4px 0;
-    padding: 0 10px;
-    border-radius: 4px;
+    margin: 3px 0;
+    padding: 0 8px;
+    border-radius: 1px;
 }
 
 #battery.charging,
@@ -147,9 +155,9 @@ window#waybar.hidden {
 #custom-dunst,
 #custom-caf-waybar {
     padding: 0 6px;
-    border: 1px solid alpha(@primary, 0.4);
-    border-radius: 4px;
-    margin: 4px 0;
+    border: 1px solid alpha(@primary, 0.35);
+    border-radius: 1px;
+    margin: 3px 0;
     color: @text;
 }
 
@@ -169,9 +177,9 @@ window#waybar.hidden {
 #sounds,
 #mpris {
     background-color: alpha(@secondary, 0.10);
-    margin: 4px 0;
+    margin: 3px 0;
     padding: 0 6px;
-    border-radius: 4px;
+    border-radius: 1px;
 }
 
 #mpris {
@@ -189,8 +197,8 @@ window#waybar.hidden {
 /* ===== TOOLTIP ===== */
 tooltip {
     background-color: @base;
-    border: 1px solid alpha(@secondary, 0.100);
-    color: @secondary;
+    border: 1px solid @primary;
+    border-radius: 1px;
 }
 
 tooltip label {

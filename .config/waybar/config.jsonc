@@ -1,11 +1,11 @@
 {
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 34,
-    "spacing": 6,
-    "margin-top": 3,
-    "margin-left": 6,
-    "margin-right": 6,
+    "height": 32,
+    "spacing": 4,
+    "margin-top": 2,
+    "margin-left": 4,
+    "margin-right": 4,
     "margin-bottom": 0,
 
     "modules-left": [
@@ -39,14 +39,11 @@
 "niri/workspaces": {
     "on-click": "activate",
     "all-outputs": true,
-    "persistent-workspaces": {
-        "1": [],
-        "2": [],
-        "3": [],
-        "4": [],
-        "5": []
-    },
-    "format": "{icon}"
+    "format": "{index}",
+    "format-icons": {
+        "active": "{index}",
+        "default": "{index}"
+    }
 },
 
     "clock": {
