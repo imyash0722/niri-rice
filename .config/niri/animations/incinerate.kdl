@@ -10,14 +10,14 @@ Demo: ./demos/incinerate.gif
 animations {
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    slowdown 3.0
+    slowdown 2.0
 
     workspace-switch {
         spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
     }
 
     window-open {
-        duration-ms 280
+        duration-ms 420
         curve "linear"
 
         custom-shader r"
@@ -167,7 +167,7 @@ vec4 open_color(vec3 coords_geo, vec3 size_geo) {
     }
 
     window-close {
-        duration-ms 280
+        duration-ms 420
         curve "linear"
 
         custom-shader r"
@@ -350,7 +350,7 @@ vec4 resize_color(vec3 coords_curr_geo, vec3 size_curr_geo) {
     }
 
     screenshot-ui-open {
-        duration-ms 200
+        duration-ms 380
         curve "ease-out-quad"
     }
 

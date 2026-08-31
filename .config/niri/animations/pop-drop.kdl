@@ -7,6 +7,8 @@ Demo: ./demos/pop-drop.gif
 
 
 animations {
+    slowdown 1.8
+
     workspace-switch {
         spring damping-ratio=0.85 stiffness=700 epsilon=0.0001
     }
@@ -16,7 +18,7 @@ animations {
     }
 
     window-open {
-      duration-ms 175
+      duration-ms 385
       curve "ease-out-quad"
       custom-shader r"
         vec4 zoom_in(vec3 coords_geo, vec3 size_geo) {
@@ -39,7 +41,7 @@ animations {
 
     // Original by Lemmy: https://github.com/ItsLemmy
     window-close {
-      duration-ms 200
+      duration-ms 380
       curve "linear"
       custom-shader r"
         vec4 fall_and_rotate(vec3 coords_geo, vec3 size_geo) {

@@ -9,10 +9,10 @@ Demo: ./demos/blur.gif
 animations {
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    //slowdown 3.0
+    //slowdown 2.0
 
     window-open {
-        duration-ms 150
+        duration-ms 360
         curve "linear"
 
         custom-shader r"
@@ -64,7 +64,7 @@ return (outColor / samples / directions) * p;
 
 
     window-close {
-        duration-ms 150
+        duration-ms 360
         curve "linear"
 
         custom-shader r"
@@ -116,7 +116,7 @@ return (outColor / samples / directions) * (1.0 - p);
 
 
     window-resize {
-        duration-ms 150
+        duration-ms 360
         curve "linear"
 
         custom-shader r"

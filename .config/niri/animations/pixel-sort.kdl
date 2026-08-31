@@ -11,6 +11,8 @@ Notes:
 
 
 animations {
+    slowdown 1.8
+
     window-open {
         duration-ms 1200
         curve "ease-out-cubic"
@@ -99,7 +101,7 @@ vec4 open_color(vec3 coords_geo, vec3 size_geo) {
     }
 
     window-close {
-        duration-ms 240
+        duration-ms 380
         curve "linear"
 
         custom-shader r"

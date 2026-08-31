@@ -7,6 +7,8 @@ Demo: ./demos/dither-glitch.gif
 
 
 animations {
+    slowdown 1.8
+
     window-open {
         // AJUSTE LOCAL (no viene así del pack original): era `duration-ms 380`.
         // El default de niri para window-open es 150 ms; 380 hacía que abrir cualquier
@@ -20,7 +22,7 @@ animations {
         // progress salta a ~0.9 en los primeros ms y el revelado se colapsa en un par de
         // frames: se pierde el efecto. Si algún día no te importa el glitch, ahí sí
         // conviene 150 ms + ease-out-expo.
-        duration-ms 180
+        duration-ms 396
         curve "linear"
 
         custom-shader r"
@@ -106,7 +108,7 @@ animations {
     }
 
     window-close {
-        duration-ms 140
+        duration-ms 360
         curve "linear"
 
         custom-shader r"

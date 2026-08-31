@@ -9,7 +9,7 @@ Demo: ./demos/mushroom.gif
 animations {
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    //slowdown 1.0
+    //slowdown 2.0
 
     window-open {
         duration-ms 750

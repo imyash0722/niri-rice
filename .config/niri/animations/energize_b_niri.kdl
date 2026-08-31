@@ -8,6 +8,8 @@ Demo: ./demos/energize_b.gif
 
 
 animations {
+    slowdown 1.8
+
     window-open {
         duration-ms 380
         curve "linear"

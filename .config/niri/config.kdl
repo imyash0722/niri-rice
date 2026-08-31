@@ -1,3 +1,5 @@
+include "./themes/active-cursor.kdl"
+include "./themes/active-animations.kdl"
 // ─────────────────────────────────────────────────────────
 //  niri config — pineapple rice
 //  KDL format: https://kdl.dev
@@ -41,6 +43,12 @@ output "eDP-1" {
 
 // ── Layout ───────────────────────────────────────────────
 layout {
+    focus-ring {
+        width 2
+        active-color "#639AAD"
+        inactive-color "#070A0E"
+    }
+
     gaps 6
 
     // Center focused column when it doesn't fit alongside the previous one
@@ -54,7 +62,7 @@ layout {
 
     default-column-width { proportion 0.49999; }
 
-    include "./themes/active-niri.kdl"
+    
 
     border {
         off
@@ -67,12 +75,6 @@ layout {
         offset x=0 y=4
         color "#0007"
     }
-}
-
-// ── Animations ───────────────────────────────────────────
-animations {
-    // Feels close to your Sway animation_duration_ms 300
-    slowdown 0.9
 }
 
 // ── Screenshot path (same folder as Sway) ────────────────

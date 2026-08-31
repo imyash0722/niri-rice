@@ -16,6 +16,8 @@ Demo: ./demos/glitch_00.gif
 // - uv.y * 400.0: Scanline density - higher = more lines
 
 animations {
+    slowdown 1.8
+
     window-open {
         duration-ms 400
         curve "linear"

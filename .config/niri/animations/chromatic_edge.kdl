@@ -8,7 +8,7 @@ Demo: ./demos/chromatic_edge.gif
 animations {
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    slowdown 3.0
+    slowdown 2.0
 
     window-open {
         duration-ms 300
@@ -451,7 +451,7 @@ vec4 resize_color(vec3 coords_geo, vec3 size_geo) {
     }
 
     screenshot-ui-open {
-        duration-ms 220
+        duration-ms 380
         curve "cubic-bezier" 0.22 1.0 0.36 1.0
     }
 

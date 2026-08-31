@@ -1,4 +1,4 @@
-include "../animations/glitch_01.kdl"
+include "../animations/pixelate.kdl"
 focus-ring {
     width 1
     active-color "#639AAD"

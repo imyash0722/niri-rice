@@ -7,6 +7,8 @@ Demo: ./demos/bloom.gif
 
 
 animations {
+    slowdown 1.8
+
     workspace-switch {
         spring damping-ratio=0.9 stiffness=800 epsilon=0.0001
     }
@@ -16,7 +18,7 @@ animations {
     }
 
     window-open {
-        duration-ms 200
+        duration-ms 380
         curve "linear"
 
         custom-shader r"

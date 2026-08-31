@@ -7,6 +7,8 @@ Demo: ./demos/pixelate.gif
 
 
 animations {
+    slowdown 1.8
+
   workspace-switch {
     duration-ms 300
     curve "ease-out-cubic"

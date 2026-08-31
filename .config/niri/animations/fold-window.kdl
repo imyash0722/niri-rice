@@ -6,6 +6,8 @@ Demo: ./demos/fold-window.gif
 */
 
 animations {
+    slowdown 1.8
+
     workspace-switch {
         spring damping-ratio=0.80 stiffness=523 epsilon=0.0001
     }
@@ -116,7 +118,7 @@ animations {
         spring damping-ratio=0.65 stiffness=923 epsilon=0.001
     }
     screenshot-ui-open {
-        duration-ms 200
+        duration-ms 380
         curve "ease-out-quad"
     }
     overview-open-close {

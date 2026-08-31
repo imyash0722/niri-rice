@@ -14,14 +14,17 @@ immutability=1
 lastScreen=0
 location=0
 plugin=org.kde.plasma.folder
-wallpaperplugin=luisbocanegra.smart.video.wallpaper.reborn
+wallpaperplugin=org.kde.image
 
 [Containments][210][Wallpaper][luisbocanegra.smart.video.wallpaper.reborn][General]
 LastVideo=file:///home/pineapple/Pictures/Wall/2825711-ezgif.com-gif-to-mp4-converter.mp4
 LastVideoPosition=880
 SlidePaths=/usr/share/wallpapers/
-Video=file:///home/pineapple/Pictures/Wall/6364907-1200p-optimized.mp4
+Video=file:///home/pineapple/.config/niri/themes/blue/wallpaper.mp4
 VideoUrls=[{"filename":"file:///home/pineapple/Pictures/Wall/6364907-1200p-optimized.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Pictures/Wall/6364914-ezgif.com-gif-to-mp4-converter.mp4","enabled":false,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false},{"filename":"file:///home/pineapple/Pictures/Wall/2825711-ezgif.com-gif-to-mp4-converter.mp4","enabled":true,"duration":0,"customDuration":0,"playbackRate":0,"alternativePlaybackRate":0,"loop":false}]
+
+[Containments][210][Wallpaper][org.kde.image][General]
+Image=file:///home/pineapple/.config/niri/themes/blue/wallpaper.png
 
 [Containments][211]
 activityId=
@@ -164,6 +167,9 @@ lastScreen=1
 location=0
 plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
+
+[Containments][236][Wallpaper][org.kde.image][General]
+Image=file:///home/pineapple/.config/niri/themes/blue/wallpaper.png
 
 [ScreenMapping]
 itemsOnDisabledScreens=

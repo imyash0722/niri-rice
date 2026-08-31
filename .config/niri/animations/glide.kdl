@@ -11,11 +11,11 @@ Notes:
 
 animations {
     // Uncomment while tuning.
-    slowdown 1.5
+    slowdown 2.0
 
 
     window-open {
-        duration-ms 260
+        duration-ms 390
         // close to a polished macOS-style ease-out feel
         curve "cubic-bezier" 0.22 1.0 0.36 1.0
 
@@ -49,7 +49,7 @@ animations {
     }
 
     window-close {
-        duration-ms 180
+        duration-ms 396
         // quick, clean exit
         curve "cubic-bezier" 0.32 0.0 0.67 0.0
 
@@ -134,7 +134,7 @@ animations {
     }
 
     screenshot-ui-open {
-        duration-ms 220
+        duration-ms 380
         curve "cubic-bezier" 0.22 1.0 0.36 1.0
     }
 
