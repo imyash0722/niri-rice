@@ -43,6 +43,8 @@ output "eDP-1" {
 
 // ── Layout ───────────────────────────────────────────────
 layout {
+    background-color "transparent"
+
     focus-ring {
         width 2
         active-color "#639AAD"
@@ -80,12 +82,12 @@ layout {
 // ── Overview & Recent Windows Styling (val-niri) ──────────
 overview {
     workspace-shadow {
-        softness 40
-        spread 8
-        offset x=0 y=8
-        color "#070A0ECC"
+        softness 50
+        spread 10
+        offset x=0 y=10
+        color "#00000088"
     }
-    backdrop-color "#070A0ECC"
+    backdrop-color "#00000000"
 }
 
 // ── Screenshot path (same folder as Sway) ────────────────
