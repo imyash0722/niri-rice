@@ -77,6 +77,17 @@ layout {
     }
 }
 
+// ── Overview & Recent Windows Styling (val-niri) ──────────
+overview {
+    workspace-shadow {
+        softness 40
+        spread 8
+        offset x=0 y=8
+        color "#070A0ECC"
+    }
+    backdrop-color "#070A0ECC"
+}
+
 // ── Screenshot path (same folder as Sway) ────────────────
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
@@ -240,6 +251,9 @@ binds {
 
     // App launcher (Super)
     Super_L { spawn-sh "pkill -x rofi || rofi -show drun"; }
+
+    // Wallpaper & Theme Gallery (val-niri)
+    Mod+Z { spawn "sh" "-c" "~/.local/bin/wall.sh"; }
 
     // Kill window
     Mod+Q repeat=false { close-window; }

@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
-WALLPAPER_DIR="$HOME/pics/walls/"
-COLUMNS=6
-THUMB_SIZE=190
+WALLPAPER_DIR="$HOME/Pictures/Wall"
+COLUMNS=5
+THUMB_SIZE=180
 TMPFILE=$(mktemp)
 
-fd --max-depth 1 --type f -e jpg -e jpeg -e png -e webp -e gif . "$WALLPAPER_DIR" |
+mkdir -p "$WALLPAPER_DIR"
+
+fd --max-depth 1 --type f -e jpg -e jpeg -e png -e webp -e gif -e mp4 . "$WALLPAPER_DIR" |
 sort > "$TMPFILE"
+
+if [ ! -s "$TMPFILE" ]; then
+    notify-send "Wallpaper Menu" "No wallpapers found in $WALLPAPER_DIR"
+    rm "$TMPFILE"
+    exit 0
+fi
 
 INDEX=$(
     cat "$TMPFILE" |
@@ -13,43 +21,40 @@ INDEX=$(
             filename=$(basename "$filepath")
             printf '%s\x00icon\x1f%s\n' "$filename" "$filepath"
         done |
-        rofi -dmenu -p wallpaper -i -show-icons -format i -theme-str "
+        rofi -dmenu -p "󰸉 Wallpaper" -i -show-icons -format i -theme-str "
             window {
-                width: 70%;
+                width: 75%;
                 location: south;
-                y-offset: -10;
-                x-offset: 10;
+                y-offset: -20;
+                border-radius: 12px;
             }
-
             listview {
                 columns: $COLUMNS;
                 flow: horizontal;
-                spacing: 8px;
+                spacing: 12px;
                 lines: 3;
             }
             element {
                 orientation: vertical;
-                padding: 4px;
-                border-radius: 0px;
-                spacing: 0px;
+                padding: 8px;
+                border-radius: 8px;
+                spacing: 4px;
             }
             element-icon {
                 size: ${THUMB_SIZE}px;
-                border-radius: 0px;
+                border-radius: 6px;
             }
             element-text {
-                padding: 0px 0 0 0;
-                font-size: 14px;
+                padding: 4px 0 0 0;
+                font-size: 13px;
                 width: ${THUMB_SIZE}px;
                 text-align: center;
                 horizontal-align: 0.5;
                 vertical-align: 0.5;
             }
-            element selected {
-                border-radius: 0px;
-            }
         "
 )
+
 [ -z "$INDEX" ] && {
     rm "$TMPFILE"
     exit 0
@@ -59,45 +64,6 @@ SELECTED=$(sed -n "$((INDEX + 1))p" "$TMPFILE")
 rm "$TMPFILE"
 
 if [ -n "$SELECTED" ]; then
-    HAS_MATUGEN=0
-    if command -v matugen &>/dev/null; then
-        HAS_MATUGEN=1
-
-        SCHEMES="scheme-tonal-spot
-scheme-content
-scheme-neutral
-scheme-rainbow
-"
-        SCHEME=$(printf '%s\n' "$SCHEMES" | rofi -dmenu -i -p "scheme" -theme-str '
-            window {
-                width: 15%;
-                location: center;
-            }
-            listview {
-                columns: 1;
-                lines: 4;
-            }
-        ')
-
-        [ -z "$SCHEME" ] && exit 0
-    fi
-
-    echo "$SELECTED" >"$HOME/.config/wallpaper"
-    awww img "$SELECTED" --transition-type center --transition-fps 120 &
-
-    if [ "$HAS_MATUGEN" -eq 1 ]; then
-        matugen image "$SELECTED" --source-color-index 0 -t "$SCHEME"
-        sleep 1.5
-
-        dunstctl reload
-
-        pkill -SIGUSR1 kitty 2>/dev/null
-        systemctl --user restart xdg-desktop-portal-gtk
-
-        pkill -SIGUSR2 waybar
-        pkill -USR2 btop
-        pkill -USR1 cava
-        spicetify watch -s 2>&1 | sed "/Reloaded Spotify/q"
-    fi
-    dunstify -i ~/.icons/icon_scripts/dunst/misc/walls.svg -a walls "wallpaper changed" "congrats"
+    echo "Applying selected wallpaper: $SELECTED"
+    "$HOME/.config/niri/scripts/apply-wallpaper.sh" "$SELECTED"
 fi
