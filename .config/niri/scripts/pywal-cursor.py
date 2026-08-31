@@ -77,25 +77,39 @@ def get_most_vibrant_pywal_color(colors_dict):
     return best_color
 
 def run_pywal_on_file(file_path):
-    """Extract colors via pywal from image or video frame."""
+    """Extract colors via pywal from image or video frame without stale caching."""
     if not os.path.exists(file_path):
         return None
     
     target_img = file_path
     if file_path.lower().endswith((".mp4", ".mkv", ".webm", ".mov", ".avi", ".gif")):
-        target_img = "/tmp/pywal_cursor_frame.jpg"
-        try:
-            subprocess.run(
-                ["ffmpeg", "-y", "-ss", "00:00:01", "-i", file_path, "-vframes", "1", "-f", "image2", target_img],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                check=False
-            )
-        except Exception:
-            target_img = file_path
+        base_name = os.path.splitext(os.path.basename(file_path))[0]
+        png_sibling = os.path.join(os.path.dirname(file_path), f"{base_name}.png")
+        if os.path.exists(png_sibling):
+            target_img = png_sibling
+        else:
+            target_img = f"/tmp/pywal_frame_{base_name}.jpg"
+            try:
+                subprocess.run(
+                    ["ffmpeg", "-y", "-ss", "00:00:01", "-i", file_path, "-vframes", "1", "-f", "image2", target_img],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    check=False
+                )
+            except Exception:
+                target_img = file_path
 
     if os.path.exists(target_img):
         try:
+            # Purge stale pywal scheme cache to guarantee fresh extraction
+            schemes_dir = os.path.expanduser("~/.cache/wal/schemes")
+            if os.path.exists(schemes_dir):
+                for sf in os.listdir(schemes_dir):
+                    try:
+                        os.remove(os.path.join(schemes_dir, sf))
+                    except Exception:
+                        pass
+
             subprocess.run(
                 ["wal", "-i", target_img, "-n", "-s", "-t", "-e", "-q"],
                 stdout=subprocess.DEVNULL,
@@ -337,7 +351,7 @@ def update_all_desktop_colors(target_color=None):
         bg_hex = bg.lstrip("#")
         fg_hex = fg.lstrip("#")
         foot_ini_content = f"""[colors-dark]
-alpha=0.95
+alpha=0.86
 background={bg_hex}
 foreground={fg_hex}
 

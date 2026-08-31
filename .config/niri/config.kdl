@@ -194,10 +194,24 @@ window-rule {
     opacity 0.97
 }
 
-// Terminal (both focused and unfocused): 95% opacity
+// Terminal (frosted glass, high readability): 86% opacity + blur
 window-rule {
     match app-id=r#"^foot.*"#
-    opacity 0.95
+    opacity 0.86
+    background-effect {
+        blur true
+    }
+}
+
+// Dedicated AGY / Antigravity Glass Window
+window-rule {
+    match title=r#"(?i).*agy.*"#
+    match title=r#"(?i).*antigravity.*"#
+    match app-id=r#"(?i).*(agy|antigravity).*"#
+    opacity 0.82
+    background-effect {
+        blur true
+    }
 }
 
 // Foot floating window
