@@ -351,7 +351,7 @@ def update_all_desktop_colors(target_color=None):
         bg_hex = bg.lstrip("#")
         fg_hex = fg.lstrip("#")
         foot_ini_content = f"""[colors-dark]
-alpha=0.74
+alpha=0.84
 background={bg_hex}
 foreground={fg_hex}
 
