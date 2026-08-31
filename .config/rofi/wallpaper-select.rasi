@@ -16,26 +16,26 @@
 window {
     location: center;
     anchor: center;
-    width: 65%;
-    height: 60%;
+    width: 72%;
+    height: 78%;
     x-offset: 0;
     y-offset: 0;
 
     border: 2px solid;
     border-color: @accent-color;
     border-radius: 14px;
-    background-color: rgba(9, 20, 26, 0.88);
+    background-color: rgba(9, 20, 26, 0.90);
 }
 
 mainbox {
-    spacing: 16px;
-    padding: 24px;
+    spacing: 14px;
+    padding: 20px;
     children: [ inputbar, listview ];
 }
 
 inputbar {
     spacing: 12px;
-    padding: 10px 16px;
+    padding: 8px 16px;
     border: 1px solid;
     border-color: rgba(255, 255, 255, 0.12);
     border-radius: 10px;
@@ -56,9 +56,9 @@ entry {
 
 listview {
     columns: 4;
-    lines: 2;
+    lines: 3;
     flow: horizontal;
-    spacing: 16px;
+    spacing: 12px;
     cycle: true;
     dynamic: true;
     scrollbar: false;
@@ -66,8 +66,8 @@ listview {
 
 element {
     orientation: vertical;
-    padding: 12px;
-    spacing: 8px;
+    padding: 8px;
+    spacing: 6px;
     border-radius: 10px;
     border: 1px solid;
     border-color: rgba(255, 255, 255, 0.06);
@@ -81,8 +81,8 @@ element selected.normal, element selected.active {
 }
 
 element-icon {
-    size: 140px;
-    border-radius: 8px;
+    size: 100px;
+    border-radius: 6px;
     horizontal-align: 0.5;
     vertical-align: 0.5;
 }

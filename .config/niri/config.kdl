@@ -47,8 +47,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#EA876A"
-        inactive-color "#0B0A0B"
+        active-color "#518C49"
+        inactive-color "#10100d"
     }
 
     tab-indicator {
@@ -320,8 +320,10 @@ window-rule {
 // Add your personal keybinds here when you're ready.
 
 binds {
+    // Radial Dial (GPU-Accelerated Context-Aware Menu)
+    Mod+Tab { spawn-sh "niri-radial-dial"; }
     // Show overview
-    Mod+Tab { toggle-overview; }
+    Mod+Shift+Tab { toggle-overview; }
     // Switch focus between floating and tiling
     Mod+Grave { switch-focus-between-floating-and-tiling; }
     // Show hotkey overlay
