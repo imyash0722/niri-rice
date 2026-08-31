@@ -106,7 +106,7 @@ element-text {
 
 element selected element-text {
     text-color: #0c110d;
-    background-color: alpha(@accent-color, 0.92);
+    background-color: @accent-color;
     border-color: @accent-color;
     font: "JetBrainsMono Nerd Font Bold 10";
 }
