@@ -1,20 +1,186 @@
-@import url("/home/pineapple/.config/waybar/main.css");
-@define-color bg #070A0E;
-@define-color fg #c0dbd7;
-@define-color red #4A708E;
-@define-color color0 #070A0E;
-@define-color color1 #4A708E;
-@define-color color2 #4286A3;
-@define-color color3 #5090AA;
-@define-color color4 #639AAD;
-@define-color color5 #68A2C8;
-@define-color color6 #6BAAC9;
-@define-color color7 #c0dbd7;
-@define-color color8 #869996;
-@define-color color9 #4A708E;
-@define-color color10 #4286A3;
-@define-color color11 #5090AA;
-@define-color color12 #639AAD;
-@define-color color13 #68A2C8;
-@define-color color14 #6BAAC9;
-@define-color color15 #c0dbd7;
+* {
+    font-family: "JetBrainsMono Nerd Font Propo", monospace;
+    font-size: 15px;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+}
+
+@import "colors.css";
+
+/* ===== BASE ===== */
+window#waybar {
+    background-color: alpha(@base, 0.8);
+    color: @text;
+    transition: background-color 0.3s ease;
+}
+
+window#waybar.hidden {
+    opacity: 0.3;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+    padding: 0 4px;
+}
+
+/* ===== COMMON MODULE STYLES ===== */
+#workspaces,
+#clock,
+#cpu,
+#memory,
+#temperature,
+#network,
+#pulseaudio,
+#pulseaudio.microphone,
+#backlight,
+#mpris,
+#custom-vesktop,
+#custom-spotify,
+#custom-weather,
+#custom-steam {
+    padding: 0 2px;
+    color: @text;
+    background-color: transparent;
+}
+
+#custom-spotify,
+#custom-weather,
+#custom-steam {
+    padding: 0 4px;
+}
+/* ===== WORKSPACES ===== */
+#workspaces {
+    border-radius: 0px;
+    margin: 4px 0;
+    padding: 0 6px;
+    background-color: alpha(@secondary, 0.100);
+}
+
+#workspaces button {
+    padding: 0 8px;
+    color: @primary;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+#workspaces button.empty {
+    color: @text;
+    opacity: 0.35;
+}
+
+#workspaces button:hover {
+    color: @primary;
+    opacity: 1;
+}
+
+#workspaces button.active {
+    background: @primary;
+    color: @base;
+}
+
+#workspaces button.urgent {
+    color: @text;
+    border-bottom: 2px solid alpha(@text, 0.70);
+    animation: blink 0.8s step-end infinite;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes blink {
+    50% { opacity: 0.4; }
+}
+
+/* ===== BATTERY ===== */
+#battery {
+    background-color: alpha(@secondary, 0.10);
+    margin: 4px 0;
+    padding: 0 10px;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: @text;
+}
+
+#battery.warning:not(.charging) {
+    color: alpha(@text, 0.75);
+}
+
+#battery.critical:not(.charging) {
+    color: @base;
+    background-color: alpha(@error, 1);
+}
+
+/* ===== SYSTEM MONITORS ===== */
+#cpu,
+#memory,
+#pulseaudio,
+#pulseaudio.microphone,
+#backlight,
+#network {
+    padding: 0 4px;
+}
+
+#temperature {
+    padding: 0 4px;
+}
+
+#temperature.critical {
+    animation: blink 1s step-end infinite;
+}
+
+#pulseaudio.muted,
+#pulseaudio.microphone.source-muted {
+    color: alpha(@text, 0.40);
+}
+
+#network.disconnected {
+    color: alpha(@text, 0.40);
+}
+
+/* ===== CUSTOM MODULES ===== */
+#custom-dunst,
+#custom-caf-waybar {
+    padding: 0 4px;
+    border: 1px solid @primary;
+    margin: 4px 0;
+    color: @text;
+}
+
+/* ===== GROUPED MODULES (with background) ===== */
+#hw,
+#syst,
+#bg,
+#sounds,
+#clock,
+#mpris,
+#custom-weather {
+    background-color: alpha(@secondary, 0.10);
+    margin: 4px 0;
+    padding: 0 6px;
+}
+
+#clock,
+#mpris {
+    background-color: alpha(@secondary, 0.100);
+}
+
+#mpris {
+    font-style: normal;
+}
+
+#mpris label {
+    color: @text;
+}
+
+/* ===== TOOLTIP ===== */
+tooltip {
+    background-color: @base;
+    border: 1px solid alpha(@secondary, 0.100);
+    color: @secondary;
+}
+
+tooltip label {
+    color: @text;
+}

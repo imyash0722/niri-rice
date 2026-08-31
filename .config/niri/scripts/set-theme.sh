@@ -31,8 +31,7 @@ if [ -n "$ACTIVE_COLOR" ] && [ -n "$INACTIVE_COLOR" ]; then
     sed -i -E "s/inactive-color \".*\"/inactive-color \"$INACTIVE_COLOR\"/g" "$CONFIG_FILE"
 fi
 
-# 3. Update Waybar colors
-cp "$THEMES_DIR/$THEME/waybar.css" "$HOME/.config/waybar/style.css"
+# 3. Waybar colors are dynamically updated via colors.css in pywal-cursor.py
 
 # 4. Update Wallpaper path
 echo "$THEMES_DIR/$THEME/wallpaper.mp4" > "$THEMES_DIR/active-wallpaper.txt"

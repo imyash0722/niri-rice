@@ -220,8 +220,8 @@ binds {
     Mod+Return { spawn "foot"; }
     Mod+Shift+Return { spawn-sh "foot --app-id=foot.floating"; }
 
-    // App launcher
-    Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
+    // App launcher (Super)
+    Super_L { spawn-sh "pkill -x rofi || rofi -show drun"; }
 
     // Kill window
     Mod+Q repeat=false { close-window; }

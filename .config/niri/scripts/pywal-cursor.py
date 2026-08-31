@@ -280,12 +280,53 @@ def apply_to_gtk_and_x11(cursor_theme, size=32):
     with open(xres_path, "w") as f:
         f.writelines(new_xres)
 
+def update_waybar_colors():
+    wal_cache = os.path.expanduser("~/.cache/wal/colors.json")
+    if not os.path.exists(wal_cache):
+        return
+    try:
+        with open(wal_cache, "r") as f:
+            data = json.load(f)
+        colors = data.get("colors", {})
+        special = data.get("special", {})
+        bg = special.get("background", "#101418")
+        fg = special.get("foreground", "#e0e2e8")
+        c0 = colors.get("color0", bg)
+        c1 = colors.get("color1", "#ffb4ab")
+        c2 = colors.get("color2", "#9ccbfb")
+        c4 = colors.get("color4", "#9ccbfb")
+        c5 = colors.get("color5", "#b9c8da")
+        c6 = colors.get("color6", "#d4bfe6")
+        c7 = colors.get("color7", "#c2c7cf")
+        c8 = colors.get("color8", "#42474e")
+
+        colors_css = f"""@define-color base            {bg};
+@define-color surface         {c0};
+@define-color overlay         {c8};
+@define-color text            {fg};
+@define-color subtext         {c7};
+@define-color primary         {c4};
+@define-color on_primary      {bg};
+@define-color secondary       {c5};
+@define-color on_secondary    {bg};
+@define-color tertiary        {c6};
+@define-color error           {c1};
+@define-color primary_container   {c2};
+@define-color on_primary_container {fg};
+"""
+        waybar_dir = os.path.expanduser("~/.config/waybar")
+        os.makedirs(waybar_dir, exist_ok=True)
+        with open(os.path.join(waybar_dir, "colors.css"), "w") as f:
+            f.write(colors_css)
+    except Exception as e:
+        print(f"Warning: Could not update waybar colors: {e}", file=sys.stderr)
+
 def main():
     parser = argparse.ArgumentParser(description="Match and apply 24px Moga Neon cursor color via Pywal for Niri and KDE.")
     parser.add_argument("--color", type=str, help="Target hex color code (e.g. #00e5ff)")
     parser.add_argument("--wallpaper", type=str, help="Run pywal on this wallpaper (image or video) and match cursor")
     parser.add_argument("--wal", action="store_true", help="Read colors from current pywal cache")
-    parser.add_argument("--size", type=int, default=32, help="Cursor size (default: 24)")
+    parser.add_argument("--size", type=int, default=32, help="Cursor size (default: 32)")
 
     args = parser.parse_args()
 
@@ -307,8 +348,9 @@ def main():
     apply_to_niri(chosen_variant, args.size)
     apply_to_kde(chosen_variant, args.size)
     apply_to_gtk_and_x11(chosen_variant, args.size)
+    update_waybar_colors()
 
-    print(f"Cursor theme '{chosen_variant}' ({args.size}px) applied to Niri, KDE Plasma, GTK, and XWayland successfully!")
+    print(f"Cursor theme '{chosen_variant}' ({args.size}px) and Waybar colors applied successfully!")
 
 if __name__ == "__main__":
     main()

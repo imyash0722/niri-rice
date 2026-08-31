@@ -1,0 +1,14 @@
+#!/bin/bash
+# platform-profile — Waybar custom module
+# Reads /sys/firmware/acpi/platform_profile and outputs Waybar JSON
+
+PROFILE=$(cat /sys/firmware/acpi/platform_profile 2>/dev/null || echo "unknown")
+
+case "$PROFILE" in
+    performance) CLASS="performance" TOOLTIP="Performance\nAC profile — full boost" ;;
+    balanced)    CLASS="balanced"    TOOLTIP="Balanced\nDefault AC profile"       ;;
+    low-power)   CLASS="low-power"   TOOLTIP="Low Power\nBattery profile"          ;;
+    *)           CLASS="unknown"     TOOLTIP="Unknown: $PROFILE"                   ;;
+esac
+
+echo "{\"text\": \"$PROFILE\", \"class\": \"$CLASS\", \"tooltip\": \"$TOOLTIP\"}"
