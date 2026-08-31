@@ -8,10 +8,11 @@
 
 @import "colors.css";
 
-/* ===== BASE ===== */
+/* ===== BASE (FROSTED GLASS) ===== */
 window#waybar {
-    background-color: alpha(@base, 0.90);
+    background-color: alpha(@base, 0.72);
     color: @text;
+    border: 1px solid alpha(@text, 0.08);
     border-radius: 6px;
     transition: background-color 0.3s ease;
 }
@@ -53,7 +54,7 @@ window#waybar.hidden {
 }
 /* ===== WORKSPACES ===== */
 #workspaces {
-    border-radius: 6px;
+    border-radius: 4px;
     margin: 4px 0;
     padding: 0 6px;
     background-color: alpha(@secondary, 0.100);
@@ -79,6 +80,7 @@ window#waybar.hidden {
 #workspaces button.active {
     background: @primary;
     color: @base;
+    border-radius: 3px;
 }
 
 #workspaces button.urgent {
@@ -97,6 +99,7 @@ window#waybar.hidden {
     background-color: alpha(@secondary, 0.10);
     margin: 4px 0;
     padding: 0 10px;
+    border-radius: 4px;
 }
 
 #battery.charging,
@@ -143,9 +146,19 @@ window#waybar.hidden {
 /* ===== CUSTOM MODULES ===== */
 #custom-dunst,
 #custom-caf-waybar {
-    padding: 0 4px;
-    border: 1px solid @primary;
+    padding: 0 6px;
+    border: 1px solid alpha(@primary, 0.4);
+    border-radius: 4px;
     margin: 4px 0;
+    color: @text;
+}
+
+/* ===== CLOCK & DATE (TRANSPARENT FLOATING) ===== */
+#clock,
+#custom-weather {
+    background-color: transparent;
+    padding: 0 8px;
+    margin: 0;
     color: @text;
 }
 
@@ -154,15 +167,13 @@ window#waybar.hidden {
 #syst,
 #bg,
 #sounds,
-#clock,
-#mpris,
-#custom-weather {
+#mpris {
     background-color: alpha(@secondary, 0.10);
     margin: 4px 0;
     padding: 0 6px;
+    border-radius: 4px;
 }
 
-#clock,
 #mpris {
     background-color: alpha(@secondary, 0.100);
 }
