@@ -134,8 +134,12 @@ ForegroundVisited=155,89,182
 
 [General]
 AccentColor=104,107,111
+ColorScheme=BreezeDark
 ColorSchemeHash=9d38eb71ded8ff549da26d57d7cbab9164da243a
 LastUsedCustomAccentColor=104,107,111
+
+[Icons]
+Theme=breeze-dark
 
 [KDE]
 AnimationDurationFactor=0

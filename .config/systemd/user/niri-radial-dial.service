@@ -6,9 +6,10 @@ After=graphical-session.target
 [Service]
 Type=simple
 Environment=PYTHONPATH=/mnt/shared/stuff/projects/niri-radial-dial
+Environment=WAYLAND_DISPLAY=wayland-1
 ExecStart=/usr/bin/python3 -m niri_radial_dial.main daemon
-Restart=on-failure
+Restart=always
 RestartSec=1s
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=default.target

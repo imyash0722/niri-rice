@@ -6,12 +6,17 @@ include "./themes/active-animations.kdl"
 //  Full reference: https://niri-wm.github.io/niri/Configuration:-Introduction
 // ─────────────────────────────────────────────────────────
 
-// Enforce dark mode globally
+// Enforce dark mode and KDE/Qt styling globally
 environment {
     XDG_MENU_PREFIX "plasma-"
     QT_QPA_PLATFORMTHEME "kde"
+    QT_QPA_PLATFORM "wayland;xcb"
+    QT_STYLE_OVERRIDE "Breeze"
+    KDE_FULL_SESSION "true"
+    KDE_SESSION_VERSION "6"
     GTK_THEME "Breeze"
     GTK_USE_PORTAL "1"
+    XDG_CURRENT_DESKTOP "niri:KDE"
 }
 
 // ── Input ────────────────────────────────────────────────
@@ -101,6 +106,9 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 prefer-no-csd
 
 // ── Startup daemons ──────────────────────────────────────
+
+// D-Bus & Systemd environment sync (ensures apps spawned by portals/other apps inherit KDE theme)
+spawn-at-startup "sh" "-c" "dbus-update-activation-environment --systemd --all || true"
 
 // Waybar
 spawn-at-startup "/usr/lib/org_kde_powerdevil"
@@ -323,7 +331,8 @@ window-rule {
 binds {
     // Show overview
     Mod+Tab { toggle-overview; }
-    // Radial Dial (GPU-Accelerated Context-Aware Menu at Cursor)
+    // Radial Dial Triggers (Mouse Thumb Button 5, Keyboard Super+`)
+    MouseForward { spawn "/home/pineapple/.local/bin/niri-radial-dial"; }
     Mod+Grave { spawn "/home/pineapple/.local/bin/niri-radial-dial"; }
     // Switch focus between floating and tiling
     Mod+Shift+Grave { switch-focus-between-floating-and-tiling; }

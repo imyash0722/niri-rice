@@ -450,6 +450,9 @@ padding=12
         if os.environ.get("NIRI_SOCKET"):
             subprocess.run(["niri", "msg", "action", "do-screen-transition"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
+        # 10. Sync environment to D-Bus and systemd
+        subprocess.run(["dbus-update-activation-environment", "--systemd", "--all"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
     except Exception as e:
         print(f"Warning: Could not update all desktop colors: {e}", file=sys.stderr)
 
