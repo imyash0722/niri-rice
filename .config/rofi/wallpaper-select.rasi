@@ -1,5 +1,5 @@
 /**
- * Ultra-Modern 16:10 Glassmorphic Wallpaper Grid with Full-Width Frosted Nameplates
+ * Ultra-Modern 16:10 Flush Glassmorphic Wallpaper Grid
  **/
 
 @import "colors.rasi"
@@ -16,8 +16,8 @@
 window {
     location: center;
     anchor: center;
-    width: 74%;
-    height: 64%;
+    width: 1120px;
+    height: 630px;
     x-offset: 0;
     y-offset: 0;
 
@@ -62,8 +62,7 @@ listview {
     cycle: true;
     dynamic: true;
     scrollbar: false;
-    fixed-height: true;
-    fixed-columns: true;
+    fixed-height: false;
 }
 
 element {
@@ -74,21 +73,20 @@ element {
     border-radius: 10px;
     border: 2px;
     border-color: rgba(255, 255, 255, 0.08);
-    background-color: rgba(0, 0, 0, 0.40);
+    background-color: transparent;
     cursor: pointer;
 }
 
 element selected.normal, element selected.active {
     border-color: @accent-color;
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.06);
 }
 
 element-icon {
-    size: 320px;
+    size: 260px;
     border-radius: 8px 8px 0px 0px;
     horizontal-align: 0.5;
     vertical-align: 0.5;
-    expand: true;
 }
 
 element-text {
@@ -97,12 +95,11 @@ element-text {
     text-color: @fg0;
     font: "JetBrainsMono Nerd Font Bold 10";
     padding: 6px 0px;
-    margin: -32px 0px 0px 0px;
+    margin: -30px 0px 0px 0px;
     border-radius: 0px 0px 8px 8px;
     background-color: rgba(6, 12, 16, 0.84);
     border: 1px 0px 0px 0px;
     border-color: rgba(255, 255, 255, 0.14);
-    expand: false;
 }
 
 element selected element-text {
