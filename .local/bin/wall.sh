@@ -1,69 +1,64 @@
 #!/usr/bin/env bash
-WALLPAPER_DIR="$HOME/Pictures/Wall"
-COLUMNS=5
-THUMB_SIZE=180
+
+# Directories
+WALLPAPER_DIRS=(
+    "$HOME/Pictures/Wall"
+    "$HOME/.config/niri/themes/blue"
+    "$HOME/.config/niri/themes/cyan"
+    "$HOME/.config/niri/themes/green"
+    "$HOME/.config/niri/themes/pink"
+)
+CACHE_DIR="$HOME/.cache/thumbnails/wallpapers"
+mkdir -p "$CACHE_DIR"
+
 TMPFILE=$(mktemp)
 
-mkdir -p "$WALLPAPER_DIR"
-
-fd --max-depth 1 --type f -e jpg -e jpeg -e png -e webp -e gif -e mp4 . "$WALLPAPER_DIR" |
-sort > "$TMPFILE"
+# Gather all wallpapers
+for dir in "${WALLPAPER_DIRS[@]}"; do
+    if [ -d "$dir" ]; then
+        fd --max-depth 1 --type f -e jpg -e jpeg -e png -e webp -e gif -e mp4 . "$dir" >> "$TMPFILE"
+    fi
+done
 
 if [ ! -s "$TMPFILE" ]; then
-    notify-send "Wallpaper Menu" "No wallpapers found in $WALLPAPER_DIR"
-    rm "$TMPFILE"
+    notify-send "Wallpaper Picker" "No wallpapers found in ~/Pictures/Wall"
+    rm -f "$TMPFILE"
     exit 0
 fi
 
+# Sort and filter unique paths
+sort -u "$TMPFILE" -o "$TMPFILE"
+
+# Prepare entries with thumbnails
 INDEX=$(
-    cat "$TMPFILE" |
-        while read -r filepath; do
-            filename=$(basename "$filepath")
-            printf '%s\x00icon\x1f%s\n' "$filename" "$filepath"
-        done |
-        rofi -dmenu -p "󰸉 Wallpaper" -i -show-icons -format i -theme-str "
-            window {
-                width: 75%;
-                location: south;
-                y-offset: -20;
-                border-radius: 12px;
-            }
-            listview {
-                columns: $COLUMNS;
-                flow: horizontal;
-                spacing: 12px;
-                lines: 3;
-            }
-            element {
-                orientation: vertical;
-                padding: 8px;
-                border-radius: 8px;
-                spacing: 4px;
-            }
-            element-icon {
-                size: ${THUMB_SIZE}px;
-                border-radius: 6px;
-            }
-            element-text {
-                padding: 4px 0 0 0;
-                font-size: 13px;
-                width: ${THUMB_SIZE}px;
-                text-align: center;
-                horizontal-align: 0.5;
-                vertical-align: 0.5;
-            }
-        "
+    while read -r filepath; do
+        filename=$(basename "$filepath")
+        name_no_ext="${filename%.*}"
+        thumb="$filepath"
+
+        # Generate thumbnail for MP4 / video files
+        if [[ "$filepath" =~ \.(mp4|mkv|webm|mov|avi|gif)$ ]]; then
+            thumb="$CACHE_DIR/${name_no_ext}_thumb.png"
+            if [ ! -f "$thumb" ]; then
+                ffmpeg -y -ss 00:00:01 -i "$filepath" -vframes 1 -vf "scale=320:200:force_original_aspect_ratio=increase,crop=320:200" "$thumb" 2>/dev/null || \
+                ffmpeg -y -i "$filepath" -vframes 1 -vf "scale=320:200:force_original_aspect_ratio=increase,crop=320:200" "$thumb" 2>/dev/null
+            fi
+        fi
+
+        printf '%s\x00icon\x1f%s\n' "$name_no_ext" "$thumb"
+    done < "$TMPFILE" |
+    rofi -dmenu -p "󰸉 Wallpapers" -i -show-icons -format i -theme "$HOME/.config/rofi/wallpaper-select.rasi"
 )
 
 [ -z "$INDEX" ] && {
-    rm "$TMPFILE"
+    rm -f "$TMPFILE"
     exit 0
 }
 
 SELECTED=$(sed -n "$((INDEX + 1))p" "$TMPFILE")
-rm "$TMPFILE"
+rm -f "$TMPFILE"
 
-if [ -n "$SELECTED" ]; then
-    echo "Applying selected wallpaper: $SELECTED"
+if [ -n "$SELECTED" ] && [ -f "$SELECTED" ]; then
+    notify-send -a "Wallpaper Manager" -i "preferences-desktop-wallpaper" "Applying Wallpaper..." "$(basename "$SELECTED")"
     "$HOME/.config/niri/scripts/apply-wallpaper.sh" "$SELECTED"
 fi

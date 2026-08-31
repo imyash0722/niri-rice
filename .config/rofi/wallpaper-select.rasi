@@ -1,0 +1,100 @@
+/**
+ * Ultra-Modern Glassmorphic Wallpaper Picker Theme
+ **/
+
+@import "colors.rasi"
+
+* {
+    font: "JetBrainsMono Nerd Font 11";
+    background-color: transparent;
+    text-color: @fg0;
+    margin: 0;
+    padding: 0;
+    spacing: 0;
+}
+
+window {
+    location: center;
+    anchor: center;
+    width: 65%;
+    height: 60%;
+    x-offset: 0;
+    y-offset: 0;
+
+    border: 2px solid;
+    border-color: @accent-color;
+    border-radius: 14px;
+    background-color: rgba(9, 20, 26, 0.88);
+}
+
+mainbox {
+    spacing: 16px;
+    padding: 24px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    spacing: 12px;
+    padding: 10px 16px;
+    border: 1px solid;
+    border-color: rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    children: [ prompt, entry ];
+}
+
+prompt {
+    text-color: @accent-color;
+    font: "JetBrainsMono Nerd Font Bold 12";
+}
+
+entry {
+    placeholder: "Search wallpapers or scroll...";
+    placeholder-color: rgba(255, 255, 255, 0.35);
+    text-color: @fg0;
+}
+
+listview {
+    columns: 4;
+    lines: 2;
+    flow: horizontal;
+    spacing: 16px;
+    cycle: true;
+    dynamic: true;
+    scrollbar: false;
+}
+
+element {
+    orientation: vertical;
+    padding: 12px;
+    spacing: 8px;
+    border-radius: 10px;
+    border: 1px solid;
+    border-color: rgba(255, 255, 255, 0.06);
+    background-color: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+}
+
+element selected.normal, element selected.active {
+    border-color: @accent-color;
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+element-icon {
+    size: 140px;
+    border-radius: 8px;
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+}
+
+element-text {
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+    text-color: @fg0;
+    font: "JetBrainsMono Nerd Font Medium 10";
+}
+
+element selected element-text {
+    text-color: @accent-color;
+    font: "JetBrainsMono Nerd Font Bold 10";
+}

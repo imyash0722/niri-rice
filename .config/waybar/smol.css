@@ -10,7 +10,7 @@
 
 window#waybar {
     background-color: alpha(@base, 0.90);
-    border-radius: 6px;
+    border-radius: 0px;
     color: @text;
     transition: background-color 0.3s ease;
     border-radius: 0px;
