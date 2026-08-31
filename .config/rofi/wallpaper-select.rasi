@@ -16,15 +16,15 @@
 window {
     location: center;
     anchor: center;
-    width: 76%;
-    height: 76%;
+    width: 74%;
+    height: 64%;
     x-offset: 0;
     y-offset: 0;
 
     border: 2px;
     border-color: @accent-color;
     border-radius: 14px;
-    background-color: rgba(8, 14, 20, 0.92);
+    background-color: rgba(8, 14, 20, 0.94);
 }
 
 mainbox {
@@ -63,6 +63,7 @@ listview {
     dynamic: true;
     scrollbar: false;
     fixed-height: true;
+    fixed-columns: true;
 }
 
 element {
@@ -73,17 +74,17 @@ element {
     border-radius: 10px;
     border: 2px;
     border-color: rgba(255, 255, 255, 0.08);
-    background-color: rgba(0, 0, 0, 0.35);
+    background-color: rgba(0, 0, 0, 0.40);
     cursor: pointer;
 }
 
 element selected.normal, element selected.active {
     border-color: @accent-color;
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color: rgba(255, 255, 255, 0.08);
 }
 
 element-icon {
-    size: 190px;
+    size: 320px;
     border-radius: 8px 8px 0px 0px;
     horizontal-align: 0.5;
     vertical-align: 0.5;
