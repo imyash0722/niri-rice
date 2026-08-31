@@ -1,15 +1,14 @@
 {
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 32,
-    "spacing": 4,
-    "margin-top": 2,
-    "margin-left": 4,
-    "margin-right": 4,
+    "height": 34,
+    "spacing": 6,
+    "margin-top": 6,
+    "margin-left": 6,
+    "margin-right": 6,
     "margin-bottom": 0,
 
     "modules-left": [
-        "custom/spacer-left",
         "niri/workspaces",
         "mpris"
     ],
@@ -25,19 +24,8 @@
         "group/sounds",
         "group/hw",
         "custom/dunst",
-        "custom/caf-waybar",
-        "custom/spacer-right"
+        "custom/caf-waybar"
     ],
-
-"custom/spacer-left": {
-    "format": " ",
-    "tooltip": false
-},
-
-"custom/spacer-right": {
-    "format": " ",
-    "tooltip": false
-},
 
 "custom/caf-waybar": {
     "exec": "~/.local/bin/caf.sh status",
