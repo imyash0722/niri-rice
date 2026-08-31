@@ -51,6 +51,10 @@ layout {
         inactive-color "#091c21"
     }
 
+    tab-indicator {
+        hide-when-single-tab
+    }
+
     gaps 6
 
     // Center focused column when it doesn't fit alongside the previous one
@@ -182,6 +186,11 @@ layer-rule {
 
 // ── Window rules ─────────────────────────────────────────
 
+// Disable solid background rendering under translucent windows
+window-rule {
+    draw-border-with-background false
+}
+
 // General apps (focused): 99% opacity
 window-rule {
     match is-focused=true
@@ -194,10 +203,10 @@ window-rule {
     opacity 0.97
 }
 
-// Terminal (frosted glass, high readability): 82% opacity + blur
+// Terminal (consistent frosted glass): blur true without harsh opacity jumps
 window-rule {
     match app-id=r#"^foot.*"#
-    opacity 0.82
+    opacity 1.0
     background-effect {
         blur true
     }
