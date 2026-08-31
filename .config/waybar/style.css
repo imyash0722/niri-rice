@@ -21,10 +21,26 @@ window#waybar.hidden {
     opacity: 0.3;
 }
 
-.modules-left,
-.modules-center,
-.modules-right {
+.modules-left {
+    padding: 0 4px 0 2px;
+}
+
+.modules-center {
     padding: 0 4px;
+}
+
+.modules-right {
+    padding: 0 2px 0 4px;
+}
+
+#custom-spacer-left,
+#custom-spacer-right {
+    padding: 0;
+    margin: 0;
+    min-width: 2px;
+    font-size: 1px;
+    color: transparent;
+    background-color: transparent;
 }
 
 /* ===== COMMON MODULE STYLES ===== */

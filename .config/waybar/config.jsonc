@@ -9,8 +9,9 @@
     "margin-bottom": 0,
 
     "modules-left": [
+        "custom/spacer-left",
         "niri/workspaces",
-        "mpris",
+        "mpris"
     ],
 
     "modules-center": [
@@ -24,8 +25,19 @@
         "group/sounds",
         "group/hw",
         "custom/dunst",
-        "custom/caf-waybar"
+        "custom/caf-waybar",
+        "custom/spacer-right"
     ],
+
+"custom/spacer-left": {
+    "format": " ",
+    "tooltip": false
+},
+
+"custom/spacer-right": {
+    "format": " ",
+    "tooltip": false
+},
 
 "custom/caf-waybar": {
     "exec": "~/.local/bin/caf.sh status",
