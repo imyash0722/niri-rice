@@ -21,7 +21,7 @@ window {
     x-offset: 0;
     y-offset: 0;
 
-    border: 2px solid;
+    border: 2px;
     border-color: @accent-color;
     border-radius: 14px;
     background-color: rgba(8, 14, 20, 0.92);
@@ -36,7 +36,7 @@ mainbox {
 inputbar {
     spacing: 10px;
     padding: 8px 16px;
-    border: 1px solid;
+    border: 1px;
     border-color: rgba(255, 255, 255, 0.10);
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.04);
@@ -71,7 +71,7 @@ element {
     margin: 0;
     spacing: -38px;
     border-radius: 10px;
-    border: 2px solid;
+    border: 2px;
     border-color: rgba(255, 255, 255, 0.08);
     background-color: rgba(0, 0, 0, 0.35);
     cursor: pointer;
@@ -99,7 +99,8 @@ element-text {
     margin: 0 10px 8px 10px;
     border-radius: 6px;
     background-color: rgba(6, 12, 16, 0.82);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px;
+    border-color: rgba(255, 255, 255, 0.14);
 }
 
 element selected element-text {
