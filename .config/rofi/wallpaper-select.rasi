@@ -1,5 +1,5 @@
 /**
- * Ultra-Modern Glassmorphic Wallpaper Grid with Floating Frosted Nameplates
+ * Ultra-Modern 16:10 Glassmorphic Wallpaper Grid with Full-Width Frosted Nameplates
  **/
 
 @import "colors.rasi"
@@ -16,8 +16,8 @@
 window {
     location: center;
     anchor: center;
-    width: 78%;
-    height: 84%;
+    width: 76%;
+    height: 76%;
     x-offset: 0;
     y-offset: 0;
 
@@ -28,8 +28,8 @@ window {
 }
 
 mainbox {
-    spacing: 14px;
-    padding: 18px;
+    spacing: 12px;
+    padding: 16px;
     children: [ inputbar, listview ];
 }
 
@@ -69,7 +69,7 @@ element {
     orientation: vertical;
     padding: 0;
     margin: 0;
-    spacing: -38px;
+    spacing: 0;
     border-radius: 10px;
     border: 2px;
     border-color: rgba(255, 255, 255, 0.08);
@@ -83,8 +83,8 @@ element selected.normal, element selected.active {
 }
 
 element-icon {
-    size: 200px;
-    border-radius: 8px;
+    size: 190px;
+    border-radius: 8px 8px 0px 0px;
     horizontal-align: 0.5;
     vertical-align: 0.5;
     expand: true;
@@ -95,16 +95,18 @@ element-text {
     vertical-align: 0.5;
     text-color: @fg0;
     font: "JetBrainsMono Nerd Font Bold 10";
-    padding: 6px 12px;
-    margin: 0 10px 8px 10px;
-    border-radius: 6px;
-    background-color: rgba(6, 12, 16, 0.82);
-    border: 1px;
+    padding: 6px 0px;
+    margin: -32px 0px 0px 0px;
+    border-radius: 0px 0px 8px 8px;
+    background-color: rgba(6, 12, 16, 0.84);
+    border: 1px 0px 0px 0px;
     border-color: rgba(255, 255, 255, 0.14);
+    expand: false;
 }
 
 element selected element-text {
-    text-color: @accent-color;
-    background-color: rgba(6, 12, 16, 0.94);
+    text-color: #0c110d;
+    background-color: alpha(@accent-color, 0.92);
     border-color: @accent-color;
+    font: "JetBrainsMono Nerd Font Bold 10";
 }
