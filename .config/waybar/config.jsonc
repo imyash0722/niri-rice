@@ -39,10 +39,11 @@
 "niri/workspaces": {
     "on-click": "activate",
     "all-outputs": true,
-    "format": "{index}",
+    "format": "{icon}",
     "format-icons": {
-        "active": "{index}",
-        "default": "{index}"
+        "active": "󰮯",
+        "default": "󰊠",
+        "empty": ""
     }
 },
 

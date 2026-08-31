@@ -52,48 +52,49 @@ window#waybar.hidden {
 #custom-steam {
     padding: 0 4px;
 }
-/* ===== WORKSPACES (THEMED FROSTED GLASS) ===== */
+/* ===== WORKSPACES (PACMAN & GHOSTS) ===== */
 #workspaces {
-    border-radius: 1px;
+    border-radius: 6px;
     margin: 3px 0;
-    padding: 1px 3px;
+    padding: 0 3px;
     background-color: alpha(@secondary, 0.12);
-    border: 1px solid alpha(@text, 0.05);
+    border: 1px solid alpha(@text, 0.06);
 }
 
 #workspaces button {
-    padding: 0 7px;
-    margin: 0 1px;
-    color: @text;
+    padding: 0 6px;
+    margin: 2px 1px;
+    color: @primary;
     background-color: transparent;
-    border-radius: 1px;
+    border-radius: 4px;
     box-shadow: none;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 15px;
     transition: all 0.2s ease-in-out;
 }
 
 #workspaces button.empty {
     color: alpha(@text, 0.35);
+    font-size: 11px;
+    padding: 0 4px;
 }
 
 #workspaces button:hover {
     color: @primary;
-    background-color: alpha(@primary, 0.15);
-    border-radius: 1px;
+    background-color: alpha(@primary, 0.18);
+    border-radius: 4px;
 }
 
 #workspaces button.active {
     background: @primary;
     color: @base;
-    border-radius: 1px;
-    font-weight: 700;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
 #workspaces button.urgent {
     background: @error;
     color: @base;
-    border-radius: 1px;
+    border-radius: 4px;
     animation: blink 0.8s step-end infinite;
 }
 
@@ -107,7 +108,7 @@ window#waybar.hidden {
     background-color: alpha(@secondary, 0.10);
     margin: 3px 0;
     padding: 0 8px;
-    border-radius: 1px;
+    border-radius: 6px;
 }
 
 #battery.charging,
@@ -156,7 +157,7 @@ window#waybar.hidden {
 #custom-caf-waybar {
     padding: 0 6px;
     border: 1px solid alpha(@primary, 0.35);
-    border-radius: 1px;
+    border-radius: 6px;
     margin: 3px 0;
     color: @text;
 }
@@ -179,7 +180,7 @@ window#waybar.hidden {
     background-color: alpha(@secondary, 0.10);
     margin: 3px 0;
     padding: 0 6px;
-    border-radius: 1px;
+    border-radius: 6px;
 }
 
 #mpris {
@@ -198,7 +199,7 @@ window#waybar.hidden {
 tooltip {
     background-color: @base;
     border: 1px solid @primary;
-    border-radius: 1px;
+    border-radius: 6px;
 }
 
 tooltip label {
