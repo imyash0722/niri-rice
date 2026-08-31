@@ -306,8 +306,9 @@ binds {
     Mod+Return { spawn "foot"; }
     Mod+Shift+Return { spawn-sh "foot --app-id=foot.floating"; }
 
-    // App launcher (Super)
+    // App launcher (Super / Mod+D)
     Super_L { spawn-sh "pkill -x rofi || rofi -show drun"; }
+    Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
 
     // Wallpaper & Theme Gallery (val-niri)
     Mod+Z { spawn "sh" "-c" "~/.local/bin/wall.sh"; }
