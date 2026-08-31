@@ -8,11 +8,11 @@ Demo: ./demos/tv_crt.gif
 animations {
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    slowdown 2.0
-    //slowdown 2.0
+    slowdown 1.0
+    //slowdown 1.0
 
     window-open {
-        duration-ms 390
+        duration-ms 190
         curve "linear"
 
         custom-shader r"
@@ -149,7 +149,7 @@ vec4 open_color(vec3 coords_geo, vec3 size_geo) {
     }
 
     window-close {
-        duration-ms 396
+        duration-ms 150
         //curve "ease-out-quad"
         curve "linear"
 
@@ -290,7 +290,7 @@ vec4 close_color(vec3 coords_geo, vec3 size_geo) {
     }
 
     window-resize {
-        duration-ms 360
+        duration-ms 160
         curve "linear"
 
         custom-shader r"

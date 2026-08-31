@@ -7,14 +7,14 @@ Demo: ./demos/pixelate.gif
 
 
 animations {
-    slowdown 1.8
+    slowdown 1.0
 
   workspace-switch {
-    duration-ms 300
+        duration-ms 180
     curve "ease-out-cubic"
   }
   window-open {
-    duration-ms 400
+        duration-ms 190
     curve "linear"
     custom-shader r"
       vec4 pixelate_open(vec3 coords_geo, vec3 size_geo) {
@@ -49,7 +49,7 @@ animations {
     "
   }
   window-close {
-    duration-ms 400
+        duration-ms 150
     curve "linear"
     custom-shader r"
       vec4 pixelate_close(vec3 coords_geo, vec3 size_geo) {
