@@ -114,16 +114,22 @@ spawn-at-startup "sh" "-c" "sleep 1 && otd-daemon"
 
 // ── Window rules ─────────────────────────────────────────
 
-// Inactive windows get 99% opacity
+// Inactive windows get 97% opacity
 window-rule {
     match is-focused=false
-    opacity 0.99
+    opacity 0.97
 }
 
-// Terminal opacity: 97%
+// Active Terminal opacity: 97%
 window-rule {
-    match app-id=r#"^foot.*"#
+    match app-id=r#"^foot.*"# is-focused=true
     opacity 0.97
+}
+
+// Inactive Terminal opacity: 95% (2 units lower)
+window-rule {
+    match app-id=r#"^foot.*"# is-focused=false
+    opacity 0.95
 }
 
 // Foot floating window
