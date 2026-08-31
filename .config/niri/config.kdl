@@ -125,6 +125,61 @@ spawn-at-startup "hypridle"
 // Wacom One tablet driver (OpenTabletDriver)
 spawn-at-startup "sh" "-c" "sleep 1 && otd-daemon"
 
+// ── Blur & Layer Rules (val-niri) ────────────────────────
+blur {
+    passes 3
+    offset 3
+    noise 0.03
+    saturation 1.5
+}
+
+// Ensure wallpaper covers entire backdrop behind all workspaces in overview
+layer-rule {
+    match namespace="mpvpaper"
+    place-within-backdrop true
+}
+
+layer-rule {
+    match namespace="^mpvpaper.*"
+    place-within-backdrop true
+}
+
+layer-rule {
+    match namespace="^wallpaper.*"
+    place-within-backdrop true
+}
+
+layer-rule {
+    match namespace="^swww.*"
+    place-within-backdrop true
+}
+
+layer-rule {
+    match namespace="^awww.*"
+    place-within-backdrop true
+}
+
+layer-rule {
+    match namespace="^swaybg$"
+    place-within-backdrop true
+}
+
+layer-rule {
+    match namespace="waybar"
+    background-effect {
+        blur true
+    }
+}
+
+layer-rule {
+    match namespace="^rofi$"
+    background-effect {
+        blur true
+        saturation 0.9
+        xray false
+    }
+}
+
 // ── Window rules ─────────────────────────────────────────
 
 // General apps (focused): 99% opacity
