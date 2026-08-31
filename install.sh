@@ -55,8 +55,16 @@ link_dir_contents() {
 # ---------------------------------------------------------------------------
 # 1. Dependencies
 # ---------------------------------------------------------------------------
-echo "[1/6] Syncing databases, updating system, and installing required dependencies..."
-paru -Syu --needed --noconfirm \
+echo "[1/6] Detecting package manager and installing dependencies..."
+if command -v paru &>/dev/null; then
+    AUR_HELPER="paru"
+elif command -v yay &>/dev/null; then
+    AUR_HELPER="yay"
+else
+    AUR_HELPER="sudo pacman"
+fi
+
+$AUR_HELPER -Syu --needed --noconfirm \
     google-chrome dolphin konsole \
     niri waybar rofi foot fastfetch networkmanager plasma-nm \
     cage alacritty \

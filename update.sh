@@ -33,11 +33,15 @@ mkdir -p .local/share/konsole
 mkdir -p .local/share/dbus-1/services
 cp -a "$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service" .local/share/dbus-1/services/ 2>/dev/null || true
 cp -r "$HOME/.local/share/konsole/"* .local/share/konsole/ 2>/dev/null || true
-mkdir -p .local/share/dbus-1/services
-cp -a "$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service" .local/share/dbus-1/services/ 2>/dev/null || true
+
+# Pull .local/bin scripts (excluding heavy binaries)
+mkdir -p .local/bin
+cp -r "$HOME/.local/bin/"* .local/bin/ 2>/dev/null || true
+rm -f .local/bin/agy
 
 # Pull standalone configs and wallpapers
 cp "$HOME/.zshrc" .zshrc
-cp -r "$HOME/Wallpapers/"* Pictures/Wall/ 2>/dev/null || true
+mkdir -p Pictures/Wall
+cp -r "$HOME/Pictures/Wall/"* Pictures/Wall/ 2>/dev/null || true
 
 echo "Done! Run 'git status' to see what changed, then commit and push."
