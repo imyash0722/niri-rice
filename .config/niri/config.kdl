@@ -323,7 +323,7 @@ binds {
     // Show overview
     Mod+Tab { toggle-overview; }
     // Radial Dial (GPU-Accelerated Context-Aware Menu at Cursor)
-    Mod+Grave { spawn-sh "niri-radial-dial"; }
+    Mod+Grave { spawn "/home/pineapple/.local/bin/niri-radial-dial"; }
     // Switch focus between floating and tiling
     Mod+Shift+Grave { switch-focus-between-floating-and-tiling; }
     // Show hotkey overlay
@@ -498,12 +498,4 @@ binds {
     Mod+Shift+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
 
-// Niri Radial Dial (Frosted Glass Layer Blur)
-layer-rule {
-    match namespace="^niri-radial-dial$"
-    background-effect {
-        blur true
-        saturation 1.2
-        xray false
-    }
-}
+
