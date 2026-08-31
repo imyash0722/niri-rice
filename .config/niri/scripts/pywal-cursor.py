@@ -14,6 +14,7 @@ import json
 import subprocess
 import argparse
 import colorsys
+import re
 
 # Exact Moga-Neon cursor variant names from GNOME-Look / AUR
 MOGA_NEON_VARIANTS = {
@@ -280,7 +281,7 @@ def apply_to_gtk_and_x11(cursor_theme, size=32):
     with open(xres_path, "w") as f:
         f.writelines(new_xres)
 
-def update_waybar_colors():
+def update_all_desktop_colors(target_color=None):
     wal_cache = os.path.expanduser("~/.cache/wal/colors.json")
     if not os.path.exists(wal_cache):
         return
@@ -294,18 +295,29 @@ def update_waybar_colors():
         c0 = colors.get("color0", bg)
         c1 = colors.get("color1", "#ffb4ab")
         c2 = colors.get("color2", "#9ccbfb")
-        c4 = colors.get("color4", "#9ccbfb")
+        c3 = colors.get("color3", "#f0c674")
+        c4 = colors.get("color4", target_color or "#9ccbfb")
         c5 = colors.get("color5", "#b9c8da")
         c6 = colors.get("color6", "#d4bfe6")
         c7 = colors.get("color7", "#c2c7cf")
         c8 = colors.get("color8", "#42474e")
+        c9 = colors.get("color9", c1)
+        c10 = colors.get("color10", c2)
+        c11 = colors.get("color11", c3)
+        c12 = colors.get("color12", c4)
+        c13 = colors.get("color13", c5)
+        c14 = colors.get("color14", c6)
+        c15 = colors.get("color15", fg)
 
+        primary_accent = target_color or c4
+
+        # 1. Waybar colors.css
         colors_css = f"""@define-color base            {bg};
 @define-color surface         {c0};
 @define-color overlay         {c8};
 @define-color text            {fg};
 @define-color subtext         {c7};
-@define-color primary         {c4};
+@define-color primary         {primary_accent};
 @define-color on_primary      {bg};
 @define-color secondary       {c5};
 @define-color on_secondary    {bg};
@@ -318,8 +330,89 @@ def update_waybar_colors():
         os.makedirs(waybar_dir, exist_ok=True)
         with open(os.path.join(waybar_dir, "colors.css"), "w") as f:
             f.write(colors_css)
+
+        # 2. Foot Terminal colors.ini
+        foot_dir = os.path.expanduser("~/.config/foot")
+        os.makedirs(foot_dir, exist_ok=True)
+        bg_hex = bg.lstrip("#")
+        fg_hex = fg.lstrip("#")
+        foot_ini_content = f"""[colors-dark]
+alpha=0.95
+background={bg_hex}
+foreground={fg_hex}
+
+## Normal/regular colors (color0-color7)
+regular0={c0.lstrip("#")}
+regular1={c1.lstrip("#")}
+regular2={c2.lstrip("#")}
+regular3={c3.lstrip("#")}
+regular4={primary_accent.lstrip("#")}
+regular5={c5.lstrip("#")}
+regular6={c6.lstrip("#")}
+regular7={c7.lstrip("#")}
+
+## Bright colors (color8-color15)
+bright0={c8.lstrip("#")}
+bright1={c9.lstrip("#")}
+bright2={c10.lstrip("#")}
+bright3={c11.lstrip("#")}
+bright4={c12.lstrip("#")}
+bright5={c13.lstrip("#")}
+bright6={c14.lstrip("#")}
+bright7={c15.lstrip("#")}
+"""
+        with open(os.path.join(foot_dir, "colors.ini"), "w") as f:
+            f.write(foot_ini_content)
+
+        # 3. Rofi colors.rasi
+        rofi_dir = os.path.expanduser("~/.config/rofi")
+        os.makedirs(rofi_dir, exist_ok=True)
+        rofi_rasi_content = f"""* {{
+    bg0: {bg};
+    bg1: {c0};
+    fg0: {fg};
+    accent-color: {primary_accent};
+    urgent-color: {c1};
+    border-color: {primary_accent};
+}}
+"""
+        with open(os.path.join(rofi_dir, "colors.rasi"), "w") as f:
+            f.write(rofi_rasi_content)
+
+        # 4. Mako notifications
+        mako_dir = os.path.expanduser("~/.config/mako")
+        os.makedirs(mako_dir, exist_ok=True)
+        mako_content = f"""background-color={bg}
+text-color={fg}
+border-color={primary_accent}
+border-size=1
+border-radius=4
+icons=1
+max-icon-size=64
+default-timeout=15000
+ignore-timeout=1
+font=JetBrains Mono 10
+width=320
+height=110
+margin=16
+padding=12
+"""
+        with open(os.path.join(mako_dir, "config"), "w") as f:
+            f.write(mako_content)
+        subprocess.run(["makoctl", "reload"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        # 5. Niri Focus Ring & Colors in config.kdl
+        niri_config = os.path.expanduser("~/.config/niri/config.kdl")
+        if os.path.exists(niri_config):
+            with open(niri_config, "r") as f:
+                content = f.read()
+            content = re.sub(r'active-color\s+"#[0-9a-fA-F]+"', f'active-color "{primary_accent}"', content)
+            content = re.sub(r'inactive-color\s+"#[0-9a-fA-F]+"', f'inactive-color "{bg}"', content)
+            with open(niri_config, "w") as f:
+                f.write(content)
+
     except Exception as e:
-        print(f"Warning: Could not update waybar colors: {e}", file=sys.stderr)
+        print(f"Warning: Could not update all desktop colors: {e}", file=sys.stderr)
 
 def main():
     parser = argparse.ArgumentParser(description="Match and apply 24px Moga Neon cursor color via Pywal for Niri and KDE.")
@@ -348,9 +441,9 @@ def main():
     apply_to_niri(chosen_variant, args.size)
     apply_to_kde(chosen_variant, args.size)
     apply_to_gtk_and_x11(chosen_variant, args.size)
-    update_waybar_colors()
+    update_all_desktop_colors(target_color)
 
-    print(f"Cursor theme '{chosen_variant}' ({args.size}px) and Waybar colors applied successfully!")
+    print(f"Cursor theme '{chosen_variant}' ({args.size}px) and all system colors (Niri, Foot, Rofi, Waybar, Mako) applied successfully!")
 
 if __name__ == "__main__":
     main()

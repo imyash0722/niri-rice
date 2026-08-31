@@ -1,0 +1,8 @@
+* {
+    bg0: #091c21;
+    bg1: #091c21;
+    fg0: #e3ebe8;
+    accent-color: #47ABA2;
+    urgent-color: #9D7585;
+    border-color: #47ABA2;
+}
