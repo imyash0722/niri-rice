@@ -320,12 +320,12 @@ window-rule {
 // Add your personal keybinds here when you're ready.
 
 binds {
-    // Radial Dial (GPU-Accelerated Context-Aware Menu)
-    Mod+Tab { spawn-sh "niri-radial-dial"; }
     // Show overview
-    Mod+Shift+Tab { toggle-overview; }
+    Mod+Tab { toggle-overview; }
+    // Radial Dial (GPU-Accelerated Context-Aware Menu at Cursor)
+    Mod+Grave { spawn-sh "niri-radial-dial"; }
     // Switch focus between floating and tiling
-    Mod+Grave { switch-focus-between-floating-and-tiling; }
+    Mod+Shift+Grave { switch-focus-between-floating-and-tiling; }
     // Show hotkey overlay
     Mod+Slash { show-hotkey-overlay; }
 
