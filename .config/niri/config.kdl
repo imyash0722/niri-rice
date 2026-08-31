@@ -46,7 +46,7 @@ layout {
     background-color "transparent"
 
     focus-ring {
-        width 2
+        width 1
         active-color "#47ABA2"
         inactive-color "#091c21"
     }
