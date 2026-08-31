@@ -127,10 +127,10 @@ spawn-at-startup "sh" "-c" "sleep 1 && otd-daemon"
 
 // ── Blur & Layer Rules (val-niri) ────────────────────────
 blur {
-    passes 3
-    offset 3
-    noise 0.03
-    saturation 1.5
+    passes 4
+    offset 4
+    noise 0.02
+    saturation 1.4
 }
 
 // Ensure wallpaper covers entire backdrop behind all workspaces in overview
@@ -194,21 +194,21 @@ window-rule {
     opacity 0.97
 }
 
-// Terminal (frosted glass, high readability): 86% opacity + blur
+// Terminal (frosted glass, high readability): 82% opacity + blur
 window-rule {
     match app-id=r#"^foot.*"#
-    opacity 0.86
+    opacity 0.82
     background-effect {
         blur true
     }
 }
 
-// Dedicated AGY / Antigravity Glass Window
+// Dedicated AGY / Antigravity Glass Window: 78% opacity + blur
 window-rule {
     match title=r#"(?i).*agy.*"#
     match title=r#"(?i).*antigravity.*"#
     match app-id=r#"(?i).*(agy|antigravity).*"#
-    opacity 0.82
+    opacity 0.78
     background-effect {
         blur true
     }
@@ -299,7 +299,7 @@ window-rule {
 
 // Rounded corners for everything
 window-rule {
-    geometry-corner-radius 2
+    geometry-corner-radius 6
     clip-to-geometry true
 }
 

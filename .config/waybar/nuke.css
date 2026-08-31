@@ -10,10 +10,10 @@
 
 window#waybar {
     background-color: alpha(@base, 0.90);
-    border-radius: 0px;
+    border-radius: 6px;
     color: @text;
     transition: background-color 0.3s ease;
-    border-radius: 0px;
+    border-radius: 6px;
 }
 
 window#waybar.hidden {
@@ -48,7 +48,7 @@ window#waybar.hidden {
 
 #workspaces button.active {
     background :@primary;
-    border-radius: 0px;
+    border-radius: 6px;
     color: @base;
 }
 
@@ -64,7 +64,7 @@ window#waybar.hidden {
 
 #battery {
     background-color: alpha(@secondary, 0.10);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 4px 0;
     padding: 2 10px;
     color: @secondary;
@@ -88,14 +88,14 @@ window#waybar.hidden {
 
 #memory {
     background-color: alpha(@secondary, 0.10);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 2px 0;
     padding: 4 1px;
     border: 1px solid @primary;
 }
 #temperature {
     background-color: alpha(@secondary, 0.10);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 2px 0;
     padding: 4 1px;
     border: 1px solid @primary;
@@ -112,7 +112,7 @@ window#waybar.hidden {
 
 #pulseaudio.microphone {
     background-color: alpha(@secondary, 0.10);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 2px 0;
     padding: 4 1px;
     border: 1px solid @primary;   
@@ -124,7 +124,7 @@ window#waybar.hidden {
 
 #network {
     background-color: alpha(@secondary, 0.10);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 2px 0;
     padding: 4 1px;
     border: 1px solid @primary;
@@ -140,7 +140,7 @@ window#waybar.hidden {
 
 #custom-dunst {
     padding: 0 4 0 4px;
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 4px 0;
     background-color: alpha(@error, 1);
     color: @base;
@@ -149,7 +149,7 @@ window#waybar.hidden {
 
 #custom-caf-waybar{
     background-color: alpha(@secondary, 0.10);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 2px 0;
     padding: 4 1px;
     color: @tertiary;
@@ -158,7 +158,7 @@ window#waybar.hidden {
 
 #custom-light {
     background-color: alpha(@secondary, 0.10);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 2px 0;
     padding: 2 10px;
     color: @primary;
@@ -167,7 +167,7 @@ window#waybar.hidden {
 
 #custom-volume {
     background-color: alpha(@secondary, 0.10);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 2px 0;
     padding: 2 10px;
     color: @tertiary;
@@ -176,7 +176,7 @@ window#waybar.hidden {
 
 #custom-ppd {
     background-color: alpha(@secondary, 0.05);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 2px 0;
     padding: 4 1px;
     color: @primary;
@@ -193,14 +193,14 @@ window#waybar.hidden {
 
 #clock {
     background-color: alpha(@secondary, 0.10);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 2px 0;
     padding: 4 1px;
     border: 1px solid @primary;
 }
 
 #mpris {
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 4px 0;
     padding: 0 6px;  
     background-color: alpha(@secondary, 0.100);
@@ -208,7 +208,7 @@ window#waybar.hidden {
 
 #workspaces {
     background-color: alpha(@secondary, 0.10);
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 2px 0;
     padding: 2 1px;
     border: 1px solid @primary;

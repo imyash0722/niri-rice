@@ -12,7 +12,7 @@
 window#waybar {
     background-color: alpha(@base, 0.90);
     color: @text;
-    border-radius: 0px;
+    border-radius: 6px;
     transition: background-color 0.3s ease;
 }
 
@@ -53,7 +53,7 @@ window#waybar.hidden {
 }
 /* ===== WORKSPACES ===== */
 #workspaces {
-    border-radius: 0px;
+    border-radius: 6px;
     margin: 4px 0;
     padding: 0 6px;
     background-color: alpha(@secondary, 0.100);
