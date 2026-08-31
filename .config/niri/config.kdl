@@ -170,6 +170,7 @@ layer-rule {
 
 layer-rule {
     match namespace="waybar"
+    geometry-corner-radius 6
     background-effect {
         blur true
     }
@@ -177,6 +178,7 @@ layer-rule {
 
 layer-rule {
     match namespace="^rofi$"
+    geometry-corner-radius 14
     background-effect {
         blur true
         saturation 0.9
