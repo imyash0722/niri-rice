@@ -114,7 +114,19 @@ spawn-at-startup "sh" "-c" "sleep 1 && otd-daemon"
 
 // ── Window rules ─────────────────────────────────────────
 
-// WezTerm initial configure workaround
+// Inactive windows get 99% opacity
+window-rule {
+    match is-focused=false
+    opacity 0.99
+}
+
+// Terminal opacity: 97%
+window-rule {
+    match app-id=r#"^foot.*"#
+    opacity 0.97
+}
+
+// Foot floating window
 window-rule {
     match app-id="foot.floating"
     open-floating true
