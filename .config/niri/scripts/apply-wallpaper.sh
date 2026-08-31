@@ -78,10 +78,11 @@ if command -v kwriteconfig6 &>/dev/null; then
     kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 210 --group Wallpaper --group "luisbocanegra.smart.video.wallpaper.reborn" --group General --key Video "file://$OUT_MP4" 2>/dev/null || true
 fi
 
-# 3. Reload Niri / mpvpaper if running
+# 3. Reload Niri / mpvpaper and Waybar if running
 if [ -n "$NIRI_SOCKET" ]; then
-    killall mpvpaper 2>/dev/null || true
-    mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$OUT_MP4" &
+    pkill -9 -x mpvpaper 2>/dev/null || true
+    nohup mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$OUT_MP4" >/dev/null 2>&1 &
+    killall -SIGUSR2 waybar 2>/dev/null || true
     niri msg action do-screen-transition 2>/dev/null || true
 fi
 

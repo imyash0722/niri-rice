@@ -36,9 +36,14 @@ fi
 # 4. Update Wallpaper path
 echo "$THEMES_DIR/$THEME/wallpaper.mp4" > "$THEMES_DIR/active-wallpaper.txt"
 
-# 5. Extract Pywal colors from wallpaper and apply matching 24px Moga-Neon cursor
+# 5. Extract Pywal colors directly from theme preview frame or wallpaper and apply full desktop theme
+WALL_IMG="$THEMES_DIR/$THEME/wallpaper.png"
+if [ ! -f "$WALL_IMG" ]; then
+    WALL_IMG="$THEMES_DIR/$THEME/wallpaper.mp4"
+fi
+
 if [ -x "$HOME/.config/niri/scripts/pywal-cursor.py" ]; then
-    "$HOME/.config/niri/scripts/pywal-cursor.py" --wallpaper "$THEMES_DIR/$THEME/wallpaper.mp4" --size 32
+    "$HOME/.config/niri/scripts/pywal-cursor.py" --wallpaper "$WALL_IMG" --size 32
 fi
 
 # 5.5 Update KDE Plasma Wallpaper (Static frame + Smart Video Wallpaper config)
@@ -49,13 +54,12 @@ if command -v kwriteconfig6 &>/dev/null; then
     kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 210 --group Wallpaper --group "luisbocanegra.smart.video.wallpaper.reborn" --group General --key Video "file://$THEMES_DIR/$THEME/wallpaper.mp4" 2>/dev/null || true
 fi
 
-# 6. Reload services
+# 6. Apply live to Niri and Waybar
 if [ -n "$NIRI_SOCKET" ]; then
-    niri msg action do-screen-transition
-    killall -SIGUSR2 waybar
-    "$HOME/.config/niri/scripts/reload.sh"
-else
-    echo "Not running in Niri. Configuration updated on disk for next boot."
+    pkill -9 -x mpvpaper 2>/dev/null || true
+    nohup mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$THEMES_DIR/$THEME/wallpaper.mp4" >/dev/null 2>&1 &
+    killall -SIGUSR2 waybar 2>/dev/null || true
+    niri msg action do-screen-transition 2>/dev/null || true
 fi
 
 echo "Theme '$THEME' applied successfully!"

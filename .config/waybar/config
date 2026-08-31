@@ -21,7 +21,6 @@
     "modules-right": [
         "custom/recorder",
         "battery",
-        "group/syst",
         "group/sounds",
         "group/hw",
         "custom/dunst",
@@ -29,10 +28,12 @@
     ],
 
 "custom/caf-waybar": {
-    "exec": "sh -c 'pgrep sleep.sh >/dev/null && echo \"\" || echo \" caffeinated\"'",
+    "exec": "~/.local/bin/caf.sh status",
+    "on-click": "~/.local/bin/caf.sh toggle",
+    "return-type": "json",
     "signal": 13,
-    "format": "{}",
-    "tooltip": false
+    "interval": 5,
+    "tooltip": true
 }, 
 
 "niri/workspaces": {
@@ -88,19 +89,16 @@
 
     "battery": {
         "states": {
-            // "good": 95,
             "warning": 30,
             "critical": 15
         },
-        "format": "{icon} {capacity}%",
-        "format-discharging": "{icon} {capacity}% - {time}",
+        "format": "{capacity}% {icon}",
+        "format-discharging": "{capacity}% {icon}",
         "format-full": "{capacity}% {icon}",
-        "format-charging": " {capacity}%",
-        "format-plugged": " {capacity}%",
-        //"format-alt": "{icon} {time}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""],
+        "format-charging": "{capacity}% 󰂄",
+        "format-plugged": "{capacity}% 󰂄",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰁹"],
+        "tooltip-format": "{capacity}% - {timeTo}"
     },
 
     "battery#bat2": {

@@ -6,11 +6,23 @@ if [ "$XDG_CURRENT_DESKTOP" != "niri" ] && [ -z "$NIRI_SOCKET" ]; then
     exit 1
 fi
 
-# Reload Waybar
-pkill -x waybar
-nohup waybar >/dev/null 2>&1 &
+# 1. Hot-reload Waybar CSS or launch if not running
+if pgrep -x waybar >/dev/null; then
+    killall -SIGUSR2 waybar 2>/dev/null || true
+else
+    nohup waybar >/dev/null 2>&1 &
+fi
 
-# Reload Wallpaper (mpvpaper - GPU hardware decoded)
-pkill mpvpaper || true
-sleep 0.5
-mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$(cat ~/.config/niri/themes/active-wallpaper.txt)" &
+# 2. Reload Wallpaper cleanly (single mpvpaper instance)
+WALL_PATH="$(cat "$HOME/.config/niri/themes/active-wallpaper.txt" 2>/dev/null)"
+if [ -n "$WALL_PATH" ] && [ -f "$WALL_PATH" ]; then
+    pkill -9 -x mpvpaper 2>/dev/null || true
+    nohup mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$WALL_PATH" >/dev/null 2>&1 &
+fi
+
+# 3. Reload Mako notifications & Foot
+makoctl reload 2>/dev/null || true
+
+# 4. Trigger smooth screen transition in Niri
+niri msg action do-screen-transition 2>/dev/null || true
+

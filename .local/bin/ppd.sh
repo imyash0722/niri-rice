@@ -1,38 +1,43 @@
 #!/usr/bin/env bash
 
 PROFILES=(
-    "󰌪  Power Saver"
-    "  Balanced"
-    # "  Custom"
-    "󱓞  Performance"
+    "󰌪  Power Saver (TLP Battery)"
+    "  Balanced (TLP Balanced)"
+    "󱓞  Performance (TLP AC Mode)"
 )
 
 CHOICE=$(
     printf '%s\n' "${PROFILES[@]}" | rofi \
         -dmenu \
         -i \
-        -p "CPU Prof" \
+        -p "Power Profile" \
         -theme-str '
-        window { width: 15%; }
+        window { width: 250px; }
+        listview { lines: 3; }
         '
 )
 
 case "$CHOICE" in
 *"Performance"*)
-    powerprofilesctl set performance
-    dunstify -a "CPU profile" "changed to performance mode" -i ~/.icons/icon_scripts/dunst/cpu/perf.svg
+    powerprofilesctl set performance 2>/dev/null || true
+    if [ -f /home/pineapple/.askpass.sh ]; then
+        SUDO_ASKPASS=/home/pineapple/.askpass.sh sudo -A tlp ac 2>/dev/null || true
+    fi
+    notify-send -a "Power Profile" -i "battery-charging" "Performance Mode" "TLP set to AC / max performance"
     ;;
 *"Balanced"*)
-    powerprofilesctl set balanced
-    dunstify -a "CPU profile" "changed to balance mode" -i ~/.icons/icon_scripts/dunst/cpu/balance.svg
+    powerprofilesctl set balanced 2>/dev/null || true
+    if [ -f /home/pineapple/.askpass.sh ]; then
+        SUDO_ASKPASS=/home/pineapple/.askpass.sh sudo -A tlp start 2>/dev/null || true
+    fi
+    notify-send -a "Power Profile" -i "battery" "Balanced Mode" "TLP set to automatic balanced mode"
     ;;
 *"Power Saver"*)
-    powerprofilesctl set power-saver
-    dunstify -a "CPU profile" "changed to low-power mode" -i ~/.icons/icon_scripts/dunst/cpu/low.svg
-    ;;
-*"  Custom"*)
-    echo "max-power" | sudo tee /sys/firmware/acpi/platform_profile
+    powerprofilesctl set power-saver 2>/dev/null || true
+    if [ -f /home/pineapple/.askpass.sh ]; then
+        SUDO_ASKPASS=/home/pineapple/.askpass.sh sudo -A tlp bat 2>/dev/null || true
+    fi
+    notify-send -a "Power Profile" -i "battery-caution" "Power Saver Mode" "TLP set to battery conservation"
     ;;
 esac
-
-pkill -sigrtmin+21 waybar
+pkill -sigrtmin+21 waybar 2>/dev/null || true
