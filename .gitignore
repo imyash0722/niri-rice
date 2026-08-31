@@ -31,3 +31,6 @@ Pictures/Wall/
 .config/trashrc
 .config/user-dirs.locale
 .config/systemmonitorrc
+__pycache__/
+*.pyc
+.local/bin/agy

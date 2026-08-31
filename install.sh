@@ -154,9 +154,9 @@ sudo cp "$REPO_DIR/setup_assets/terminal.desktop" "/usr/share/wayland-sessions/t
 # ---------------------------------------------------------------------------
 echo ""
 echo "[4/6] Setting script permissions..."
-[ -d "$HOME/.config/niri/scripts" ] && chmod +x "$HOME/.config/niri/scripts"/*.sh 2>/dev/null || true
-[ -d "$HOME/.config/hypr/scripts" ] && chmod +x "$HOME/.config/hypr/scripts"/*.sh 2>/dev/null || true
-chmod +x "$HOME/.local/bin/"* 2>/dev/null || true
+[ -d "$HOME/.config/niri/scripts" ] && chmod +x "$HOME/.config/niri/scripts"/* 2>/dev/null || true
+[ -d "$HOME/.config/waybar/nuke-script" ] && chmod +x "$HOME/.config/waybar/nuke-script"/* 2>/dev/null || true
+[ -d "$HOME/.local/bin" ] && chmod +x "$HOME/.local/bin"/* 2>/dev/null || true
 
 # ---------------------------------------------------------------------------
 # 5. System services & Battery Optimization
@@ -211,15 +211,14 @@ sudo systemctl daemon-reload || true
 sudo systemctl enable --now powertop.service || true
 
 # ---------------------------------------------------------------------------
-# 6. Apply wallpaper immediately (mpvpaper must be installed)
+# 6. Apply initial theme & wallpaper (Pywal dynamic extraction)
 # ---------------------------------------------------------------------------
 echo ""
-echo "[6/6] Applying wallpaper..."
-if command -v mpvpaper &>/dev/null; then
-    mpvpaper -o 'no-audio loop hwdec=auto' '*' "$HOME/Pictures/Wall/6364907-1200p-optimized.mp4" &
-    echo "  Wallpaper applied!"
-else
-    echo "  [!] mpvpaper not found, wallpaper will apply on next login."
+echo "[6/6] Applying initial theme & extracting Pywal colors..."
+if [ -x "$HOME/.config/niri/scripts/set-theme.sh" ]; then
+    "$HOME/.config/niri/scripts/set-theme.sh" blue || true
+elif [ -x "$HOME/.config/niri/scripts/apply-wallpaper.sh" ] && [ -f "$HOME/Pictures/Wall/silent_katana_samurai.mp4" ]; then
+    "$HOME/.config/niri/scripts/apply-wallpaper.sh" "$HOME/Pictures/Wall/silent_katana_samurai.mp4" || true
 fi
 
 # ---------------------------------------------------------------------------

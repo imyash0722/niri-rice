@@ -1,93 +1,114 @@
 @import "colors.rasi"
 
 * {
-    font:   "JetBrainsMono Nerd Font 13";
-
-    background-color:   transparent;
-    text-color:         @fg0;
-
-    margin:     0;
-    padding:    0;
-    spacing:    0;
+    font: "JetBrainsMono Nerd Font 12";
+    background-color: transparent;
+    text-color: @fg0;
+    margin: 0;
+    padding: 0;
+    spacing: 0;
 }
 
 window {
-    location:   center;
-    width:      480;
+    location: center;
+    width: 520px;
+    border: 2px;
+    border-color: @accent-color;
+    border-radius: 12px;
+    background-color: rgba(9, 18, 24, 0.88);
+    padding: 16px;
+}
 
-    border:     1px;
-    border-color: @border-color;
-    border-radius: 4px;
-
-    background-color:   @bg0;
+mainbox {
+    spacing: 12px;
+    children: [ inputbar, message, listview ];
 }
 
 inputbar {
-    spacing:    8px;
-    padding:    8px;
-
-    background-color:   @bg1;
-}
-
-prompt, entry, element-icon, element-text {
-    vertical-align: 0.5;
+    spacing: 10px;
+    padding: 8px 14px;
+    border: 1px;
+    border-color: rgba(255, 255, 255, 0.10);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    children: [ prompt, entry ];
 }
 
 prompt {
     text-color: @accent-color;
+    font: "JetBrainsMono Nerd Font Bold 12";
 }
 
-textbox {
-    padding:            8px;
-    background-color:   @bg1;
-}
-
-listview {
-    padding:    4px 0;
-    lines:      8;
-    columns:    1;
-
-    fixed-height:   false;
-}
-
-element {
-    padding:    4px;
-    spacing:    4px;
-}
-
-element normal normal {
+entry {
+    placeholder: "Search applications...";
+    placeholder-color: rgba(255, 255, 255, 0.35);
     text-color: @fg0;
 }
 
-element normal urgent {
+message {
+    padding: 6px;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+textbox {
+    text-color: @fg0;
+}
+
+listview {
+    padding: 4px 0;
+    lines: 7;
+    columns: 1;
+    spacing: 4px;
+    fixed-height: false;
+    scrollbar: false;
+}
+
+element {
+    padding: 8px 12px;
+    spacing: 10px;
+    border-radius: 8px;
+    border: 1px;
+    border-color: transparent;
+    cursor: pointer;
+}
+
+element normal.normal, element alternate.normal {
+    text-color: @fg0;
+    background-color: transparent;
+}
+
+element selected.normal, element selected.active {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: @accent-color;
+    text-color: @accent-color;
+}
+
+element normal.active, element alternate.active {
+    text-color: @accent-color;
+}
+
+element normal.urgent, element alternate.urgent {
     text-color: @urgent-color;
 }
 
-element normal active {
-    text-color: @accent-color;
-}
-
-element alternate active {
-    text-color: @accent-color;
-}
-
-element selected {
-    text-color: @bg0;
-    font: "JetBrainsMono Nerd Font Bold 13";
-}
-
-element selected normal, element selected active {
-    background-color:   @accent-color;
-}
-
-element selected urgent {
-    background-color:   @urgent-color;
+element selected.urgent {
+    background-color: @urgent-color;
+    text-color: #0c110d;
 }
 
 element-icon {
-    size:   0.8em;
+    size: 24px;
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
 }
 
 element-text {
     text-color: inherit;
+    font: "JetBrainsMono Nerd Font Medium 12";
+    vertical-align: 0.5;
+}
+
+element selected element-text {
+    font: "JetBrainsMono Nerd Font Bold 12";
 }
