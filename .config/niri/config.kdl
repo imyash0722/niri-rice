@@ -47,8 +47,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#69B4C3"
-        inactive-color "#111519"
+        active-color "#E2B3A2"
+        inactive-color "#12100f"
     }
 
     tab-indicator {
@@ -128,6 +128,7 @@ spawn-at-startup "hypridle"
 
 // Wacom One tablet driver (OpenTabletDriver)
 spawn-at-startup "sh" "-c" "sleep 1 && otd-daemon"
+spawn-at-startup "/home/pineapple/.local/bin/niri-radial-dial" "daemon"
 
 // ── Blur & Layer Rules (val-niri) ────────────────────────
 blur {
@@ -193,16 +194,16 @@ window-rule {
     draw-border-with-background false
 }
 
-// General apps (focused): 99% opacity
+// General apps (active / focused): 100% opacity
 window-rule {
     match is-focused=true
-    opacity 0.99
+    opacity 1.0
 }
 
-// General apps (unfocused): 97% opacity
+// General apps (inactive / unfocused): 99% opacity
 window-rule {
     match is-focused=false
-    opacity 0.97
+    opacity 0.99
 }
 
 // Terminal (consistent frosted glass): blur true without harsh opacity jumps
