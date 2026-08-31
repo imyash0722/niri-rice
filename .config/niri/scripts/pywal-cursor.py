@@ -424,6 +424,17 @@ padding=12
             content = re.sub(r'inactive-color\s+"#[0-9a-fA-F]+"', f'inactive-color "{bg}"', content)
             with open(niri_config, "w") as f:
                 f.write(content)
+            try:
+                os.utime(niri_config, None)
+            except Exception:
+                pass
+
+        # 6. Live reload signals for all running desktop processes
+        subprocess.run(["killall", "-SIGUSR2", "waybar"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["pkill", "-SIGUSR1", "foot"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["makoctl", "reload"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if os.environ.get("NIRI_SOCKET"):
+            subprocess.run(["niri", "msg", "action", "do-screen-transition"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     except Exception as e:
         print(f"Warning: Could not update all desktop colors: {e}", file=sys.stderr)
