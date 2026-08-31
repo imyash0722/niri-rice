@@ -47,8 +47,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#47ABA2"
-        inactive-color "#091c21"
+        active-color "#EA876A"
+        inactive-color "#0B0A0B"
     }
 
     tab-indicator {
@@ -494,4 +494,14 @@ binds {
 
     // Escape hatch for shortcut inhibitors
     Mod+Shift+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+}
+
+// Niri Radial Dial (Frosted Glass Layer Blur)
+layer-rule {
+    match namespace="^niri-radial-dial$"
+    background-effect {
+        blur true
+        saturation 1.2
+        xray false
+    }
 }

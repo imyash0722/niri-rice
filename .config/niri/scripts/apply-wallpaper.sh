@@ -59,11 +59,12 @@ else
 fi
 
 echo "[2/4] Extracting Pywal dynamic color palette..."
-wal -i "$OUT_PNG" -n -s -t -e -q
+rm -rf "$HOME/.cache/wal/schemes"
+wal -i "$OUT_PNG" -n -s -t -q
 
-echo "[3/4] Auto-matching & applying 24px Moga-Neon cursor..."
+echo "[3/4] Auto-matching & applying 24px Moga-Neon cursor and desktop themes..."
 if [ -x "$HOME/.config/niri/scripts/pywal-cursor.py" ]; then
-    "$HOME/.config/niri/scripts/pywal-cursor.py" --wal --size 32
+    "$HOME/.config/niri/scripts/pywal-cursor.py" --wallpaper "$OUT_PNG" --size 32
 fi
 
 echo "[4/4] Setting active wallpaper for Niri and KDE Plasma..."
@@ -78,12 +79,10 @@ if command -v kwriteconfig6 &>/dev/null; then
     kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 210 --group Wallpaper --group "luisbocanegra.smart.video.wallpaper.reborn" --group General --key Video "file://$OUT_MP4" 2>/dev/null || true
 fi
 
-# 3. Reload Niri / mpvpaper and Waybar if running
+# 3. Reload Niri / mpvpaper if running
 if [ -n "$NIRI_SOCKET" ]; then
     pkill -9 -x mpvpaper 2>/dev/null || true
     nohup mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$OUT_MP4" >/dev/null 2>&1 &
-    killall -SIGUSR2 waybar 2>/dev/null || true
-    niri msg action do-screen-transition 2>/dev/null || true
 fi
 
 echo "All done! 1920x1200 wallpaper, Pywal palette, and 24px cursor successfully applied!"

@@ -429,10 +429,24 @@ padding=12
             except Exception:
                 pass
 
-        # 6. Live reload signals for all running desktop processes
-        subprocess.run(["killall", "-SIGUSR2", "waybar"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-SIGUSR1", "foot"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        # 6. Touch Waybar stylesheets and restart Waybar to bust GTK3 CSS cache
+        for css_file in ["main.css", "style.css"]:
+            p = os.path.join(waybar_dir, css_file)
+            if os.path.exists(p):
+                try:
+                    os.utime(p, None)
+                except Exception:
+                    pass
+        subprocess.run(["pkill", "-x", "waybar"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(["waybar"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+
+        # 7. Broadcast live terminal color sequences to all active terminals
+        subprocess.run(["wal", "-R"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        # 8. Reload Mako notifications
         subprocess.run(["makoctl", "reload"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        # 9. Trigger Niri smooth screen transition
         if os.environ.get("NIRI_SOCKET"):
             subprocess.run(["niri", "msg", "action", "do-screen-transition"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
