@@ -10,8 +10,9 @@
 
 /* ===== BASE ===== */
 window#waybar {
-    background-color: alpha(@base, 0.8);
+    background-color: alpha(@base, 0.90);
     color: @text;
+    border-radius: 6px;
     transition: background-color 0.3s ease;
 }
 

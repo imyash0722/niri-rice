@@ -1,11 +1,12 @@
 {
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 34, // Waybar height (to be removed for auto height)
-    "width": 1920, // Waybar width
-    "spacing": 12, // Gaps between modules (4px)
-    "margin-top": 1,
-    "margin-bottom": 1,
+    "height": 34,
+    "spacing": 12,
+    "margin-top": 6,
+    "margin-left": 6,
+    "margin-right": 6,
+    "margin-bottom": 0,
 
     "modules-left": [
       "niri/workspaces",
