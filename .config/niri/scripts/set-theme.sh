@@ -56,8 +56,13 @@ fi
 
 # 6. Apply live to Niri and Waybar
 if [ -n "$NIRI_SOCKET" ]; then
-    pkill -9 -x mpvpaper 2>/dev/null || true
-    nohup mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$THEMES_DIR/$THEME/wallpaper.mp4" >/dev/null 2>&1 &
+    pgrep -x awww-daemon >/dev/null || nohup awww-daemon >/dev/null 2>&1 &
+    awww img "$THEMES_DIR/$THEME/wallpaper.png" \
+        --transition-type center \
+        --transition-pos center \
+        --transition-duration 1.2 \
+        --transition-fps 120 \
+        --transition-bezier .25,1,.5,1 2>/dev/null || true
     killall -SIGUSR2 waybar 2>/dev/null || true
     niri msg action do-screen-transition 2>/dev/null || true
 fi

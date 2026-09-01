@@ -13,11 +13,16 @@ else
     nohup waybar >/dev/null 2>&1 &
 fi
 
-# 2. Reload Wallpaper cleanly (single mpvpaper instance)
+# 2. Reload Wallpaper cleanly (via awww)
 WALL_PATH="$(cat "$HOME/.config/niri/themes/active-wallpaper.txt" 2>/dev/null)"
 if [ -n "$WALL_PATH" ] && [ -f "$WALL_PATH" ]; then
-    pkill -9 -x mpvpaper 2>/dev/null || true
-    nohup mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$WALL_PATH" >/dev/null 2>&1 &
+    pgrep -x awww-daemon >/dev/null || nohup awww-daemon >/dev/null 2>&1 &
+    awww img "$WALL_PATH" \
+        --transition-type center \
+        --transition-pos center \
+        --transition-duration 1.2 \
+        --transition-fps 120 \
+        --transition-bezier .25,1,.5,1 2>/dev/null || true
 fi
 
 # 3. Reload Mako notifications & Foot

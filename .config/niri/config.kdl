@@ -147,32 +147,7 @@ blur {
 
 // Ensure wallpaper covers entire backdrop behind all workspaces in overview
 layer-rule {
-    match namespace="mpvpaper"
-    place-within-backdrop true
-}
-
-layer-rule {
-    match namespace="^mpvpaper.*"
-    place-within-backdrop true
-}
-
-layer-rule {
-    match namespace="^wallpaper.*"
-    place-within-backdrop true
-}
-
-layer-rule {
-    match namespace="^swww.*"
-    place-within-backdrop true
-}
-
-layer-rule {
     match namespace="^awww.*"
-    place-within-backdrop true
-}
-
-layer-rule {
-    match namespace="^swaybg$"
     place-within-backdrop true
 }
 

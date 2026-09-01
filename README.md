@@ -21,7 +21,7 @@
 
 - 🌊 **niri** — Scrollable, infinite-canvas tiling Wayland compositor
 - 📺 **Dynamic Display Scaling** — Monitor daemon auto-scales outputs on connect (`1.5x` for 4K, `1.25x` for 1440p, `1.0x` for 1080p)
-- 🎬 **mpvpaper** — GPU-accelerated animated wallpapers (MP4/GIF) via mpv
+- 🎬 **awww** — Wayland wallpaper daemon with smooth circular droplet bubble transitions
 - 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
 - 🚀 **Rofi** — App launcher with a custom dark theme; toggles instantly via hardware Copilot key
 - 📸 **Satty** — Screenshot annotation tool (native Niri screenshot support via `Mod+Shift+S`)
@@ -40,7 +40,7 @@
 | Window Manager | `niri` |
 | Status Bar | `waybar` |
 | App Launcher | `rofi` |
-| Wallpaper | `mpvpaper` |
+| Wallpaper | `awww` |
 | Lock Screen | `qylock (quickshell)` + `hypridle` |
 | Notifications | `mako` |
 | Terminal | `foot` + `alacritty` (TTY session) |
@@ -198,7 +198,7 @@ Colours are extracted from the wallpaper via **pywal** and applied to Waybar and
 > ```
 > ~/niri-rice/Pictures/Wall/6364907-1200p-optimized.mp4
 > ```
-> The installer will symlink `~/Wallpapers` and play it via `mpvpaper` automatically.
+> The installer will symlink `~/Wallpapers` and display it via `awww` automatically.
 
 ---
 
