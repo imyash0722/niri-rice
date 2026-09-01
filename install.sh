@@ -83,7 +83,7 @@ $AUR_HELPER -Syu --needed --noconfirm \
     sddm quickshell qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
     qt6-multimedia-ffmpeg gst-plugins-base gst-plugins-good gst-plugins-bad \
     gst-plugins-ugly gst-libav gst-plugin-pipewire gst-plugin-va \
-    waybar-module-pacman-updates-git mpvpaper powertop opentabletdriver \
+    waybar-module-pacman-updates-git awww powertop opentabletdriver \
     plasma6-wallpapers-smart-video-wallpaper-reborn \
     pavucontrol wireplumber pipewire-alsa pipewire-pulse \
     openssh ufw rsync wget unzip unrar \

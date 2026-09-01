@@ -52,8 +52,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#92504E"
-        inactive-color "#0b130d"
+        active-color "#69B4C3"
+        inactive-color "#111519"
     }
 
     tab-indicator {
@@ -114,11 +114,8 @@ spawn-at-startup "sh" "-c" "dbus-update-activation-environment --systemd --all |
 spawn-at-startup "/usr/lib/org_kde_powerdevil"
 spawn-at-startup "sh" "-c" "waybar"
 
-// Wallpaper Daemon (awww for smooth droplet bubble transitions)
+// Wallpaper Daemon (awww for smooth droplet bubble transitions and wallpaper management)
 spawn-at-startup "awww-daemon"
-
-// Animated wallpaper (mpvpaper - GPU hardware decoded)
-spawn-at-startup "sh" "-c" "sleep 1 && mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' \"$(cat ~/.config/niri/themes/active-wallpaper.txt)\""
 
 // Clipboard history (cliphist)
 spawn-at-startup "sh" "-c" "pkill wl-paste; wl-paste --type text --watch cliphist store & wl-paste --type image --watch cliphist store &"

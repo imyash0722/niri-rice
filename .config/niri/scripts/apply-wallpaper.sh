@@ -69,7 +69,7 @@ fi
 
 echo "[4/4] Setting active wallpaper for Niri and KDE Plasma..."
 # 1. Update Niri active wallpaper path
-echo "$OUT_MP4" > "$THEMES_DIR/active-wallpaper.txt"
+echo "$OUT_PNG" > "$THEMES_DIR/active-wallpaper.txt"
 
 # 2. Update KDE Plasma wallpaper
 if command -v plasma-apply-wallpaperimage &>/dev/null && [ -f "$OUT_PNG" ]; then
@@ -91,18 +91,6 @@ if [ -n "$NIRI_SOCKET" ]; then
         --transition-duration 1.2 \
         --transition-fps 120 \
         --transition-bezier .25,1,.5,1 2>/dev/null || true
-
-    if [ "$IS_ANIMATED" = true ]; then
-        # For animated MP4 wallpapers, let the droplet bubble finish then seamlessly start mpvpaper
-        (
-            sleep 1.2
-            pkill -9 -x mpvpaper 2>/dev/null || true
-            nohup mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$OUT_MP4" >/dev/null 2>&1 &
-        ) &
-    else
-        # For static image wallpapers, dismiss mpvpaper so awww displays the static frame directly
-        pkill -9 -x mpvpaper 2>/dev/null || true
-    fi
 fi
 
 echo "All done! 1920x1200 wallpaper, Pywal palette, and 24px cursor successfully applied!"
