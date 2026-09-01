@@ -34,3 +34,4 @@ Pictures/Wall/
 __pycache__/
 *.pyc
 .local/bin/agy
+.local/bin/agy*

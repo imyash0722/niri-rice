@@ -79,10 +79,30 @@ if command -v kwriteconfig6 &>/dev/null; then
     kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 210 --group Wallpaper --group "luisbocanegra.smart.video.wallpaper.reborn" --group General --key Video "file://$OUT_MP4" 2>/dev/null || true
 fi
 
-# 3. Reload Niri / mpvpaper if running
+# 3. Apply with droplet bubble transition via awww
 if [ -n "$NIRI_SOCKET" ]; then
-    pkill -9 -x mpvpaper 2>/dev/null || true
-    nohup mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$OUT_MP4" >/dev/null 2>&1 &
+    # Ensure awww-daemon is active
+    pgrep -x awww-daemon >/dev/null || nohup awww-daemon >/dev/null 2>&1 &
+    
+    # Trigger circular droplet bubble animation expanding from center
+    awww img "$OUT_PNG" \
+        --transition-type center \
+        --transition-pos center \
+        --transition-duration 1.2 \
+        --transition-fps 120 \
+        --transition-bezier .25,1,.5,1 2>/dev/null || true
+
+    if [ "$IS_ANIMATED" = true ]; then
+        # For animated MP4 wallpapers, let the droplet bubble finish then seamlessly start mpvpaper
+        (
+            sleep 1.2
+            pkill -9 -x mpvpaper 2>/dev/null || true
+            nohup mpvpaper -o 'no-audio loop-file=inf hwdec=vaapi msg-level=all=error video-unscaled=yes' '*' "$OUT_MP4" >/dev/null 2>&1 &
+        ) &
+    else
+        # For static image wallpapers, dismiss mpvpaper so awww displays the static frame directly
+        pkill -9 -x mpvpaper 2>/dev/null || true
+    fi
 fi
 
 echo "All done! 1920x1200 wallpaper, Pywal palette, and 24px cursor successfully applied!"
