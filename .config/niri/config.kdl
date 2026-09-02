@@ -14,7 +14,6 @@ environment {
     QT_STYLE_OVERRIDE "Breeze"
     KDE_FULL_SESSION "true"
     KDE_SESSION_VERSION "6"
-    GTK_THEME "Breeze"
     GTK_USE_PORTAL "1"
     XDG_CURRENT_DESKTOP "niri:KDE"
 }
@@ -174,6 +173,12 @@ layer-rule {
 // Disable solid background rendering under translucent windows
 window-rule {
     draw-border-with-background false
+}
+
+// Inform all tiled windows that they are tiled so terminals (like foot) expand flush without snapping gaps
+window-rule {
+    match is-floating=false
+    tiled-state true
 }
 
 // General apps (active / focused): 100% opacity
