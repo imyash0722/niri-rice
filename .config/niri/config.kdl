@@ -269,6 +269,23 @@ window-rule {
     open-floating true
 }
 
+// FreeCAD: float splash screens, task panels, constraint dialogs, and tools; tile main window
+window-rule {
+    match app-id=r#"(?i).*freecad.*"# title=r#"(?i).*(splash|loading).*"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"(?i).*freecad.*"#
+    exclude title=r#"^FreeCAD.*"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"(?i).*freecad.*"# title=r#"^FreeCAD.*"#
+    default-column-width { proportion 1.0; }
+}
+
 // Foot floating app-ids (batctl)
 
 window-rule {

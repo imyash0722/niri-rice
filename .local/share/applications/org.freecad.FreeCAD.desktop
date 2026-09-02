@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=FreeCAD
+Comment=Feature based Parametric Modeler
+GenericName=CAD Application
+Exec=env QT_QPA_PLATFORM=xcb FreeCAD - --single-instance %F
+Terminal=false
+Type=Application
+Icon=org.freecad.FreeCAD
+Categories=Graphics;Science;Education;Engineering;X-CNC;
+StartupNotify=true
+StartupWMClass=FreeCAD
+MimeType=application/x-extension-fcstd;model/obj;image/vnd.dwg;image/vnd.dxf;model/vnd.collada+xml;application/iges;model/iges;model/step;model/step+zip;model/stl;application/vnd.shp;model/vrml;
