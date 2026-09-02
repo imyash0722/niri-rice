@@ -34,6 +34,7 @@ window#waybar.hidden {
 #memory,
 #temperature,
 #network,
+#bluetooth,
 #pulseaudio,
 #pulseaudio.microphone,
 #backlight,
@@ -131,6 +132,7 @@ window#waybar.hidden {
 #pulseaudio,
 #pulseaudio.microphone,
 #backlight,
+#bluetooth,
 #network {
     padding: 0 4px;
 }
@@ -148,8 +150,14 @@ window#waybar.hidden {
     color: alpha(@text, 0.40);
 }
 
-#network.disconnected {
+#network.disconnected,
+#bluetooth.disabled,
+#bluetooth.off {
     color: alpha(@text, 0.40);
+}
+
+#bluetooth.connected {
+    color: @primary;
 }
 
 /* ===== CUSTOM MODULES ===== */
