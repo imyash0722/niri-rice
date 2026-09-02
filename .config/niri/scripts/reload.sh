@@ -6,12 +6,13 @@ if [ "$XDG_CURRENT_DESKTOP" != "niri" ] && [ -z "$NIRI_SOCKET" ]; then
     exit 1
 fi
 
-# 1. Hot-reload Waybar CSS or launch if not running
-if pgrep -x waybar >/dev/null; then
-    killall -SIGUSR2 waybar 2>/dev/null || true
-else
-    nohup waybar >/dev/null 2>&1 &
-fi
+# 1. Reload Niri config
+niri msg action load-config-file 2>/dev/null || true
+
+# 2. Restart Waybar cleanly to pick up both config and CSS updates
+killall waybar 2>/dev/null || true
+sleep 0.2
+nohup waybar >/dev/null 2>&1 &
 
 # 2. Reload Wallpaper cleanly (via awww)
 WALL_PATH="$(cat "$HOME/.config/niri/themes/active-wallpaper.txt" 2>/dev/null)"
