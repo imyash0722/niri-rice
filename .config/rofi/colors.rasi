@@ -1,8 +1,8 @@
 * {
-    bg0: #111519;
-    bg1: #111519;
-    fg0: #cae5ef;
-    accent-color: #69B4C3;
-    urgent-color: #AE9E5C;
-    border-color: #69B4C3;
+    bg0: #141b1f;
+    bg1: #141b1f;
+    fg0: #d3d7d8;
+    accent-color: #788B99;
+    urgent-color: #8C7A82;
+    border-color: #788B99;
 }

@@ -52,8 +52,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#69B4C3"
-        inactive-color "#111519"
+        active-color "#788B99"
+        inactive-color "#141b1f"
     }
 
     tab-indicator {
@@ -102,8 +102,8 @@ overview {
 // ── Screenshot path (same folder as Sway) ────────────────
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
-// ── Prefer server-side decorations ───────────────────────
-prefer-no-csd
+// ── Window decorations (CSD preserved for floating dialogs, popups, and loading screens)
+// prefer-no-csd
 
 // ── Startup daemons ──────────────────────────────────────
 
@@ -199,8 +199,14 @@ window-rule {
 
 // Dedicated AGY / Antigravity Glass Window: 78% opacity + blur
 window-rule {
-    match title=r#"(?i).*agy.*"#
-    match title=r#"(?i).*antigravity.*"#
+    match title=r#"(?i).*(agy|antigravity).*"#
+    opacity 0.78
+    background-effect {
+        blur true
+    }
+}
+
+window-rule {
     match app-id=r#"(?i).*(agy|antigravity).*"#
     opacity 0.78
     background-effect {
@@ -272,8 +278,7 @@ window-rule {
 
 // KDE Settings popup (kcmshell6 launches modules dynamically)
 window-rule {
-    match app-id=r#"^kcm_"#
-    match app-id="systemsettings"
+    match app-id=r#"^(kcm_|systemsettings)"#
     open-floating true
     default-column-width { proportion 0.5; }
     default-window-height { proportion 0.5; }
@@ -284,6 +289,16 @@ window-rule {
     open-floating true
 }
 
+// Dialogs, popups, loading screens, splash screens, and file pickers
+window-rule {
+    match title=r#"(?i).*(dialog|splash|loading|progress|confirm|preferences|settings|properties|about|open file|save file|choose file|select file|export|import).*"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"(?i).*(portal|polkit|pinentry|kdialog|pavucontrol|blueman|nm-connection).*"#
+    open-floating true
+}
 
 // Zoom meeting sharing indicator
 window-rule {
@@ -291,10 +306,24 @@ window-rule {
     open-floating false
 }
 
-// Rounded corners for everything
+// Rounded corners for tiled windows
 window-rule {
     geometry-corner-radius 6
     clip-to-geometry true
+}
+
+// Floating windows: always 100% solid opacity, unclipped (preserves CSD, menus, tooltips, loading screens), with drop shadow
+window-rule {
+    match is-floating=true
+    clip-to-geometry false
+    opacity 1.0
+    shadow {
+        on
+        softness 25
+        spread 3
+        offset x=0 y=6
+        color "#000000aa"
+    }
 }
 
 // ── Binds ────────────────────────────────────────────────

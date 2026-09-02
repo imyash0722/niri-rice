@@ -1,0 +1,7 @@
+[Unit]
+Description=Sync /mnt/shared partition to server drive
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/pineapple/scripts/sync-shared-partition.sh

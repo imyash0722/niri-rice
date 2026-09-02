@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodic Low-Impact Sync of /mnt/shared to server drive
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=15min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
