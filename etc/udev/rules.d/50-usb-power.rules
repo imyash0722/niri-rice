@@ -1,0 +1,5 @@
+# Disable USB autosuspend for Logitech and Razer wireless receivers and HID devices
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="046d", TEST=="power/control", ATTR{power/control}="on"
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1532", TEST=="power/control", ATTR{power/control}="on"
+ACTION=="add", SUBSYSTEM=="usb", ENV{ID_INPUT_KEYBOARD}=="1", TEST=="power/control", ATTR{power/control}="on"
+ACTION=="add", SUBSYSTEM=="usb", ENV{ID_INPUT_MOUSE}=="1", TEST=="power/control", ATTR{power/control}="on"

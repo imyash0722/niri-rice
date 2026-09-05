@@ -1,8 +1,8 @@
 [Default Applications]
 x-scheme-handler/discord=vesktop.desktop
 x-scheme-handler/terminal=foot.desktop
-x-scheme-handler/http=firefox-developer-edition.desktop
-x-scheme-handler/https=firefox-developer-edition.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
 inode/directory=org.kde.dolphin.desktop
 
 text/plain=typora-free-with-plugin.desktop
@@ -35,3 +35,4 @@ application/x-xz=org.kde.ark.desktop
 application/x-7z-compressed=org.kde.ark.desktop
 application/x-rar=org.kde.ark.desktop
 application/gzip=org.kde.ark.desktop
+text/html=google-chrome.desktop

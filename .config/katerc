@@ -11,6 +11,7 @@ Show Url Nav Bar=true
 [MainWindow]
 1920x1200 screen: Height=1150
 1920x1200 screen: Width=950
+1920x1200 screen: Window-Maximized=true
 2 screens: Height=1279
 2 screens: Width=1499
 

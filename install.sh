@@ -87,9 +87,21 @@ $AUR_HELPER -Syu --needed --noconfirm \
     plasma6-wallpapers-smart-video-wallpaper-reborn \
     pavucontrol wireplumber pipewire-alsa pipewire-pulse \
     openssh ufw rsync wget unzip unrar \
-    xdg-user-dirs xdg-desktop-portal-gtk \
     vscodium nodejs npm python python-pynvim \
-    libinput-tools || echo "  [!] Some packages failed to install — continuing anyway..."
+    keyd libinput-tools || echo "  [!] Some packages failed to install — continuing anyway..."
+
+# ---------------------------------------------------------------------------
+# 1.1 Universal input & USB power management (keyd & udev)
+# ---------------------------------------------------------------------------
+echo -e "\n[1.1/6] Configuring universal input daemon (keyd) and USB power rules..."
+if [ -d "$REPO_DIR/etc" ]; then
+    sudo mkdir -p /etc/keyd /etc/udev/rules.d
+    sudo cp -f "$REPO_DIR/etc/keyd/default.conf" /etc/keyd/default.conf 2>/dev/null || true
+    sudo cp -f "$REPO_DIR/etc/udev/rules.d/50-usb-power.rules" /etc/udev/rules.d/50-usb-power.rules 2>/dev/null || true
+    sudo udevadm control --reload 2>/dev/null || true
+    sudo udevadm trigger --subsystem-match=usb 2>/dev/null || true
+    sudo systemctl enable --now keyd 2>/dev/null || true
+fi
 
 # ---------------------------------------------------------------------------
 # 1.5. Clone qylock themes
