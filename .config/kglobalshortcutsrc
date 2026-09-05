@@ -280,6 +280,18 @@ toggle do not disturb=none,none,Toggle do not disturb
 [services][org.kde.konsole.desktop]
 _launch=Meta+Return
 
+[services][org.kde.kcalc.desktop]
+_k_friendly_name=KCalc
+_launch=Calculator\tLaunch (1),Calculator\tLaunch (1),Launch KCalc
+
+[services][org.kde.dolphin.desktop]
+_k_friendly_name=Dolphin
+_launch=Explorer\tMeta+E,Explorer\tMeta+E,Launch Dolphin
+
+[services][org.kde.krunner.desktop]
+_k_friendly_name=KRunner
+_launch=Search\tAlt+Space\tAlt+F2\tMeta+Space,Search\tAlt+Space\tAlt+F2\tMeta+Space,KRunner
+
 [services][org.kde.plasma-systemmonitor.desktop]
 _launch=none
 
