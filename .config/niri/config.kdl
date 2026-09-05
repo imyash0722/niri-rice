@@ -175,25 +175,24 @@ window-rule {
     draw-border-with-background false
 }
 
-// Inform all tiled windows that they are tiled so terminals (like foot) expand flush without snapping gaps
+// 1. Tiled State (Tells tiled clients like Foot to expand flush without cell-snapping gaps)
 window-rule {
     match is-floating=false
     tiled-state true
 }
 
-// General apps (active / focused): 100% opacity
+// 2. Focus Opacity
 window-rule {
     match is-focused=true
     opacity 1.0
 }
 
-// General apps (inactive / unfocused): 99% opacity
 window-rule {
     match is-focused=false
     opacity 0.99
 }
 
-// Terminal (consistent frosted glass): blur true without harsh opacity jumps
+// 3. Terminal & Frosted Glass Styling
 window-rule {
     match app-id=r#"^foot.*"#
     opacity 1.0
@@ -202,7 +201,6 @@ window-rule {
     }
 }
 
-// Dedicated AGY / Antigravity Glass Window: 78% opacity + blur
 window-rule {
     match title=r#"(?i).*(agy|antigravity).*"#
     opacity 0.78
@@ -219,62 +217,42 @@ window-rule {
     }
 }
 
-// Foot floating window
+// 4. Universal Dialogs, Modals, Splash & Loading Screens (Automatic Floating)
 window-rule {
-    match app-id="foot.floating"
+    match title=r#"(?i).*(dialog|splash|loading|progress|confirm|preferences|settings|properties|about|open file|save file|choose file|select file|export|import).*"#
     open-floating true
 }
 
-// Firefox Picture-in-Picture
+// 5. Universal System Utilities, Auth Prompts & Desktop Portals (Automatic Floating)
 window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id=r#"(?i).*(portal|polkit|pinentry|kdialog|pavucontrol|blueman|nm-connection|kcalc|qalculate|tasks|dialect).*"#
     open-floating true
 }
 
-// Firefox Developer Edition PiP
+// 6. Browser Picture-in-Picture & Password Managers
 window-rule {
-    match app-id=r#"firefox-developer-edition$"# title="^Picture-in-Picture$"
+    match app-id=r#"firefox.*"# title="^Picture-in-Picture$"
     open-floating true
 }
 
-// Bitwarden popup
 window-rule {
     match app-id="firefox" title="Bitwarden"
     open-floating true
 }
 
-// Floating utility windows
+// 7. Specific Application Overrides (Foot floating tools, KDE Settings, FreeCAD, Zoom)
 window-rule {
-    match app-id="blueman-manager"
+    match app-id=r#"^foot\.(floating|batctl|notes).*"#
     open-floating true
 }
 
 window-rule {
-    match app-id="org.pulseaudio.pavucontrol"
+    match app-id=r#"^(kcm_|systemsettings)"#
     open-floating true
+    default-column-width { proportion 0.5; }
+    default-window-height { proportion 0.5; }
 }
 
-window-rule {
-    match app-id="kcalc"
-    open-floating true
-}
-
-window-rule {
-    match app-id="qalculate-gtk"
-    open-floating true
-}
-
-window-rule {
-    match app-id=r#"^io\.github\.tasks$"#
-    open-floating true
-}
-
-window-rule {
-    match app-id=r#"^com\.github\.gi_lom\.dialect$"#
-    open-floating true
-}
-
-// FreeCAD: float splash screens, task panels, constraint dialogs, and tools; tile main window
 window-rule {
     match app-id=r#"(?i).*freecad.*"# title=r#"(?i).*(splash|loading).*"#
     open-floating true
@@ -291,50 +269,18 @@ window-rule {
     default-column-width { proportion 1.0; }
 }
 
-// Foot floating app-ids (batctl)
-
-window-rule {
-    match app-id="foot.batctl"
-    open-floating true
-}
-
-// KDE Settings popup (kcmshell6 launches modules dynamically)
-window-rule {
-    match app-id=r#"^(kcm_|systemsettings)"#
-    open-floating true
-    default-column-width { proportion 0.5; }
-    default-window-height { proportion 0.5; }
-}
-
-window-rule {
-    match app-id="foot.floating.notes"
-    open-floating true
-}
-
-// Dialogs, popups, loading screens, splash screens, and file pickers
-window-rule {
-    match title=r#"(?i).*(dialog|splash|loading|progress|confirm|preferences|settings|properties|about|open file|save file|choose file|select file|export|import).*"#
-    open-floating true
-}
-
-window-rule {
-    match app-id=r#"(?i).*(portal|polkit|pinentry|kdialog|pavucontrol|blueman|nm-connection).*"#
-    open-floating true
-}
-
-// Zoom meeting sharing indicator
 window-rule {
     match title=r#"^Zoom Meeting"#
     open-floating false
 }
 
-// Rounded corners for tiled windows
+// 8. Rounded Corners (Tiled Windows)
 window-rule {
     geometry-corner-radius 6
     clip-to-geometry true
 }
 
-// Floating windows: always 100% solid opacity, unclipped (preserves CSD, menus, tooltips, loading screens), with drop shadow
+// 9. Floating Windows (100% Solid Opacity, Unclipped for CSD/tooltips, Drop Shadow)
 window-rule {
     match is-floating=true
     clip-to-geometry false
