@@ -119,12 +119,14 @@ spawn-at-startup "awww-daemon"
 // Clipboard history (cliphist)
 spawn-at-startup "sh" "-c" "pkill wl-paste; wl-paste --type text --watch cliphist store & wl-paste --type image --watch cliphist store &"
 
-// Notifications
+// Notifications (Mako)
 spawn-at-startup "mako"
 
+// Polkit Authentication Agent (GUI password prompts for elevated privileges)
+spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
 
 // KDE Wallet (keyring)
-spawn-at-startup "kwalletd5"
+spawn-at-startup "kwalletd6"
 
 // Monitor auto-scaling (4K=1.5, 2K=1.25, 1080p=1.0)
 spawn-at-startup "bash" "-c" "sleep 2 && ~/.config/niri/scripts/monitor-setup.sh"

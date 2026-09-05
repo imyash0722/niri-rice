@@ -8,7 +8,7 @@ send_notification() {
 	else
 		BODY=$(cal "$1" | tail -n7)
 	fi
-	dunstify -h string:x-canonical-private-synchronous:calendar \
+	notify-send -h string:x-canonical-private-synchronous:calendar \
 		"$HEAD" "$BODY" -u NORMAL -a calendar
 }
 

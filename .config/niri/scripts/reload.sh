@@ -12,12 +12,12 @@ niri msg action load-config-file 2>/dev/null || true
 # 2. Restart Waybar cleanly to pick up both config and CSS updates
 killall waybar 2>/dev/null || true
 sleep 0.2
-nohup waybar >/dev/null 2>&1 &
+nohup waybar >/dev/null 2>&1 & disown
 
-# 2. Reload Wallpaper cleanly (via awww)
+# 3. Reload Wallpaper cleanly (via awww)
 WALL_PATH="$(cat "$HOME/.config/niri/themes/active-wallpaper.txt" 2>/dev/null)"
 if [ -n "$WALL_PATH" ] && [ -f "$WALL_PATH" ]; then
-    pgrep -x awww-daemon >/dev/null || nohup awww-daemon >/dev/null 2>&1 &
+    pgrep -x awww-daemon >/dev/null || (nohup awww-daemon >/dev/null 2>&1 & disown)
     awww img "$WALL_PATH" \
         --transition-type center \
         --transition-pos center \

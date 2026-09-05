@@ -12,10 +12,10 @@ set -euo pipefail
 
 RUNTIME="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
 
-# Wait for Niri socket (includes PID in name: niri.wayland-1.<pid>.sock)
+# Wait for Niri socket
 for i in $(seq 1 20); do
-    NIRI_SOCK="$(ls "$RUNTIME"/niri.wayland-1.*.sock 2>/dev/null | head -1)"
-    [[ -n "$NIRI_SOCK" ]] && break
+    NIRI_SOCK="${NIRI_SOCKET:-$(ls "$RUNTIME"/niri.*.sock 2>/dev/null | head -1)}"
+    [[ -n "$NIRI_SOCK" && -S "$NIRI_SOCK" ]] && break
     sleep 0.5
 done
 
@@ -23,6 +23,7 @@ if [[ -z "${NIRI_SOCK:-}" ]]; then
     echo "monitor-setup: Niri socket not found, giving up." >&2
     exit 1
 fi
+export NIRI_SOCKET="$NIRI_SOCK"
 
 # Dump outputs to temp file (avoids stdin conflict with embedded Python)
 TMPFILE="$(mktemp /tmp/niri-outputs.XXXXXX.json)"

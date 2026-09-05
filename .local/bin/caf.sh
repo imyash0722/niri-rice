@@ -8,8 +8,6 @@ toggle() {
         # Turn OFF Caffeine -> Restore normal sleep and TLP balanced/bat
         rm -f "$FLAG"
         pkill -f "systemd-inhibit.*caffeine" 2>/dev/null || true
-        pkill -f "sleep.sh" 2>/dev/null || true
-        nohup "$HOME/.local/bin/sleep.sh" >/dev/null 2>&1 &
         
         # TLP / power profile to balanced/bat
         powerprofilesctl set balanced 2>/dev/null || true
@@ -21,8 +19,6 @@ toggle() {
     else
         # Turn ON Caffeine -> Disable sleep & idle, set TLP performance/ac
         touch "$FLAG"
-        pkill -f "sleep.sh" 2>/dev/null || true
-        pkill -x swayidle 2>/dev/null || true
         
         # Inhibit systemd idle/sleep
         nohup systemd-inhibit --what=idle:sleep --who="Caffeine" --why="User requested no sleep" sleep infinity >/dev/null 2>&1 &

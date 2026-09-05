@@ -1,35 +1,13 @@
 #!/usr/bin/env bash
-desc=$(curl -s -m 5 "wttr.in/semarang?format=%C")
-temp=$(curl -s -m 5 "wttr.in/semarang?format=%t" | sed 's/+//')
+# ~/.local/bin/weather.sh — Lightweight weather module for Waybar
 
-ICON_DIR="$HOME/.icons/icon_scripts/dunst/weather/"  
+# Fetch weather (format: emoji condition + temp, e.g. "⛅ +28°C")
+WEATHER=$(curl -s --connect-timeout 2 "https://wttr.in/?format=%c+%t" 2>/dev/null | tr -s ' ' | sed 's/^[ \t]*//;s/[ \t]*$//')
 
-
-case "${desc,,}" in
-    *sun*|*clear*)
-        icon_text="󰖙"
-        svg_icon="$ICON_DIR/sun.svg"
-        ;;
-    *cloud*)
-        icon_text="󰖐"
-        svg_icon="$ICON_DIR/cloudy.svg"
-        ;;
-    *rain*|*drizzle*)
-        icon_text="󰖗"
-        svg_icon="$ICON_DIR/rainy.svg"
-        ;;
-    *thunder*)
-        icon_text="󰖓"
-        svg_icon="$ICON_DIR/thunder.svg"
-        ;;
-    *fog*|*mist*)
-        icon_text="󰖑"
-        svg_icon="$ICON_DIR/fog.svg"
-        ;;
-    *)
-        icon_text="󰖕"
-        svg_icon="$ICON_DIR/edgecase.svg"
-        ;;
-esac
-
-dunstify -a weather -i "$svg_icon" "$icon_text $temp" "$desc"
+if [ -n "$WEATHER" ] && [[ ! "$WEATHER" =~ "Unknown" ]] && [[ ! "$WEATHER" =~ "html" ]] && [[ ! "$WEATHER" =~ "Error" ]]; then
+    # Output Waybar JSON format
+    printf '{"text": "%s", "tooltip": "Weather: %s\\nSource: wttr.in", "class": "weather"}\n' "$WEATHER" "$WEATHER"
+else
+    # Fallback when offline or timeout
+    printf '{"text": "⛅ --°C", "tooltip": "Weather: Offline / Waiting for connection", "class": "weather-offline"}\n'
+fi
