@@ -104,6 +104,15 @@ if [ -d "$REPO_DIR/etc" ]; then
 fi
 
 # ---------------------------------------------------------------------------
+# 1.2 SSH, Tailscale & Remote Access
+# ---------------------------------------------------------------------------
+echo -e "\n[1.2/6] Configuring SSH, Tailscale, and firewall..."
+sudo systemctl enable --now sshd tailscaled ufw 2>/dev/null || true
+sudo ufw allow in on tailscale0 to any port 22 2>/dev/null || true
+sudo ufw --force enable 2>/dev/null || true
+sudo tailscale set --ssh 2>/dev/null || true
+
+# ---------------------------------------------------------------------------
 # 1.5. Clone qylock themes
 # ---------------------------------------------------------------------------
 echo -e "\n[1.5/5] Cloning qylock lockscreens/SDDM themes..."
