@@ -125,8 +125,9 @@ spawn-at-startup "mako"
 // Polkit Authentication Agent (GUI password prompts for elevated privileges)
 spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
 
-// KDE Wallet (keyring)
+// KDE Wallet (keyring) & SSH Agent
 spawn-at-startup "kwalletd6"
+spawn-at-startup "sh" "-c" "pgrep -u $USER -x ssh-agent >/dev/null || ssh-agent -a \"${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/ssh-agent.socket\""
 
 // Monitor auto-scaling (4K=1.5, 2K=1.25, 1080p=1.0)
 spawn-at-startup "bash" "-c" "sleep 2 && ~/.config/niri/scripts/monitor-setup.sh"
@@ -352,8 +353,9 @@ binds {
     // Bluetooth
     Mod+Shift+B { spawn "blueman-manager"; }
 
-    // Network (nmtui)
+    // Network (nmtui) & SSH Manager
     Mod+Shift+W { spawn-sh "foot --app-id=foot.nmtui --window-size-chars=81x34 -e nmtui"; }
+    Mod+Alt+S   { spawn "/home/pineapple/.local/bin/rofi-ssh"; }
 
     // F12 & Keypad Special Keys
     XF86Calculator       { spawn "kcalc"; }

@@ -221,3 +221,11 @@ exists fastfetch && fastfetch
 # Added by Antigravity CLI installer
 export PATH="/home/pineapple/.local/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+
+# SSH Management & Agent
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket"
+export SSH_ASKPASS="/usr/bin/ksshaskpass"
+alias s="ssh"
+alias ssh-keys="ssh-add -l"
+alias ssh-flush="ssh-add -D"
+alias ssh-menu="~/.local/bin/rofi-ssh"

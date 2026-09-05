@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# ~/.local/bin/rofi-ssh — Interactive SSH Session Launcher
+
+rofi -show ssh -terminal foot -ssh-command "foot --app-id=foot.ssh -T '{host}' -e ssh {host}" -display-ssh "󰢹 SSH"
