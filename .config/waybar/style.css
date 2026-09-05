@@ -32,7 +32,6 @@ window#waybar.hidden {
 #clock,
 #cpu,
 #memory,
-#temperature,
 #network,
 #bluetooth,
 #pulseaudio,
@@ -135,14 +134,6 @@ window#waybar.hidden {
 #bluetooth,
 #network {
     padding: 0 4px;
-}
-
-#temperature {
-    padding: 0 4px;
-}
-
-#temperature.critical {
-    animation: blink 1s step-end infinite;
 }
 
 #pulseaudio.muted,
