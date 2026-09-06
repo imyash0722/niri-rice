@@ -1,5 +1,6 @@
 include "./themes/active-cursor.kdl"
 include "./themes/active-animations.kdl"
+include "./themes/active-ssh.kdl"
 // ─────────────────────────────────────────────────────────
 //  niri config — pineapple rice
 //  KDL format: https://kdl.dev

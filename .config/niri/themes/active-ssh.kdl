@@ -1,0 +1,16 @@
+// SSH Terminal Window Styling (Dynamic Pywal)
+window-rule {
+    match app-id=r#"^foot\.ssh.*"#
+    border {
+        on
+        width 2
+        active-color "#3E827A"
+        inactive-color "#172c28"
+    }
+    shadow {
+        on
+        softness 30
+        spread 4
+        offset x=0 y=6
+    }
+}
