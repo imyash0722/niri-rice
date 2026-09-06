@@ -98,6 +98,9 @@ if [ -d "$REPO_DIR/etc" ]; then
     sudo mkdir -p /etc/keyd /etc/udev/rules.d
     sudo cp -f "$REPO_DIR/etc/keyd/default.conf" /etc/keyd/default.conf 2>/dev/null || true
     sudo cp -f "$REPO_DIR/etc/udev/rules.d/50-usb-power.rules" /etc/udev/rules.d/50-usb-power.rules 2>/dev/null || true
+    if [ -d "$REPO_DIR/etc/pam.d" ]; then
+        sudo cp -f "$REPO_DIR/etc/pam.d/"* /etc/pam.d/ 2>/dev/null || true
+    fi
     sudo udevadm control --reload 2>/dev/null || true
     sudo udevadm trigger --subsystem-match=usb 2>/dev/null || true
     sudo systemctl enable --now keyd 2>/dev/null || true
