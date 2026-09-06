@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-ThinkBook Battery & Power Manager (Rofi Applet & CLI)
-Features:
-  - Percentage with visual gauge
-  - Estimated time to discharge / charge
-  - Battery health (energy_full vs energy_design) and cycle count
-  - ThinkBook Conservation Mode switcher (0-60% battery health mode vs 0-100% lasting mode)
-  - Platform power profile switcher
+ThinkBook Battery & Power Manager (Rofi Script Applet & CLI)
+Supports:
+  - In-place live updating (window does NOT close when toggling options)
+  - ThinkBook Conservation Mode (0-60% lifespan vs 0-100% lasting mode)
+  - ACPI platform profile switching (Performance / Balanced / Low-power)
+  - Live battery stats, percentage gauge, time remaining, health, cycles
+  - Fast CLI options (--status, --toggle, --conservation, --full)
 """
 
 import os
@@ -19,7 +19,10 @@ CONSERVATION_PATHS = [
     "/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode",
     "/sys/devices/pci0000:00/0000:00:14.3/PNP0C09:00/VPC2004:00/conservation_mode",
 ]
-PLATFORM_PROFILE_PATH = "/sys/firmware/acpi/platform_profile"
+PLATFORM_PROFILE_PATHS = [
+    "/sys/firmware/acpi/platform_profile",
+    "/sys/class/platform-profile/platform-profile-0/profile",
+]
 
 def read_sysfs(path, default=""):
     if os.path.exists(path):
@@ -29,6 +32,14 @@ def read_sysfs(path, default=""):
         except Exception:
             pass
     return default
+
+def write_sysfs(path, val):
+    try:
+        with open(path, "w") as f:
+            f.write(str(val))
+        return True
+    except Exception:
+        return False
 
 def get_conservation_path():
     for p in CONSERVATION_PATHS:
@@ -46,21 +57,62 @@ def get_conservation_mode():
 def set_conservation_mode(mode: int):
     p = get_conservation_path()
     if not p:
-        notify("Battery Error", "ThinkBook conservation mode sysfs not found.", urgency="critical")
+        notify("Battery Error", "Conservation mode sysfs not found.", icon="dialog-error")
         return False
-    
     val = str(1 if mode else 0)
-    try:
-        with open(p, "w") as f:
-            f.write(val)
+    if write_sysfs(p, val):
         return True
-    except PermissionError:
-        # Fallback to sudo if permissions somehow lost
-        res = subprocess.run(["sudo", "sh", "-c", f"echo {val} > '{p}'"], capture_output=True)
-        return res.returncode == 0
-    except Exception as e:
-        notify("Battery Error", f"Failed to set mode: {e}", urgency="critical")
-        return False
+    # Fallback to pkexec/sudo if needed
+    res = subprocess.run(["sudo", "-n", "sh", "-c", f"echo {val} > '{p}'"], capture_output=True)
+    return res.returncode == 0
+
+def get_platform_profile():
+    for p in PLATFORM_PROFILE_PATHS:
+        val = read_sysfs(p)
+        if val:
+            return val
+    return "balanced"
+
+def set_platform_profile(profile: str):
+    success = False
+    for p in PLATFORM_PROFILE_PATHS:
+        if os.path.exists(p):
+            if write_sysfs(p, profile):
+                success = True
+                break
+    if not success:
+        # Try sudo without password
+        for p in PLATFORM_PROFILE_PATHS:
+            res = subprocess.run(["sudo", "-n", "sh", "-c", f"echo {profile} > '{p}'"], capture_output=True)
+            if res.returncode == 0:
+                success = True
+                break
+    if success:
+        subprocess.run(["pkill", "-RTMIN+2", "waybar"], check=False)
+    return success
+
+def cycle_platform_profile():
+    curr = get_platform_profile()
+    choices = ["low-power", "balanced", "performance"]
+    # Check if system provides specific choices
+    choices_str = read_sysfs("/sys/firmware/acpi/platform_profile_choices")
+    if choices_str:
+        avail = choices_str.split()
+        if avail:
+            choices = avail
+    
+    try:
+        idx = choices.index(curr)
+        nxt = choices[(idx + 1) % len(choices)]
+    except ValueError:
+        nxt = "balanced"
+
+    if set_platform_profile(nxt):
+        notify("Power Profile Changed", f"Switched to: {nxt.capitalize()}", icon="power-profile")
+        return nxt
+    else:
+        notify("Power Profile Error", "Failed to switch power profile (permission required)", icon="dialog-error")
+        return curr
 
 def notify(title, message, icon="battery"):
     try:
@@ -81,7 +133,6 @@ def get_battery_stats():
     model = read_sysfs(os.path.join(BAT_DIR, "model_name"), "ThinkBook Battery")
     vendor = read_sysfs(os.path.join(BAT_DIR, "manufacturer"), "Lenovo")
 
-    # Fallback to charge_* if energy_* not found
     if energy_now == 0 and energy_full == 0:
         charge_now = int(read_sysfs(os.path.join(BAT_DIR, "charge_now"), "0") or 0)
         charge_full = int(read_sysfs(os.path.join(BAT_DIR, "charge_full"), "0") or 0)
@@ -98,9 +149,8 @@ def get_battery_stats():
     energy_design_wh = energy_design / 1e6
     power_w = power_now / 1e6
 
-    # Calculate time remaining
-    time_str = "Calculating..."
     cons_mode = get_conservation_mode()
+    time_str = "Calculating..."
 
     if status == "Discharging":
         if power_now > 0:
@@ -129,7 +179,6 @@ def get_battery_stats():
         else:
             time_str = "Plugged In (AC Powered)"
 
-    # Battery icon selection
     if status == "Charging":
         icon = "󰂄"
     elif capacity >= 95:
@@ -153,11 +202,9 @@ def get_battery_stats():
     else:
         icon = "󰁺"
 
-    # Gauge string
     filled = int(round(capacity / 10))
     gauge = "█" * filled + "░" * (10 - filled)
-
-    profile = read_sysfs(PLATFORM_PROFILE_PATH, "balanced")
+    profile = get_platform_profile()
 
     return {
         "capacity": capacity,
@@ -198,95 +245,94 @@ def show_detailed_specs(s):
         f"Voltage: {s['voltage_v']:.2f} V\n"
         f"Cycle Count: {s['cycles']}\n"
         f"Power Draw: {s['power_w']:.2f} W\n"
-        f"Conservation Mode: {'ON (60% limit)' if s['cons_mode'] else 'OFF (100% limit)'}"
+        f"Conservation Mode: {'ON (60% limit)' if s['cons_mode'] else 'OFF (100% limit)'}\n"
+        f"Power Profile: {s['profile'].capitalize()}"
     )
     notify(f"Battery Hardware Specs ({s['capacity']}%)", details, icon="battery")
 
-def cycle_profile():
-    curr = read_sysfs(PLATFORM_PROFILE_PATH, "balanced")
-    mapping = {"performance": "balanced", "balanced": "low-power", "low-power": "performance"}
-    nxt = mapping.get(curr, "balanced")
-    try:
-        with open(PLATFORM_PROFILE_PATH, "w") as f:
-            f.write(nxt)
-    except Exception:
-        subprocess.run(["sudo", "sh", "-c", f"echo {nxt} > {PLATFORM_PROFILE_PATH}"], check=False)
-    subprocess.run(["pkill", "-RTMIN+2", "waybar"], check=False)
-    notify("Power Profile Changed", f"Profile set to: {nxt.capitalize()}", icon="power-profile")
+def render_script_mode_entries(s):
+    is_cons = s["cons_mode"] == 1
+    if is_cons:
+        mode_label = "󱐌 Mode:  0-60% Lifespan Mode (Conservation Active)"
+        toggle_action = "󱤅 Switch to 0-100% Lasting Mode   (Full charge for travel)"
+    else:
+        mode_label = "󱤅 Mode:  0-100% Lasting Mode (Full Capacity Active)"
+        toggle_action = "󱐌 Switch to 0-60% Lifespan Mode   (Caps at 60% for desk use)"
 
-def run_rofi_applet():
-    while True:
-        s = get_battery_stats()
-        is_cons = s["cons_mode"] == 1
+    power_info = f" ({s['power_w']:.1f}W)" if s['power_w'] > 0 else ""
 
-        if is_cons:
-            mode_label = "󱐌 Mode:  0-60% Lifespan Mode (Conservation Active)"
-            toggle_action = "󱤅 Switch to 0-100% Lasting Mode   (Full charge for travel)"
-        else:
-            mode_label = "󱤅 Mode:  0-100% Lasting Mode (Full Capacity Active)"
-            toggle_action = "󱐌 Switch to 0-60% Lifespan Mode   (Caps at 60% for desk use)"
+    # Header controls for Rofi script mode
+    print("\0prompt\x1f󰁹 Battery")
+    print("\0keep-selection\x1ftrue")
+    print("\0no-custom\x1ftrue")
 
-        power_info = f" ({s['power_w']:.1f}W)" if s['power_w'] > 0 else ""
-        
-        items = [
-            f"{s['icon']} Level:   {s['capacity']}%  [{s['gauge']}]",
-            f"󱐋 State:   {s['status']}{power_info}",
-            f"󰔐 Time:    {s['time_str']}",
-            f" Health:  {s['health']:.1f}%  ({s['energy_full_wh']:.1f}/{s['energy_design_wh']:.1f} Wh · {s['cycles']} cycles)",
-            mode_label,
-            "───────────────────────────────────────────────",
-            f"󰚥 {toggle_action}",
-            f"󰈐 Power Profile: [{s['profile'].capitalize()}] (Click to switch)",
-            "󰛲 Detailed Specs & Hardware Info",
-        ]
+    items = [
+        f"{s['icon']} Level:   {s['capacity']}%  [{s['gauge']}]",
+        f"󱐋 State:   {s['status']}{power_info}",
+        f"󰔐 Time:    {s['time_str']}",
+        f" Health:  {s['health']:.1f}%  ({s['energy_full_wh']:.1f}/{s['energy_design_wh']:.1f} Wh · {s['cycles']} cycles)",
+        mode_label,
+        "───────────────────────────────────────────────",
+        f"󰚥 {toggle_action}",
+        f"󰈐 Power Profile: [{s['profile'].capitalize()}]  (Click to cycle)",
+        "󰛲 Detailed Specs & Hardware Info",
+        "󰅖 Close Window",
+    ]
+    for item in items:
+        print(item)
 
-        menu_input = "\n".join(items)
-        rofi_cmd = [
-            "rofi",
-            "-dmenu",
-            "-i",
-            "-p", "󰁹 Battery",
-            "-theme-str",
-            "window { width: 560px; } listview { lines: 9; }",
-            "-format", "s"
-        ]
+def handle_rofi_script_mode():
+    retv = os.environ.get("ROFI_RETV", "0")
+    arg = sys.argv[1] if len(sys.argv) > 1 else ""
 
-        proc = subprocess.run(rofi_cmd, input=menu_input, text=True, capture_output=True)
-        choice = proc.stdout.strip()
-
-        if proc.returncode != 0 or not choice:
-            break
-
-        if "Switch to 0-60% Lifespan Mode" in choice:
+    if retv != "0" and arg:
+        if "Close Window" in arg:
+            sys.exit(0)
+        elif "Switch to 0-60% Lifespan Mode" in arg:
             if set_conservation_mode(1):
                 notify(
                     "ThinkBook Battery: Conservation Mode",
                     "Charging capped at 60% to protect battery health during desk use.",
                     icon="battery-charging"
                 )
-        elif "Switch to 0-100% Lasting Mode" in choice:
+        elif "Switch to 0-100% Lasting Mode" in arg:
             if set_conservation_mode(0):
                 notify(
                     "ThinkBook Battery: Full Capacity Mode",
                     "Charging unlocked up to 100% for maximum on-the-go runtime.",
                     icon="battery-full"
                 )
-        elif "Power Profile:" in choice:
-            cycle_profile()
-        elif "Detailed Specs" in choice or "Health:" in choice or "Level:" in choice:
-            show_detailed_specs(s)
-        elif "Refresh" in choice:
-            continue
-        else:
-            # User clicked informational line, show specs
+        elif "Power Profile:" in arg:
+            cycle_platform_profile()
+        elif "Detailed Specs" in arg or "Health:" in arg or "Level:" in arg:
+            s = get_battery_stats()
             show_detailed_specs(s)
 
+    s = get_battery_stats()
+    render_script_mode_entries(s)
+
+def launch_rofi_gui():
+    script_path = os.path.abspath(__file__)
+    cmd = [
+        "rofi",
+        "-show", "battery",
+        "-modes", f"battery:{script_path}",
+        "-theme-str", "window { width: 580px; location: center; anchor: center; } listview { lines: 10; } entry { enabled: false; }"
+    ]
+    subprocess.run(cmd)
+
 def main():
+    # If called by Rofi in script mode
+    if "ROFI_RETV" in os.environ or (len(sys.argv) > 1 and not sys.argv[1].startswith("--")):
+        handle_rofi_script_mode()
+        return
+
     parser = argparse.ArgumentParser(description="ThinkBook Battery Manager & Rofi Applet")
     parser.add_argument("--status", action="store_true", help="Print battery status and exit")
     parser.add_argument("--toggle", action="store_true", help="Toggle between 0-60%% and 0-100%% modes")
     parser.add_argument("--conservation", action="store_true", help="Set 0-60%% conservation mode")
     parser.add_argument("--full", action="store_true", help="Set 0-100%% full capacity mode")
+    parser.add_argument("--cycle-profile", action="store_true", help="Cycle ACPI power profile")
 
     args = parser.parse_args()
 
@@ -310,8 +356,10 @@ def main():
         set_conservation_mode(0)
         notify("ThinkBook Battery", "Full Capacity Mode Activated (100% Cap)", icon="battery-full")
         print("Conservation Mode: DISABLED (0-100% Runtime)")
+    elif args.cycle_profile:
+        cycle_platform_profile()
     else:
-        run_rofi_applet()
+        launch_rofi_gui()
 
 if __name__ == "__main__":
     main()
