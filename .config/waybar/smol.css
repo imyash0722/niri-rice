@@ -37,7 +37,6 @@ window#waybar.hidden {
 #pulseaudio.microphone,
 #backlight,
 #mpris,
-#custom-weather,
 #custom-spotify,
 #custom-steam {
     padding: 0 2px;
@@ -183,7 +182,6 @@ window#waybar.hidden {
 }
 
 
-#custom-weather {
     background-color: alpha(@secondary, 0.10);
     border-radius: 6px;
     margin: 4px 0;

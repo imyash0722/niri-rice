@@ -131,7 +131,6 @@
         "tooltip-format": "{source_desc} | {source_volume}%"
     },
 
-    "custom/weather": {
         "format": "{}°C",
         "tooltip": true,
         "interval": 5400,

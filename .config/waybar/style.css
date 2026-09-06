@@ -40,7 +40,6 @@ window#waybar.hidden {
 #mpris,
 #custom-vesktop,
 #custom-spotify,
-#custom-weather,
 #custom-steam {
     padding: 0 2px;
     color: @text;
@@ -48,7 +47,6 @@ window#waybar.hidden {
 }
 
 #custom-spotify,
-#custom-weather,
 #custom-steam {
     padding: 0 4px;
 }
@@ -162,8 +160,7 @@ window#waybar.hidden {
 }
 
 /* ===== CLOCK & DATE (TRANSPARENT FLOATING) ===== */
-#clock,
-#custom-weather {
+#clock {
     background-color: transparent;
     padding: 0 8px;
     margin: 0;

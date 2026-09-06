@@ -14,7 +14,6 @@
     ],
 
     "modules-center": [
-        "custom/weather",
         "clock"
     ],
 
@@ -134,14 +133,6 @@
         "on-scroll-up": "pactl set-source-volume @DEFAULT_SOURCE@ +5%",
         "on-scroll-down": "pactl set-source-volume @DEFAULT_SOURCE@ -5%",
         "tooltip-format": "{source_desc} | {source_volume}%"
-    },
-
-    "custom/weather": {
-        "format": "{}",
-        "tooltip": true,
-        "interval": 1800,
-        "exec": "~/.local/bin/weather.sh",
-        "return-type": "json"
     },
 
     "group/cpu": {
