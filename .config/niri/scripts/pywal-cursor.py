@@ -351,7 +351,7 @@ def update_all_desktop_colors(target_color=None):
         bg_hex = bg.lstrip("#")
         fg_hex = fg.lstrip("#")
         foot_ini_content = f"""[colors-dark]
-alpha=0.84
+alpha=0.95
 background={bg_hex}
 foreground={fg_hex}
 
@@ -452,6 +452,15 @@ padding=12
 
         # 10. Sync environment to D-Bus and systemd
         subprocess.run(["dbus-update-activation-environment", "--systemd", "--all"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        # 11. Broadcast colorscheme reload to active Neovim instances
+        import glob
+        runtime_dir = os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")
+        for sock in glob.glob(f"{runtime_dir}/nvim*"):
+            try:
+                subprocess.run(["nvim", "--server", sock, "--remote-send", "<Esc>:colorscheme neopywal<CR>"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except Exception:
+                pass
 
     except Exception as e:
         print(f"Warning: Could not update all desktop colors: {e}", file=sys.stderr)

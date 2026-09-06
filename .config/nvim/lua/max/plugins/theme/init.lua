@@ -1,1 +1,2 @@
-return require("max.plugins.theme.catpuccin");
+return require("max.plugins.theme.pywal");
+
