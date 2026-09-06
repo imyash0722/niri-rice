@@ -83,18 +83,21 @@ do_disconnect() {
 }
 
 do_status() {
-    local status wifi_status
-    status=$(nmcli general status 2>/dev/null | tail -n +2 | head -1)
-    wifi_status=$(nmcli radio wifi 2>/dev/null | tail -n +2 | head -1)
-
-    local active
+    local active wifi_status conn_state ip_addr
     active=$(active_connections | awk -F: 'NR==1{print $1}')
-    [[ -z "$active" ]] && active="none"
+    [[ -z "$active" ]] && active="Disconnected"
 
-    printf "Connected:  %s\nWiFi radio: %s\nStatus:     %s\n" \
-        "$active" "$wifi_status" "$status" |
-        rofi -dmenu -p "Network status" \
-            -theme-str 'window {width: 60%;} entry {enabled: false;}' \
+    wifi_status=$(nmcli -t -f WIFI g 2>/dev/null || nmcli radio wifi 2>/dev/null | tail -n 1)
+    conn_state=$(nmcli -t -f CONNECTIVITY g 2>/dev/null)
+    [[ -z "$conn_state" ]] && conn_state="unknown"
+
+    ip_addr=$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{for(i=1;i<=NF;i++) if($i=="src") print $(i+1)}')
+    [[ -z "$ip_addr" ]] && ip_addr="Not Assigned"
+
+    printf "  󰖩  Network:       %s\n  󰩠  IPv4 Address:  %s\n  󰈀  Connectivity:  %s\n  󰤨  Wi-Fi Radio:   %s\n" \
+        "$active" "$ip_addr" "$conn_state" "$wifi_status" |
+        rofi -dmenu -p "Network Status" \
+            -theme-str 'window {width: 440px;} listview {lines: 4;} entry {enabled: false;}' \
             >/dev/null
 }
 

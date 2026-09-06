@@ -1,0 +1,3 @@
+# Enable user write access to Lenovo battery conservation mode (0-60% vs 0-100%)
+ACTION=="add|change", SUBSYSTEM=="platform", KERNEL=="VPC2004:00", RUN+="/usr/bin/chmod 0666 /sys/devices/pci0000:00/0000:00:14.3/PNP0C09:00/VPC2004:00/conservation_mode"
+ACTION=="add|change", SUBSYSTEM=="platform", DRIVERS=="ideapad_acpi", TEST=="conservation_mode", RUN+="/usr/bin/chmod 0666 %S%p/conservation_mode"

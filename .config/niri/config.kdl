@@ -366,6 +366,7 @@ binds {
     // Network (nmtui) & SSH Manager
     Mod+Shift+W { spawn-sh "foot --app-id=foot.nmtui --window-size-chars=81x34 -e nmtui"; }
     Mod+Alt+S   { spawn "/home/pineapple/.local/bin/rofi-ssh"; }
+    Mod+Alt+B   { spawn "/home/pineapple/.local/bin/battery-rofi"; }
 
     // F12 & Keypad Special Keys
     XF86Calculator       { spawn "kcalc"; }

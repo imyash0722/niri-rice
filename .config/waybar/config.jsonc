@@ -85,7 +85,9 @@
         "format-charging": "{capacity}% 󰂄",
         "format-plugged": "{capacity}% 󰂄",
         "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰁹"],
-        "tooltip-format": "{capacity}% - {timeTo}"
+        "tooltip-format": "{capacity}% - {timeTo}",
+        "on-click": "~/.local/bin/battery-rofi",
+        "on-click-right": "~/.local/bin/battery-rofi --toggle"
     },
 
     "battery#bat2": {
