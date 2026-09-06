@@ -225,36 +225,8 @@ export PATH="$HOME/.local/bin:$PATH"
 # SSH Management & Agent
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket"
 export SSH_ASKPASS="/usr/bin/ksshaskpass"
+alias s="ssh"
 alias ssh-keys="ssh-add -l"
 alias ssh-flush="ssh-add -D"
 alias ssh-menu="~/.local/bin/rofi-ssh"
-
-# Dynamic Pywal theme switching for SSH sessions (distinct tinted atmosphere & vivid cursor)
-ssh() {
-  local wal_ssh="$HOME/.cache/wal/ssh-colors.sh"
-  local ssh_bg="#172b28"
-  local ssh_fg="#bcd1d0"
-  local ssh_cur="#3E827A"
-
-  if [[ -f "$wal_ssh" ]]; then
-    source "$wal_ssh"
-    ssh_bg="${SSH_THEME_BG:-$ssh_bg}"
-    ssh_fg="${SSH_THEME_FG:-$ssh_fg}"
-    ssh_cur="${SSH_THEME_CURSOR:-$ssh_cur}"
-  fi
-
-  # Apply distinct Pywal SSH background, foreground, cursor, and terminal title
-  printf '\e]11;%s\e\\\e]10;%s\e\\\e]12;%s\e\\' "$ssh_bg" "$ssh_fg" "$ssh_cur"
-  printf '\e]2;󰢹 SSH: %s\e\\' "$*"
-
-  # Run SSH with xterm-256color for server & ubunly-zsh-theme compatibility
-  TERM=xterm-256color command ssh "$@"
-  local ret=$?
-
-  # Restore default terminal colors and title on exit
-  printf '\e]111\e\\\e]110\e\\\e]112\e\\'
-  printf '\e]2;%s\e\\' "${HOST:-$(hostname)}"
-  return $ret
-}
-alias s="ssh"
 
