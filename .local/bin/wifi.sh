@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# ~/.local/bin/wifi.sh — Network Management Rofi Applet
+# ~/.local/bin/wifi.sh — Network & VPN Management Rofi Applet
 
-ROFI_CMD="rofi -dmenu -i -theme-str 'window { width: 480px; location: center; anchor: center; } listview { lines: 6; }'"
+ROFI_CMD="rofi -dmenu -i -theme-str 'window { width: 500px; location: center; anchor: center; } listview { lines: 7; }'"
 
 ICON_DIR="$HOME/.icons/icon_scripts/dunst/wifi"
 
@@ -60,7 +60,6 @@ for line in res.stdout.strip().split("\n"):
 if not networks:
     sys.exit(2)
 
-# Sort: connected first, then highest signal
 sorted_nets = sorted(networks.items(), key=lambda x: (x[1]["in_use"], x[1]["signal"]), reverse=True)
 options = []
 for ssid, info in sorted_nets:
@@ -176,8 +175,46 @@ do_disconnect() {
     fi
 }
 
+do_toggle_dns() {
+    local new_state
+    new_state=$(sudo -n /usr/local/bin/cloudflare-dns toggle 2>/dev/null)
+    if [[ "$new_state" == "enabled" ]]; then
+        notify "Cloudflare DNS (1.1.1.1) Activated (DoT Encrypted)" connected
+    else
+        notify "Cloudflare DNS Disabled (Using default network DNS)" disconnected
+    fi
+}
+
+get_active_vpn_name() {
+    # 1. Check Cloudflare WARP
+    if warp-cli status 2>/dev/null | grep -q "Connected" && ! warp-cli status 2>/dev/null | grep -q "Disconnected"; then
+        echo "Cloudflare WARP"
+        return
+    fi
+    # 2. Check Proton VPN
+    if protonvpn status 2>/dev/null | grep -iq "connected" && ! protonvpn status 2>/dev/null | grep -iq "disconnected"; then
+        echo "Proton VPN"
+        return
+    fi
+    # 3. Check Tailscale Exit Node
+    local ts_exit
+    ts_exit=$(tailscale status --json 2>/dev/null | jq -r '.ExitNodeStatus.TailscaleIPs[0] // empty' 2>/dev/null)
+    if [[ -n "$ts_exit" ]]; then
+        echo "Tailscale Exit Node ($ts_exit)"
+        return
+    fi
+    # 4. Check NetworkManager VPN
+    local nm_vpn
+    nm_vpn=$(nmcli -t -f NAME,TYPE con show --active 2>/dev/null | awk -F: '$2~/vpn|wireguard/{print $1}' | head -n 1)
+    if [[ -n "$nm_vpn" ]]; then
+        echo "NM: $nm_vpn"
+        return
+    fi
+    echo "None (Direct)"
+}
+
 do_status() {
-    local active wifi_status conn_state ip_addr
+    local active wifi_status conn_state ip_addr dns_state vpn_state
     active=$(active_connections | awk -F: 'NR==1{print $1}')
     [[ -z "$active" ]] && active="Disconnected"
 
@@ -188,10 +225,19 @@ do_status() {
     ip_addr=$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{for(i=1;i<=NF;i++) if($i=="src") print $(i+1)}')
     [[ -z "$ip_addr" ]] && ip_addr="Not Assigned"
 
-    printf "󰖩  Network:       %s\n󰩠  IPv4 Address:  %s\n󰈀  Connectivity:  %s\n󰤨  Wi-Fi Radio:   %s\n" \
-        "$active" "$ip_addr" "$conn_state" "$wifi_status" |
+    dns_state=$(sudo -n /usr/local/bin/cloudflare-dns status 2>/dev/null)
+    if [[ "$dns_state" == "enabled" ]]; then
+        dns_desc="1.1.1.1 (DoT Encrypted)"
+    else
+        dns_desc="Default (DHCP / ISP)"
+    fi
+
+    vpn_state=$(get_active_vpn_name)
+
+    printf "󰖩  Network:       %s\n󰩠  IPv4 Address:  %s\n󰈀  Connectivity:  %s\n󰤨  Wi-Fi Radio:   %s\n󰌵  DNS Resolver:  %s\n󰖂  Active VPN:    %s\n" \
+        "$active" "$ip_addr" "$conn_state" "$wifi_status" "$dns_desc" "$vpn_state" |
         rofi -dmenu -p "Network Status" \
-            -theme-str 'window { width: 480px; location: center; anchor: center; } listview { lines: 4; } entry { enabled: false; }' \
+            -theme-str 'window { width: 520px; location: center; anchor: center; } listview { lines: 6; } entry { enabled: false; }' \
             >/dev/null
 }
 
@@ -258,25 +304,61 @@ do_toggle_ethernet() {
     fi
 }
 
-do_vpn() {
+do_vpn_warp() {
+    if warp-cli status 2>/dev/null | grep -q "Connected" && ! warp-cli status 2>/dev/null | grep -q "Disconnected"; then
+        warp-cli disconnect &>/dev/null
+        notify "Cloudflare WARP disconnected" disconnected
+    else
+        warp-cli connect &>/dev/null
+        notify "Cloudflare WARP connected" connected
+    fi
+}
+
+do_vpn_tailscale() {
+    local is_exit
+    is_exit=$(tailscale status --json 2>/dev/null | jq -r '.ExitNodeStatus // empty')
+    if [[ -n "$is_exit" ]]; then
+        tailscale up --exit-node="" &>/dev/null
+        notify "Tailscale Exit Node disabled (Direct Connection)" disconnected
+    else
+        # Enable exit node to pineapple-station
+        tailscale up --exit-node=pineapple-station --exit-node-allow-lan-access &>/dev/null
+        notify "Tailscale Exit Node routed via pineapple-station" connected
+    fi
+}
+
+do_vpn_proton() {
+    if protonvpn status 2>/dev/null | grep -iq "connected" && ! protonvpn status 2>/dev/null | grep -iq "disconnected"; then
+        protonvpn disconnect &>/dev/null
+        notify "Proton VPN disconnected" disconnected
+    else
+        notify "Connecting to Proton VPN (Fastest Server)..." info
+        if protonvpn connect &>/dev/null; then
+            notify "Proton VPN connected" connected
+        else
+            notify "Proton VPN connection failed (run 'protonvpn signin' if first time)" error
+        fi
+    fi
+}
+
+do_vpn_nm() {
     local vpns
-    vpns=$(nmcli -t -f NAME,TYPE con show |
-        awk -F: '$2~/vpn|wireguard/{print $1}')
+    vpns=$(nmcli -t -f NAME,TYPE con show | awk -F: '$2~/vpn|wireguard/{print $1}')
 
     if [[ -z "$vpns" ]]; then
-        notify "No VPN connections configured" info
+        notify "No custom NetworkManager VPN profiles found" info
         return
     fi
 
     local chosen
     chosen=$(echo "$vpns" |
-        awk '{print "󰖂  " $0}' |
+        awk '{print "󱛆  " $0}' |
         rofi -dmenu -i \
-            -theme-str 'window { width: 480px; location: center; anchor: center; } listview { lines: 6; }' \
-            -p 'Toggle VPN')
+            -theme-str 'window { width: 500px; location: center; anchor: center; } listview { lines: 6; }' \
+            -p 'Toggle NetworkManager VPN')
 
     [[ -z "$chosen" ]] && return
-    chosen=$(echo "$chosen" | sed 's/^󰖂  //')
+    chosen=$(echo "$chosen" | sed 's/^󱛆  //')
 
     if nmcli -t -f NAME,TYPE con show --active | grep -q "^$chosen:"; then
         nmcli con down "$chosen" && notify "VPN $chosen disconnected" disconnected
@@ -286,19 +368,88 @@ do_vpn() {
     fi
 }
 
-MENU="󰤨  Connect to Wi-Fi\n󰤭  Disconnect\n󰖩  Network Status\n󰤨  Toggle Wi-Fi\n󰈀  Toggle Ethernet\n󰖂  VPN"
+do_vpn_disconnect_all() {
+    warp-cli disconnect &>/dev/null
+    protonvpn disconnect &>/dev/null
+    tailscale up --exit-node="" &>/dev/null
+    local nm_active
+    nm_active=$(nmcli -t -f NAME,TYPE con show --active 2>/dev/null | awk -F: '$2~/vpn|wireguard/{print $1}')
+    for v in $nm_active; do
+        nmcli con down "$v" &>/dev/null
+    done
+    notify "All VPN tunnels disconnected (Direct Connection)" disconnected
+}
+
+do_vpn_switcher() {
+    local warp_state ts_state pvpn_state nm_count
+    
+    # 1. WARP State
+    if warp-cli status 2>/dev/null | grep -q "Connected" && ! warp-cli status 2>/dev/null | grep -q "Disconnected"; then
+        warp_state="Connected "
+    else
+        warp_state="Disconnected"
+    fi
+
+    # 2. Tailscale Exit Node State
+    local ts_exit
+    ts_exit=$(tailscale status --json 2>/dev/null | jq -r '.ExitNodeStatus.TailscaleIPs[0] // empty' 2>/dev/null)
+    if [[ -n "$ts_exit" ]]; then
+        ts_state="Active: pineapple-station "
+    else
+        ts_state="Off (Direct)"
+    fi
+
+    # 3. Proton VPN State
+    if protonvpn status 2>/dev/null | grep -iq "connected" && ! protonvpn status 2>/dev/null | grep -iq "disconnected"; then
+        pvpn_state="Connected "
+    else
+        pvpn_state="Disconnected"
+    fi
+
+    # 4. NM Profiles count
+    nm_count=$(nmcli -t -f NAME,TYPE con show 2>/dev/null | awk -F: '$2~/vpn|wireguard/{print $1}' | wc -l)
+
+    local vpn_menu
+    vpn_menu="󰤨  Cloudflare WARP         [$warp_state]\n󰈑  Tailscale Exit Node     [$ts_state]\n󰖂  Proton VPN (Stealth)    [$pvpn_state]\n󱛆  NetworkManager Profiles [$nm_count Profiles]\n󰅖  Disconnect All VPNs     (Reset to Direct)"
+
+    local choice
+    choice=$(printf "$vpn_menu" |
+        rofi -dmenu -i \
+            -theme-str 'window { width: 560px; location: center; anchor: center; } listview { lines: 6; }' \
+            -p 'VPN Switcher')
+
+    case "$choice" in
+    *"Cloudflare WARP"*) do_vpn_warp ;;
+    *"Tailscale Exit Node"*) do_vpn_tailscale ;;
+    *"Proton VPN"*) do_vpn_proton ;;
+    *"NetworkManager Profiles"*) do_vpn_nm ;;
+    *"Disconnect All VPNs"*) do_vpn_disconnect_all ;;
+    *) return ;;
+    esac
+}
+
+# --- Main Applet Menu ---
+dns_state=$(sudo -n /usr/local/bin/cloudflare-dns status 2>/dev/null)
+if [[ "$dns_state" == "enabled" ]]; then
+    dns_badge="[Active 󰄴]"
+else
+    dns_badge="[Off]"
+fi
+
+MENU="󰤨  Connect to Wi-Fi\n󰤭  Disconnect\n󰖩  Network Status\n󰖂  VPN Switcher\n󰌵  Cloudflare DNS (1.1.1.1) $dns_badge\n󰤨  Toggle Wi-Fi\n󰈀  Toggle Ethernet"
 
 choice=$(printf "$MENU" |
     rofi -dmenu -i \
-        -theme-str 'window { width: 480px; location: center; anchor: center; } listview { lines: 6; }' \
+        -theme-str 'window { width: 500px; location: center; anchor: center; } listview { lines: 7; }' \
         -p 'Network')
 
 case "$choice" in
 *"Connect to Wi-Fi") do_connect ;;
 *"Disconnect") do_disconnect ;;
 *"Network Status") do_status ;;
+*"VPN Switcher") do_vpn_switcher ;;
+*"Cloudflare DNS"*) do_toggle_dns ;;
 *"Toggle Wi-Fi") do_toggle_wifi ;;
 *"Toggle Ethernet") do_toggle_ethernet ;;
-*"VPN") do_vpn ;;
 *) exit 0 ;;
 esac
