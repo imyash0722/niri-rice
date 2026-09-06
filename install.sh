@@ -88,16 +88,22 @@ $AUR_HELPER -Syu --needed --noconfirm \
     pavucontrol wireplumber pipewire-alsa pipewire-pulse \
     openssh ufw rsync wget unzip unrar \
     vscodium nodejs npm python python-pynvim \
-    keyd libinput-tools || echo "  [!] Some packages failed to install — continuing anyway..."
+    keyd libinput-tools solaar || echo "  [!] Some packages failed to install — continuing anyway..."
 
 # ---------------------------------------------------------------------------
-# 1.1 Universal input & USB power management (keyd & udev)
+# 1.1 Universal input, peripheral managers & USB power rules
 # ---------------------------------------------------------------------------
-echo -e "\n[1.1/6] Configuring universal input daemon (keyd) and USB power rules..."
+echo -e "\n[1.1/6] Configuring universal input, peripheral managers, and USB power rules..."
 if [ -d "$REPO_DIR/etc" ]; then
-    sudo mkdir -p /etc/keyd /etc/udev/rules.d
+    sudo mkdir -p /etc/keyd /etc/udev/rules.d /etc/modprobe.d /etc/bluetooth
     sudo cp -f "$REPO_DIR/etc/keyd/default.conf" /etc/keyd/default.conf 2>/dev/null || true
     sudo cp -f "$REPO_DIR/etc/udev/rules.d/50-usb-power.rules" /etc/udev/rules.d/50-usb-power.rules 2>/dev/null || true
+    if [ -d "$REPO_DIR/etc/modprobe.d" ]; then
+        sudo cp -f "$REPO_DIR/etc/modprobe.d/"* /etc/modprobe.d/ 2>/dev/null || true
+    fi
+    if [ -d "$REPO_DIR/etc/bluetooth" ]; then
+        sudo cp -f "$REPO_DIR/etc/bluetooth/"* /etc/bluetooth/ 2>/dev/null || true
+    fi
     if [ -d "$REPO_DIR/etc/pam.d" ]; then
         sudo cp -f "$REPO_DIR/etc/pam.d/"* /etc/pam.d/ 2>/dev/null || true
     fi

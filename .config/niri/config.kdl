@@ -145,6 +145,10 @@ spawn-at-startup "hypridle"
 spawn-at-startup "sh" "-c" "sleep 1 && otd-daemon"
 spawn-at-startup "/home/pineapple/.local/bin/niri-radial-dial" "daemon"
 
+// Logitech peripheral manager (runs in background)
+spawn-at-startup "sh" "-c" "sleep 2 && solaar --window=hide"
+
+
 // ── Blur & Layer Rules (val-niri) ────────────────────────
 blur {
     passes 4
