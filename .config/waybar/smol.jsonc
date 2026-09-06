@@ -92,7 +92,9 @@
         "format-full": "{capacity}% {icon}",
         "format-charging": "{capacity}% 󰂄",
         "format-plugged": "{capacity}% 󰂄",
-        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰁹"]
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰁹"],
+        "on-click": "~/.local/bin/battery-rofi",
+        "on-click-right": "~/.local/bin/battery-rofi --toggle"
     },
 
     "battery#bat2": {
