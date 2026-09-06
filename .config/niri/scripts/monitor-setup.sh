@@ -51,7 +51,10 @@ for output in outputs:
     mode = output["modes"][mode_idx]
     width, height = mode["width"], mode["height"]
 
-    if height >= 2160:
+    if name == "HDMI-A-1":
+        scale = "0.9"
+        tier  = "External (90%)"
+    elif height >= 2160:
         scale = "1.5"
         tier  = "4K"
     elif height >= 1440:
