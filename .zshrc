@@ -225,7 +225,22 @@ export PATH="$HOME/.local/bin:$PATH"
 # SSH Management & Agent
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket"
 export SSH_ASKPASS="/usr/bin/ksshaskpass"
-alias s="ssh"
 alias ssh-keys="ssh-add -l"
 alias ssh-flush="ssh-add -D"
 alias ssh-menu="~/.local/bin/rofi-ssh"
+
+# Dynamic Ubunly / Ubuntu theme switching for SSH sessions
+ssh() {
+  # Temporarily shift terminal background to Ubuntu Aubergine (#2C001E) and cursor to Orange (#E95420)
+  printf '\e]11;#2C001E\e\\\e]10;#EEEEEC\e\\\e]12;#E95420\e\\'
+  
+  # Run SSH with xterm-256color for server & ubunly-zsh-theme compatibility
+  TERM=xterm-256color command ssh "$@"
+  local ret=$?
+
+  # Restore default terminal colors on exit
+  printf '\e]111\e\\\e]110\e\\\e]112\e\\'
+  return $ret
+}
+alias s="ssh"
+
