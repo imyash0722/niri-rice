@@ -11,12 +11,12 @@ fd . "$dir" \
 
 INDEX=$(
 declare -A DESC=(
-    ["shutdown.svg"]="   shutdown"
-    ["reboot.svg"]="    reboot"
-    ["lock.svg"]="  lockscreen"
-    ["suspend.svg"]="    suspend"
-    ["suspend_toggle.svg"]="toggle suspend"
-    ["logout.svg"]="    logout"
+    ["shutdown.svg"]="Shutdown"
+    ["reboot.svg"]="Reboot"
+    ["lock.svg"]="Lockscreen"
+    ["suspend.svg"]="Suspend"
+    ["suspend_toggle.svg"]="Toggle Suspend"
+    ["logout.svg"]="Logout"
 )
 
 cat "$TMPFILE" |
@@ -56,6 +56,8 @@ cat "$TMPFILE" |
                 border-radius: 0px;
             }
             element-text {
+                horizontal-align: 0.5;
+                vertical-align: 0.5;
                 padding: 0;
                 margin: 0;
             }

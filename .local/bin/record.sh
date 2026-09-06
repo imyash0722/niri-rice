@@ -11,9 +11,9 @@ COLUMNS=3
 THUMB_SIZE=100
 
 declare -A DESC=(
-    [fullscreen]="   Record screen"
-    [area]="    Record area"
-    [mic]="  Record with mic"
+    [fullscreen]="Record Screen"
+    [area]="Record Area"
+    [mic]="Record with Mic"
 )
 
 MODE=$(
@@ -53,6 +53,8 @@ MODE=$(
                 border-radius: 0px;
             }
             element-text {
+                horizontal-align: 0.5;
+                vertical-align: 0.5;
                 padding: 0;
                 margin: 0;
             }

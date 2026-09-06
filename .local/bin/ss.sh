@@ -10,9 +10,9 @@ fd . "$dir" \
     --extension svg > "$TMPFILE"
 INDEX=$(
 declare -A DESC=(
-    ["window.svg"]="  Screenshot Window"
-    ["screen.svg"]="  Screenshot whole"
-    ["selection.svg"]=" Screenshot Selection"
+    ["window.svg"]="Window"
+    ["screen.svg"]="Fullscreen"
+    ["selection.svg"]="Selection"
 )
 
 cat "$TMPFILE" |
@@ -54,6 +54,8 @@ cat "$TMPFILE" |
                 border-radius: 0px;
             }
             element-text {
+                horizontal-align: 0.5;
+                vertical-align: 0.5;
                 padding: 0;
                 margin: 0;
             }

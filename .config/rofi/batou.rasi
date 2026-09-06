@@ -1,7 +1,7 @@
 @import "colors.rasi"
 
 * {
-    font: "JetBrainsMono Nerd Font 12";
+    font: "JetBrainsMono Nerd Font 11";
     background-color: transparent;
     text-color: @fg0;
     margin: 0;
@@ -11,42 +11,43 @@
 
 window {
     location: center;
-    width: 520px;
+    anchor: center;
+    width: 420px;
     border: 2px;
     border-color: @accent-color;
-    border-radius: 12px;
-    background-color: rgba(9, 18, 24, 0.88);
-    padding: 16px;
+    border-radius: 10px;
+    background-color: rgba(9, 18, 24, 0.90);
+    padding: 10px;
 }
 
 mainbox {
-    spacing: 12px;
+    spacing: 8px;
     children: [ inputbar, message, listview ];
 }
 
 inputbar {
-    spacing: 10px;
-    padding: 8px 14px;
+    spacing: 8px;
+    padding: 6px 10px;
     border: 1px;
     border-color: rgba(255, 255, 255, 0.10);
-    border-radius: 8px;
+    border-radius: 6px;
     background-color: rgba(255, 255, 255, 0.05);
     children: [ prompt, entry ];
 }
 
 prompt {
     text-color: @accent-color;
-    font: "JetBrainsMono Nerd Font Bold 12";
+    font: "JetBrainsMono Nerd Font Bold 11";
 }
 
 entry {
-    placeholder: "Search applications...";
+    placeholder: "Search...";
     placeholder-color: rgba(255, 255, 255, 0.35);
     text-color: @fg0;
 }
 
 message {
-    padding: 6px;
+    padding: 4px 6px;
     border-radius: 6px;
     background-color: rgba(255, 255, 255, 0.05);
 }
@@ -56,18 +57,18 @@ textbox {
 }
 
 listview {
-    padding: 4px 0;
+    padding: 2px 0;
     lines: 7;
     columns: 1;
-    spacing: 4px;
+    spacing: 2px;
     fixed-height: false;
     scrollbar: false;
 }
 
 element {
-    padding: 8px 12px;
-    spacing: 10px;
-    border-radius: 8px;
+    padding: 5px 8px;
+    spacing: 8px;
+    border-radius: 6px;
     border: 1px;
     border-color: transparent;
     cursor: pointer;
@@ -98,17 +99,17 @@ element selected.urgent {
 }
 
 element-icon {
-    size: 24px;
+    size: 20px;
     horizontal-align: 0.5;
     vertical-align: 0.5;
 }
 
 element-text {
     text-color: inherit;
-    font: "JetBrainsMono Nerd Font Medium 12";
+    font: "JetBrainsMono Nerd Font Medium 11";
     vertical-align: 0.5;
 }
 
 element selected element-text {
-    font: "JetBrainsMono Nerd Font Bold 12";
+    font: "JetBrainsMono Nerd Font Bold 11";
 }

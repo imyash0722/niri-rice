@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Pick direction
-DIRECTION=$(printf " English → Indonesian\n Indonesian → English" | rofi -dmenu -theme-str 'window { width: 350px; }' -p "Translate" -l 2)
+DIRECTION=$(printf "English → Indonesian\nIndonesian → English" | rofi -dmenu -theme-str 'window { width: 320px; location: center; anchor: center; }' -p "Translate" -l 2)
 
 case "$DIRECTION" in
 *"English → Indonesian"*)

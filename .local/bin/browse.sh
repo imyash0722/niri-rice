@@ -21,6 +21,7 @@ CHOICE=$(printf '%s\n' "${PREDEFINED[@]}" | rofi \
     window {
         width: 17%;
         location: center;
+        anchor: center;
     }
     listview {
         columns: 2;
