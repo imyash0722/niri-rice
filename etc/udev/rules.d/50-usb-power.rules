@@ -4,3 +4,8 @@ ACTION=="add|bind", SUBSYSTEM=="usb", ATTR{idVendor}=="1532", TEST=="power/contr
 ACTION=="add|bind", SUBSYSTEM=="usb", ATTR{idVendor}=="0489", ATTR{idProduct}=="e0d8", TEST=="power/control", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="-1"
 ACTION=="add|bind", SUBSYSTEM=="usb", ENV{ID_INPUT_KEYBOARD}=="1", TEST=="power/control", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="-1"
 ACTION=="add|bind", SUBSYSTEM=="usb", ENV{ID_INPUT_MOUSE}=="1", TEST=="power/control", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="-1"
+
+# Disable USB autosuspend for Realtek RTS5411 Hub (USB Extender) and all USB Hubs
+ACTION=="add|bind", SUBSYSTEM=="usb", ATTR{idVendor}=="0bda", ATTR{idProduct}=="5411", TEST=="power/control", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="-1"
+ACTION=="add|bind", SUBSYSTEM=="usb", ATTR{idVendor}=="0bda", ATTR{idProduct}=="0411", TEST=="power/control", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="-1"
+ACTION=="add|bind", SUBSYSTEM=="usb", ATTR{bDeviceClass}=="09", TEST=="power/control", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="-1"

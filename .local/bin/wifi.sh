@@ -10,7 +10,9 @@ notify() {
     local kind="${2:-info}"
     local icon="$ICON_DIR/${kind}.svg"
 
-    if command -v dunstify &>/dev/null; then
+    if command -v notify-send &>/dev/null; then
+        notify-send -a network -i "$icon" "Network: $message"
+    elif command -v dunstify &>/dev/null; then
         dunstify -i "$icon" "Network: $message" -a network
     fi
 }

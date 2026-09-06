@@ -1,6 +1,6 @@
 configuration {
     modi: "drun,run,window";
-    show-icons: true;
+    show-icons: false;
     terminal: "foot";
 }
 @theme "batou"

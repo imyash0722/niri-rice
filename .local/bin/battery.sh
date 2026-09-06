@@ -122,7 +122,8 @@ def notify(title, message, icon="battery"):
     else:
         icon_path = ic
 
-    cmd = ["dunstify", "-a", "battery", "-i", icon_path, title, message]
+    # Use notify-send with fallback to dunstify
+    cmd = ["notify-send", "-a", "battery", "-i", icon_path, "-u", "normal", "-t", "8000", title, message]
     subprocess.run(cmd, check=False)
 
 def get_battery_stats():
@@ -292,7 +293,8 @@ def launch_rofi_gui():
         "rofi",
         "-show", "battery",
         "-modes", f"battery:{script_path}",
-        "-theme-str", "window { width: 420px; location: center; anchor: center; } listview { lines: 9; } entry { enabled: false; }"
+        "-no-show-icons",
+        "-theme-str", "window { width: 420px; location: center; anchor: center; } listview { lines: 9; } entry { enabled: false; } element { children: [ element-text ]; }"
     ]
     subprocess.run(cmd)
 

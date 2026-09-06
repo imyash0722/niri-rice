@@ -1,7 +1,7 @@
 @import "colors.rasi"
 
 * {
-    font: "JetBrainsMono Nerd Font 11";
+    font: "Inter, JetBrainsMono Nerd Font 11";
     background-color: transparent;
     text-color: @fg0;
     margin: 0;
@@ -37,7 +37,7 @@ inputbar {
 
 prompt {
     text-color: @accent-color;
-    font: "JetBrainsMono Nerd Font Bold 11";
+    font: "Inter, JetBrainsMono Nerd Font Bold 11";
 }
 
 entry {
@@ -106,10 +106,10 @@ element-icon {
 
 element-text {
     text-color: inherit;
-    font: "JetBrainsMono Nerd Font Medium 11";
+    font: "Inter, JetBrainsMono Nerd Font Medium 11";
     vertical-align: 0.5;
 }
 
 element selected element-text {
-    font: "JetBrainsMono Nerd Font Bold 11";
+    font: "Inter, JetBrainsMono Nerd Font Bold 11";
 }
