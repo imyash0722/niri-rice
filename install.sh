@@ -12,7 +12,7 @@ echo ""
 # ---------------------------------------------------------------------------
 # Helper: create a symlink, backing up whatever was there before (if it
 # wasn't already a symlink pointing at our repo).
-# Usage: safe_link <abs-source> <abs-dest>
+# Usage: force_link <abs-source> <abs-dest>
 # ---------------------------------------------------------------------------
 force_link() {
     local src="$1"
@@ -35,9 +35,24 @@ force_link() {
 }
 
 # ---------------------------------------------------------------------------
-# Link every top-level entry inside repo's .config/ into ~/.config/
-# This means: git pull = instant update, no re-running install needed.
+# Copy a source dir into dst, merging contents recursively (no symlink).
+# Used for entries on filesystems without symlink support (e.g. exFAT).
 # ---------------------------------------------------------------------------
+copy_dir_merge() {
+    local src="$1"
+    local dst="$2"
+    mkdir -p "$dst"
+    cp -r "$src"/. "$dst"/
+    echo "  Copied (merged): $dst <- $src"
+}
+
+# ---------------------------------------------------------------------------
+# Link every top-level entry inside repo's .config/ into ~/.config/
+# Entries listed in NO_SYMLINK_ITEMS are deep-copied instead of symlinked
+# because ~/.config/systemd must be a real dir on btrfs (exFAT can't symlink).
+# ---------------------------------------------------------------------------
+NO_SYMLINK_ITEMS=("systemd")
+
 link_dir_contents() {
     local src_dir="$1"   # e.g. /path/to/repo/.config
     local dst_dir="$2"   # e.g. ~/.config
@@ -48,7 +63,18 @@ link_dir_contents() {
         [ -e "$src_item" ] || continue   # skip if glob matched nothing
         local name
         name="$(basename "$src_item")"
-        force_link "$src_item" "$dst_dir/$name"
+
+        # Items that must be copied rather than symlinked
+        local no_sym=0
+        for skip in "${NO_SYMLINK_ITEMS[@]}"; do
+            [ "$name" = "$skip" ] && no_sym=1 && break
+        done
+
+        if [ "$no_sym" = "1" ]; then
+            copy_dir_merge "$src_item" "$dst_dir/$name"
+        else
+            force_link "$src_item" "$dst_dir/$name"
+        fi
     done
 }
 
