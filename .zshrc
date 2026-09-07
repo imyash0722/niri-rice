@@ -238,4 +238,8 @@ exists tmux && {
   alias tk="tmux kill-session -t"
 }
 
+# Disable TTY flow control (prevents Ctrl+S freeze and frees Ctrl+Q for tmux prefix)
+[[ $- == *i* ]] && stty -ixon 2>/dev/null
+
+
 
