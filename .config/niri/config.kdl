@@ -373,10 +373,10 @@ binds {
     // Show hotkey overlay
     Mod+Slash { show-hotkey-overlay; }
 
-    // Terminal
-    Mod+Return { spawn "foot"; }
+    // Terminal (Persistent Tmux Main Shell)
+    Mod+Return { spawn-sh "foot -e tmux new-session -A -s main"; }
     Mod+Shift+Return { spawn-sh "foot --app-id=foot.floating"; }
-    Mod+Alt+Return { spawn-sh "foot -e tmux new-session -A -s main"; }
+    Mod+Alt+Return { spawn "foot"; }
 
     // App launcher (Super / Mod+D)
     Super_L { spawn-sh "pkill -x rofi || rofi -show drun"; }
