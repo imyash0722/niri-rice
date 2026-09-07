@@ -230,3 +230,12 @@ alias ssh-keys="ssh-add -l"
 alias ssh-flush="ssh-add -D"
 alias ssh-menu="~/.local/bin/rofi-ssh"
 
+# Tmux session management
+exists tmux && {
+  alias t="tmux"
+  alias ta="tmux attach-session -t"
+  alias tls="tmux list-sessions"
+  alias tk="tmux kill-session -t"
+}
+
+

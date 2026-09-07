@@ -52,8 +52,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#9B6E71"
-        inactive-color "#0a0b0f"
+        active-color "#92504E"
+        inactive-color "#0b130d"
     }
 
     tab-indicator {
@@ -376,6 +376,7 @@ binds {
     // Terminal
     Mod+Return { spawn "foot"; }
     Mod+Shift+Return { spawn-sh "foot --app-id=foot.floating"; }
+    Mod+Alt+Return { spawn-sh "foot -e tmux new-session -A -s main"; }
 
     // App launcher (Super / Mod+D)
     Super_L { spawn-sh "pkill -x rofi || rofi -show drun"; }
