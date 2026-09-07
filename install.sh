@@ -139,13 +139,25 @@ if [ -d "$REPO_DIR/etc" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# 1.2 SSH, Tailscale & Remote Access
+# 1.2 SSH, Tailscale, Remote Access & Power Save Exceptions
 # ---------------------------------------------------------------------------
-echo -e "\n[1.2/6] Configuring SSH, Tailscale, and firewall..."
+echo -e "\n[1.2/6] Configuring SSH, Tailscale, firewall, and power save exceptions..."
 sudo systemctl enable --now sshd tailscaled ufw 2>/dev/null || true
 sudo ufw allow in on tailscale0 to any port 22 2>/dev/null || true
 sudo ufw --force enable 2>/dev/null || true
 sudo tailscale set --ssh 2>/dev/null || true
+
+# Deploy logind power save exceptions & TLP thermal configuration
+if [ -d "$REPO_DIR/etc/systemd/logind.conf.d" ]; then
+    sudo mkdir -p /etc/systemd/logind.conf.d
+    sudo cp -f "$REPO_DIR/etc/systemd/logind.conf.d/"* /etc/systemd/logind.conf.d/ 2>/dev/null || true
+    sudo systemctl kill -s HUP systemd-logind 2>/dev/null || true
+fi
+if [ -f "$REPO_DIR/etc/tlp.conf" ]; then
+    sudo cp -f "$REPO_DIR/etc/tlp.conf" /etc/tlp.conf 2>/dev/null || true
+    sudo systemctl enable --now tlp 2>/dev/null || true
+    sudo tlp start 2>/dev/null || true
+fi
 
 # ---------------------------------------------------------------------------
 # 1.5. Clone qylock themes

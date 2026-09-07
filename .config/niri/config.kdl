@@ -139,7 +139,6 @@ spawn-at-startup "hypridle"
 
 // Wacom One tablet driver (OpenTabletDriver)
 spawn-at-startup "sh" "-c" "sleep 1 && otd-daemon"
-spawn-at-startup "/home/pineapple/.local/bin/niri-radial-dial" "daemon"
 
 // Logitech peripheral manager (runs in background)
 spawn-at-startup "sh" "-c" "sleep 2 && solaar --window=hide"
@@ -365,9 +364,6 @@ window-rule {
 binds {
     // Show overview
     Mod+Tab { toggle-overview; }
-    // Radial Dial Triggers (Mouse Thumb Button 5, Keyboard Super+`)
-    MouseForward { spawn "/home/pineapple/.local/bin/niri-radial-dial"; }
-    Mod+Grave { spawn "/home/pineapple/.local/bin/niri-radial-dial"; }
     // Switch focus between floating and tiling
     Mod+Shift+Grave { switch-focus-between-floating-and-tiling; }
     // Show hotkey overlay

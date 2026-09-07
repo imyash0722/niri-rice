@@ -9,24 +9,21 @@ toggle() {
         rm -f "$FLAG"
         pkill -f "systemd-inhibit.*caffeine" 2>/dev/null || true
         
-        # TLP / power profile to balanced/bat
-        powerprofilesctl set balanced 2>/dev/null || true
-        if command -v tlp &>/dev/null; then
-            tlp-stat -s >/dev/null 2>&1 || true
-        fi
+        # Restore cool / low-power platform profile
+        echo "low-power" > /sys/firmware/acpi/platform_profile 2>/dev/null || true
         
-        notify-send -a "Power Manager" -i "preferences-system-power" "Sleep Mode: Normal" "Automatic sleep & idle enabled (TLP Balanced)"
+        notify-send -a "Power Manager" -i "preferences-system-power" "Sleep Mode: Normal" "Auto-sleep enabled, cool profile active"
     else
-        # Turn ON Caffeine -> Disable sleep & idle, set TLP performance/ac
+        # Turn ON Caffeine -> Disable sleep & idle, set performance
         touch "$FLAG"
         
-        # Inhibit systemd idle/sleep
-        nohup systemd-inhibit --what=idle:sleep --who="Caffeine" --why="User requested no sleep" sleep infinity >/dev/null 2>&1 &
+        # Inhibit systemd idle, sleep, and lid switch
+        nohup systemd-inhibit --what=idle:sleep:handle-lid-switch --who="Caffeine" --why="User requested no sleep" sleep infinity >/dev/null 2>&1 &
         
-        # TLP / power profile to performance
-        powerprofilesctl set performance 2>/dev/null || true
+        # Set performance platform profile
+        echo "performance" > /sys/firmware/acpi/platform_profile 2>/dev/null || true
         
-        notify-send -a "Power Manager" -i "caffeine" "Sleep Mode: Caffeinated" "Sleep & idle disabled (TLP Performance / AC)"
+        notify-send -a "Power Manager" -i "caffeine" "Sleep Mode: Caffeinated" "Sleep & idle disabled (Performance mode)"
     fi
     pkill -RTMIN+13 waybar 2>/dev/null || true
 }
