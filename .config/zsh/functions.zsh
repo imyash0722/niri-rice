@@ -1,8 +1,7 @@
-source $(dirname "$0")/functions/conf.zsh;
-source $(dirname "$0")/functions/dev.zsh;
-source $(dirname "$0")/functions/fp.zsh;
-source $(dirname "$0")/functions/fx.zsh;
-source $(dirname "$0")/functions/mv-safe.zsh;
-source $(dirname "$0")/functions/note.zsh;
-source $(dirname "$0")/functions/run.zsh;
-source $(dirname "$0")/functions/ssh_selector.zsh;
+# Automatically load all custom function definitions
+local func_dir="${0:A:h}/functions"
+if [[ -d "$func_dir" ]]; then
+  for func_file in "$func_dir"/*.zsh; do
+    [[ -f "$func_file" ]] && source "$func_file"
+  done
+fi

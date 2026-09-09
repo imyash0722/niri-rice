@@ -34,10 +34,10 @@ mkdir -p .local/share/dbus-1/services
 cp -a "$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service" .local/share/dbus-1/services/ 2>/dev/null || true
 cp -r "$HOME/.local/share/konsole/"* .local/share/konsole/ 2>/dev/null || true
 
-# Pull .local/bin scripts (excluding heavy binaries)
+# Pull .local/bin scripts (excluding heavy binaries and build artifacts)
 mkdir -p .local/bin
 cp -r "$HOME/.local/bin/"* .local/bin/ 2>/dev/null || true
-rm -f .local/bin/agy
+rm -rf .local/bin/agy* .local/bin/*.old .local/bin/__pycache__ .local/bin/*.pyc .local/bin/dumppdf* .local/bin/pdf2txt* .local/bin/pymupdf* .local/bin/git-filter-repo 2>/dev/null || true
 
 # Pull standalone configs and wallpapers
 cp "$HOME/.zshrc" .zshrc

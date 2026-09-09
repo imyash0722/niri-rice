@@ -7,9 +7,14 @@ export HISTFILE="$HOME/.zsh_history"  # History file
 export HISTSIZE=100000                # Lines kept in memory
 export SAVEHIST=100000                # Lines saved to file
 
-export PATH="$PATH:$HOME/bin"
-export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PATH:/usr/sbin"
+# Unique PATH deduplication
+typeset -U path PATH
+path=(
+  "$HOME/bin"
+  "$HOME/.local/bin"
+  "/usr/sbin"
+  $path
+)
 
 # Load custom autocompletions
 export FPATH="$FPATH:$HOME/.config/zsh/completions"
@@ -28,8 +33,7 @@ zcomet load zsh-users/zsh-autosuggestions
 zcomet load zdharma-continuum/fast-syntax-highlighting
 zcomet load Aloxaf/fzf-tab
 zcomet load jeffreytse/zsh-vi-mode
-# # zcomet load romkatv/powerlevel10k
-zcomet compinit   # faster completions
+zcomet compinit -C   # cached fast completions
 
 # Configure zsh vim mode to work with history
 function zvm_before_init() {
@@ -68,19 +72,8 @@ exists podman-compose && {
   alias pc="podman-compose"
 }
 
-exists podman && {
-  source <(podman completion zsh)
-}
-
 exists bat && {
   alias cat="bat"
-}
-
-
-exists docker && {
-  alias d="docker"
-  alias dc="docker compose"
-  source <(docker completion zsh)
 }
 
 exists cargo && {
@@ -190,17 +183,6 @@ typeset -ga chpwd_functions
 chpwd_functions+=(chpwd_auto_ls)
 
 
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
-# Added by Antigravity CLI installer
-export PATH="$HOME/.local/bin:$PATH"
-
 # Smart Wrappers for modern CLI tools
 exists lazygit && {
   git() {
@@ -228,11 +210,6 @@ exists yazi && {
 
 # Run fastfetch on startup
 exists fastfetch && fastfetch
-
-
-# Added by Antigravity CLI installer
-export PATH="/home/pineapple/.local/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
 
 # SSH Management & Agent
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket"

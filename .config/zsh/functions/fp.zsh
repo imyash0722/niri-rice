@@ -2,8 +2,9 @@
 
 function fp(){
 
-    if [ "$(which lsof)" = "lsof not found" ]; then
+    if ! command -v lsof >/dev/null 2>&1; then
         echo "lsof not installed"
+        return 1
     else
         for PORT in "$@"
         do

@@ -15,7 +15,7 @@ function run(){
             go watch main.go
           fi
         else
-          dotnet "$@"
+          go "$@"
         fi
     elif [ -f "yarn.lock" ]; then
         yarn "$@"

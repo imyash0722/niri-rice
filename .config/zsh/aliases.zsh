@@ -15,13 +15,8 @@ alias p="git pull"
 alias lt="tree -L 2 --filelimit 150 --dirsfirst"
 alias ll="ls -lah"
 
-alias d="docker"
-
-alias dots="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
-alias lazydots="lazygit --git-dir=$HOME/.dotfiles --work-tree=$HOME"
-
-# Clear screen and reload shell configuration
-alias clear='clear && source ~/.zshrc'
+# Reload shell configuration on demand
+alias reload='clear && source ~/.zshrc'
 
 # Power profile switcher
 alias power="power-manager"
