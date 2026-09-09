@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Prevent multiple lockscreen instances from fighting over session lock
+if pgrep -f "quickshell.*lock_shell\.qml" >/dev/null 2>&1; then
+    exit 0
+fi
+
 # A script to lock the screen using qylock (Quickshell lockscreen)
 if [ -f "$HOME/.local/share/quickshell-lockscreen/lock.sh" ]; then
     exec "$HOME/.local/share/quickshell-lockscreen/lock.sh" "$@"
