@@ -177,6 +177,18 @@ exists zoxide && {
   eval "$(zoxide init zsh --cmd cd)"
 }
 
+# Automatically list directory contents on cd (directory change)
+chpwd_auto_ls() {
+  [[ -o interactive ]] || return 0
+  if exists eza; then
+    eza --icons
+  else
+    ls
+  fi
+}
+typeset -ga chpwd_functions
+chpwd_functions+=(chpwd_auto_ls)
+
 
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
