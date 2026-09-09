@@ -343,6 +343,16 @@ if [[ -z "$config_qylock" || "$config_qylock" =~ ^[Yy]$ ]]; then
         (cd "$HOME/.local/share/qylock" && chmod +x sddm.sh && ./sddm.sh || true)
         echo "Launching Quickshell lockscreen selector..."
         (cd "$HOME/.local/share/qylock" && chmod +x quickshell.sh && ./quickshell.sh || true)
+
+        # Apply stability patches (PAM deadlock fix, concurrency guards, theme error fixes)
+        if [ -d "$REPO_DIR/.local/share/quickshell-lockscreen" ]; then
+            echo "  Applying quickshell-lockscreen stability patches..."
+            cp -r "$REPO_DIR/.local/share/quickshell-lockscreen/"* "$HOME/.local/share/quickshell-lockscreen/" 2>/dev/null || true
+        fi
+        if [ -d "$REPO_DIR/.local/share/qylock-patches/sword" ] && [ -d "$HOME/.local/share/qylock/themes/sword" ]; then
+            echo "  Applying theme QML fixes..."
+            cp "$REPO_DIR/.local/share/qylock-patches/sword/Main.qml" "$HOME/.local/share/qylock/themes/sword/Main.qml" 2>/dev/null || true
+        fi
     else
         echo "qylock repository not found in ~/.local/share/qylock."
     fi
