@@ -15,8 +15,8 @@ alias p="git pull"
 alias lt="tree -L 2 --filelimit 150 --dirsfirst"
 alias ll="ls -lah"
 
-# Reload shell configuration on demand
-alias reload='clear && source ~/.zshrc'
+# Clear screen and display system info
+alias clear='clear && fastfetch'
 
 # Power profile switcher
 alias power="power-manager"
