@@ -1,0 +1,13 @@
+[Unit]
+Description=Initialize Hibernate Resume Device and Offset
+DefaultDependencies=no
+After=swap.target local-fs.target
+Before=systemd-logind.service systemd-hibernate.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/setup-hibernate-resume.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=basic.target

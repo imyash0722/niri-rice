@@ -159,6 +159,17 @@ if [ -f "$REPO_DIR/etc/tlp.conf" ]; then
     sudo tlp start 2>/dev/null || true
 fi
 
+# Deploy sleep & hibernation configuration
+if [ -d "$REPO_DIR/etc/systemd/sleep.conf.d" ]; then
+    sudo mkdir -p /etc/systemd/sleep.conf.d
+    sudo cp -f "$REPO_DIR/etc/systemd/sleep.conf.d/"* /etc/systemd/sleep.conf.d/ 2>/dev/null || true
+fi
+if [ -f "$REPO_DIR/etc/systemd/system/hibernate-setup.service" ]; then
+    sudo cp -f "$REPO_DIR/etc/systemd/system/hibernate-setup.service" /etc/systemd/system/hibernate-setup.service 2>/dev/null || true
+    sudo systemctl daemon-reload 2>/dev/null || true
+    sudo systemctl enable --now hibernate-setup.service 2>/dev/null || true
+fi
+
 # ---------------------------------------------------------------------------
 # 1.5. Clone qylock themes
 # ---------------------------------------------------------------------------
