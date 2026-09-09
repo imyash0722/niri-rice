@@ -19,7 +19,9 @@ alias d="docker"
 
 alias dots="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias lazydots="lazygit --git-dir=$HOME/.dotfiles --work-tree=$HOME"
-alias pls='sudo -E env "PATH=$PATH"'
+
+# Clear screen and reload shell configuration
+alias clear='clear && source ~/.zshrc'
 
 # Power profile switcher
 alias power="power-manager"
