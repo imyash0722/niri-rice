@@ -35,6 +35,7 @@
   "mini.nvim": { "branch": "main", "commit": "629bf6792187e11b4829411c1648f86f28df3963" },
   "mini.pick": { "branch": "main", "commit": "b27dc13b3d6dafc10e868b6ddc682cc4f047f4d1" },
   "neo-tree.nvim": { "branch": "main", "commit": "6679b9395526b52ddb2b137fcd5255dab71c5a58" },
+  "neopywal": { "branch": "master", "commit": "95425eea6411eebc17c2fcdc46d1c45e57d99205" },
   "neotest": { "branch": "master", "commit": "27bf921498043f7ecd821d6db68d05de244bbd02" },
   "neotest-deno": { "branch": "main", "commit": "7136b9342aeecb675c7c16a0bde327d7fcb00a1c" },
   "neotest-golang": { "branch": "main", "commit": "05cd7bf89a146cf1fa2848a9fe277a1e68a3a51d" },
