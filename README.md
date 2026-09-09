@@ -4,11 +4,11 @@
 
 <br/>
 
+![Release](https://img.shields.io/github/v/release/imyash0722/niri-rice?style=for-the-badge&color=7fc8ff&logo=github)
 ![niri](https://img.shields.io/badge/niri-26.04-7fc8ff?style=for-the-badge&logo=wayland&logoColor=white)
 ![Waybar](https://img.shields.io/badge/Waybar-customised-ffc87f?style=for-the-badge)
 ![Theme](https://img.shields.io/badge/Theme-Pywal%20Dynamic-ff69b4?style=for-the-badge&logoColor=white)
 ![Shell](https://img.shields.io/badge/Shell-ZSH-89b4fa?style=for-the-badge&logo=gnu-bash&logoColor=white)
-![Migrated](https://img.shields.io/badge/Migrated%20from-SwayFX-a9b1d6?style=for-the-badge)
 ![Distro](https://img.shields.io/badge/Distro-CachyOS-00b4d8?style=for-the-badge&logo=archlinux&logoColor=white)
 
 *A scrollable, tiling Wayland desktop built on the niri compositor. Features animated wallpapers, dynamic Pywal colours, and a fully custom Waybar.*
@@ -185,6 +185,20 @@ Colours are extracted from the wallpaper via **pywal** and applied to Waybar and
 | Muted Purple | `#443C45` |
 | Dark Mauve | `#50474F` |
 | Mid Grey | `#857C86` |
+
+---
+
+## 🔖 Versioning & Releases
+
+This project adheres to strict **[Semantic Versioning (SemVer)](https://semver.org/)**:
+
+| Increment | Level | Scope & Description |
+|:---------:|:-----:|:--------------------|
+| `+1.0.0` | **Major** | Breaking changes, architectural rewrites, or incompatible migration steps. |
+| `+0.1.0` | **Minor** | New user features, new hardware integrations, or new CLI commands (backwards-compatible). |
+| `+0.0.1` | **Patch** | Bug fixes, stability patches, performance tweaks, or documentation updates. |
+
+Browse all past releases, changelogs, and source tarballs on the **[GitHub Releases](https://github.com/imyash0722/niri-rice/releases)** page.
 
 ---
 
