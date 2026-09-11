@@ -19,8 +19,10 @@ path=(
 # Load custom autocompletions
 export FPATH="$FPATH:$HOME/.config/zsh/completions"
 
-# Setup starship prompt
-eval "$(starship init zsh)"
+# Setup starship prompt (guard against re-sourcing infinite widget recursion)
+if [[ -z "$STARSHIP_SHELL" ]]; then
+  eval "$(starship init zsh)"
+fi
 
 # Setup zcomet plugin manager
 if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
@@ -76,9 +78,12 @@ exists bat && {
   alias cat="bat"
 }
 
+# Markdown viewer: vibrant CLI terminal reader
+alias md="mdview"
+
+
 exists cargo && {
   export PATH="$HOME/.cargo/bin:$PATH"
-  # . "$HOME/.cargo/env"
 }
 
 exists go && {

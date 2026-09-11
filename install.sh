@@ -99,7 +99,7 @@ $AUR_HELPER -Syu --needed --noconfirm \
     starship mako hypridle ffmpeg jq brightnessctl playerctl rofi-rbw \
     wtype obs-studio imagemagick kwallet kanshi ttf-jetbrains-mono ttf-roboto \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd otf-font-awesome \
-    ttf-meslo-nerd ttf-jetbrains-mono-nerd python-pywal \
+    ttf-meslo-nerd ttf-jetbrains-mono-nerd matugen \
     noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-dejavu ttf-liberation \
     breeze breeze-gtk breeze-icons plasma-integration tlp tlp-rdw powerdevil \
     kde-gtk-config kscreen kwalletmanager kwallet-pam kdialog kio-admin \
@@ -298,10 +298,10 @@ sudo systemctl daemon-reload || true
 sudo systemctl enable --now powertop.service || true
 
 # ---------------------------------------------------------------------------
-# 6. Apply initial theme & wallpaper (Pywal dynamic extraction)
+# 6. Apply initial theme & wallpaper (Matugen dynamic extraction)
 # ---------------------------------------------------------------------------
 echo ""
-echo "[6/6] Applying initial theme & extracting Pywal colors..."
+echo "[6/6] Applying initial theme & extracting Matugen Material You colors..."
 if [ -x "$HOME/.config/niri/scripts/set-theme.sh" ]; then
     "$HOME/.config/niri/scripts/set-theme.sh" blue || true
 elif [ -x "$HOME/.config/niri/scripts/apply-wallpaper.sh" ] && [ -f "$HOME/Pictures/Wall/silent_katana_samurai.mp4" ]; then

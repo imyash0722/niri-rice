@@ -31,18 +31,20 @@ if [ -n "$ACTIVE_COLOR" ] && [ -n "$INACTIVE_COLOR" ]; then
     sed -i -E "s/inactive-color \".*\"/inactive-color \"$INACTIVE_COLOR\"/g" "$CONFIG_FILE"
 fi
 
-# 3. Waybar colors are dynamically updated via colors.css in pywal-cursor.py
+# 3. Waybar colors are dynamically updated via colors.css in matugen-theme.py
 
 # 4. Update Wallpaper path
 echo "$THEMES_DIR/$THEME/wallpaper.mp4" > "$THEMES_DIR/active-wallpaper.txt"
 
-# 5. Extract Pywal colors directly from theme preview frame or wallpaper and apply full desktop theme
+# 5. Extract Matugen colors directly from theme preview frame or wallpaper and apply full desktop theme
 WALL_IMG="$THEMES_DIR/$THEME/wallpaper.png"
 if [ ! -f "$WALL_IMG" ]; then
     WALL_IMG="$THEMES_DIR/$THEME/wallpaper.mp4"
 fi
 
-if [ -x "$HOME/.config/niri/scripts/pywal-cursor.py" ]; then
+if [ -x "$HOME/.config/niri/scripts/matugen-theme.py" ]; then
+    "$HOME/.config/niri/scripts/matugen-theme.py" --wallpaper "$WALL_IMG" --size 32
+elif [ -x "$HOME/.config/niri/scripts/pywal-cursor.py" ]; then
     "$HOME/.config/niri/scripts/pywal-cursor.py" --wallpaper "$WALL_IMG" --size 32
 fi
 

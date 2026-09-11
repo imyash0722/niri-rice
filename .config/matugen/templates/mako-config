@@ -1,6 +1,6 @@
-background-color=#111519
-text-color=#cae5ef
-border-color=#69B4C3
+background-color={{ colors.background.default.hex }}
+text-color={{ colors.on_surface.default.hex }}
+border-color={{ colors.primary.default.hex }}
 border-size=1
 border-radius=4
 icons=1

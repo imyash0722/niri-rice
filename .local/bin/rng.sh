@@ -16,9 +16,11 @@ if [ -z "$WALLPAPER" ]; then
 fi
 
 echo "$WALLPAPER" >"$HOME/.config/wallpaper"
-awww img "$WALLPAPER" --transition-type center --transition-fps 165 &
-matugen image "$WALLPAPER" --source-color-index 0 -t scheme-tonal-spot 
-sleep 1.5
+if [ -x "$HOME/.config/niri/scripts/matugen-theme.py" ]; then
+    "$HOME/.config/niri/scripts/matugen-theme.py" --wallpaper "$WALLPAPER" --size 32
+else
+    matugen image "$WALLPAPER" --source-color-index 0 -t scheme-tonal-spot
+fi
 
 dunstctl reload
 

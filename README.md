@@ -7,11 +7,11 @@
 ![Release](https://img.shields.io/github/v/release/imyash0722/niri-rice?style=for-the-badge&color=7fc8ff&logo=github)
 ![niri](https://img.shields.io/badge/niri-26.04-7fc8ff?style=for-the-badge&logo=wayland&logoColor=white)
 ![Waybar](https://img.shields.io/badge/Waybar-customised-ffc87f?style=for-the-badge)
-![Theme](https://img.shields.io/badge/Theme-Pywal%20Dynamic-ff69b4?style=for-the-badge&logoColor=white)
+![Theme](https://img.shields.io/badge/Theme-Matugen%20Material%20You-89b4fa?style=for-the-badge&logoColor=white)
 ![Shell](https://img.shields.io/badge/Shell-ZSH-89b4fa?style=for-the-badge&logo=gnu-bash&logoColor=white)
 ![Distro](https://img.shields.io/badge/Distro-CachyOS-00b4d8?style=for-the-badge&logo=archlinux&logoColor=white)
 
-*A scrollable, tiling Wayland desktop built on the niri compositor. Features animated wallpapers, dynamic Pywal colours, and a fully custom Waybar.*
+*A scrollable, tiling Wayland desktop built on the niri compositor. Features animated wallpapers, dynamic Matugen Material You colours, and a fully custom Waybar.*
 
 </div>
 
@@ -175,7 +175,7 @@ The installer automatically applies several kernel and driver-level fixes:
 
 ## 🎨 Colour Palette
 
-Colours are extracted from the wallpaper via **pywal** and applied to Waybar and Rofi automatically.
+Colours and Material Design 3 design tokens are extracted from the wallpaper via **Matugen** and applied to Waybar, Foot, Rofi, and Mako automatically.
 
 | Role | Hex |
 |------|-----|

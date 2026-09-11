@@ -1,0 +1,16 @@
+#compdef mdview md
+
+_mdview() {
+    local -a args
+    args=(
+        '(-p --no-pager)'{-p,--no-pager}'[Do not pipe output into a pager]'
+        '(-w --width)'{-w,--width}'[Override terminal display width]:COLS:_guard "[0-9]#" "width in columns"'
+        '(-c --completions)'{-c,--completions}'[Generate shell completion script]:shell:(bash zsh fish)'
+        '(-v -V --version)'{-v,-V,--version}'[Print version information]'
+        '(-h --help)'{-h,--help}'[Print help information]'
+        '1:file:_files -g "*.(md|markdown|mdown|mkd|mkdn)(-.)"'
+    )
+    _arguments -s -S $args
+}
+
+_mdview "$@"

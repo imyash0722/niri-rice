@@ -7,7 +7,7 @@ set -e
 #   - Scales and center-crops ANY resolution/aspect ratio to exactly 1920x1200
 #   - Converts GIFs/Videos to smooth 1200p hardware-accelerated MP4
 #   - Converts static images to 1920x1200 PNG
-#   - Automatically extracts Pywal colors
+#   - Automatically extracts Matugen Material You colors
 #   - Automatically syncs matching 24px Moga-Neon cursor in Niri & KDE
 #   - Applies live wallpaper in Niri (mpvpaper) and KDE Plasma
 # ==============================================================================
@@ -58,14 +58,14 @@ else
     ffmpeg -y -loop 1 -i "$OUT_PNG" -t 1 -c:v libx264 -pix_fmt yuv420p -crf 18 -preset fast -an "$OUT_MP4" 2>/dev/null
 fi
 
-echo "[2/4] Extracting Pywal dynamic color palette..."
-rm -rf "$HOME/.cache/wal/schemes"
-wal -i "$OUT_PNG" -n -s -t -q
-
-echo "[3/4] Auto-matching & applying 24px Moga-Neon cursor and desktop themes..."
-if [ -x "$HOME/.config/niri/scripts/pywal-cursor.py" ]; then
+echo "[2/4] Extracting Matugen Material You color palette & themes..."
+if [ -x "$HOME/.config/niri/scripts/matugen-theme.py" ]; then
+    "$HOME/.config/niri/scripts/matugen-theme.py" --wallpaper "$OUT_PNG" --size 32
+elif [ -x "$HOME/.config/niri/scripts/pywal-cursor.py" ]; then
     "$HOME/.config/niri/scripts/pywal-cursor.py" --wallpaper "$OUT_PNG" --size 32
 fi
+
+echo "[3/4] Wallpaper processed..."
 
 echo "[4/4] Setting active wallpaper for Niri and KDE Plasma..."
 # 1. Update Niri active wallpaper path
@@ -93,4 +93,4 @@ if [ -n "$NIRI_SOCKET" ]; then
         --transition-bezier .25,1,.5,1 2>/dev/null || true
 fi
 
-echo "All done! 1920x1200 wallpaper, Pywal palette, and 24px cursor successfully applied!"
+echo "All done! 1920x1200 wallpaper, Matugen palette, and 24px cursor successfully applied!"
