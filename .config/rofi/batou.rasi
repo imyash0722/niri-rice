@@ -16,7 +16,7 @@ window {
     border: 2px;
     border-color: @accent-color;
     border-radius: 10px;
-    background-color: rgba(9, 18, 24, 0.90);
+    background-color: @bg0-alpha;
     padding: 10px;
 }
 

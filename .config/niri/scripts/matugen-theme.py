@@ -309,8 +309,10 @@ def update_all_desktop_colors(target_color=None):
                     os.utime(p, None)
                 except Exception:
                     pass
-        subprocess.run(["pkill", "-x", "waybar"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        subprocess.Popen(["waybar"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+        if subprocess.run(["pgrep", "-x", "waybar"], stdout=subprocess.DEVNULL).returncode == 0:
+            subprocess.run(["killall", "-SIGUSR2", "waybar"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        else:
+            subprocess.Popen(["waybar"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
 
         # 3. Reload Mako notifications
         subprocess.run(["makoctl", "reload"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
