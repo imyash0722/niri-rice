@@ -1,9 +1,9 @@
 [package]
 name = "rice-ctl"
-version = "0.1.0"
+version = "0.3.0"
 edition = "2021"
 authors = ["imyash0722"]
-description = "High-performance unified desktop controller & theming engine for Niri rice"
+description = "High-performance unified desktop controller & native theming engine for Niri rice"
 
 [dependencies]
 clap = { version = "4.5", features = ["derive"] }

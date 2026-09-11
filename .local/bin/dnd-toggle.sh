@@ -1,3 +1,2 @@
-#!/bin/bash
-dunstctl set-paused toggle
-pkill -SIGRTMIN+8 waybar
+#!/bin/sh
+exec rice-ctl dnd toggle "$@"

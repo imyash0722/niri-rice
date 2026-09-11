@@ -52,8 +52,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#c1c1ff"
-        inactive-color "#131318"
+        active-color "#b8c3ff"
+        inactive-color "#121318"
     }
 
     tab-indicator {
@@ -378,17 +378,18 @@ binds {
     Super_L { spawn-sh "pkill -x rofi || rofi -show drun"; }
     Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
 
-    // Wallpaper & Theme Gallery (val-niri)
-    Mod+Z { spawn "sh" "-c" "~/.local/bin/wall.sh"; }
+    // Wallpaper & Theme Gallery
+    Mod+Z { spawn "rice-ctl" "theme" "select"; }
+    Mod+Alt+W { spawn "rice-ctl" "theme" "random"; }
 
     // Kill window
     Mod+Q repeat=false { close-window; }
 
     // Power menu
-    Mod+Shift+Q { spawn "sh" "-c" "~/.config/niri/scripts/power.sh"; }
+    Mod+Shift+Q { spawn "rice-ctl" "power" "menu"; }
 
     // Lock screen
-    Mod+L allow-inhibiting=false { spawn "sh" "-c" "~/.config/niri/scripts/lock.sh"; }
+    Mod+L allow-inhibiting=false { spawn "rice-ctl" "power" "lock"; }
 
     // Browser
     Mod+B { spawn "firefox-developer-edition"; }
@@ -419,8 +420,8 @@ binds {
     XF86Calculator       { spawn "kcalc"; }
     XF86Search           { spawn "rofi" "-show" "drun"; }
     XF86Explorer         { spawn "dolphin"; }
-    XF86Sleep            { spawn "sh" "-c" "~/.config/niri/scripts/lock.sh"; }
-    XF86Standby          { spawn "sh" "-c" "~/.config/niri/scripts/lock.sh"; }
+    XF86Sleep            { spawn "rice-ctl" "power" "lock"; }
+    XF86Standby          { spawn "rice-ctl" "power" "lock"; }
 
     // ── Function Row (Lenovo ThinkBook Special Keys) ──
     Print                { screenshot; }
@@ -520,11 +521,11 @@ binds {
     // Audio
     XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"; }
     XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; }
-    XF86AudioMute         allow-when-locked=true { spawn-sh "~/.config/niri/scripts/mute-debounce"; }
-    XF86AudioMicMute      allow-when-locked=true { spawn-sh "~/.config/niri/scripts/mic-debounce"; }
-    XF86AudioPlay         allow-when-locked=true { spawn "playerctl" "play-pause"; }
-    XF86AudioPrev         allow-when-locked=true { spawn "playerctl" "previous"; }
-    XF86AudioNext         allow-when-locked=true { spawn "playerctl" "next"; }
+    XF86AudioMute         allow-when-locked=true { spawn "rice-ctl" "volume" "mute-toggle"; }
+    XF86AudioMicMute      allow-when-locked=true { spawn "rice-ctl" "volume" "mic-mute-toggle"; }
+    XF86AudioPlay         allow-when-locked=true { spawn "rice-ctl" "media" "play-pause"; }
+    XF86AudioPrev         allow-when-locked=true { spawn "rice-ctl" "media" "previous"; }
+    XF86AudioNext         allow-when-locked=true { spawn "rice-ctl" "media" "next"; }
 
     // Brightness
     XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "+5%"; }
@@ -532,7 +533,7 @@ binds {
 
     // Reload Config
     Mod+A       { spawn "killall" "-SIGUSR1" "waybar"; }
-    Mod+Shift+R { spawn-sh "~/.config/niri/scripts/reload.sh"; }
+    Mod+Shift+R { spawn "rice-ctl" "reload"; }
 
     // Quit niri (with confirmation dialog)
     Mod+Escape { quit; }

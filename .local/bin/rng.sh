@@ -1,2 +1,2 @@
-#!/bin/bash
-exec rice-ctl theme random
+#!/bin/sh
+exec rice-ctl theme random "$@"
