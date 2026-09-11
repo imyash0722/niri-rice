@@ -1,8 +1,26 @@
-#!/usr/bin/env python3
-"""Compatibility wrapper forwarding to matugen-theme.py"""
-import os
-import sys
+#!/bin/bash
+# Backward-compatibility forwarder to native Rust rice-ctl
+WALLPAPER=""
+SIZE="32"
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-matugen_theme = os.path.join(script_dir, "matugen-theme.py")
-os.execv(sys.executable, [sys.executable, matugen_theme] + sys.argv[1:])
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --wallpaper)
+      WALLPAPER="$2"
+      shift 2
+      ;;
+    --size)
+      SIZE="$2"
+      shift 2
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+
+if [ -n "$WALLPAPER" ]; then
+  exec rice-ctl theme set "$WALLPAPER" --size "$SIZE"
+else
+  exec rice-ctl theme random --size "$SIZE"
+fi

@@ -81,5 +81,5 @@ if [ -n "$SELECTED" ] && [ -f "$SELECTED" ]; then
     sel_name=$(basename "$SELECTED")
     display_sel=$(echo "${sel_name%.*}" | sed 's/_16x[0-9]*//g' | tr '_' ' ' | tr '-' ' ' | sed -E 's/\b([a-z])/\U\1/g')
     notify-send -a "Wallpaper Manager" -i "preferences-desktop-wallpaper" "Applying Wallpaper..." "$display_sel"
-    "$HOME/.config/niri/scripts/apply-wallpaper.sh" "$SELECTED"
+    rice-ctl theme set "$SELECTED"
 fi

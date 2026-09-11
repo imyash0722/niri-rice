@@ -42,31 +42,6 @@ if [ ! -f "$WALL_IMG" ]; then
     WALL_IMG="$THEMES_DIR/$THEME/wallpaper.mp4"
 fi
 
-if [ -x "$HOME/.config/niri/scripts/matugen-theme.py" ]; then
-    "$HOME/.config/niri/scripts/matugen-theme.py" --wallpaper "$WALL_IMG" --size 32
-elif [ -x "$HOME/.config/niri/scripts/pywal-cursor.py" ]; then
-    "$HOME/.config/niri/scripts/pywal-cursor.py" --wallpaper "$WALL_IMG" --size 32
-fi
-
-# 5.5 Update KDE Plasma Wallpaper (Static frame + Smart Video Wallpaper config)
-if command -v plasma-apply-wallpaperimage &>/dev/null && [ -f "$THEMES_DIR/$THEME/wallpaper.png" ]; then
-    plasma-apply-wallpaperimage "$THEMES_DIR/$THEME/wallpaper.png" &>/dev/null || true
-fi
-if command -v kwriteconfig6 &>/dev/null; then
-    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 210 --group Wallpaper --group "luisbocanegra.smart.video.wallpaper.reborn" --group General --key Video "file://$THEMES_DIR/$THEME/wallpaper.mp4" 2>/dev/null || true
-fi
-
-# 6. Apply live to Niri and Waybar
-if [ -n "$NIRI_SOCKET" ]; then
-    pgrep -x awww-daemon >/dev/null || nohup awww-daemon >/dev/null 2>&1 &
-    awww img "$THEMES_DIR/$THEME/wallpaper.png" \
-        --transition-type center \
-        --transition-pos center \
-        --transition-duration 1.2 \
-        --transition-fps 120 \
-        --transition-bezier .25,1,.5,1 2>/dev/null || true
-    killall -SIGUSR2 waybar 2>/dev/null || true
-    niri msg action do-screen-transition 2>/dev/null || true
-fi
+rice-ctl theme set "$WALL_IMG" --size 32
 
 echo "Theme '$THEME' applied successfully!"

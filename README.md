@@ -21,6 +21,7 @@
 
 - 🌊 **niri** — Scrollable, infinite-canvas tiling Wayland compositor
 - 📺 **Dynamic Display Scaling** — Monitor daemon auto-scales outputs on connect (`1.5x` for 4K, `1.25x` for 1440p, `1.0x` for 1080p)
+- 🦀 **rice-ctl** — Native Rust unified desktop controller for sub-second Material You theming, live wallpaper transitions, cursor matching, and power actions
 - 🎬 **awww** — Wayland wallpaper daemon with smooth circular droplet bubble transitions
 - 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
 - 🚀 **Rofi** — App launcher with a custom dark theme; toggles instantly via hardware Copilot key

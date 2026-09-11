@@ -1,9 +1,9 @@
 * {
-    bg0: #121318;
-    bg0-alpha: #121318ea;
-    bg1: #121318;
-    fg0: #e3e2e9;
-    accent-color: #b3c5ff;
+    bg0: #131318;
+    bg0-alpha: #131318ea;
+    bg1: #131318;
+    fg0: #e4e1e9;
+    accent-color: #c1c1ff;
     urgent-color: #ffb4ab;
-    border-color: #b3c5ff;
+    border-color: #c1c1ff;
 }

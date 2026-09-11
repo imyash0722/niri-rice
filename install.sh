@@ -213,6 +213,14 @@ if [ -d "$REPO_DIR/setup_assets/icons" ]; then
     cp -r "$REPO_DIR/setup_assets/icons/"* "$HOME/.local/share/icons/" 2>/dev/null || true
 fi
 
+# Build & install native Rust rice-ctl
+if [ -d "$REPO_DIR/crates/rice-ctl" ]; then
+    echo "  Compiling and installing native Rust rice-ctl..."
+    cargo build --release --manifest-path "$REPO_DIR/crates/rice-ctl/Cargo.toml"
+    mkdir -p "$HOME/.local/bin"
+    cp "$REPO_DIR/crates/rice-ctl/target/release/rice-ctl" "$HOME/.local/bin/rice-ctl"
+fi
+
 # ~/.zshrc
 if [ -f "$REPO_DIR/.zshrc" ]; then
     force_link "$REPO_DIR/.zshrc" "$HOME/.zshrc"

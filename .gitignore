@@ -35,3 +35,7 @@ __pycache__/
 *.pyc
 .local/bin/agy
 .local/bin/agy*
+
+# Rust build artifacts
+target/
+**/target/
