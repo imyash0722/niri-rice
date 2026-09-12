@@ -1,6 +1,6 @@
 // SSH Terminal Window Styling (Dynamic Pywal)
 window-rule {
-    match app-id=r#"^foot\.ssh.*"#
+    match app-id=r#"^kitty\.ssh.*"#
     border {
         on
         width 2

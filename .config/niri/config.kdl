@@ -52,8 +52,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#879ff8"
-        inactive-color "#120c10"
+        active-color "#f4b2e2"
+        inactive-color "#181216"
     }
 
     tab-indicator {
@@ -191,7 +191,7 @@ window-rule {
     draw-border-with-background false
 }
 
-// Inform all tiled windows that they are tiled so terminals (like foot) expand flush without snapping gaps
+// Inform all tiled windows that they are tiled so terminals expand flush without snapping gaps
 window-rule {
     match is-floating=false
     tiled-state true
@@ -211,7 +211,7 @@ window-rule {
 
 // Terminal (consistent frosted glass): blur true without harsh opacity jumps
 window-rule {
-    match app-id=r#"^(kitty|foot).*"#
+    match app-id=r#"^kitty.*"#
     opacity 1.0
     background-effect {
         blur true
@@ -237,7 +237,7 @@ window-rule {
 
 // Terminal floating window
 window-rule {
-    match app-id=r#"^(kitty|foot)\.floating$"#
+    match app-id="kitty.floating"
     open-floating true
 }
 
@@ -309,22 +309,22 @@ window-rule {
 
 // Terminal floating app-ids (batctl, notes, nmtui, ssh)
 window-rule {
-    match app-id=r#"^(kitty|foot)\.batctl$"#
+    match app-id="kitty.batctl"
     open-floating true
 }
 
 window-rule {
-    match app-id=r#"^(kitty|foot)\.floating\.notes$"#
+    match app-id="kitty.floating.notes"
     open-floating true
 }
 
 window-rule {
-    match app-id=r#"^(kitty|foot)\.nmtui$"#
+    match app-id="kitty.nmtui"
     open-floating true
 }
 
 window-rule {
-    match app-id=r#"^(kitty|foot)\.ssh$"#
+    match app-id="kitty.ssh"
     open-floating true
 }
 

@@ -25,7 +25,7 @@
 - 🚀 **Rofi** — App launcher with modern glassmorphic theme; toggles instantly via hardware Copilot key
 - 📸 **Satty** — Screenshot annotation tool (native Niri screenshot support via `Mod+Shift+S`)
 - 🔒 **hyprlock** — Bespoke Material You lockscreen with Android 14/15 2-line clock, frosted glass blur, battery pills, and PAM/fingerprint unlock
-- 🐾 **Foot** — Fast, GPU-rendered Wayland terminal
+- 🐱 **Kitty** — Fast, GPU-accelerated terminal with Material You theming
 - ⭐ **Starship** — Cross-shell prompt
 - 📋 **cliphist** — Clipboard history manager (`Mod+V` to open)
 - 💻 **TTY Session** — Minimal fullscreen terminal session via `cage` — selectable from the SDDM login screen dropdown
@@ -157,7 +157,7 @@ The installer automatically applies several kernel and driver-level fixes:
 
 ## 🎨 Colour Palette
 
-Colours and Material Design 3 design tokens are extracted from the wallpaper via **Matugen** and applied to Waybar, Foot, Rofi, and Mako automatically.
+Colours and Material Design 3 design tokens are extracted from the wallpaper via **Matugen** and applied to Waybar, Kitty, Rofi, and Mako automatically.
 
 | Role | Hex |
 |------|-----|

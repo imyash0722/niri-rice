@@ -5,10 +5,6 @@ input_path = "~/.config/matugen/templates/waybar-colors.css"
 output_path = "~/.config/waybar/colors.css"
 post_hook = "killall -SIGUSR2 waybar 2>/dev/null || true"
 
-[templates.foot]
-input_path = "~/.config/matugen/templates/foot-colors.ini"
-output_path = "~/.config/foot/colors.ini"
-
 [templates.rofi]
 input_path = "~/.config/matugen/templates/rofi-colors.rasi"
 output_path = "~/.config/rofi/colors.rasi"

@@ -356,11 +356,11 @@ fn apply_cursor(variant: &str, size: u32) {
         ])
         .output();
 
+    let re_theme = Regex::new(r"gtk-cursor-theme-name=.*").unwrap();
+    let re_size = Regex::new(r"gtk-cursor-theme-size=.*").unwrap();
     for gtk in ["gtk-3.0", "gtk-4.0"] {
         let ini_path = PathBuf::from(&home).join(format!(".config/{}/settings.ini", gtk));
         if let Ok(content) = fs::read_to_string(&ini_path) {
-            let re_theme = Regex::new(r"gtk-cursor-theme-name=.*").unwrap();
-            let re_size = Regex::new(r"gtk-cursor-theme-size=.*").unwrap();
             let updated =
                 re_theme.replace_all(&content, format!("gtk-cursor-theme-name={}", variant));
             let updated = re_size.replace_all(&updated, format!("gtk-cursor-theme-size={}", size));
@@ -412,8 +412,9 @@ fn apply_desktop_colors(target_color: Option<&str>) {
         .unwrap_or_else(|| "#e3e2e9".to_string());
     let primary = target_color
         .map(|s| s.to_string())
+        .or_else(|| cache.special.get("cursor").cloned())
         .or_else(|| cache.colors.get("color4").cloned())
-        .unwrap_or_else(|| "#b3c5ff".to_string());
+        .unwrap_or_else(|| "#f4b2e2".to_string());
 
     let niri_config = PathBuf::from(&home).join(".config/niri/config.kdl");
     if let Ok(content) = fs::read_to_string(&niri_config) {
@@ -568,7 +569,7 @@ fn set_wallpaper(file: &Path, size: u32) {
 
     if let Ok(data) = fs::read_to_string(&wal_cache) {
         if let Ok(cache) = serde_json::from_str::<WalCache>(&data) {
-            if let Some(p) = cache.colors.get("color4") {
+            if let Some(p) = cache.special.get("cursor").or_else(|| cache.colors.get("color4")) {
                 primary_color = p.clone();
             }
         }
@@ -692,7 +693,7 @@ fn select_wallpaper(size: u32) {
 
     let mut rofi_input = Vec::new();
     for c in &concepts {
-        let display = c.replace('_', " ").replace('-', " ");
+        let display = c.replace(['_', '-'], " ");
         let display_title: String = display
             .split_whitespace()
             .map(|word| {
@@ -801,8 +802,7 @@ fn select_wallpaper(size: u32) {
         let clean_display = name
             .replace("_16x10", "")
             .replace("_16x9", "")
-            .replace('_', " ")
-            .replace('-', " ");
+            .replace(['_', '-'], " ");
         let _ = Command::new("notify-send")
             .args([
                 "-a",
@@ -1572,7 +1572,7 @@ fn wifi_menu() {
     }
 
     let mut items: Vec<(String, bool, u32, String)> = networks.into_iter().map(|(ssid, (in_use, sig, sec))| (ssid, in_use, sig, sec)).collect();
-    items.sort_by(|a, b| b.2.cmp(&a.2));
+    items.sort_by_key(|a| std::cmp::Reverse(a.2));
 
     let mut rofi_lines = String::new();
     rofi_lines.push_str("󰤮  Toggle Wi-Fi (On/Off)\n");
@@ -1733,8 +1733,8 @@ fn url_decode(s: &str) -> String {
 }
 
 fn extract_line_number(frag: &str) -> Option<u32> {
-    let s = frag.trim_start_matches(|c: char| c == 'L' || c == 'l' || c == ':');
-    let num_str = s.split(|c: char| c == '-' || c == ':' || c == ',' || c == '#').next()?;
+    let s = frag.trim_start_matches(['L', 'l', ':']);
+    let num_str = s.split(['-', ':', ',', '#']).next()?;
     num_str.parse::<u32>().ok()
 }
 
@@ -1795,10 +1795,9 @@ fn open_target(target: &str) {
         return;
     }
 
-    if trimmed.starts_with("file://") {
-        let stripped = &trimmed["file://".len()..];
-        let path_part = if stripped.starts_with("localhost/") {
-            &stripped["localhost".len()..]
+    if let Some(stripped) = trimmed.strip_prefix("file://") {
+        let path_part = if let Some(p) = stripped.strip_prefix("localhost/") {
+            p
         } else {
             stripped
         };
@@ -2133,10 +2132,7 @@ struct NiriWindow {
 
 fn is_terminal_window(w: &NiriWindow) -> bool {
     let Some(ref app_id) = w.app_id else { return false };
-    match app_id.as_str() {
-        "kitty" | "kitty.floating" => true,
-        _ => false,
-    }
+    matches!(app_id.as_str(), "kitty" | "kitty.floating")
 }
 
 fn spawn_main_terminal() {
@@ -2479,7 +2475,7 @@ fn main() {
         Commands::Reload => reload_desktop(),
         Commands::Caffeine { action } => match action.as_str() {
             "toggle" => caffeine_toggle(),
-            "status" | _ => caffeine_status(),
+            _ => caffeine_status(),
         },
         Commands::Volume { action } => match action {
             VolumeAction::MuteToggle => volume_mute_toggle(),

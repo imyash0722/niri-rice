@@ -92,7 +92,7 @@ fi
 
 $AUR_HELPER -Syu --needed --noconfirm \
     google-chrome dolphin konsole \
-    niri waybar rofi kitty foot fastfetch networkmanager plasma-nm \
+    niri waybar rofi kitty fastfetch networkmanager plasma-nm \
     cage alacritty fish zsh hypridle hyprlock btop cava mpv \
     kde-cli-tools plasma-pa bluedevil bt-dualboot satty neovim \
     firefox-developer-edition grim slurp wl-clipboard cliphist \
