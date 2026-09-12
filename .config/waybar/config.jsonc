@@ -9,12 +9,12 @@
     "margin-bottom": 0,
 
     "modules-left": [
-        "niri/workspaces"
+        "niri/workspaces",
+        "mpris"
     ],
 
     "modules-center": [
-        "clock",
-        "mpris"
+        "clock"
     ],
 
     "modules-right": [
@@ -22,8 +22,8 @@
         "battery",
         "group/sounds",
         "group/hw",
-        "custom/caf-waybar",
-        "custom/control-center"
+        "custom/dunst",
+        "custom/caf-waybar"
     ],
 
 "custom/caf-waybar": {
@@ -157,12 +157,14 @@
         }
     },
 
-    "custom/control-center": {
-        "format": "󰂚",
-        "on-click": "swaync-client -t -sw",
-        "on-click-right": "swaync-client -d -sw",
-        "tooltip": true,
-        "tooltip-format": "Left click: Control Center\nRight click: Toggle DND"
+    "custom/dunst": {
+        "format": "{}",
+        "exec": "makoctl mode | grep -q dnd && echo '󰂛' || echo ''",
+        "on-click": "makoctl mode -t dnd; pkill -RTMIN+8 waybar",
+        "on-click-right": "makoctl dismiss -a",
+        "interval": 5,
+        "signal": 8,
+        "tooltip-format": "Left click: Toggle DND\nRight click: Dismiss all"
     },
 
     "custom/recorder": {
@@ -192,7 +194,7 @@
         "orientation": "horizontal",
         "modules": [
             "pulseaudio",
-            "pulseaudio#microphone"
+            "pulseaudio#microphone",
         ]
     },
         "group/syst": {
