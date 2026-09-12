@@ -972,9 +972,12 @@ fn lock_screen() {
 }
 
 fn power_menu() {
-    let options = "Lock\nLogout\nSuspend\nHibernate\nReboot\nShutdown\n";
+    let options = "󰌾 Lock\n󰍃 Logout\n󰤄 Suspend\n󰒲 Hibernate\n󰜉 Reboot\n󰐥 Shutdown\n";
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let theme_path = PathBuf::from(&home).join(".config/rofi/powermenu.rasi");
+
     let mut child = match Command::new("rofi")
-        .args(["-dmenu", "-i", "-p", "Power", "-lines", "6"])
+        .args(["-dmenu", "-i", "-p", "Power", "-theme", &theme_path.to_string_lossy()])
         .stdin(std::process::Stdio::piped())
         .stdout(std::process::Stdio::piped())
         .spawn()
@@ -995,24 +998,18 @@ fn power_menu() {
     };
     let choice = String::from_utf8_lossy(&output.stdout).trim().to_string();
 
-    match choice.as_str() {
-        "Lock" => lock_screen(),
-        "Logout" => {
-            let _ = Command::new("niri").args(["msg", "action", "quit"]).output();
-        }
-        "Suspend" => {
-            let _ = Command::new("systemctl").arg("suspend").spawn();
-        }
-        "Hibernate" => {
-            let _ = Command::new("systemctl").arg("hibernate").spawn();
-        }
-        "Reboot" => {
-            let _ = Command::new("systemctl").arg("reboot").spawn();
-        }
-        "Shutdown" => {
-            let _ = Command::new("systemctl").arg("poweroff").spawn();
-        }
-        _ => {}
+    if choice.contains("Lock") {
+        lock_screen();
+    } else if choice.contains("Logout") {
+        let _ = Command::new("niri").args(["msg", "action", "quit"]).output();
+    } else if choice.contains("Suspend") {
+        let _ = Command::new("systemctl").arg("suspend").spawn();
+    } else if choice.contains("Hibernate") {
+        let _ = Command::new("systemctl").arg("hibernate").spawn();
+    } else if choice.contains("Reboot") {
+        let _ = Command::new("systemctl").arg("reboot").spawn();
+    } else if choice.contains("Shutdown") {
+        let _ = Command::new("systemctl").arg("poweroff").spawn();
     }
 }
 
@@ -1127,8 +1124,10 @@ fn power_profile_menu() {
         };
         String::from_utf8_lossy(&output.stdout).trim().to_string()
     } else {
+        let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+        let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
         let mut rchild = match Command::new("rofi")
-            .args(["-dmenu", "-i", "-p", "Power Profile", "-lines", "3"])
+            .args(["-dmenu", "-i", "-p", "󰓅 Power Profile", "-theme", &theme_path.to_string_lossy()])
             .stdin(std::process::Stdio::piped())
             .stdout(std::process::Stdio::piped())
             .spawn()
@@ -1173,9 +1172,12 @@ fn apply_power_profile_choice(chosen: &str) {
 }
 
 fn ssh_menu() {
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
     let _ = Command::new("rofi")
         .args([
             "-show", "ssh",
+            "-theme", &theme_path.to_string_lossy(),
             "-terminal", "foot",
             "-ssh-command", "foot --app-id=foot.ssh -T '{host}' -e ssh {host}",
             "-display-ssh", "󰢹 SSH",
@@ -1539,8 +1541,11 @@ fn battery_menu() {
         cap, stat, cons_str, prof
     );
 
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
+
     let mut child = match Command::new("rofi")
-        .args(["-dmenu", "-i", "-p", "Battery & Power", "-lines", "3"])
+        .args(["-dmenu", "-i", "-p", "󰂀 Battery & Power", "-theme", &theme_path.to_string_lossy()])
         .stdin(std::process::Stdio::piped())
         .stdout(std::process::Stdio::piped())
         .spawn()
@@ -1607,8 +1612,11 @@ fn wifi_menu() {
         rofi_lines.push_str(&format!("{} {} {} ({}%)\n", icon, ssid, lock, sig));
     }
 
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
+
     let mut child = match Command::new("rofi")
-        .args(["-dmenu", "-i", "-p", "Wi-Fi Networks", "-lines", "10"])
+        .args(["-dmenu", "-i", "-p", "󰤨 Wi-Fi Networks", "-theme", &theme_path.to_string_lossy()])
         .stdin(std::process::Stdio::piped())
         .stdout(std::process::Stdio::piped())
         .spawn()
@@ -1648,7 +1656,7 @@ fn wifi_menu() {
                 if sec.is_empty() || sec == "--" {
                     let _ = Command::new("nmcli").args(["dev", "wifi", "connect", ssid]).spawn();
                 } else {
-                    if let Ok(pwd_child) = Command::new("rofi").args(["-dmenu", "-password", "-p", &format!("Password for {}", ssid)]).stdout(std::process::Stdio::piped()).spawn() {
+                    if let Ok(pwd_child) = Command::new("rofi").args(["-dmenu", "-password", "-p", &format!("Password for {}", ssid), "-theme", &theme_path.to_string_lossy()]).stdout(std::process::Stdio::piped()).spawn() {
                         if let Ok(pwd_out) = pwd_child.wait_with_output() {
                             let pass = String::from_utf8_lossy(&pwd_out.stdout).trim().to_string();
                             if !pass.is_empty() {
@@ -1681,8 +1689,11 @@ fn browse_menu() {
         input.push('\n');
     }
 
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
+
     let mut child = match Command::new("rofi")
-        .args(["-dmenu", "-p", "Browse", "-i", "-lines", "8"])
+        .args(["-dmenu", "-p", "󰖟 Browse", "-i", "-theme", &theme_path.to_string_lossy()])
         .stdin(std::process::Stdio::piped())
         .stdout(std::process::Stdio::piped())
         .spawn()
@@ -1772,8 +1783,11 @@ fn calendar_action(action: &str) {
 
 fn bar_select() {
     let options = "main\nsmol\nnuke\n";
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
+
     let mut child = match Command::new("rofi")
-        .args(["-dmenu", "-p", "Waybar Mode", "-lines", "3"])
+        .args(["-dmenu", "-p", "󱂬 Waybar Mode", "-theme", &theme_path.to_string_lossy()])
         .stdin(std::process::Stdio::piped())
         .stdout(std::process::Stdio::piped())
         .spawn()
@@ -1795,7 +1809,6 @@ fn bar_select() {
         return;
     }
 
-    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let _ = Command::new("killall").arg("waybar").output();
     std::thread::sleep(std::time::Duration::from_millis(200));
 
@@ -1881,13 +1894,15 @@ fn take_screenshot(mode: &str) {
 }
 
 fn files_picker() {
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
     let Ok(mut child) = Command::new("fd")
         .args(["--type", "f", "--exclude", "Games"])
         .stdout(std::process::Stdio::piped())
         .spawn() else { return };
     let Some(stdout) = child.stdout.take() else { return };
     if let Ok(rofi) = Command::new("rofi")
-        .args(["-dmenu", "-i", "-p", "Search Files:"])
+        .args(["-dmenu", "-i", "-p", "󰈞 Search Files:", "-theme", &theme_path.to_string_lossy()])
         .stdin(stdout)
         .stdout(std::process::Stdio::piped())
         .spawn()

@@ -1,0 +1,163 @@
+/**
+ * Modern Glassmorphic App Launcher
+ * Dynamic Material You tinting via colors.rasi
+ **/
+
+@import "colors.rasi"
+
+configuration {
+    modi:                       "drun,run,window";
+    show-icons:                 true;
+    display-drun:               "󰍉 Apps";
+    display-run:                " Run";
+    display-window:             "󱂬 Windows";
+    drun-display-format:        "{name}";
+    window-format:              "{w} · {c} · {t}";
+    font:                       "Inter, JetBrainsMono Nerd Font 11";
+    icon-theme:                 "breeze-dark";
+}
+
+* {
+    background-color:           transparent;
+    text-color:                 @fg0;
+    margin:                     0px;
+    padding:                    0px;
+    spacing:                    0px;
+}
+
+window {
+    transparency:               "real";
+    location:                   center;
+    anchor:                     center;
+    fullscreen:                 false;
+    width:                      640px;
+    height:                     460px;
+    x-offset:                   0px;
+    y-offset:                   0px;
+
+    enabled:                    true;
+    border:                     2px;
+    border-color:               @accent-color;
+    border-radius:              16px;
+    background-color:           @bg0-alpha;
+    cursor:                     "default";
+}
+
+mainbox {
+    enabled:                    true;
+    spacing:                    12px;
+    padding:                    18px;
+    background-color:           transparent;
+    children:                   [ "inputbar", "listview", "mode-switcher" ];
+}
+
+inputbar {
+    enabled:                    true;
+    spacing:                    10px;
+    padding:                    10px 14px;
+    border:                     1px;
+    border-color:               rgba(255, 255, 255, 0.10);
+    border-radius:              12px;
+    background-color:           rgba(255, 255, 255, 0.04);
+    text-color:                 @fg0;
+    children:                   [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:                    true;
+    background-color:           transparent;
+    text-color:                 @accent-color;
+    font:                       "JetBrainsMono Nerd Font Bold 12";
+}
+
+entry {
+    enabled:                    true;
+    background-color:           transparent;
+    text-color:                 @fg0;
+    cursor:                     text;
+    placeholder:                "Search applications...";
+    placeholder-color:          @fg1;
+    font:                       "Inter 11";
+}
+
+listview {
+    enabled:                    true;
+    columns:                    1;
+    lines:                      6;
+    cycle:                      true;
+    dynamic:                    true;
+    scrollbar:                  false;
+    layout:                     vertical;
+    reverse:                    false;
+    fixed-height:               true;
+    fixed-columns:              true;
+    spacing:                    5px;
+    background-color:           transparent;
+    text-color:                 @fg0;
+    cursor:                     "default";
+}
+
+element {
+    enabled:                    true;
+    spacing:                    12px;
+    padding:                    8px 12px;
+    border:                     1px;
+    border-color:               transparent;
+    border-radius:              10px;
+    background-color:           transparent;
+    text-color:                 @fg0;
+    cursor:                     pointer;
+}
+
+element normal.normal, element alternate.normal {
+    background-color:           transparent;
+    text-color:                 @fg0;
+}
+
+element selected.normal, element selected.active {
+    background-color:           @accent-container;
+    border-color:               @accent-color;
+    text-color:                 @fg0;
+}
+
+element-icon {
+    background-color:           transparent;
+    text-color:                 inherit;
+    size:                       32px;
+    cursor:                     inherit;
+}
+
+element-text {
+    background-color:           transparent;
+    text-color:                 inherit;
+    highlight:                  inherit;
+    cursor:                     inherit;
+    vertical-align:             0.5;
+    horizontal-align:           0.0;
+    font:                       "Inter Medium 11";
+}
+
+element selected.normal element-text {
+    font:                       "Inter Bold 11";
+}
+
+mode-switcher {
+    enabled:                    true;
+    spacing:                    8px;
+    background-color:           transparent;
+    text-color:                 @fg0;
+}
+
+button {
+    padding:                    6px 14px;
+    border-radius:              8px;
+    background-color:           rgba(255, 255, 255, 0.04);
+    text-color:                 @fg1;
+    cursor:                     pointer;
+}
+
+button selected {
+    background-color:           @accent-color;
+    text-color:                 #121212;
+    font:                       "Inter Bold 10";
+}

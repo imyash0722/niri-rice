@@ -1,6 +1,7 @@
 configuration {
     modi: "drun,run,window";
-    show-icons: false;
+    show-icons: true;
     terminal: "foot";
+    icon-theme: "breeze-dark";
 }
-@theme "batou"
+@theme "launcher"

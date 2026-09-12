@@ -1,110 +1,111 @@
 /**
  * Ultra-Modern 16:10 Flush Glassmorphic Wallpaper Grid
+ * Dynamic Material You tinting via colors.rasi
  **/
 
 @import "colors.rasi"
 
 * {
-    font: "Inter, JetBrainsMono Nerd Font 11";
-    background-color: transparent;
-    text-color: @fg0;
-    margin: 0;
-    padding: 0;
-    spacing: 0;
+    font:                       "Inter, JetBrainsMono Nerd Font 11";
+    background-color:           transparent;
+    text-color:                 @fg0;
+    margin:                     0px;
+    padding:                    0px;
+    spacing:                    0px;
 }
 
 window {
-    location: center;
-    anchor: center;
-    width: 1120px;
-    height: 630px;
-    x-offset: 0;
-    y-offset: 0;
+    location:                   center;
+    anchor:                     center;
+    width:                      1120px;
+    height:                     630px;
+    x-offset:                   0px;
+    y-offset:                   0px;
 
-    border: 2px;
-    border-color: @accent-color;
-    border-radius: 14px;
-    background-color: @bg0-alpha;
+    border:                     2px;
+    border-color:               @accent-color;
+    border-radius:              16px;
+    background-color:           @bg0-alpha;
 }
 
 mainbox {
-    spacing: 12px;
-    padding: 16px;
-    children: [ inputbar, listview ];
+    spacing:                    12px;
+    padding:                    16px;
+    children:                   [ "inputbar", "listview" ];
 }
 
 inputbar {
-    spacing: 10px;
-    padding: 8px 16px;
-    border: 1px;
-    border-color: rgba(255, 255, 255, 0.10);
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.04);
-    children: [ prompt, entry ];
+    spacing:                    10px;
+    padding:                    8px 16px;
+    border:                     1px;
+    border-color:               rgba(255, 255, 255, 0.10);
+    border-radius:              12px;
+    background-color:           rgba(255, 255, 255, 0.04);
+    children:                   [ "prompt", "entry" ];
 }
 
 prompt {
-    text-color: @accent-color;
-    font: "JetBrainsMono Nerd Font Bold 12";
+    text-color:                 @accent-color;
+    font:                       "JetBrainsMono Nerd Font Bold 12";
 }
 
 entry {
-    placeholder: "Search wallpapers or scroll...";
-    placeholder-color: rgba(255, 255, 255, 0.35);
-    text-color: @fg0;
+    placeholder:                "Search wallpapers or scroll...";
+    placeholder-color:          @fg1;
+    text-color:                 @fg0;
 }
 
 listview {
-    columns: 4;
-    lines: 3;
-    flow: horizontal;
-    spacing: 12px;
-    cycle: true;
-    dynamic: true;
-    scrollbar: false;
-    fixed-height: false;
+    columns:                    4;
+    lines:                      3;
+    flow:                       horizontal;
+    spacing:                    12px;
+    cycle:                      true;
+    dynamic:                    true;
+    scrollbar:                  false;
+    fixed-height:               false;
 }
 
 element {
-    orientation: vertical;
-    padding: 0;
-    margin: 0;
-    spacing: 0;
-    border-radius: 10px;
-    border: 2px;
-    border-color: rgba(255, 255, 255, 0.08);
-    background-color: transparent;
-    cursor: pointer;
+    orientation:                vertical;
+    padding:                    0px;
+    margin:                     0px;
+    spacing:                    0px;
+    border-radius:              10px;
+    border:                     2px;
+    border-color:               rgba(255, 255, 255, 0.08);
+    background-color:           transparent;
+    cursor:                     pointer;
 }
 
 element selected.normal, element selected.active {
-    border-color: @accent-color;
-    background-color: rgba(255, 255, 255, 0.06);
+    border-color:               @accent-color;
+    background-color:           rgba(255, 255, 255, 0.06);
 }
 
 element-icon {
-    size: 260px;
-    border-radius: 8px 8px 0px 0px;
-    horizontal-align: 0.5;
-    vertical-align: 0.5;
+    size:                       260px;
+    border-radius:              8px 8px 0px 0px;
+    horizontal-align:           0.5;
+    vertical-align:             0.5;
 }
 
 element-text {
-    horizontal-align: 0.5;
-    vertical-align: 0.5;
-    text-color: @fg0;
-    font: "JetBrainsMono Nerd Font Bold 10";
-    padding: 6px 0px;
-    margin: -30px 0px 0px 0px;
-    border-radius: 0px 0px 8px 8px;
-    background-color: rgba(6, 12, 16, 0.84);
-    border: 1px 0px 0px 0px;
-    border-color: rgba(255, 255, 255, 0.14);
+    horizontal-align:           0.5;
+    vertical-align:             0.5;
+    text-color:                 @fg0;
+    font:                       "JetBrainsMono Nerd Font Bold 10";
+    padding:                    6px 0px;
+    margin:                     -30px 0px 0px 0px;
+    border-radius:              0px 0px 8px 8px;
+    background-color:           @bg0-alpha;
+    border:                     1px 0px 0px 0px;
+    border-color:               rgba(255, 255, 255, 0.14);
 }
 
 element selected element-text {
-    text-color: #0c110d;
-    background-color: @accent-color;
-    border-color: @accent-color;
-    font: "JetBrainsMono Nerd Font Bold 10";
+    text-color:                 #121212;
+    background-color:           @accent-color;
+    border-color:               @accent-color;
+    font:                       "JetBrainsMono Nerd Font Bold 10";
 }

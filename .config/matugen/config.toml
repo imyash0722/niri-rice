@@ -21,3 +21,5 @@ post_hook = "makoctl reload 2>/dev/null || true"
 [templates.wal]
 input_path = "~/.config/matugen/templates/wal-colors.json"
 output_path = "~/.cache/wal/colors.json"
+
+

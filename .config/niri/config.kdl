@@ -52,8 +52,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#ffb68c"
-        inactive-color "#1a120d"
+        active-color "#f4b2e2"
+        inactive-color "#181216"
     }
 
     tab-indicator {
@@ -373,8 +373,7 @@ binds {
     Mod+Shift+Return { spawn-sh "foot --app-id=foot.floating"; }
     Mod+Alt+Return { spawn "foot"; }
 
-    // App launcher (Super / Mod+D)
-    Super_L { spawn-sh "pkill -x rofi || rofi -show drun"; }
+    // App launcher (Mod+D / Copilot key)
     Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
 
     // Wallpaper & Theme Gallery
@@ -400,7 +399,7 @@ binds {
     Mod+N { spawn-sh "cd ~/Notes && foot --app-id=foot.floating.notes -e nvim"; }
 
     // Clipboard history
-    Mod+V { spawn-sh "cliphist list | rofi -dmenu -p 'Clipboard' | cliphist decode | wl-copy"; }
+    Mod+V { spawn-sh "cliphist list | rofi -dmenu -theme ~/.config/rofi/dmenu.rasi -p '󰅍 Clipboard' | cliphist decode | wl-copy"; }
 
     // Password manager
     Mod+P { spawn-sh "rofi-rbw --selector rofi --typer wtype --clipboarder wl-copy"; }
