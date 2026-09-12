@@ -52,8 +52,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#f4b2e2"
-        inactive-color "#181216"
+        active-color "#acc7ff"
+        inactive-color "#111318"
     }
 
     tab-indicator {
@@ -175,14 +175,6 @@ layer-rule {
     }
 }
 
-layer-rule {
-    match namespace="^swaync-control-center$"
-    geometry-corner-radius 20
-    background-effect {
-        blur true
-        saturation 1.1
-    }
-}
 
 layer-rule {
     match namespace="^mako$"
