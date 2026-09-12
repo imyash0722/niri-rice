@@ -415,7 +415,7 @@ fn apply_desktop_colors(target_color: Option<&str>) {
     let primary = target_color
         .map(|s| s.to_string())
         .or_else(|| cache.special.get("cursor").cloned())
-        .or_else(|| cache.colors.get("color4").cloned())
+        .or_else(|| cache.colors.get("color5").cloned())
         .unwrap_or_else(|| "#f4b2e2".to_string());
 
     let niri_config = PathBuf::from(&home).join(".config/niri/config.kdl");
@@ -571,7 +571,7 @@ fn set_wallpaper(file: &Path, size: u32) {
 
     if let Ok(data) = fs::read_to_string(&wal_cache) {
         if let Ok(cache) = serde_json::from_str::<WalCache>(&data) {
-            if let Some(p) = cache.special.get("cursor").or_else(|| cache.colors.get("color4")) {
+            if let Some(p) = cache.special.get("cursor").or_else(|| cache.colors.get("color5")) {
                 primary_color = p.clone();
             }
         }

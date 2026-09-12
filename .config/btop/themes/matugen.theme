@@ -29,7 +29,7 @@ theme[graph_text]="#d2c2ca"
 theme[meter_bg]="#3a3337"
 
 # Misc colors for processes box
-theme[proc_misc]="#dbbed1"
+theme[proc_misc]="#dcbed1"
 
 # Box outlines
 theme[cpu_box]="#4e444a"
@@ -45,23 +45,23 @@ theme[temp_end]="#ffb4ab"
 
 # CPU graph colors
 theme[cpu_start]="#f4b2e2"
-theme[cpu_mid]="#dbbed1"
+theme[cpu_mid]="#dcbed1"
 theme[cpu_end]="#f5b9a4"
 
 # Mem/Disk free meter
 theme[free_start]="#a6cd63"
-theme[free_mid]="#dbbed1"
+theme[free_mid]="#dcbed1"
 theme[free_end]="#f4b2e2"
 
 # Mem/Disk cached meter
-theme[cached_start]="#dbbed1"
+theme[cached_start]="#dcbed1"
 theme[cached_mid]="#f4b2e2"
 theme[cached_end]="#f5b9a4"
 
 # Mem/Disk available meter
 theme[available_start]="#8fccff"
 theme[available_mid]="#f4b2e2"
-theme[available_end]="#dbbed1"
+theme[available_end]="#dcbed1"
 
 # Mem/Disk used meter
 theme[used_start]="#f4b2e2"
@@ -70,15 +70,15 @@ theme[used_end]="#ffb4ab"
 
 # Download graph colors
 theme[download_start]="#f4b2e2"
-theme[download_mid]="#dbbed1"
+theme[download_mid]="#dcbed1"
 theme[download_end]="#f5b9a4"
 
 # Upload graph colors
 theme[upload_start]="#f5b9a4"
-theme[upload_mid]="#dbbed1"
+theme[upload_mid]="#dcbed1"
 theme[upload_end]="#f4b2e2"
 
 # Process box color gradient
 theme[process_start]="#f4b2e2"
-theme[process_mid]="#dbbed1"
+theme[process_mid]="#dcbed1"
 theme[process_end]="#ffb4ab"
