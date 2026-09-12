@@ -2134,7 +2134,7 @@ struct NiriWindow {
 fn is_terminal_window(w: &NiriWindow) -> bool {
     let Some(ref app_id) = w.app_id else { return false };
     match app_id.as_str() {
-        "kitty" | "kitty.floating" | "foot" | "foot.floating" | "alacritty" | "wezterm" => true,
+        "kitty" | "kitty.floating" => true,
         _ => false,
     }
 }

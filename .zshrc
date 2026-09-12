@@ -238,5 +238,6 @@ exists tmux && {
 # Disable TTY flow control (prevents Ctrl+S freeze and frees Ctrl+Q for tmux prefix)
 [[ $- == *i* ]] && stty -ixon 2>/dev/null
 
-
-
+# Never hang up or kill background jobs/processes when a shell or window closes
+setopt NO_HUP
+setopt NO_CHECK_JOBS
