@@ -1330,6 +1330,7 @@ fn reload_desktop() {
         }
     }
 
+    let _ = Command::new("swaync-client").args(["-R", "-rs"]).output();
     let _ = Command::new("makoctl").arg("reload").output();
 
     let _ = Command::new("niri")
@@ -2359,6 +2360,7 @@ fn main() {
             return;
         }
         "dnd-toggle.sh" => {
+            let _ = Command::new("swaync-client").args(["-d", "-sw"]).output();
             let _ = Command::new("makoctl").args(["mode", "-t", "dnd"]).output();
             return;
         }
@@ -2483,6 +2485,7 @@ fn main() {
         },
         Commands::Dnd { action } => {
             if action == "toggle" {
+                let _ = Command::new("swaync-client").args(["-d", "-sw"]).output();
                 let _ = Command::new("makoctl").args(["mode", "-t", "dnd"]).output();
             }
         }

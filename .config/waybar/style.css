@@ -1,6 +1,6 @@
 * {
     font-family: "Inter", "JetBrainsMono Nerd Font Propo", sans-serif;
-    font-size: 15px;
+    font-size: 14.5px;
     border: none;
     border-radius: 0;
     min-height: 0;
@@ -8,23 +8,37 @@
 
 @import "colors.css";
 
-/* ===== BASE (FROSTED GLASS) ===== */
+/* ===== BASE (TRANSPARENT CONTAINER FOR DYNAMIC ISLANDS) ===== */
 window#waybar {
-    background-color: alpha(@base, 0.74);
+    background-color: transparent;
     color: @text;
     border: none;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 window#waybar.hidden {
     opacity: 0.3;
 }
 
+/* ===== FLOATING DYNAMIC ISLAND CAPSULES ===== */
 .modules-left,
 .modules-center,
 .modules-right {
-    padding: 0 6px;
+    background-color: alpha(@base, 0.78);
+    color: @text;
+    border: 1px solid alpha(@text, 0.08);
+    border-radius: 16px;
+    padding: 2px 10px;
+    margin: 4px 6px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s ease-in-out;
+}
+
+.modules-left:hover,
+.modules-center:hover,
+.modules-right:hover {
+    border-color: alpha(@primary, 0.35);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* ===== COMMON MODULE STYLES ===== */
@@ -40,23 +54,20 @@ window#waybar.hidden {
 #mpris,
 #custom-vesktop,
 #custom-spotify,
-#custom-steam {
-    padding: 0 2px;
+#custom-steam,
+#custom-control-center {
+    padding: 0 3px;
     color: @text;
     background-color: transparent;
 }
 
-#custom-spotify,
-#custom-steam {
-    padding: 0 4px;
-}
 /* ===== WORKSPACES (PACMAN & GHOSTS) ===== */
 #workspaces {
-    border-radius: 6px;
-    margin: 3px 0;
-    padding: 0 3px;
-    background-color: alpha(@secondary, 0.12);
-    border: 1px solid alpha(@text, 0.06);
+    border-radius: 12px;
+    margin: 2px 0;
+    padding: 0 2px;
+    background-color: transparent;
+    border: none;
 }
 
 #workspaces button {
@@ -64,7 +75,7 @@ window#waybar.hidden {
     margin: 2px 1px;
     color: @primary;
     background-color: transparent;
-    border-radius: 4px;
+    border-radius: 8px;
     box-shadow: none;
     font-size: 15px;
     transition: all 0.2s ease-in-out;
@@ -79,34 +90,63 @@ window#waybar.hidden {
 #workspaces button:hover {
     color: @primary;
     background-color: alpha(@primary, 0.18);
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 #workspaces button.active {
     background: @primary;
     color: @base;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 16px;
 }
 
 #workspaces button.urgent {
     background: @error;
     color: @base;
-    border-radius: 4px;
+    border-radius: 8px;
     animation: blink 0.8s step-end infinite;
 }
 
-/* ===== ANIMATIONS ===== */
 @keyframes blink {
     50% { opacity: 0.4; }
 }
 
-/* ===== BATTERY ===== */
+/* ===== CENTER ISLAND: CLOCK & DYNAMIC MPRIS ===== */
+#clock {
+    background-color: transparent;
+    padding: 0 8px;
+    margin: 0;
+    font-weight: 600;
+    color: @text;
+}
+
+#mpris {
+    padding: 0 10px;
+    margin: 0 4px;
+    color: @primary;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 12px;
+    background-color: alpha(@secondary, 0.15);
+    border: 1px solid alpha(@primary, 0.25);
+    transition: all 0.2s ease-in-out;
+}
+
+#mpris:hover {
+    background-color: alpha(@secondary, 0.3);
+    border-color: @primary;
+}
+
+#mpris label {
+    color: @text;
+}
+
+/* ===== RIGHT ISLAND: BATTERY, HARDWARE, CONTROLS ===== */
 #battery {
     background-color: alpha(@secondary, 0.10);
-    margin: 3px 0;
+    margin: 2px 0;
     padding: 0 8px;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 #battery.charging,
@@ -123,7 +163,7 @@ window#waybar.hidden {
     background-color: alpha(@error, 1);
 }
 
-/* ===== SYSTEM MONITORS ===== */
+/* System monitors */
 #cpu,
 #memory,
 #pulseaudio,
@@ -149,53 +189,47 @@ window#waybar.hidden {
     color: @primary;
 }
 
-/* ===== CUSTOM MODULES ===== */
-#custom-dunst,
+/* Caffeine module */
 #custom-caf-waybar {
     padding: 0 6px;
     border: 1px solid alpha(@primary, 0.35);
-    border-radius: 6px;
-    margin: 3px 0;
+    border-radius: 8px;
+    margin: 2px 2px;
     color: @text;
 }
 
-/* ===== CLOCK & DATE (TRANSPARENT FLOATING) ===== */
-#clock {
-    background-color: transparent;
+/* Control Center toggle button */
+#custom-control-center {
     padding: 0 8px;
-    margin: 0;
-    color: @text;
+    margin: 2px 2px;
+    color: @primary;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
 }
 
-/* ===== GROUPED MODULES (with background) ===== */
+#custom-control-center:hover {
+    color: @on_primary;
+    background-color: @primary;
+}
+
+/* Group modules */
 #hw,
 #syst,
 #bg,
-#sounds,
-#mpris {
+#sounds {
     background-color: alpha(@secondary, 0.10);
-    margin: 3px 0;
+    margin: 2px 0;
     padding: 0 6px;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
-#mpris {
-    background-color: alpha(@secondary, 0.100);
-}
-
-#mpris {
-    font-style: normal;
-}
-
-#mpris label {
-    color: @text;
-}
-
-/* ===== TOOLTIP ===== */
+/* Tooltip */
 tooltip {
     background-color: @base;
     border: 1px solid @primary;
-    border-radius: 6px;
+    border-radius: 10px;
+    padding: 8px;
 }
 
 tooltip label {

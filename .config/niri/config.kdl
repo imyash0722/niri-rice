@@ -120,8 +120,8 @@ spawn-at-startup "awww-daemon"
 // Clipboard history (cliphist)
 spawn-at-startup "sh" "-c" "pkill wl-paste; wl-paste --type text --watch cliphist store & wl-paste --type image --watch cliphist store &"
 
-// Notifications (Mako)
-spawn-at-startup "mako"
+// Notifications & Control Center (SwayNC with Mako fallback)
+spawn-at-startup "sh" "-c" "if command -v swaync >/dev/null 2>&1; then swaync; else mako; fi"
 
 // Polkit Authentication Agent (GUI password prompts for elevated privileges)
 spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
@@ -172,6 +172,24 @@ layer-rule {
         blur true
         saturation 0.9
         xray false
+    }
+}
+
+layer-rule {
+    match namespace="^swaync-control-center$"
+    geometry-corner-radius 20
+    background-effect {
+        blur true
+        saturation 1.1
+    }
+}
+
+layer-rule {
+    match namespace="^swaync-notification-window$"
+    geometry-corner-radius 12
+    background-effect {
+        blur true
+        saturation 1.1
     }
 }
 
@@ -415,7 +433,11 @@ binds {
     Mod+E { spawn-sh "env QT_QPA_PLATFORMTHEME=kde dolphin"; }
 
     // Quick notes (Kitty nvim)
-    Mod+N { spawn-sh "cd ~/Notes && kitty --class kitty.floating.notes nvim"; }
+    Mod+Alt+N { spawn-sh "cd ~/Notes && kitty --class kitty.floating.notes nvim"; }
+
+    // Control Center & Notifications (SwayNC)
+    Mod+N { spawn-sh "swaync-client -t -sw"; }
+    Mod+Shift+N { spawn-sh "swaync-client -d -sw"; }
 
     // Clipboard history
     Mod+V { spawn-sh "cliphist list | rofi -dmenu -theme ~/.config/rofi/dmenu.rasi -p '󰅍 Clipboard' | cliphist decode | wl-copy"; }
