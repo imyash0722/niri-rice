@@ -368,8 +368,8 @@ binds {
     // Show hotkey overlay
     Mod+Slash { show-hotkey-overlay; }
 
-    // Terminal (Persistent Tmux Main Shell)
-    Mod+Return { spawn-sh "foot -e tmux new-session -A -s main"; }
+    // Terminal (Focus existing or spawn persistent Tmux main shell)
+    Mod+Return { spawn-sh "~/.local/bin/rice-ctl terminal"; }
     Mod+Shift+Return { spawn-sh "foot --app-id=foot.floating"; }
     Mod+Alt+Return { spawn "foot"; }
 

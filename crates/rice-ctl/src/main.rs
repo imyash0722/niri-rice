@@ -93,6 +93,8 @@ enum Commands {
     Notes,
     /// Interactive SSH session launcher
     Ssh,
+    /// Focus open terminal or launch main terminal
+    Terminal,
     /// System setup and administration tools
     System {
         #[command(subcommand)]
@@ -1916,6 +1918,93 @@ fn files_picker() {
     }
 }
 
+#[allow(dead_code)]
+#[derive(Deserialize, Debug)]
+struct NiriFocusTimestamp {
+    secs: u64,
+    nanos: u32,
+}
+
+#[allow(dead_code)]
+#[derive(Deserialize, Debug)]
+struct NiriWindow {
+    id: u64,
+    #[serde(default)]
+    title: Option<String>,
+    #[serde(default)]
+    app_id: Option<String>,
+    #[serde(default)]
+    is_focused: bool,
+    #[serde(default)]
+    focus_timestamp: Option<NiriFocusTimestamp>,
+}
+
+fn is_terminal_window(w: &NiriWindow) -> bool {
+    let Some(ref app_id) = w.app_id else { return false };
+    match app_id.as_str() {
+        "foot" | "foot.floating" | "alacritty" | "kitty" | "wezterm" => true,
+        _ => false,
+    }
+}
+
+fn spawn_main_terminal() {
+    let _ = Command::new("foot")
+        .args(["-e", "tmux", "new-session", "-A", "-s", "main"])
+        .spawn();
+}
+
+fn focus_or_spawn_terminal() {
+    let output = Command::new("niri")
+        .args(["msg", "-j", "windows"])
+        .output();
+
+    let Ok(out) = output else {
+        spawn_main_terminal();
+        return;
+    };
+
+    let Ok(windows): Result<Vec<NiriWindow>, _> = serde_json::from_slice(&out.stdout) else {
+        spawn_main_terminal();
+        return;
+    };
+
+    let mut term_windows: Vec<&NiriWindow> = windows
+        .iter()
+        .filter(|w| is_terminal_window(w))
+        .collect();
+
+    if term_windows.is_empty() {
+        spawn_main_terminal();
+        return;
+    }
+
+    let focused_idx = term_windows.iter().position(|w| w.is_focused);
+
+    match focused_idx {
+        Some(idx) => {
+            if term_windows.len() > 1 {
+                let next_idx = (idx + 1) % term_windows.len();
+                let next_id = term_windows[next_idx].id;
+                let _ = Command::new("niri")
+                    .args(["msg", "action", "focus-window", "--id", &next_id.to_string()])
+                    .spawn();
+            }
+        }
+        None => {
+            term_windows.sort_by(|a, b| {
+                let ts_a = a.focus_timestamp.as_ref().map(|t| (t.secs, t.nanos)).unwrap_or((0, 0));
+                let ts_b = b.focus_timestamp.as_ref().map(|t| (t.secs, t.nanos)).unwrap_or((0, 0));
+                ts_b.cmp(&ts_a)
+            });
+
+            let target_id = term_windows[0].id;
+            let _ = Command::new("niri")
+                .args(["msg", "action", "focus-window", "--id", &target_id.to_string()])
+                .spawn();
+        }
+    }
+}
+
 fn mem_info() {
     let _ = Command::new("notify-send")
         .args([
@@ -2209,6 +2298,7 @@ fn main() {
                 .spawn();
         }
         Commands::Ssh => ssh_menu(),
+        Commands::Terminal => focus_or_spawn_terminal(),
         Commands::System { action } => match action {
             SystemAction::Fingerprint => fingerprint_menu(),
             SystemAction::ResumeOffset => setup_hibernate_resume(),
