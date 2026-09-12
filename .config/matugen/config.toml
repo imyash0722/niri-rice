@@ -32,4 +32,8 @@ input_path = "~/.config/matugen/templates/swaync-colors.css"
 output_path = "~/.config/swaync/colors.css"
 post_hook = "swaync-client -rs 2>/dev/null || true"
 
+[templates.btop]
+input_path = "~/.config/matugen/templates/btop-theme.theme"
+output_path = "~/.config/btop/themes/matugen.theme"
+
 
