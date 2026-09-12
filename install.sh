@@ -96,7 +96,7 @@ $AUR_HELPER -Syu --needed --noconfirm \
     cage alacritty fish zsh hypridle hyprlock btop cava mpv \
     kde-cli-tools plasma-pa bluedevil bt-dualboot satty neovim \
     firefox-developer-edition grim slurp wl-clipboard cliphist \
-    starship swaync mako ffmpeg jq brightnessctl playerctl rofi-rbw \
+    starship mako ffmpeg jq brightnessctl playerctl rofi-rbw \
     wtype obs-studio imagemagick kwallet kanshi ttf-jetbrains-mono ttf-roboto \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd otf-font-awesome \
     ttf-meslo-nerd ttf-jetbrains-mono-nerd matugen \

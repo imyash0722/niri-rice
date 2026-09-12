@@ -90,6 +90,8 @@ enum Commands {
         #[arg(default_value = "toggle")]
         action: String,
     },
+    /// Interactive notification history and manager
+    History,
     /// Media control wrapper
     Media {
         #[arg(default_value = "play-pause")]
@@ -1143,6 +1145,146 @@ fn apply_power_profile_choice(chosen: &str) {
     let _ = Command::new("pkill").args(["-RTMIN+2", "waybar"]).output();
 }
 
+#[derive(Debug, Deserialize, Clone)]
+struct MakoNotificationItem {
+    id: u32,
+    app_name: Option<String>,
+    summary: Option<String>,
+    body: Option<String>,
+    urgency: Option<String>,
+}
+
+fn notification_history_menu() {
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
+
+    let mut items: Vec<MakoNotificationItem> = Vec::new();
+    let mut seen_ids = std::collections::HashSet::new();
+
+    // 1. Fetch active notifications
+    if let Ok(out) = Command::new("makoctl").args(["list", "-j"]).output() {
+        if out.status.success() {
+            if let Ok(list) = serde_json::from_slice::<Vec<MakoNotificationItem>>(&out.stdout) {
+                for item in list {
+                    if seen_ids.insert(item.id) {
+                        items.push(item);
+                    }
+                }
+            }
+        }
+    }
+
+    // 2. Fetch history notifications
+    if let Ok(out) = Command::new("makoctl").args(["history", "-j"]).output() {
+        if out.status.success() {
+            if let Ok(history) = serde_json::from_slice::<Vec<MakoNotificationItem>>(&out.stdout) {
+                for item in history {
+                    if seen_ids.insert(item.id) {
+                        items.push(item);
+                    }
+                }
+            }
+        }
+    }
+
+    let mut options = String::new();
+    if items.is_empty() {
+        options.push_str("󰂚  No notification history\n");
+    } else {
+        options.push_str("󰆴  Clear All Notifications\n");
+        for item in &items {
+            let app = item.app_name.as_deref().unwrap_or("System");
+            let summary = item.summary.as_deref().unwrap_or("").trim();
+            let body = item.body.as_deref().unwrap_or("").replace('\n', " ").trim().to_string();
+            let urgency_icon = match item.urgency.as_deref() {
+                Some("critical") => "󰀦",
+                _ => "󰂚",
+            };
+
+            let title = if !summary.is_empty() && !body.is_empty() {
+                format!("{} [{}] {} - {}", urgency_icon, app, summary, body)
+            } else if !summary.is_empty() {
+                format!("{} [{}] {}", urgency_icon, app, summary)
+            } else if !body.is_empty() {
+                format!("{} [{}] {}", urgency_icon, app, body)
+            } else {
+                format!("{} [{}] Notification #{}", urgency_icon, app, item.id)
+            };
+            options.push_str(&title);
+            options.push('\n');
+        }
+    }
+
+    let mut child = match Command::new("rofi")
+        .args([
+            "-dmenu",
+            "-i",
+            "-format", "i",
+            "-p", "󰂚 Notifications",
+            "-theme", &theme_path.to_string_lossy(),
+        ])
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+    {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("Error spawning rofi notification history menu: {}", e);
+            return;
+        }
+    };
+
+    if let Some(mut stdin) = child.stdin.take() {
+        let _ = stdin.write_all(options.as_bytes());
+    }
+
+    let Ok(output) = child.wait_with_output() else { return };
+    if !output.status.success() {
+        return;
+    }
+
+    let selected_index_str = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    let Ok(idx) = selected_index_str.parse::<usize>() else {
+        return;
+    };
+
+    if items.is_empty() {
+        return;
+    }
+
+    if idx == 0 {
+        let _ = Command::new("makoctl").args(["dismiss", "-a"]).output();
+        let _ = Command::new("systemctl").args(["--user", "restart", "mako"]).output();
+        let _ = Command::new("notify-send")
+            .args(["-a", "Mako", "Notifications", "All notifications cleared"])
+            .spawn();
+        return;
+    }
+
+    if let Some(selected) = items.get(idx - 1) {
+        let _ = Command::new("makoctl").args(["dismiss", "-n", &selected.id.to_string()]).output();
+
+        let full_text = match (&selected.summary, &selected.body) {
+            (Some(s), Some(b)) if !s.is_empty() && !b.is_empty() => format!("{}: {}", s, b),
+            (Some(s), _) if !s.is_empty() => s.clone(),
+            (_, Some(b)) if !b.is_empty() => b.clone(),
+            _ => format!("Notification #{}", selected.id),
+        };
+
+        if let Ok(mut copy_proc) = Command::new("wl-copy").stdin(std::process::Stdio::piped()).spawn() {
+            if let Some(mut cin) = copy_proc.stdin.take() {
+                let _ = cin.write_all(full_text.as_bytes());
+            }
+            let _ = copy_proc.wait();
+        }
+
+        let summary_preview = selected.summary.as_deref().unwrap_or("Notification text");
+        let _ = Command::new("notify-send")
+            .args(["-a", "Mako", "Copied to Clipboard", summary_preview])
+            .spawn();
+    }
+}
+
 fn ssh_menu() {
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
@@ -1330,7 +1472,6 @@ fn reload_desktop() {
         }
     }
 
-    let _ = Command::new("swaync-client").args(["-R", "-rs"]).output();
     let _ = Command::new("makoctl").arg("reload").output();
 
     let _ = Command::new("niri")
@@ -2360,7 +2501,6 @@ fn main() {
             return;
         }
         "dnd-toggle.sh" => {
-            let _ = Command::new("swaync-client").args(["-d", "-sw"]).output();
             let _ = Command::new("makoctl").args(["mode", "-t", "dnd"]).output();
             return;
         }
@@ -2485,10 +2625,10 @@ fn main() {
         },
         Commands::Dnd { action } => {
             if action == "toggle" {
-                let _ = Command::new("swaync-client").args(["-d", "-sw"]).output();
                 let _ = Command::new("makoctl").args(["mode", "-t", "dnd"]).output();
             }
         }
+        Commands::History => notification_history_menu(),
         Commands::Media { action } => {
             let _ = Command::new("playerctl").arg(action).output();
         }

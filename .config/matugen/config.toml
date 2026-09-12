@@ -27,11 +27,6 @@ input_path = "~/.config/matugen/templates/kitty-colors.conf"
 output_path = "~/.config/kitty/colors.conf"
 post_hook = "pkill -SIGUSR1 -x kitty 2>/dev/null || true"
 
-[templates.swaync]
-input_path = "~/.config/matugen/templates/swaync-colors.css"
-output_path = "~/.config/swaync/colors.css"
-post_hook = "swaync-client -rs 2>/dev/null || true"
-
 [templates.btop]
 input_path = "~/.config/matugen/templates/btop-theme.theme"
 output_path = "~/.config/btop/themes/matugen.theme"

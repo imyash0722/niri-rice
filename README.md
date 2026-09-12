@@ -21,8 +21,9 @@
 - 📺 **Dynamic Display Scaling** — Monitor daemon auto-scales outputs on connect (`1.5x` for 4K, `1.25x` for 1440p, `1.0x` for 1080p)
 - 🦀 **rice-ctl** — Native Rust unified desktop controller for sub-second Material You theming, live wallpaper transitions, cursor matching, and power actions
 - 🎬 **awww** — Wayland wallpaper daemon with smooth circular droplet bubble transitions
-- 🏝️ **Dynamic Island Waybar** — Floating capsule pills with workspace indicators, expanding MPRIS playback pill, and quick control toggles
-- 🎛️ **SwayNC Control Center** — Slide-in Material You control center with volume & backlight sliders, quick toggles (Wi-Fi, Bluetooth, Night Light, Mic Mute, Caffeine), MPRIS media player with album art, and Mako-parity notification toasts
+- 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
+- 🔔 **Mako** — Lightweight Wayland notification daemon with frosted glass blur and Material You theming
+- 📜 **Notification History** — Interactive Rofi notification history menu (`Mod+N`)
 - 🚀 **Rofi** — App launcher with modern glassmorphic theme; toggles instantly via hardware Copilot key
 - 📸 **Satty** — Screenshot annotation tool (native Niri screenshot support via `Mod+Shift+S`)
 - 🔒 **hyprlock** — Bespoke Material You lockscreen with Android 14/15 2-line clock, frosted glass blur, battery pills, and PAM/fingerprint unlock
@@ -36,8 +37,9 @@
 | Role | Component |
 |------|-----------|
 | Window Manager | `niri` |
-| Status Bar | `waybar` (Dynamic Island capsules) |
-| Control Center & Notifications | `swaync` (Mako-parity toasts + history drawer) |
+| Status Bar | `waybar` |
+| Notifications | `mako` |
+| Notification History | `rofi` (`Mod+N`) |
 | App Launcher | `rofi` |
 | Wallpaper | `awww` |
 | Lock Screen | `hyprlock` + `hypridle` |
@@ -120,9 +122,7 @@ niri-rice/
 | Screenshot (screen) | `Mod+S` |
 | Screenshot (window) | `Mod+Ctrl+S` |
 | Color Picker | `Mod+Shift+P` |
-| Hotkey Overlay | `Mod+/` |
-| Control Center | `Mod+N` |
-| Toggle Do Not Disturb | `Mod+Shift+N` |
+| Notification History | `Mod+N` |
 | Lock Screen | `Mod+Shift+Q` |
 | Reload Waybar + Wallpaper | `Mod+Shift+R` |
 | Toggle Waybar | `Mod+A` |
