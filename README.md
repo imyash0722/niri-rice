@@ -22,9 +22,9 @@
 - 🦀 **rice-ctl** — Native Rust unified desktop controller for sub-second Material You theming, live wallpaper transitions, cursor matching, and power actions
 - 🎬 **awww** — Wayland wallpaper daemon with smooth circular droplet bubble transitions
 - 🖥️ **Waybar** — Custom status bar with workspace indicators and interactive tray (Bluetooth, Network, Volume, Battery)
-- 🚀 **Rofi** — App launcher with a custom dark theme; toggles instantly via hardware Copilot key
+- 🚀 **Rofi** — App launcher with modern glassmorphic theme; toggles instantly via hardware Copilot key
 - 📸 **Satty** — Screenshot annotation tool (native Niri screenshot support via `Mod+Shift+S`)
-- 🔒 **qylock (quickshell)** — Modern lockscreen with blurred background, dynamic battery indicator, and digital clock
+- 🔒 **hyprlock** — Bespoke Material You lockscreen with Android 14/15 2-line clock, frosted glass blur, battery pills, and PAM/fingerprint unlock
 - 🐾 **Foot** — Fast, GPU-rendered Wayland terminal
 - ⭐ **Starship** — Cross-shell prompt
 - 📋 **cliphist** — Clipboard history manager (`Mod+V` to open)
@@ -38,7 +38,7 @@
 | Status Bar | `waybar` |
 | App Launcher | `rofi` |
 | Wallpaper | `awww` |
-| Lock Screen | `qylock (quickshell)` + `hypridle` |
+| Lock Screen | `hyprlock` + `hypridle` |
 | Notifications | `mako` |
 | Terminal | `foot` + `alacritty` (TTY session) |
 
@@ -126,11 +126,15 @@ niri-rice/
 
 > *Hardware keys (Copilot, Calculator, Screen Lock, Mic Mute, Volume) are natively mapped in `config.kdl`.*
 
-## 🔐 Smart Lockscreen
+## 🔐 Bespoke Material You Lockscreen
 
-`qylock` (quickshell) provides a modern lockscreen with a blurred wallpaper background, a bold digital clock, and a dynamic battery indicator sourced directly from `/sys/class/power_supply/BAT0/capacity`.
+A custom **`hyprlock`** lockscreen dynamically themed via **Matugen** with full Material You design tokens:
+- **Android 14/15 Two-Line Clock**: Bold, stacked hours and minutes in dynamic primary palette tones.
+- **Translucent Frosted Glass**: Hardware-accelerated GPU blur over the active session or wallpaper.
+- **Glassmorphic Pills**: Live date, battery capacity (`/sys/class/power_supply/BAT0/capacity`), and status indicators.
+- **Biometrics & Security**: Direct PAM integration with instant fingerprint scanner unlock and password fallback.
 
-`hypridle` manages automatic lock and screen-off timeouts.
+`hypridle` manages automatic lock, screen-off, and low-power timeouts.
 
 ## 💻 TTY / Terminal Session
 
@@ -142,7 +146,7 @@ The installer automatically applies several kernel and driver-level fixes:
 
 | Fix | Description |
 |-----|-------------|
-| **Numpad Enter** | Remapped to `Return` at kernel level via `systemd-hwdb`, fixing quickshell lockscreen hang |
+| **Numpad Enter** | Remapped to `Return` at kernel level via `systemd-hwdb`, ensuring flawless numpad enter keypress handling across compositors and lockscreens |
 | **MediaTek mt7921e Wi-Fi** | Driver unloads before sleep, reloads on wake to prevent PCIe drop |
 | **Hardware Audio LEDs** | `brightnessctl` syncs physical mute/mic-mute LEDs with Wireplumber state via SysFS |
 | **Copilot Key** | `Super+Shift+F23` mapped to fast-toggling `rofi` app launcher via Niri `spawn-sh` |

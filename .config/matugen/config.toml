@@ -22,4 +22,8 @@ post_hook = "makoctl reload 2>/dev/null || true"
 input_path = "~/.config/matugen/templates/wal-colors.json"
 output_path = "~/.cache/wal/colors.json"
 
+[templates.hyprlock]
+input_path = "~/.config/matugen/templates/hyprlock-colors.conf"
+output_path = "~/.config/hypr/colors.conf"
+
 

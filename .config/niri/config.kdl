@@ -175,6 +175,15 @@ layer-rule {
     }
 }
 
+layer-rule {
+    match namespace="^mako$"
+    geometry-corner-radius 12
+    background-effect {
+        blur true
+        saturation 1.1
+    }
+}
+
 // ── Window rules ─────────────────────────────────────────
 
 // Disable solid background rendering under translucent windows

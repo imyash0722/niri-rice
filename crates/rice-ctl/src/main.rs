@@ -923,7 +923,7 @@ fn set_animation(anim: &str) {
 
 fn lock_screen() {
     let pgrep = Command::new("pgrep")
-        .args(["-f", "quickshell.*lock_shell\\.qml"])
+        .args(["-x", "hyprlock"])
         .output();
     if let Ok(out) = pgrep {
         if out.status.success() {
@@ -931,46 +931,9 @@ fn lock_screen() {
         }
     }
 
-    let home = dirs_home();
-    let qs_dir = home.join(".local/share/quickshell-lockscreen");
-    let lock_qml = qs_dir.join("lock_shell.qml");
-
-    if lock_qml.is_file() {
-        let _ = Command::new("killall")
-            .args(["-9", "hyprlock", "swaylock", "wlogout"])
-            .output();
-
-        let imports = qs_dir.join("imports");
-        let existing_qml = std::env::var("QML2_IMPORT_PATH").unwrap_or_default();
-        let qml_import = if existing_qml.is_empty() {
-            imports.to_string_lossy().to_string()
-        } else {
-            format!("{}:{}", imports.display(), existing_qml)
-        };
-
-        let themes_link = qs_dir.join("themes_link/sword");
-        let themes_dir = home.join(".local/share/themes/sword");
-        let theme_path = if themes_dir.is_dir() && !qs_dir.join("themes_link").is_dir() {
-            themes_dir
-        } else {
-            themes_link
-        };
-
-        let session_type = std::env::var("XDG_SESSION_TYPE").unwrap_or_else(|_| "wayland".to_string());
-
-        let _ = Command::new("quickshell")
-            .arg("-p")
-            .arg(&lock_qml)
-            .env("QML2_IMPORT_PATH", qml_import)
-            .env("QML_XHR_ALLOW_FILE_READ", "1")
-            .env("XDG_SESSION_TYPE", session_type)
-            .env("QS_THEME", "sword")
-            .env("QS_THEME_PATH", theme_path.to_string_lossy().as_ref())
-            .spawn();
-        return;
-    }
-
-    let _ = Command::new("loginctl").arg("lock-session").spawn();
+    let _ = Command::new("hyprlock")
+        .arg("--immediate-render")
+        .spawn();
 }
 
 fn power_menu() {

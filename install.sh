@@ -93,10 +93,10 @@ fi
 $AUR_HELPER -Syu --needed --noconfirm \
     google-chrome dolphin konsole \
     niri waybar rofi foot fastfetch networkmanager plasma-nm \
-    cage alacritty \
-    kde-cli-tools plasma-pa bluedevil bt-dualboot satty btop neovim zsh \
+    cage alacritty fish zsh hypridle hyprlock btop cava mpv \
+    kde-cli-tools plasma-pa bluedevil bt-dualboot satty neovim \
     firefox-developer-edition grim slurp wl-clipboard cliphist \
-    starship mako hypridle ffmpeg jq brightnessctl playerctl rofi-rbw \
+    starship mako ffmpeg jq brightnessctl playerctl rofi-rbw \
     wtype obs-studio imagemagick kwallet kanshi ttf-jetbrains-mono ttf-roboto \
     ttf-hack eza bat batctl-tui fzf zoxide ripgrep fd otf-font-awesome \
     ttf-meslo-nerd ttf-jetbrains-mono-nerd matugen \
@@ -106,7 +106,7 @@ $AUR_HELPER -Syu --needed --noconfirm \
     kdeconnect kdegraphics-thumbnailers gwenview spectacle kate kcalc krita meld \
     lazygit yazi tealdeer qimgv haruna ark okular libreoffice-still zapzap video2gif \
     xcb-util-cursor xwayland-satellite kde-applications-meta \
-    sddm quickshell qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
+    sddm qt6-declarative qt6-5compat qt6-svg qt6-multimedia \
     qt6-multimedia-ffmpeg gst-plugins-base gst-plugins-good gst-plugins-bad \
     gst-plugins-ugly gst-libav gst-plugin-pipewire gst-plugin-va \
     waybar-module-pacman-updates-git awww powertop opentabletdriver \
@@ -168,17 +168,6 @@ if [ -f "$REPO_DIR/etc/systemd/system/hibernate-setup.service" ]; then
     sudo cp -f "$REPO_DIR/etc/systemd/system/hibernate-setup.service" /etc/systemd/system/hibernate-setup.service 2>/dev/null || true
     sudo systemctl daemon-reload 2>/dev/null || true
     sudo systemctl enable --now hibernate-setup.service 2>/dev/null || true
-fi
-
-# ---------------------------------------------------------------------------
-# 1.5. Clone qylock themes
-# ---------------------------------------------------------------------------
-echo -e "\n[1.5/5] Cloning qylock lockscreens/SDDM themes..."
-if [ ! -d "$HOME/.local/share/qylock" ]; then
-    git clone https://github.com/Darkkal44/qylock "$HOME/.local/share/qylock"
-else
-    echo "  qylock already exists in ~/.local/share/qylock, pulling latest..."
-    git -C "$HOME/.local/share/qylock" pull
 fi
 
 # ---------------------------------------------------------------------------
@@ -344,28 +333,6 @@ if [[ "$run_fingwit" =~ ^[Yy]$ ]]; then
     echo "Fingwit installed! You can run 'fingwit' from your app launcher to configure your fingerprints."
 fi
 
-echo ""
-read -rp "Do you want to configure your qylock lockscreen and SDDM themes now? [Y/n]: " config_qylock
-if [[ -z "$config_qylock" || "$config_qylock" =~ ^[Yy]$ ]]; then
-    if [ -d "$HOME/.local/share/qylock" ]; then
-        echo "Launching SDDM theme selector..."
-        (cd "$HOME/.local/share/qylock" && chmod +x sddm.sh && ./sddm.sh || true)
-        echo "Launching Quickshell lockscreen selector..."
-        (cd "$HOME/.local/share/qylock" && chmod +x quickshell.sh && ./quickshell.sh || true)
-
-        # Apply stability patches (PAM deadlock fix, concurrency guards, theme error fixes)
-        if [ -d "$REPO_DIR/.local/share/quickshell-lockscreen" ]; then
-            echo "  Applying quickshell-lockscreen stability patches..."
-            cp -r "$REPO_DIR/.local/share/quickshell-lockscreen/"* "$HOME/.local/share/quickshell-lockscreen/" 2>/dev/null || true
-        fi
-        if [ -d "$REPO_DIR/.local/share/qylock-patches/sword" ] && [ -d "$HOME/.local/share/qylock/themes/sword" ]; then
-            echo "  Applying theme QML fixes..."
-            cp "$REPO_DIR/.local/share/qylock-patches/sword/Main.qml" "$HOME/.local/share/qylock/themes/sword/Main.qml" 2>/dev/null || true
-        fi
-    else
-        echo "qylock repository not found in ~/.local/share/qylock."
-    fi
-fi
 
 echo ""
 echo "=========================================="
