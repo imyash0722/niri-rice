@@ -15,8 +15,6 @@
 
 </div>
 
----
-
 ## ✨ Features
 
 - 🌊 **niri** — Scrollable, infinite-canvas tiling Wayland compositor
@@ -31,8 +29,6 @@
 - ⭐ **Starship** — Cross-shell prompt
 - 📋 **cliphist** — Clipboard history manager (`Mod+V` to open)
 - 💻 **TTY Session** — Minimal fullscreen terminal session via `cage` — selectable from the SDDM login screen dropdown
-
----
 
 ### 📦 Core Components
 
@@ -50,8 +46,6 @@
 
 You don't need to install dependencies manually! The included `install.sh` handles everything — packages, fonts, KDE utilities, GStreamer codecs, display drivers, udev rules, and system services.
 
----
-
 ## 📸 Screenshots
 
 > *Add your screenshots to `.github/screenshots/` and they'll appear here.*
@@ -59,8 +53,6 @@ You don't need to install dependencies manually! The included `install.sh` handl
 | Desktop | Waybar | Overview |
 |:---:|:---:|:---:|
 | *(coming soon)* | *(coming soon)* | *(coming soon)* |
-
----
 
 ## 🚀 Installation
 
@@ -78,8 +70,6 @@ cd ~/niri-rice
 
 > [!NOTE]
 > The animated wallpaper (MP4) is **not bundled** due to file size. Download it from the [Wallpaper Credits](#️-wallpaper-credits) section and place the `.mp4` file in `~/niri-rice/Pictures/Wall/` before running the installer.
-
----
 
 ## 🌳 Structure
 
@@ -114,8 +104,6 @@ niri-rice/
 └── Wallpapers/                 # Wallpapers (gitignored — store locally)
 ```
 
----
-
 ## ⌨️ Key Bindings
 
 | Action | Shortcut |
@@ -138,21 +126,15 @@ niri-rice/
 
 > *Hardware keys (Copilot, Calculator, Screen Lock, Mic Mute, Volume) are natively mapped in `config.kdl`.*
 
----
-
 ## 🔐 Smart Lockscreen
 
 `qylock` (quickshell) provides a modern lockscreen with a blurred wallpaper background, a bold digital clock, and a dynamic battery indicator sourced directly from `/sys/class/power_supply/BAT0/capacity`.
 
 `hypridle` manages automatic lock and screen-off timeouts.
 
----
-
 ## 💻 TTY / Terminal Session
 
 A minimal **"Terminal Mode"** session is available directly from the SDDM login screen. It launches `alacritty` inside a `cage` Wayland kiosk compositor — giving you a clean fullscreen terminal without loading any desktop environment. Useful for server administration, recovery, or lightweight work.
-
----
 
 ## 🔧 System & Hardware Fixes Included
 
@@ -168,8 +150,6 @@ The installer automatically applies several kernel and driver-level fixes:
 | **Monitor Auto-scaling** | udev hotplug triggers `niri-monitor-hotplug.service` to re-apply scale on plug/unplug |
 | **Lid Switch** | `systemd-logind` ignores lid close on AC power to keep Tailscale/SSH alive |
 
----
-
 ## 🎨 Colour Palette
 
 Colours and Material Design 3 design tokens are extracted from the wallpaper via **Matugen** and applied to Waybar, Foot, Rofi, and Mako automatically.
@@ -183,8 +163,6 @@ Colours and Material Design 3 design tokens are extracted from the wallpaper via
 | Dark Mauve | `#50474F` |
 | Mid Grey | `#857C86` |
 
----
-
 ## 🔖 Versioning & Releases
 
 This project adheres to strict **[Semantic Versioning (SemVer)](https://semver.org/)**:
@@ -197,8 +175,6 @@ This project adheres to strict **[Semantic Versioning (SemVer)](https://semver.o
 
 Browse all past releases, changelogs, and source tarballs on the **[GitHub Releases](https://github.com/imyash0722/niri-rice/releases)** page.
 
----
-
 ## 🖼️ Wallpaper Credits
 
 | Asset | Source |
@@ -210,8 +186,6 @@ Browse all past releases, changelogs, and source tarballs on the **[GitHub Relea
 > ~/niri-rice/Pictures/Wall/6364907-1200p-optimized.mp4
 > ```
 > The installer will symlink `~/Wallpapers` and display it via `awww` automatically.
-
----
 
 <div align="center">
 
