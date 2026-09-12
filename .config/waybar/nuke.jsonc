@@ -27,8 +27,8 @@
     ],
 
 "custom/caf-waybar": {
-    "exec": "rice-ctl caffeine status",
-    "on-click": "rice-ctl caffeine toggle",
+    "exec": "~/.local/bin/rice-ctl caffeine status",
+    "on-click": "~/.local/bin/rice-ctl caffeine toggle",
     "return-type": "json",
     "signal": 13,
     "interval": 5,
@@ -56,9 +56,9 @@
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format": "[  {:%H:%M} ]",
-        "on-click-right": "rice-ctl calendar curr",
-        "on-scroll-up": "rice-ctl calendar next",
-        "on-scroll-down": "rice-ctl calendar prev"
+        "on-click-right": "~/.local/bin/rice-ctl calendar curr",
+        "on-scroll-up": "~/.local/bin/rice-ctl calendar next",
+        "on-scroll-down": "~/.local/bin/rice-ctl calendar prev"
     },
 
     "temperature": {
@@ -72,19 +72,19 @@
     },
 
     "custom/light": {
-      "exec": "rice-ctl bar nuke-back",
+      "exec": "~/.local/bin/rice-ctl bar nuke-back",
       "signal": 19
     }, 
 
     "custom/ppd": {
-      "exec": "rice-ctl bar nuke-ppd",
+      "exec": "~/.local/bin/rice-ctl bar nuke-ppd",
       "interval": 30,
       "format": "[ {} ]",
       "signal": 21
     },
 
     "custom/volume": {
-      "exec": "rice-ctl bar nuke-vol",
+      "exec": "~/.local/bin/rice-ctl bar nuke-vol",
       "signal": 17
     },
 
@@ -114,7 +114,7 @@
         "tooltip-format": "Network Information\n\nSSID  : {essid}\nIP    : {ipaddr}\nBand  : {frequency} MHz\nSignal: {signalStrength}%   \nvia   : {ifname}",
         "format-linked": "{ifname} (No IP) 󰊗",
         "format-disconnected": "[ 󱛅 ]",
-        "on-click": "rice-ctl wifi menu"
+        "on-click": "~/.local/bin/rice-ctl wifi menu"
     },
 
     "pulseaudio#microphone": {

@@ -131,7 +131,7 @@ spawn-at-startup "/usr/lib/pam_kwallet_init"
 spawn-at-startup "kwalletd6"
 spawn-at-startup "sh" "-c" "pgrep -u $USER -x ssh-agent >/dev/null || ssh-agent -a \"${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/ssh-agent.socket\""
 
-spawn-at-startup "rice-ctl" "output" "auto-scale";
+spawn-at-startup "sh" "-c" "~/.local/bin/rice-ctl output auto-scale";
 
 // Idle manager (hypridle)
 spawn-at-startup "hypridle"
@@ -378,17 +378,17 @@ binds {
     Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
 
     // Wallpaper & Theme Gallery
-    Mod+Z { spawn "rice-ctl" "theme" "select"; }
-    Mod+Alt+W { spawn "rice-ctl" "theme" "random"; }
+    Mod+Z { spawn-sh "~/.local/bin/rice-ctl theme select"; }
+    Mod+Alt+W { spawn-sh "~/.local/bin/rice-ctl theme random"; }
 
     // Kill window
     Mod+Q repeat=false { close-window; }
 
     // Power menu
-    Mod+Shift+Q { spawn "rice-ctl" "power" "menu"; }
+    Mod+Shift+Q { spawn-sh "~/.local/bin/rice-ctl power menu"; }
 
     // Lock screen
-    Mod+L allow-inhibiting=false { spawn "rice-ctl" "power" "lock"; }
+    Mod+L allow-inhibiting=false { spawn-sh "~/.local/bin/rice-ctl power lock"; }
 
     // Browser
     Mod+B { spawn "firefox-developer-edition"; }
@@ -412,15 +412,15 @@ binds {
 
     // Network (nmtui) & SSH Manager
     Mod+Shift+W { spawn-sh "foot --app-id=foot.nmtui --window-size-chars=81x34 -e nmtui"; }
-    Mod+Alt+S   { spawn "/home/pineapple/.local/bin/rofi-ssh"; }
-    Mod+Alt+B   { spawn "/home/pineapple/.local/bin/battery-rofi"; }
+    Mod+Alt+S   { spawn-sh "~/.local/bin/rice-ctl ssh"; }
+    Mod+Alt+B   { spawn-sh "~/.local/bin/rice-ctl battery menu"; }
 
     // F12 & Keypad Special Keys
     XF86Calculator       { spawn "kcalc"; }
     XF86Search           { spawn "rofi" "-show" "drun"; }
     XF86Explorer         { spawn "dolphin"; }
-    XF86Sleep            { spawn "rice-ctl" "power" "lock"; }
-    XF86Standby          { spawn "rice-ctl" "power" "lock"; }
+    XF86Sleep            { spawn-sh "~/.local/bin/rice-ctl power lock"; }
+    XF86Standby          { spawn-sh "~/.local/bin/rice-ctl power lock"; }
 
     // ── Function Row (Lenovo ThinkBook Special Keys) ──
     Print                { screenshot; }
@@ -520,11 +520,11 @@ binds {
     // Audio
     XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"; }
     XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; }
-    XF86AudioMute         allow-when-locked=true { spawn "rice-ctl" "volume" "mute-toggle"; }
-    XF86AudioMicMute      allow-when-locked=true { spawn "rice-ctl" "volume" "mic-mute-toggle"; }
-    XF86AudioPlay         allow-when-locked=true { spawn "rice-ctl" "media" "play-pause"; }
-    XF86AudioPrev         allow-when-locked=true { spawn "rice-ctl" "media" "previous"; }
-    XF86AudioNext         allow-when-locked=true { spawn "rice-ctl" "media" "next"; }
+    XF86AudioMute         allow-when-locked=true { spawn-sh "~/.local/bin/rice-ctl volume mute-toggle"; }
+    XF86AudioMicMute      allow-when-locked=true { spawn-sh "~/.local/bin/rice-ctl volume mic-mute-toggle"; }
+    XF86AudioPlay         allow-when-locked=true { spawn-sh "~/.local/bin/rice-ctl media play-pause"; }
+    XF86AudioPrev         allow-when-locked=true { spawn-sh "~/.local/bin/rice-ctl media previous"; }
+    XF86AudioNext         allow-when-locked=true { spawn-sh "~/.local/bin/rice-ctl media next"; }
 
     // Brightness
     XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "+5%"; }
@@ -532,7 +532,7 @@ binds {
 
     // Reload Config
     Mod+A       { spawn "killall" "-SIGUSR1" "waybar"; }
-    Mod+Shift+R { spawn "rice-ctl" "reload"; }
+    Mod+Shift+R { spawn-sh "~/.local/bin/rice-ctl reload"; }
 
     // Quit niri (with confirmation dialog)
     Mod+Escape { quit; }

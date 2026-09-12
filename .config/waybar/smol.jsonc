@@ -24,8 +24,8 @@
     ],
 
 "custom/caf-waybar": {
-    "exec": "rice-ctl caffeine status",
-    "on-click": "rice-ctl caffeine toggle",
+    "exec": "~/.local/bin/rice-ctl caffeine status",
+    "on-click": "~/.local/bin/rice-ctl caffeine toggle",
     "return-type": "json",
     "signal": 13,
     "interval": 5,
@@ -48,9 +48,9 @@
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format": " {:%H:%M}",
-        "on-click-right": "rice-ctl calendar curr",
-        "on-scroll-up": "rice-ctl calendar next",
-        "on-scroll-down": "rice-ctl calendar prev"
+        "on-click-right": "~/.local/bin/rice-ctl calendar curr",
+        "on-scroll-up": "~/.local/bin/rice-ctl calendar next",
+        "on-scroll-down": "~/.local/bin/rice-ctl calendar prev"
     },
 
     "cpu": {
@@ -108,7 +108,7 @@
         "tooltip-format": "Network Information\n\nSSID  : {essid}\nIP    : {ipaddr}\nBand  : {frequency} MHz\nSignal: {signalStrength}%   \nvia   : {ifname}",
         "format-linked": "{ifname} (No IP) 󰊗",
         "format-disconnected": "󱛅",
-        "on-click": "rice-ctl wifi menu"
+        "on-click": "~/.local/bin/rice-ctl wifi menu"
     },
 
     "pulseaudio": {
@@ -155,7 +155,7 @@
     "custom/dunst": {
     "format": "{}",
     "exec": "dunstctl is-paused | grep -q true && echo '' || echo ''",
-    "on-click": "rice-ctl dnd toggle",
+    "on-click": "~/.local/bin/rice-ctl dnd toggle",
     "signal": 8
     },
 
