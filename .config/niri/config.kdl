@@ -211,7 +211,7 @@ window-rule {
 
 // Terminal (consistent frosted glass): blur true without harsh opacity jumps
 window-rule {
-    match app-id=r#"^foot.*"#
+    match app-id=r#"^(kitty|foot).*"#
     opacity 1.0
     background-effect {
         blur true
@@ -235,9 +235,9 @@ window-rule {
     }
 }
 
-// Foot floating window
+// Terminal floating window
 window-rule {
-    match app-id="foot.floating"
+    match app-id=r#"^(kitty|foot)\.floating$"#
     open-floating true
 }
 
@@ -307,10 +307,24 @@ window-rule {
     default-column-width { proportion 1.0; }
 }
 
-// Foot floating app-ids (batctl)
+// Terminal floating app-ids (batctl, notes, nmtui, ssh)
+window-rule {
+    match app-id=r#"^(kitty|foot)\.batctl$"#
+    open-floating true
+}
 
 window-rule {
-    match app-id="foot.batctl"
+    match app-id=r#"^(kitty|foot)\.floating\.notes$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^(kitty|foot)\.nmtui$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^(kitty|foot)\.ssh$"#
     open-floating true
 }
 
@@ -320,11 +334,6 @@ window-rule {
     open-floating true
     default-column-width { proportion 0.5; }
     default-window-height { proportion 0.5; }
-}
-
-window-rule {
-    match app-id="foot.floating.notes"
-    open-floating true
 }
 
 // Dialogs, popups, loading screens, splash screens, and file pickers
@@ -379,8 +388,8 @@ binds {
 
     // Terminal (Focus existing or spawn persistent Tmux main shell)
     Mod+Return { spawn-sh "~/.local/bin/rice-ctl terminal"; }
-    Mod+Shift+Return { spawn-sh "foot --app-id=foot.floating"; }
-    Mod+Alt+Return { spawn "foot"; }
+    Mod+Shift+Return { spawn-sh "kitty --class kitty.floating"; }
+    Mod+Alt+Return { spawn "kitty"; }
 
     // App launcher (Mod+D / Copilot key)
     Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
@@ -404,8 +413,8 @@ binds {
     // File manager
     Mod+E { spawn-sh "env QT_QPA_PLATFORMTHEME=kde dolphin"; }
 
-    // Quick notes (Foot nvim)
-    Mod+N { spawn-sh "cd ~/Notes && foot --app-id=foot.floating.notes -e nvim"; }
+    // Quick notes (Kitty nvim)
+    Mod+N { spawn-sh "cd ~/Notes && kitty --class kitty.floating.notes nvim"; }
 
     // Clipboard history
     Mod+V { spawn-sh "cliphist list | rofi -dmenu -theme ~/.config/rofi/dmenu.rasi -p '󰅍 Clipboard' | cliphist decode | wl-copy"; }
@@ -419,7 +428,7 @@ binds {
     Mod+Shift+B { spawn "blueman-manager"; }
 
     // Network (nmtui) & SSH Manager
-    Mod+Shift+W { spawn-sh "foot --app-id=foot.nmtui --window-size-chars=81x34 -e nmtui"; }
+    Mod+Shift+W { spawn-sh "kitty --class kitty.nmtui nmtui"; }
     Mod+Alt+S   { spawn-sh "~/.local/bin/rice-ctl ssh"; }
     Mod+Alt+B   { spawn-sh "~/.local/bin/rice-ctl battery menu"; }
 

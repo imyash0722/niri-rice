@@ -26,4 +26,9 @@ output_path = "~/.cache/wal/colors.json"
 input_path = "~/.config/matugen/templates/hyprlock-colors.conf"
 output_path = "~/.config/hypr/colors.conf"
 
+[templates.kitty]
+input_path = "~/.config/matugen/templates/kitty-colors.conf"
+output_path = "~/.config/kitty/colors.conf"
+post_hook = "pkill -SIGUSR1 -x kitty 2>/dev/null || true"
+
 

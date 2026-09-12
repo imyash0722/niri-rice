@@ -428,6 +428,7 @@ fn apply_desktop_colors(target_color: Option<&str>) {
     }
 
     let _ = Command::new("makoctl").arg("reload").output();
+    let _ = Command::new("pkill").args(["-SIGUSR1", "-x", "kitty"]).output();
 
     if std::env::var("NIRI_SOCKET").is_ok() {
         let _ = Command::new("niri")
@@ -1143,8 +1144,8 @@ fn ssh_menu() {
         .args([
             "-show", "ssh",
             "-theme", &theme_path.to_string_lossy(),
-            "-terminal", "foot",
-            "-ssh-command", "foot --app-id=foot.ssh -T '{host}' -e ssh {host}",
+            "-terminal", "kitty",
+            "-ssh-command", "kitty --class kitty.ssh -T '{host}' ssh {host}",
             "-display-ssh", "󰢹 SSH",
         ])
         .spawn();
@@ -1610,7 +1611,7 @@ fn wifi_menu() {
             let _ = Command::new("nmcli").args(["radio", "wifi", next]).output();
         });
     } else if choice.contains("Network Settings") {
-        let _ = Command::new("foot").args(["--app-id=foot.nmtui", "-e", "nmtui"]).spawn();
+        let _ = Command::new("kitty").args(["--class", "kitty.nmtui", "nmtui"]).spawn();
     } else {
         for (ssid, in_use, _, sec) in &items {
             if choice.contains(ssid) {
@@ -1905,14 +1906,14 @@ struct NiriWindow {
 fn is_terminal_window(w: &NiriWindow) -> bool {
     let Some(ref app_id) = w.app_id else { return false };
     match app_id.as_str() {
-        "foot" | "foot.floating" | "alacritty" | "kitty" | "wezterm" => true,
+        "kitty" | "kitty.floating" | "foot" | "foot.floating" | "alacritty" | "wezterm" => true,
         _ => false,
     }
 }
 
 fn spawn_main_terminal() {
-    let _ = Command::new("foot")
-        .args(["-e", "tmux", "new-session", "-A", "-s", "main"])
+    let _ = Command::new("kitty")
+        .args(["tmux", "new-session", "-A", "-s", "main"])
         .spawn();
 }
 
@@ -2109,8 +2110,8 @@ fn main() {
             return;
         }
         "note.sh" | "yazi-note.sh" => {
-            let _ = Command::new("foot")
-                .args(["--app-id=foot.floating.notes", "-e", "nvim"])
+            let _ = Command::new("kitty")
+                .args(["--class", "kitty.floating.notes", "nvim"])
                 .current_dir(dirs_home().join("Notes"))
                 .spawn();
             return;
@@ -2255,8 +2256,8 @@ fn main() {
             let _ = Command::new("playerctl").arg(action).output();
         }
         Commands::Notes => {
-            let _ = Command::new("foot")
-                .args(["--app-id=foot.floating.notes", "-e", "nvim"])
+            let _ = Command::new("kitty")
+                .args(["--class", "kitty.floating.notes", "nvim"])
                 .current_dir(dirs_home().join("Notes"))
                 .spawn();
         }

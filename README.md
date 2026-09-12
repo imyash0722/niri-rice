@@ -40,7 +40,7 @@
 | Wallpaper | `awww` |
 | Lock Screen | `hyprlock` + `hypridle` |
 | Notifications | `mako` |
-| Terminal | `foot` + `alacritty` (TTY session) |
+| Terminal | `kitty` + `alacritty` (TTY session) |
 
 ### 🔧 Dependencies
 
@@ -86,7 +86,7 @@ niri-rice/
 │   │   └── themes/             # Material themes, cursors, and active wallpaper
 │   ├── waybar/                 # Waybar status bar configuration and styles
 │   ├── rofi/                   # App launcher theme and config
-│   ├── foot/                   # Foot terminal config
+│   ├── kitty/                  # Kitty terminal config with dynamic Material You colors
 │   ├── hypr/                   # hypridle config (idle/lock daemon)
 │   ├── mako/                   # Notification daemon config
 │   ├── mpv/                    # mpv player config (used by mpvpaper)
