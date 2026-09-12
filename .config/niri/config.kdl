@@ -409,6 +409,7 @@ binds {
 
     // Browser
     Mod+B { spawn "firefox-developer-edition"; }
+    Mod+U { spawn-sh "~/.local/bin/rice-ctl link-picker"; }
 
     // File manager
     Mod+E { spawn-sh "env QT_QPA_PLATFORMTHEME=kde dolphin"; }

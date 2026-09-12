@@ -48,6 +48,12 @@ enum Commands {
     },
     /// Web bookmarks and quick search
     Browse,
+    /// Open a URL, hyperlink, or file path with line number
+    Open {
+        target: String,
+    },
+    /// Interactive fuzzy link picker for current tmux pane or screen
+    LinkPicker,
     /// Calendar notifications
     Calendar {
         #[arg(default_value = "curr")]
@@ -1704,6 +1710,228 @@ fn browse_menu() {
     let _ = Command::new("xdg-open").arg(url).spawn();
 }
 
+fn url_decode(s: &str) -> String {
+    let mut res = String::with_capacity(s.len());
+    let bytes = s.as_bytes();
+    let mut i = 0;
+    while i < bytes.len() {
+        if bytes[i] == b'%' && i + 2 < bytes.len() {
+            if let Ok(b) = u8::from_str_radix(std::str::from_utf8(&bytes[i + 1..=i + 2]).unwrap_or(""), 16) {
+                res.push(b as char);
+                i += 3;
+                continue;
+            }
+        } else if bytes[i] == b'+' {
+            res.push(' ');
+            i += 1;
+            continue;
+        }
+        res.push(bytes[i] as char);
+        i += 1;
+    }
+    res
+}
+
+fn extract_line_number(frag: &str) -> Option<u32> {
+    let s = frag.trim_start_matches(|c: char| c == 'L' || c == 'l' || c == ':');
+    let num_str = s.split(|c: char| c == '-' || c == ':' || c == ',' || c == '#').next()?;
+    num_str.parse::<u32>().ok()
+}
+
+fn open_in_editor(path: &Path, line: Option<u32>) {
+    let runtime_dir = std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| "/run/user/1000".to_string());
+    if let Ok(entries) = fs::read_dir(&runtime_dir) {
+        for entry in entries.flatten() {
+            let name = entry.file_name().to_string_lossy().to_string();
+            if name.starts_with("nvim") {
+                let sock = entry.path().to_string_lossy().to_string();
+                let cmd = if let Some(l) = line {
+                    format!("<Esc>:e +{} {}<CR>", l, path.display())
+                } else {
+                    format!("<Esc>:e {}<CR>", path.display())
+                };
+                if let Ok(st) = Command::new("nvim")
+                    .args(["--server", &sock, "--remote-send", &cmd])
+                    .output()
+                {
+                    if st.status.success() {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    let has_kate = Command::new("which").arg("kate").output().map(|o| o.status.success()).unwrap_or(false);
+    if has_kate {
+        let mut cmd = Command::new("kate");
+        if let Some(l) = line {
+            cmd.args(["-l", &l.to_string()]);
+        }
+        cmd.arg(path);
+        if cmd.spawn().is_ok() {
+            return;
+        }
+    }
+
+    let mut cmd = Command::new("kitty");
+    cmd.args(["--class", "kitty.floating"]);
+    cmd.arg("nvim");
+    if let Some(l) = line {
+        cmd.arg(format!("+{}", l));
+    }
+    cmd.arg(path);
+    let _ = cmd.spawn();
+}
+
+fn open_target(target: &str) {
+    let trimmed = target.trim().trim_matches(|c| c == '\'' || c == '"' || c == '<' || c == '>' || c == '(' || c == ')' || c == '[' || c == ']');
+    if trimmed.is_empty() {
+        return;
+    }
+
+    if trimmed.starts_with("http://") || trimmed.starts_with("https://") {
+        let _ = Command::new("xdg-open").arg(trimmed).spawn();
+        return;
+    }
+
+    if trimmed.starts_with("file://") {
+        let stripped = &trimmed["file://".len()..];
+        let path_part = if stripped.starts_with("localhost/") {
+            &stripped["localhost".len()..]
+        } else {
+            stripped
+        };
+
+        let (raw_path, line_num) = if let Some(idx) = path_part.find('#') {
+            let p = &path_part[..idx];
+            let frag = &path_part[idx + 1..];
+            (p, extract_line_number(frag))
+        } else if let Some(idx) = path_part.find(':') {
+            let p = &path_part[..idx];
+            let rest = &path_part[idx + 1..];
+            (p, extract_line_number(rest))
+        } else {
+            (path_part, None)
+        };
+
+        let clean_path = url_decode(raw_path);
+        let file_path = PathBuf::from(&clean_path);
+
+        if file_path.exists() {
+            if file_path.is_dir() {
+                let _ = Command::new("dolphin").arg(&file_path).spawn();
+                return;
+            }
+
+            if line_num.is_some() {
+                open_in_editor(&file_path, line_num);
+                return;
+            }
+
+            let _ = Command::new("xdg-open").arg(&file_path).spawn();
+            return;
+        }
+    }
+
+    if let Some(idx) = trimmed.find(':') {
+        let p_str = &trimmed[..idx];
+        let rest = &trimmed[idx + 1..];
+        let p = PathBuf::from(p_str);
+        if p.exists() {
+            let line = extract_line_number(rest);
+            open_in_editor(&p, line);
+            return;
+        }
+    }
+
+    let p = PathBuf::from(trimmed);
+    if p.exists() {
+        if p.is_dir() {
+            let _ = Command::new("dolphin").arg(&p).spawn();
+            return;
+        }
+        let _ = Command::new("xdg-open").arg(&p).spawn();
+        return;
+    }
+
+    let _ = Command::new("xdg-open").arg(trimmed).spawn();
+}
+
+fn link_picker() {
+    let mut links: Vec<String> = Vec::new();
+
+    if let Ok(out) = Command::new("tmux")
+        .args(["capture-pane", "-H", "-p", "-S", "-150"])
+        .output()
+    {
+        let text = String::from_utf8_lossy(&out.stdout);
+        for word in text.split_whitespace() {
+            let w = word.trim_matches(|c| c == '\'' || c == '"' || c == '<' || c == '>');
+            if (w.starts_with("http://") || w.starts_with("https://") || w.starts_with("file://")) && !links.contains(&w.to_string()) {
+                links.push(w.to_string());
+            }
+        }
+    }
+
+    if let Ok(out) = Command::new("tmux")
+        .args(["capture-pane", "-J", "-p", "-S", "-150"])
+        .output()
+    {
+        let text = String::from_utf8_lossy(&out.stdout);
+        let re = Regex::new(r#"(https?://[^\s"'`<>]+|file://[^\s"'`<>]+|[a-zA-Z0-9_./-]+\.(rs|ts|js|py|go|c|cpp|h|json|toml|kdl|md|sh|css|html)(:\d+)?)"#).unwrap();
+        for cap in re.find_iter(&text) {
+            let w = cap.as_str().trim_matches(|c| c == '\'' || c == '"' || c == '<' || c == '>' || c == '(' || c == ')');
+            if !w.is_empty() && !links.contains(&w.to_string()) {
+                links.push(w.to_string());
+            }
+        }
+    }
+
+    if links.is_empty() {
+        let _ = Command::new("notify-send")
+            .args(["-u", "low", "-a", "Link Picker", "Link Picker", "No links or file references found in current pane"])
+            .output();
+        return;
+    }
+
+    links.reverse();
+
+    if links.len() == 1 {
+        open_target(&links[0]);
+        return;
+    }
+
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
+
+    let mut input = String::new();
+    for l in &links {
+        input.push_str(l);
+        input.push('\n');
+    }
+
+    let mut child = match Command::new("rofi")
+        .args(["-dmenu", "-p", "󰌹 Open Link", "-i", "-theme", &theme_path.to_string_lossy()])
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+    {
+        Ok(c) => c,
+        Err(_) => return,
+    };
+
+    if let Some(mut stdin) = child.stdin.take() {
+        let _ = stdin.write_all(input.as_bytes());
+    }
+
+    let Ok(output) = child.wait_with_output() else { return };
+    let choice = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    if !choice.is_empty() {
+        open_target(&choice);
+    }
+}
+
 fn calendar_action(action: &str) {
     let runtime = std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| "/tmp".to_string());
     let path = PathBuf::from(runtime).join("calendar_notification_month");
@@ -2120,6 +2348,16 @@ fn main() {
             files_picker();
             return;
         }
+        "open" => {
+            if let Some(target) = args.get(1) {
+                open_target(target);
+            }
+            return;
+        }
+        "link-picker" | "open-pane-links" => {
+            link_picker();
+            return;
+        }
         "mem.sh" => {
             mem_info();
             return;
@@ -2261,6 +2499,8 @@ fn main() {
                 .current_dir(dirs_home().join("Notes"))
                 .spawn();
         }
+        Commands::Open { target } => open_target(&target),
+        Commands::LinkPicker => link_picker(),
         Commands::Ssh => ssh_menu(),
         Commands::Terminal => focus_or_spawn_terminal(),
         Commands::System { action } => match action {

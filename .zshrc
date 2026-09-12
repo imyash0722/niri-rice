@@ -1,5 +1,8 @@
 export SHELL="/usr/bin/zsh"
 export EDITOR="nvim"
+export FORCE_HYPERLINK=1
+export COLORTERM="truecolor"
+export TERM_PROGRAM="${TERM_PROGRAM:-kitty}"
 
 # # [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
@@ -103,7 +106,7 @@ exists-dir "$HOME/Android" && {
 }
 
 exists rg && {
-  alias grep="rg"
+  alias grep="rg --hyperlink-format=default"
   export FZF_DEFAULT_COMMAND="rg --files"
   export FZF_DEFAULT_OPTS="-m --height 50% --border"
 }
@@ -166,9 +169,9 @@ exists dircolors && [[ -f ~/.dircolors ]] && {
 }
 
 exists eza && {
-  alias ls='eza --icons'
-  alias ll='eza -la --icons'
-  alias la='eza -a --icons'
+  alias ls='eza --icons --hyperlink'
+  alias ll='eza -la --icons --hyperlink'
+  alias la='eza -a --icons --hyperlink'
 }
 
 exists zoxide && {

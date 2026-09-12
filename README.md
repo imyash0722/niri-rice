@@ -110,7 +110,8 @@ niri-rice/
 |--------|----------|
 | Terminal | `Mod+Return` |
 | App Launcher | `Mod+D` |
-| Browser | `Mod+Shift+E` |
+| Browser | `Mod+B` |
+| Link Picker | `Mod+U` (or `Prefix+u` in Tmux) |
 | File Manager | `Mod+E` |
 | Overview | `Mod+Tab` |
 | Float ↔ Tile Focus | <kbd>Mod</kbd>+<kbd>`</kbd> |
