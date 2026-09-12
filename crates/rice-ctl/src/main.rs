@@ -4,7 +4,7 @@ use regex::Regex;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::fs;
-use std::io::Write;
+use std::io::{IsTerminal, Write};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
@@ -12,7 +12,7 @@ use std::process::Command;
 #[command(name = "rice-ctl")]
 #[command(
     about = "Unified desktop controller & native theming engine for Niri rice",
-    version = "0.3.0"
+    version = "2.0.0"
 )]
 struct Cli {
     #[command(subcommand)]
@@ -31,6 +31,42 @@ enum Commands {
         #[command(subcommand)]
         action: Option<PowerAction>,
     },
+    /// Battery and power conservation management
+    Battery {
+        #[command(subcommand)]
+        action: Option<BatteryAction>,
+    },
+    /// Display and output management
+    Output {
+        #[command(subcommand)]
+        action: OutputAction,
+    },
+    /// Interactive Wi-Fi connection manager
+    Wifi {
+        #[command(subcommand)]
+        action: Option<WifiAction>,
+    },
+    /// Web bookmarks and quick search
+    Browse,
+    /// Calendar notifications
+    Calendar {
+        #[arg(default_value = "curr")]
+        action: String,
+    },
+    /// Waybar style selector and module formatters
+    Bar {
+        #[command(subcommand)]
+        action: BarAction,
+    },
+    /// Screenshot capture tool
+    Screenshot {
+        #[arg(default_value = "area")]
+        mode: String,
+    },
+    /// File search and launcher
+    Files,
+    /// System memory info
+    Mem,
     /// Desktop environment reload (Niri, Waybar, Mako, awww)
     Reload,
     /// Caffeine sleep-inhibit manager
@@ -53,66 +89,99 @@ enum Commands {
         #[arg(default_value = "play-pause")]
         action: String,
     },
+    /// Open quick notes editor
+    Notes,
+    /// Interactive SSH session launcher
+    Ssh,
+    /// System setup and administration tools
+    System {
+        #[command(subcommand)]
+        action: SystemAction,
+    },
+}
+
+#[derive(Subcommand)]
+enum SystemAction {
+    /// Interactive fingerprint scanner setup and test utility
+    Fingerprint,
+    /// Set swapfile hibernation resume and offset
+    ResumeOffset,
 }
 
 #[derive(Subcommand)]
 enum ThemeAction {
     /// Interactive Rofi wallpaper picker
     Select {
-        /// Cursor size in pixels
         #[arg(short, long, default_value = "32")]
         size: u32,
     },
     /// Apply wallpaper, extract Matugen Material You colors, and sync desktop
     Set {
-        /// Path to wallpaper image or video
         file: PathBuf,
-        /// Cursor size in pixels
         #[arg(short, long, default_value = "32")]
         size: u32,
     },
     /// Pick and apply a random wallpaper from wallpaper directory
     Random {
-        /// Wallpaper directory
         #[arg(short, long)]
         dir: Option<PathBuf>,
-        /// Cursor size in pixels
         #[arg(short, long, default_value = "32")]
         size: u32,
     },
     /// Load a predefined theme from ~/.config/niri/themes
     Load {
-        /// Name of the theme
         name: String,
-        /// Cursor size in pixels
         #[arg(short, long, default_value = "32")]
         size: u32,
+    },
+    /// Set active window animation style
+    Animation {
+        name: String,
     },
 }
 
 #[derive(Subcommand)]
 enum PowerAction {
-    /// Open interactive Rofi power menu
     Menu,
-    /// Lock the screen via quickshell or loginctl
     Lock,
-    /// Suspend to RAM
     Suspend,
-    /// Hibernate to disk
     Hibernate,
-    /// Reboot system
     Reboot,
-    /// Power off system
     Shutdown,
-    /// Smart idle suspension with AC / SSH / Caffeine safeguards
     IdleSuspend,
+    Profile,
+}
+
+#[derive(Subcommand)]
+enum BatteryAction {
+    Menu,
+    Status,
+    ToggleConservation,
+    CycleProfile,
+}
+
+#[derive(Subcommand)]
+enum OutputAction {
+    /// Automatically applies per-output scaling based on native resolution
+    AutoScale,
+}
+
+#[derive(Subcommand)]
+enum WifiAction {
+    Menu,
+}
+
+#[derive(Subcommand)]
+enum BarAction {
+    Select,
+    NukeBack,
+    NukePpd,
+    NukeVol,
 }
 
 #[derive(Subcommand)]
 enum VolumeAction {
-    /// Toggle audio sink mute with hardware LED feedback
     MuteToggle,
-    /// Toggle microphone source mute with hardware LED feedback
     MicMuteToggle,
 }
 
@@ -122,6 +191,20 @@ struct WalCache {
     special: HashMap<String, String>,
     #[serde(default)]
     colors: HashMap<String, String>,
+}
+
+#[derive(Deserialize, Debug)]
+struct NiriMode {
+    width: u32,
+    height: u32,
+}
+
+#[derive(Deserialize, Debug)]
+struct NiriOutput {
+    #[allow(dead_code)]
+    name: String,
+    modes: Vec<NiriMode>,
+    current_mode: Option<usize>,
 }
 
 const MOGA_NEON_VARIANTS: &[(&str, &str)] = &[
@@ -219,7 +302,6 @@ fn find_matugen_bin() -> PathBuf {
 fn apply_cursor(variant: &str, size: u32) {
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
 
-    // 1. Niri cursor
     let niri_themes = PathBuf::from(&home).join(".config/niri/themes");
     let _ = fs::create_dir_all(&niri_themes);
     let cursor_kdl = format!(
@@ -228,7 +310,6 @@ fn apply_cursor(variant: &str, size: u32) {
     );
     let _ = fs::write(niri_themes.join("active-cursor.kdl"), cursor_kdl);
 
-    // 2. KDE Plasma live & permanent
     let _ = Command::new("plasma-apply-cursortheme")
         .args([variant, "--size", &size.to_string()])
         .output();
@@ -255,7 +336,6 @@ fn apply_cursor(variant: &str, size: u32) {
         ])
         .output();
 
-    // 3. GTK 3 & 4 settings.ini and gsettings
     let _ = Command::new("gsettings")
         .args(["set", "org.gnome.desktop.interface", "cursor-theme", variant])
         .output();
@@ -280,7 +360,6 @@ fn apply_cursor(variant: &str, size: u32) {
         }
     }
 
-    // 4. X11 & Environment
     let icons_dir = PathBuf::from(&home).join(".icons/default");
     let _ = fs::create_dir_all(&icons_dir);
     let _ = fs::write(
@@ -328,7 +407,6 @@ fn apply_desktop_colors(target_color: Option<&str>) {
         .or_else(|| cache.colors.get("color4").cloned())
         .unwrap_or_else(|| "#b3c5ff".to_string());
 
-    // 1. Update Niri focus-ring colors in config.kdl
     let niri_config = PathBuf::from(&home).join(".config/niri/config.kdl");
     if let Ok(content) = fs::read_to_string(&niri_config) {
         let re_active = Regex::new(r##"active-color\s+"#[0-9a-fA-F]+""##).unwrap();
@@ -338,7 +416,6 @@ fn apply_desktop_colors(target_color: Option<&str>) {
         let _ = fs::write(niri_config, updated.as_bytes());
     }
 
-    // 2. Live reload Waybar via SIGUSR2
     let is_waybar_running = Command::new("pgrep")
         .args(["-x", "waybar"])
         .output()
@@ -348,17 +425,14 @@ fn apply_desktop_colors(target_color: Option<&str>) {
         let _ = Command::new("killall").args(["-SIGUSR2", "waybar"]).output();
     }
 
-    // 3. Reload Mako notifications
     let _ = Command::new("makoctl").arg("reload").output();
 
-    // 4. Trigger Niri smooth screen transition
     if std::env::var("NIRI_SOCKET").is_ok() {
         let _ = Command::new("niri")
             .args(["msg", "action", "do-screen-transition"])
             .output();
     }
 
-    // 5. Broadcast ANSI OSC sequences to all active terminals (/dev/pts/*)
     let mut seq = Vec::new();
     let esc = "\x1b";
     for i in 0..16 {
@@ -391,7 +465,6 @@ fn apply_desktop_colors(target_color: Option<&str>) {
         }
     }
 
-    // 6. Broadcast colorscheme reload to active Neovim instances
     let runtime_dir = std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| "/run/user/1000".to_string());
     if let Ok(entries) = fs::read_dir(&runtime_dir) {
         for entry in entries.flatten() {
@@ -410,7 +483,6 @@ fn apply_desktop_colors(target_color: Option<&str>) {
         }
     }
 
-    // 7. Sync D-Bus environment
     let _ = Command::new("dbus-update-activation-environment")
         .args(["--systemd", "--all"])
         .output();
@@ -428,7 +500,6 @@ fn set_wallpaper(file: &Path, size: u32) {
 
     println!("[rice-ctl] Setting wallpaper: {}", canonical.display());
 
-    // 1. Resolve preview image for Matugen (if video/gif, extract frame)
     let ext = canonical
         .extension()
         .and_then(|e| e.to_str())
@@ -466,7 +537,6 @@ fn set_wallpaper(file: &Path, size: u32) {
         canonical.clone()
     };
 
-    // 2. Run Matugen in Rust
     println!("[rice-ctl] Extracting Material You palette via Matugen...");
     let matugen_bin = find_matugen_bin();
     let status = Command::new(matugen_bin)
@@ -483,7 +553,6 @@ fn set_wallpaper(file: &Path, size: u32) {
         eprintln!("Warning: Failed to execute matugen: {}", e);
     }
 
-    // 3. Read primary accent color from generated cache
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let wal_cache = PathBuf::from(&home).join(".cache/wal/colors.json");
     let mut primary_color = "#b3c5ff".to_string();
@@ -496,7 +565,6 @@ fn set_wallpaper(file: &Path, size: u32) {
         }
     }
 
-    // 4. Cursor matching & application
     let cursor_variant = find_best_cursor_variant(&primary_color);
     println!(
         "[rice-ctl] Matched cursor: {} ({}px) for accent {}",
@@ -504,10 +572,8 @@ fn set_wallpaper(file: &Path, size: u32) {
     );
     apply_cursor(cursor_variant, size);
 
-    // 5. Update desktop colors (Niri, Waybar, Mako, Terminals, Neovim)
     apply_desktop_colors(Some(&primary_color));
 
-    // 6. Apply live wallpaper via awww
     println!("[rice-ctl] Applying live wallpaper via awww...");
     let is_awww_running = Command::new("pgrep")
         .args(["-x", "awww-daemon"])
@@ -536,7 +602,6 @@ fn set_wallpaper(file: &Path, size: u32) {
         ])
         .output();
 
-    // 7. Save active wallpaper state
     let _ = fs::write(
         PathBuf::from(&home).join(".config/wallpaper"),
         canonical.to_string_lossy().as_bytes(),
@@ -547,7 +612,6 @@ fn set_wallpaper(file: &Path, size: u32) {
         canonical.to_string_lossy().as_bytes(),
     );
 
-    // 8. Sync KDE plasma wallpaper
     let _ = Command::new("plasma-apply-wallpaperimage")
         .arg(&image_target)
         .output();
@@ -556,7 +620,6 @@ fn set_wallpaper(file: &Path, size: u32) {
 }
 
 fn select_wallpaper(size: u32) {
-    // 1. Singleton Toggle: If already running, close and exit
     let pkill_output = Command::new("pkill")
         .args(["-f", "rofi.*wallpaper-select.rasi"])
         .output();
@@ -577,7 +640,6 @@ fn select_wallpaper(size: u32) {
         return;
     }
 
-    // 2. Discover unique wallpaper concepts
     let mut concepts = Vec::new();
     if thumb_dir.exists() {
         if let Ok(entries) = fs::read_dir(&thumb_dir) {
@@ -619,7 +681,6 @@ fn select_wallpaper(size: u32) {
         return;
     }
 
-    // 3. Build rofi items: {display}\0icon\x1f{thumb}\n
     let mut rofi_input = Vec::new();
     for c in &concepts {
         let display = c.replace('_', " ").replace('-', " ");
@@ -703,7 +764,6 @@ fn select_wallpaper(size: u32) {
 
     let concept = &concepts[idx];
 
-    // Prefer 16:10 for 16:10 displays, fall back gracefully
     let candidates = [
         wall_dir.join(format!("{}_16x10.mp4", concept)),
         wall_dir.join(format!("{}_16x10.png", concept)),
@@ -812,7 +872,6 @@ fn load_theme(theme: &str, size: u32) {
 
     println!("[rice-ctl] Applying theme: {}...", theme);
 
-    // 1. Update Niri Animations
     let niri_kdl = theme_dir.join("niri.kdl");
     if let Ok(content) = fs::read_to_string(&niri_kdl) {
         let anim_lines: Vec<&str> = content
@@ -825,7 +884,6 @@ fn load_theme(theme: &str, size: u32) {
         );
     }
 
-    // 2. Wallpaper resolution
     let wall_png = theme_dir.join("wallpaper.png");
     let wall_mp4 = theme_dir.join("wallpaper.mp4");
     let target_wall = if wall_png.exists() {
@@ -841,6 +899,26 @@ fn load_theme(theme: &str, size: u32) {
     println!("[rice-ctl] Theme '{}' applied successfully!", theme);
 }
 
+fn set_animation(anim: &str) {
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let anim_file = PathBuf::from(&home).join(format!(".config/niri/animations/{}.kdl", anim));
+    if !anim_file.exists() {
+        eprintln!("[rice-ctl] Animation '{}' not found.", anim);
+        return;
+    }
+    let content = format!("include \"../animations/{}.kdl\"\n", anim);
+    let _ = fs::write(
+        PathBuf::from(&home).join(".config/niri/themes/active-animations.kdl"),
+        content,
+    );
+    if std::env::var("NIRI_SOCKET").is_ok() {
+        let _ = Command::new("niri")
+            .args(["msg", "action", "do-screen-transition"])
+            .output();
+    }
+    println!("[rice-ctl] Animation '{}' applied successfully!", anim);
+}
+
 fn lock_screen() {
     let pgrep = Command::new("pgrep")
         .args(["-f", "quickshell.*lock_shell\\.qml"])
@@ -851,18 +929,43 @@ fn lock_screen() {
         }
     }
 
-    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
-    let lock_candidates = [
-        PathBuf::from(&home).join(".local/share/quickshell-lockscreen/lock.sh"),
-        PathBuf::from(&home).join(".local/share/qylock/quickshell-lockscreen/lock.sh"),
-        PathBuf::from(&home).join(".local/share/qylock/lock.sh"),
-    ];
+    let home = dirs_home();
+    let qs_dir = home.join(".local/share/quickshell-lockscreen");
+    let lock_qml = qs_dir.join("lock_shell.qml");
 
-    for c in lock_candidates {
-        if c.is_file() {
-            let _ = Command::new(c).spawn();
-            return;
-        }
+    if lock_qml.is_file() {
+        let _ = Command::new("killall")
+            .args(["-9", "hyprlock", "swaylock", "wlogout"])
+            .output();
+
+        let imports = qs_dir.join("imports");
+        let existing_qml = std::env::var("QML2_IMPORT_PATH").unwrap_or_default();
+        let qml_import = if existing_qml.is_empty() {
+            imports.to_string_lossy().to_string()
+        } else {
+            format!("{}:{}", imports.display(), existing_qml)
+        };
+
+        let themes_link = qs_dir.join("themes_link/sword");
+        let themes_dir = home.join(".local/share/themes/sword");
+        let theme_path = if themes_dir.is_dir() && !qs_dir.join("themes_link").is_dir() {
+            themes_dir
+        } else {
+            themes_link
+        };
+
+        let session_type = std::env::var("XDG_SESSION_TYPE").unwrap_or_else(|_| "wayland".to_string());
+
+        let _ = Command::new("quickshell")
+            .arg("-p")
+            .arg(&lock_qml)
+            .env("QML2_IMPORT_PATH", qml_import)
+            .env("QML_XHR_ALLOW_FILE_READ", "1")
+            .env("XDG_SESSION_TYPE", session_type)
+            .env("QS_THEME", "sword")
+            .env("QS_THEME_PATH", theme_path.to_string_lossy().as_ref())
+            .spawn();
+        return;
     }
 
     let _ = Command::new("loginctl").arg("lock-session").spawn();
@@ -914,12 +1017,10 @@ fn power_menu() {
 }
 
 fn idle_suspend() {
-    // 1. Caffeine Override
     if Path::new("/tmp/caffeine_active").exists() {
         return;
     }
 
-    // 2. Check systemd sleep inhibitors
     if let Ok(out) = Command::new("systemd-inhibit")
         .args(["--list", "--no-legend"])
         .output()
@@ -935,7 +1036,6 @@ fn idle_suspend() {
         }
     }
 
-    // 3. Check for AC Power
     let on_ac = (|| {
         if let Ok(entries) = fs::read_dir("/sys/class/power_supply") {
             for entry in entries.flatten() {
@@ -958,7 +1058,6 @@ fn idle_suspend() {
         false
     })();
 
-    // 4. Check for active SSH connections
     let has_ssh = (|| {
         if let Ok(out) = Command::new("ss")
             .args(["-H", "-t", "state", "established", "( sport = :22 )"])
@@ -989,24 +1088,250 @@ fn idle_suspend() {
         return;
     }
 
-    // 5. Battery discharge without inhibitors: suspend
     let _ = Command::new("systemctl").arg("suspend").spawn();
+}
+
+fn power_profile_menu() {
+    let current = fs::read_to_string("/sys/firmware/acpi/platform_profile")
+        .unwrap_or_else(|_| "balanced".to_string())
+        .trim()
+        .to_string();
+
+    let profiles = ["performance", "balanced", "low-power"];
+    let mut menu_input = String::new();
+    for p in profiles {
+        if p == current {
+            menu_input.push_str(&format!("{} (Active 🟢)\n", p));
+        } else {
+            menu_input.push_str(&format!("{} (⭕)\n", p));
+        }
+    }
+
+    let use_fzf = std::io::stdin().is_terminal();
+    let chosen = if use_fzf {
+        let mut child = match Command::new("fzf")
+            .args(["--ansi", "--prompt=Select Power Profile: ", "--height=10", "--layout=reverse", "--border"])
+            .stdin(std::process::Stdio::piped())
+            .stdout(std::process::Stdio::piped())
+            .spawn()
+        {
+            Ok(c) => c,
+            Err(_) => return,
+        };
+        if let Some(mut sin) = child.stdin.take() {
+            let _ = sin.write_all(menu_input.as_bytes());
+        }
+        let output = match child.wait_with_output() {
+            Ok(o) => o,
+            Err(_) => return,
+        };
+        String::from_utf8_lossy(&output.stdout).trim().to_string()
+    } else {
+        let mut rchild = match Command::new("rofi")
+            .args(["-dmenu", "-i", "-p", "Power Profile", "-lines", "3"])
+            .stdin(std::process::Stdio::piped())
+            .stdout(std::process::Stdio::piped())
+            .spawn()
+        {
+            Ok(rc) => rc,
+            Err(e) => {
+                eprintln!("Failed to spawn selector: {}", e);
+                return;
+            }
+        };
+        if let Some(mut sin) = rchild.stdin.take() {
+            let _ = sin.write_all(menu_input.as_bytes());
+        }
+        let output = match rchild.wait_with_output() {
+            Ok(o) => o,
+            Err(_) => return,
+        };
+        String::from_utf8_lossy(&output.stdout).trim().to_string()
+    };
+
+    apply_power_profile_choice(&chosen);
+}
+
+fn apply_power_profile_choice(chosen: &str) {
+    let raw = chosen.split_whitespace().next().unwrap_or("");
+    if raw.is_empty() {
+        return;
+    }
+    println!("Setting power profile to {}...", raw);
+    let tee = Command::new("sudo")
+        .args(["tee", "/sys/firmware/acpi/platform_profile"])
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::null())
+        .spawn();
+    if let Ok(mut c) = tee {
+        if let Some(mut sin) = c.stdin.take() {
+            let _ = sin.write_all(raw.as_bytes());
+        }
+        let _ = c.wait();
+    }
+    let _ = Command::new("pkill").args(["-RTMIN+2", "waybar"]).output();
+}
+
+fn ssh_menu() {
+    let _ = Command::new("rofi")
+        .args([
+            "-show", "ssh",
+            "-terminal", "foot",
+            "-ssh-command", "foot --app-id=foot.ssh -T '{host}' -e ssh {host}",
+            "-display-ssh", "󰢹 SSH",
+        ])
+        .spawn();
+}
+
+fn fingerprint_menu() {
+    let _ = Command::new("clear").status();
+    println!("\x1b[0;34m======================================================\x1b[0m");
+    println!("\x1b[0;34m       Fingerprint Scanner Setup & Management         \x1b[0m");
+    println!("\x1b[0;34m======================================================\x1b[0m\n");
+
+    let user = std::env::var("USER").unwrap_or_else(|_| "pineapple".to_string());
+
+    println!("\x1b[1;33m[1] Detecting Fingerprint Scanner...\x1b[0m");
+    let device_check = Command::new("fprintd-list").arg(&user).output();
+    let has_device = match device_check {
+        Ok(ref out) => {
+            let s = format!("{}{}", String::from_utf8_lossy(&out.stdout), String::from_utf8_lossy(&out.stderr));
+            s.contains("found 1 devices") || s.contains("Device")
+        }
+        Err(_) => false,
+    };
+
+    if has_device {
+        println!("\x1b[0;32m✓ Scanner Detected: Elan MOC Fingerprint Sensor\x1b[0m\n");
+    } else {
+        eprintln!("\x1b[0;31m✗ No supported fingerprint scanner detected by fprintd.\x1b[0m");
+        return;
+    }
+
+    println!("\x1b[1;33m[2] Currently Enrolled Fingers for user '{}':\x1b[0m", user);
+    let _ = Command::new("fprintd-list").arg(&user).status();
+    println!();
+
+    println!("\x1b[0;34m======================================================\x1b[0m");
+    println!("What would you like to do?");
+    println!("  1) Enroll Right Index Finger (Recommended)");
+    println!("  2) Enroll Right Thumb");
+    println!("  3) Enroll Left Index Finger");
+    println!("  4) Enroll a custom finger");
+    println!("  5) Test / Verify enrolled fingerprint");
+    println!("  6) Open Graphical Settings (KDE User Accounts)");
+    println!("  7) Delete all enrolled fingers");
+    println!("  8) Exit");
+    println!("\x1b[0;34m======================================================\x1b[0m");
+
+    print!("Select an option [1-8]: ");
+    let _ = std::io::stdout().flush();
+
+    let mut choice = String::new();
+    if std::io::stdin().read_line(&mut choice).is_err() {
+        return;
+    }
+    let choice = choice.trim();
+
+    match choice {
+        "1" => {
+            println!("\n\x1b[0;32mEnrolling Right Index Finger...\x1b[0m");
+            println!("Place your right index finger on the power button sensor repeatedly when prompted.");
+            let _ = Command::new("fprintd-enroll").args(["-f", "right-index-finger", &user]).status();
+        }
+        "2" => {
+            println!("\n\x1b[0;32mEnrolling Right Thumb...\x1b[0m");
+            println!("Place your right thumb on the sensor repeatedly when prompted.");
+            let _ = Command::new("fprintd-enroll").args(["-f", "right-thumb", &user]).status();
+        }
+        "3" => {
+            println!("\n\x1b[0;32mEnrolling Left Index Finger...\x1b[0m");
+            println!("Place your left index finger on the sensor repeatedly when prompted.");
+            let _ = Command::new("fprintd-enroll").args(["-f", "left-index-finger", &user]).status();
+        }
+        "4" => {
+            println!("\nAvailable finger names: right-thumb, right-index-finger, right-middle-finger, right-ring-finger, right-little-finger, left-thumb, left-index-finger, left-middle-finger, left-ring-finger, left-little-finger");
+            print!("Enter finger name: ");
+            let _ = std::io::stdout().flush();
+            let mut custom = String::new();
+            if std::io::stdin().read_line(&mut custom).is_ok() {
+                let finger = custom.trim();
+                let _ = Command::new("fprintd-enroll").args(["-f", finger, &user]).status();
+            }
+        }
+        "5" => {
+            println!("\n\x1b[0;34mPlace your enrolled finger on the sensor to test...\x1b[0m");
+            let _ = Command::new("fprintd-verify").arg(&user).status();
+        }
+        "6" => {
+            println!("\nOpening KDE User Settings GUI...");
+            let _ = Command::new("kcmshell6").arg("kcm_users").spawn();
+        }
+        "7" => {
+            print!("Are you sure you want to delete all fingerprints? [y/N]: ");
+            let _ = std::io::stdout().flush();
+            let mut confirm = String::new();
+            if std::io::stdin().read_line(&mut confirm).is_ok() && confirm.trim().eq_ignore_ascii_case("y") {
+                let _ = Command::new("fprintd-delete").arg(&user).status();
+                println!("\x1b[0;32mAll fingerprints deleted.\x1b[0m");
+            }
+        }
+        _ => {
+            println!("Exiting.");
+        }
+    }
+}
+
+fn setup_hibernate_resume() {
+    let swapfile = Path::new("/swap/swapfile");
+    if !swapfile.exists() {
+        return;
+    }
+
+    let df_out = Command::new("df").args(["--output=source", "/swap/swapfile"]).output();
+    let dev = match df_out {
+        Ok(o) => {
+            let text = String::from_utf8_lossy(&o.stdout);
+            text.lines().last().unwrap_or("").trim().to_string()
+        }
+        Err(_) => return,
+    };
+
+    if dev.is_empty() {
+        return;
+    }
+
+    let stat_maj = Command::new("stat").args(["-c", "%t", &dev]).output();
+    let stat_min = Command::new("stat").args(["-c", "%T", &dev]).output();
+    let btrfs_out = Command::new("btrfs").args(["inspect-internal", "map-swapfile", "-r", "/swap/swapfile"]).output();
+
+    if let (Ok(smaj), Ok(smin), Ok(btrfs)) = (stat_maj, stat_min, btrfs_out) {
+        let maj_hex = String::from_utf8_lossy(&smaj.stdout).trim().to_string();
+        let min_hex = String::from_utf8_lossy(&smin.stdout).trim().to_string();
+        let offset = String::from_utf8_lossy(&btrfs.stdout).trim().to_string();
+
+        if let (Ok(maj), Ok(min)) = (i64::from_str_radix(&maj_hex, 16), i64::from_str_radix(&min_hex, 16)) {
+            let majmin = format!("{}:{}", maj, min);
+            if !majmin.is_empty() && !offset.is_empty() {
+                let _ = fs::write("/sys/power/resume", majmin.as_bytes());
+                let _ = fs::write("/sys/power/resume_offset", offset.as_bytes());
+                println!("Hibernate resume set to {} at offset {}", majmin, offset);
+            }
+        }
+    }
 }
 
 fn reload_desktop() {
     println!("[rice-ctl] Reloading Niri rice desktop environment...");
 
-    // 1. Reload Niri config
     let _ = Command::new("niri")
         .args(["msg", "action", "load-config-file"])
         .output();
 
-    // 2. Restart Waybar cleanly
     let _ = Command::new("killall").arg("waybar").output();
     std::thread::sleep(std::time::Duration::from_millis(200));
     let _ = Command::new("waybar").spawn();
 
-    // 3. Reload Wallpaper via awww
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let active_wall = PathBuf::from(&home).join(".config/niri/themes/active-wallpaper.txt");
     if let Ok(wall_path) = fs::read_to_string(active_wall) {
@@ -1031,10 +1356,8 @@ fn reload_desktop() {
         }
     }
 
-    // 4. Reload Mako notifications
     let _ = Command::new("makoctl").arg("reload").output();
 
-    // 5. Trigger smooth screen transition
     let _ = Command::new("niri")
         .args(["msg", "action", "do-screen-transition"])
         .output();
@@ -1101,6 +1424,495 @@ fn caffeine_status() {
     }
 }
 
+fn monitor_autoscale() {
+    let runtime = std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| "/run/user/1000".to_string());
+
+    for _ in 0..20 {
+        if std::env::var("NIRI_SOCKET").is_ok() {
+            break;
+        }
+        if let Ok(entries) = fs::read_dir(&runtime) {
+            for entry in entries.flatten() {
+                let p = entry.path();
+                if let Some(name) = p.file_name().and_then(|n| n.to_str()) {
+                    if name.starts_with("niri") && name.ends_with(".sock") {
+                        std::env::set_var("NIRI_SOCKET", p);
+                        break;
+                    }
+                }
+            }
+        }
+        if std::env::var("NIRI_SOCKET").is_ok() {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(500));
+    }
+
+    let Ok(output) = Command::new("niri").args(["msg", "-j", "outputs"]).output() else {
+        eprintln!("[rice-ctl] Failed to query niri outputs");
+        return;
+    };
+
+    if let Ok(map) = serde_json::from_slice::<HashMap<String, NiriOutput>>(&output.stdout) {
+        for (name, out) in map {
+            if let Some(idx) = out.current_mode {
+                if let Some(mode) = out.modes.get(idx) {
+                    let scale = if mode.height >= 2160 {
+                        "1.5"
+                    } else if mode.height >= 1440 {
+                        "1.25"
+                    } else {
+                        "1.0"
+                    };
+                    println!("[rice-ctl] Output {}: {}x{} -> scale {}", name, mode.width, mode.height, scale);
+                    let _ = Command::new("niri").args(["msg", "output", &name, "scale", scale]).output();
+                }
+            }
+        }
+    }
+}
+
+fn get_battery_stats() -> (u32, String, u32, String) {
+    let capacity = fs::read_to_string("/sys/class/power_supply/BAT0/capacity")
+        .unwrap_or_else(|_| "0".to_string())
+        .trim()
+        .parse::<u32>()
+        .unwrap_or(0);
+    let status = fs::read_to_string("/sys/class/power_supply/BAT0/status")
+        .unwrap_or_else(|_| "Unknown".to_string())
+        .trim()
+        .to_string();
+    let conservation = fs::read_to_string("/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode")
+        .unwrap_or_else(|_| "0".to_string())
+        .trim()
+        .parse::<u32>()
+        .unwrap_or(0);
+    let profile = fs::read_to_string("/sys/firmware/acpi/platform_profile")
+        .unwrap_or_else(|_| "balanced".to_string())
+        .trim()
+        .to_string();
+    (capacity, status, conservation, profile)
+}
+
+fn toggle_conservation_mode() {
+    let path = "/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode";
+    let cur = fs::read_to_string(path).unwrap_or_else(|_| "0".to_string()).trim().to_string();
+    let next = if cur == "1" { "0" } else { "1" };
+    if fs::write(path, next).is_err() {
+        let _ = Command::new("sudo").args(["tee", path]).stdin(std::process::Stdio::piped()).spawn().and_then(|mut c| {
+            if let Some(mut stdin) = c.stdin.take() {
+                let _ = stdin.write_all(next.as_bytes());
+            }
+            c.wait()
+        });
+    }
+    let msg = if next == "1" { "Conservation Mode: ON (Limit 60%)" } else { "Conservation Mode: OFF (Full 100%)" };
+    let _ = Command::new("notify-send").args(["-a", "Battery Manager", "-i", "battery", "ThinkBook Battery", msg]).output();
+}
+
+fn cycle_platform_profile() {
+    let path = "/sys/firmware/acpi/platform_profile";
+    let cur = fs::read_to_string(path).unwrap_or_else(|_| "balanced".to_string()).trim().to_string();
+    let next = match cur.as_str() {
+        "performance" => "balanced",
+        "balanced" => "low-power",
+        "low-power" => "performance",
+        _ => "balanced",
+    };
+    if fs::write(path, next).is_err() {
+        let _ = Command::new("sudo").args(["tee", path]).stdin(std::process::Stdio::piped()).spawn().and_then(|mut c| {
+            if let Some(mut stdin) = c.stdin.take() {
+                let _ = stdin.write_all(next.as_bytes());
+            }
+            c.wait()
+        });
+    }
+    let _ = Command::new("pkill").args(["-RTMIN+2", "waybar"]).output();
+    let _ = Command::new("notify-send").args(["-a", "Power Manager", "-i", "preferences-system-power", "Platform Profile", next]).output();
+}
+
+fn battery_menu() {
+    let (cap, stat, cons, prof) = get_battery_stats();
+    let cons_str = if cons == 1 { "ON (60% Cap)" } else { "OFF (100% Charge)" };
+    let options = format!(
+        "🔋 Battery: {}% ({})\n🛡️ Toggle Conservation Mode [Currently: {}]\n⚡ Cycle Platform Profile [Currently: {}]\n",
+        cap, stat, cons_str, prof
+    );
+
+    let mut child = match Command::new("rofi")
+        .args(["-dmenu", "-i", "-p", "Battery & Power", "-lines", "3"])
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+    {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("Error spawning rofi battery menu: {}", e);
+            return;
+        }
+    };
+
+    if let Some(mut stdin) = child.stdin.take() {
+        let _ = stdin.write_all(options.as_bytes());
+    }
+
+    let Ok(output) = child.wait_with_output() else { return };
+    let choice = String::from_utf8_lossy(&output.stdout);
+
+    if choice.contains("Toggle Conservation Mode") {
+        toggle_conservation_mode();
+    } else if choice.contains("Cycle Platform Profile") {
+        cycle_platform_profile();
+    }
+}
+
+fn wifi_menu() {
+    let Ok(out) = Command::new("nmcli").args(["-t", "-f", "IN-USE,SIGNAL,SECURITY,SSID", "dev", "wifi", "list"]).output() else {
+        eprintln!("[rice-ctl] Failed to run nmcli");
+        return;
+    };
+
+    let text = String::from_utf8_lossy(&out.stdout);
+    let mut networks: HashMap<String, (bool, u32, String)> = HashMap::new();
+
+    for line in text.lines() {
+        let parts: Vec<&str> = line.split(':').collect();
+        if parts.len() >= 4 {
+            let in_use = parts[0].trim() == "*";
+            let signal = parts[1].trim().parse::<u32>().unwrap_or(0);
+            let security = parts[2].trim().to_string();
+            let ssid = parts[3..].join(":").trim().to_string();
+            if !ssid.is_empty() && ssid != "--" {
+                if let Some(existing) = networks.get(&ssid) {
+                    if signal > existing.1 {
+                        networks.insert(ssid.clone(), (in_use || existing.0, signal, security));
+                    }
+                } else {
+                    networks.insert(ssid.clone(), (in_use, signal, security));
+                }
+            }
+        }
+    }
+
+    let mut items: Vec<(String, bool, u32, String)> = networks.into_iter().map(|(ssid, (in_use, sig, sec))| (ssid, in_use, sig, sec)).collect();
+    items.sort_by(|a, b| b.2.cmp(&a.2));
+
+    let mut rofi_lines = String::new();
+    rofi_lines.push_str("󰤮  Toggle Wi-Fi (On/Off)\n");
+    rofi_lines.push_str("  Network Settings (nmtui)\n");
+
+    for (ssid, in_use, sig, sec) in &items {
+        let icon = if *in_use { "󰤨 [Connected]" } else if *sig > 70 { "󰤨" } else if *sig > 40 { "󰤥" } else { "󰤟" };
+        let lock = if sec.is_empty() || sec == "--" { "" } else { "🔒" };
+        rofi_lines.push_str(&format!("{} {} {} ({}%)\n", icon, ssid, lock, sig));
+    }
+
+    let mut child = match Command::new("rofi")
+        .args(["-dmenu", "-i", "-p", "Wi-Fi Networks", "-lines", "10"])
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+    {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("Error spawning rofi wifi: {}", e);
+            return;
+        }
+    };
+
+    if let Some(mut stdin) = child.stdin.take() {
+        let _ = stdin.write_all(rofi_lines.as_bytes());
+    }
+
+    let Ok(output) = child.wait_with_output() else { return };
+    let choice = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    if choice.is_empty() {
+        return;
+    }
+
+    if choice.contains("Toggle Wi-Fi") {
+        let _ = Command::new("nmcli").args(["radio", "wifi"]).output().map(|o| {
+            let s = String::from_utf8_lossy(&o.stdout).to_lowercase();
+            let next = if s.contains("enabled") { "off" } else { "on" };
+            let _ = Command::new("nmcli").args(["radio", "wifi", next]).output();
+        });
+    } else if choice.contains("Network Settings") {
+        let _ = Command::new("foot").args(["--app-id=foot.nmtui", "-e", "nmtui"]).spawn();
+    } else {
+        for (ssid, in_use, _, sec) in &items {
+            if choice.contains(ssid) {
+                if *in_use {
+                    let _ = Command::new("notify-send").args(["Wi-Fi", &format!("Already connected to {}", ssid)]).output();
+                    return;
+                }
+                if sec.is_empty() || sec == "--" {
+                    let _ = Command::new("nmcli").args(["dev", "wifi", "connect", ssid]).spawn();
+                } else {
+                    if let Ok(pwd_child) = Command::new("rofi").args(["-dmenu", "-password", "-p", &format!("Password for {}", ssid)]).stdout(std::process::Stdio::piped()).spawn() {
+                        if let Ok(pwd_out) = pwd_child.wait_with_output() {
+                            let pass = String::from_utf8_lossy(&pwd_out.stdout).trim().to_string();
+                            if !pass.is_empty() {
+                                let _ = Command::new("nmcli").args(["dev", "wifi", "connect", ssid, "password", &pass]).spawn();
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
+
+fn browse_menu() {
+    let bookmarks = [
+        ("GitHub", "https://github.com"),
+        ("Wikipedia", "https://en.wikipedia.org/wiki/Main_Page"),
+        ("YouTube", "https://www.youtube.com/"),
+        ("Arch Wiki", "https://wiki.archlinux.org/title/Main_page"),
+        ("DeepSeek", "https://chat.deepseek.com/"),
+        ("ChatGPT", "https://chatgpt.com/"),
+        ("Claude", "https://claude.ai/new"),
+        ("Gemini", "https://gemini.google.com/app"),
+    ];
+
+    let mut input = String::new();
+    for (name, _) in &bookmarks {
+        input.push_str(name);
+        input.push('\n');
+    }
+
+    let mut child = match Command::new("rofi")
+        .args(["-dmenu", "-p", "Browse", "-i", "-lines", "8"])
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+    {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("Error spawning rofi browse: {}", e);
+            return;
+        }
+    };
+
+    if let Some(mut stdin) = child.stdin.take() {
+        let _ = stdin.write_all(input.as_bytes());
+    }
+
+    let Ok(output) = child.wait_with_output() else { return };
+    let choice = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    if choice.is_empty() {
+        return;
+    }
+
+    for (name, url) in &bookmarks {
+        if choice.eq_ignore_ascii_case(name) {
+            let _ = Command::new("xdg-open").arg(url).spawn();
+            return;
+        }
+    }
+
+    let mut encoded = String::new();
+    for b in choice.bytes() {
+        match b {
+            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
+                encoded.push(b as char);
+            }
+            b' ' => encoded.push('+'),
+            other => {
+                encoded.push_str(&format!("%{:02X}", other));
+            }
+        }
+    }
+    let url = format!("https://search.brave.com/search?q={}", encoded);
+    let _ = Command::new("xdg-open").arg(url).spawn();
+}
+
+fn calendar_action(action: &str) {
+    let runtime = std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| "/tmp".to_string());
+    let path = PathBuf::from(runtime).join("calendar_notification_month");
+    let cur_diff = fs::read_to_string(&path).unwrap_or_default().trim().parse::<i32>().unwrap_or(0);
+
+    let diff = match action {
+        "next" => cur_diff + 1,
+        "prev" => cur_diff - 1,
+        _ => 0,
+    };
+    let _ = fs::write(&path, diff.to_string());
+
+    let cal_arg = if diff == 0 {
+        String::new()
+    } else if diff > 0 {
+        format!("+{} months", diff)
+    } else {
+        format!("{} months ago", -diff)
+    };
+
+    let cal_output = if cal_arg.is_empty() {
+        Command::new("cal").output()
+    } else {
+        Command::new("cal").args([&cal_arg]).output()
+    };
+
+    if let Ok(out) = cal_output {
+        let text = String::from_utf8_lossy(&out.stdout);
+        let mut lines: Vec<&str> = text.lines().collect();
+        let head = if !lines.is_empty() { lines.remove(0) } else { "Calendar" };
+        let body = lines.join("\n");
+        let _ = Command::new("notify-send")
+            .args([
+                "-h", "string:x-canonical-private-synchronous:calendar",
+                "-u", "normal",
+                "-a", "calendar",
+                head,
+                &body,
+            ])
+            .output();
+    }
+}
+
+fn bar_select() {
+    let options = "main\nsmol\nnuke\n";
+    let mut child = match Command::new("rofi")
+        .args(["-dmenu", "-p", "Waybar Mode", "-lines", "3"])
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+    {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("Error spawning rofi bar select: {}", e);
+            return;
+        }
+    };
+
+    if let Some(mut stdin) = child.stdin.take() {
+        let _ = stdin.write_all(options.as_bytes());
+    }
+
+    let Ok(output) = child.wait_with_output() else { return };
+    let choice = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    if choice.is_empty() {
+        return;
+    }
+
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let _ = Command::new("killall").arg("waybar").output();
+    std::thread::sleep(std::time::Duration::from_millis(200));
+
+    let config = format!("{}/.config/waybar/{}.jsonc", home, choice);
+    let style = format!("{}/.config/waybar/{}.css", home, choice);
+
+    if Path::new(&config).exists() && Path::new(&style).exists() {
+        let _ = Command::new("waybar").args(["-c", &config, "-s", &style]).spawn();
+    } else {
+        let _ = Command::new("waybar").spawn();
+    }
+}
+
+fn nuke_back() {
+    let get = Command::new("brightnessctl").arg("get").output();
+    let max = Command::new("brightnessctl").arg("max").output();
+    let cur: u32 = get.ok().and_then(|o| String::from_utf8_lossy(&o.stdout).trim().parse().ok()).unwrap_or(0);
+    let total: u32 = max.ok().and_then(|o| String::from_utf8_lossy(&o.stdout).trim().parse().ok()).unwrap_or(1);
+    let percent = cur * 100 / total;
+    let filled = (percent * 10 + 50) / 100;
+    let empty = 10_u32.saturating_sub(filled);
+    let bar: String = "█".repeat(filled as usize) + &"░".repeat(empty as usize);
+    println!(" [{}] {}%", bar, percent);
+}
+
+fn nuke_ppd() {
+    let prof = fs::read_to_string("/sys/firmware/acpi/platform_profile").unwrap_or_default().trim().to_string();
+    match prof.as_str() {
+        "performance" => println!("!! CRITICAL !!"),
+        "balanced" => println!("STABLE"),
+        "low-power" => println!("|| FUEL EXHAUSTION ||"),
+        _ => println!("STABLE"),
+    }
+}
+
+fn nuke_vol() {
+    let Ok(out) = Command::new("wpctl").args(["get-volume", "@DEFAULT_AUDIO_SINK@"]).output() else {
+        println!(" [░░░░░░░░░░] 0%");
+        return;
+    };
+    let text = String::from_utf8_lossy(&out.stdout);
+    let muted = text.contains("[MUTED]");
+    let vol_float: f32 = text.split_whitespace().nth(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+    let percent = if muted { 0 } else { (vol_float * 100.0) as u32 };
+    let filled = (percent * 10 + 50) / 100;
+    let empty = 10_u32.saturating_sub(filled);
+    let bar: String = "█".repeat(filled as usize) + &"░".repeat(empty as usize);
+    if muted {
+        println!(" [{}] MUTED", bar);
+    } else {
+        println!(" [{}] {}%", bar, percent);
+    }
+}
+
+fn take_screenshot(mode: &str) {
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let dir = PathBuf::from(&home).join("Pictures/Screenshots");
+    let _ = fs::create_dir_all(&dir);
+
+    let ts = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
+    let file = dir.join(format!("screenshot_{}.png", ts));
+
+    match mode {
+        "area" => {
+            let _ = Command::new("sh").args(["-c", &format!("grim -g \"$(slurp)\" - | tee \"{}\" | wl-copy", file.display())]).output();
+        }
+        "window" => {
+            let _ = Command::new("sh").args(["-c", &format!("grim -g \"$(niri msg -j focused-window | jq -r '\"\\(.x),\\(.y) \\(.width)x\\(.height)\"')\" - | tee \"{}\" | wl-copy", file.display())]).output();
+        }
+        _ => {
+            let _ = Command::new("sh").args(["-c", &format!("grim - | tee \"{}\" | wl-copy", file.display())]).output();
+        }
+    }
+
+    let _ = Command::new("notify-send")
+        .args([
+            "-a", "Screenshot",
+            "-i", "camera-photo",
+            "Screenshot Saved",
+            &format!("Saved to {}", file.display()),
+        ])
+        .output();
+}
+
+fn files_picker() {
+    let Ok(mut child) = Command::new("fd")
+        .args(["--type", "f", "--exclude", "Games"])
+        .stdout(std::process::Stdio::piped())
+        .spawn() else { return };
+    let Some(stdout) = child.stdout.take() else { return };
+    if let Ok(rofi) = Command::new("rofi")
+        .args(["-dmenu", "-i", "-p", "Search Files:"])
+        .stdin(stdout)
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+    {
+        if let Ok(out) = rofi.wait_with_output() {
+            let choice = String::from_utf8_lossy(&out.stdout).trim().to_string();
+            if !choice.is_empty() {
+                let _ = Command::new("xdg-open").arg(choice).spawn();
+            }
+        }
+    }
+}
+
+fn mem_info() {
+    let _ = Command::new("notify-send")
+        .args([
+            "-u", "normal",
+            "-a", "System Status",
+            "-i", "dialog-information",
+            "Memory Info",
+            &fs::read_to_string("/proc/meminfo").unwrap_or_default(),
+        ])
+        .output();
+}
+
 fn volume_mute_toggle() {
     let lockfile = Path::new("/tmp/audio_mute.lock");
     if lockfile.exists() {
@@ -1149,7 +1961,154 @@ fn mic_mute_toggle() {
     let _ = fs::remove_file(lockfile);
 }
 
+fn dirs_home() -> PathBuf {
+    PathBuf::from(std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string()))
+}
+
 fn main() {
+    // Multicall support (Busybox style) for backward-compatible symlinks
+    let args: Vec<String> = std::env::args().collect();
+    let invoked_as = Path::new(&args[0])
+        .file_name()
+        .and_then(|n| n.to_str())
+        .unwrap_or("rice-ctl");
+
+    match invoked_as {
+        "wall.sh" | "wall" => {
+            select_wallpaper(32);
+            return;
+        }
+        "rng.sh" | "rng" => {
+            random_wallpaper(None, 32);
+            return;
+        }
+        "caf.sh" | "caffeine" => {
+            let action = args.get(1).map(|s| s.as_str()).unwrap_or("toggle");
+            match action {
+                "toggle" => caffeine_toggle(),
+                _ => caffeine_status(),
+            }
+            return;
+        }
+        "cal.sh" => {
+            let action = args.get(1).map(|s| s.as_str()).unwrap_or("curr");
+            calendar_action(action);
+            return;
+        }
+        "battery-rofi" | "battery.sh" | "battery" => {
+            let action = args.get(1).map(|s| s.as_str()).unwrap_or("menu");
+            match action {
+                "status" | "--status" => {
+                    let (cap, stat, cons, prof) = get_battery_stats();
+                    println!("Battery: {}% ({}) | Conservation: {} | Profile: {}", cap, stat, cons, prof);
+                }
+                "toggle" | "--toggle" => toggle_conservation_mode(),
+                "cycle" | "--profile" => cycle_platform_profile(),
+                _ => battery_menu(),
+            }
+            return;
+        }
+        "wifi.sh" | "wifi" => {
+            wifi_menu();
+            return;
+        }
+        "browse.sh" | "browse" => {
+            browse_menu();
+            return;
+        }
+        "powermenu.sh" | "power.sh" => {
+            power_menu();
+            return;
+        }
+        "lock.sh" => {
+            lock_screen();
+            return;
+        }
+        "monitor-setup.sh" => {
+            monitor_autoscale();
+            return;
+        }
+        "reload.sh" => {
+            reload_desktop();
+            return;
+        }
+        "barsel.sh" => {
+            bar_select();
+            return;
+        }
+        "ss.sh" => {
+            let mode = args.get(1).map(|s| s.as_str()).unwrap_or("area");
+            take_screenshot(mode);
+            return;
+        }
+        "note.sh" | "yazi-note.sh" => {
+            let _ = Command::new("foot")
+                .args(["--app-id=foot.floating.notes", "-e", "nvim"])
+                .current_dir(dirs_home().join("Notes"))
+                .spawn();
+            return;
+        }
+        "filerofi.sh" => {
+            files_picker();
+            return;
+        }
+        "mem.sh" => {
+            mem_info();
+            return;
+        }
+        "dnd-toggle.sh" => {
+            let _ = Command::new("makoctl").args(["mode", "-t", "dnd"]).output();
+            return;
+        }
+        "mute-debounce" => {
+            volume_mute_toggle();
+            return;
+        }
+        "mic-debounce" => {
+            mic_mute_toggle();
+            return;
+        }
+        "set-animation.sh" => {
+            if let Some(anim) = args.get(1) {
+                set_animation(anim);
+            }
+            return;
+        }
+        "set-theme.sh" => {
+            if let Some(t) = args.get(1) {
+                load_theme(t, 32);
+            }
+            return;
+        }
+        "apply-wallpaper.sh" => {
+            if let Some(f) = args.get(1) {
+                set_wallpaper(Path::new(f), 32);
+            }
+            return;
+        }
+        "power-manager" => {
+            power_profile_menu();
+            return;
+        }
+        "rofi-ssh" => {
+            ssh_menu();
+            return;
+        }
+        "fingerprint-setup" => {
+            fingerprint_menu();
+            return;
+        }
+        "setup-hibernate-resume.sh" | "setup-hibernate-resume" => {
+            setup_hibernate_resume();
+            return;
+        }
+        "idle-suspend.sh" => {
+            idle_suspend();
+            return;
+        }
+        _ => {}
+    }
+
     let cli = Cli::parse();
 
     match cli.command {
@@ -1158,6 +2117,7 @@ fn main() {
             ThemeAction::Set { file, size } => set_wallpaper(&file, size),
             ThemeAction::Random { dir, size } => random_wallpaper(dir, size),
             ThemeAction::Load { name, size } => load_theme(&name, size),
+            ThemeAction::Animation { name } => set_animation(&name),
         },
         Commands::Power { action } => {
             let act = action.unwrap_or(PowerAction::Menu);
@@ -1177,8 +2137,39 @@ fn main() {
                     let _ = Command::new("systemctl").arg("poweroff").spawn();
                 }
                 PowerAction::IdleSuspend => idle_suspend(),
+                PowerAction::Profile => power_profile_menu(),
             }
         }
+        Commands::Battery { action } => {
+            let act = action.unwrap_or(BatteryAction::Menu);
+            match act {
+                BatteryAction::Menu => battery_menu(),
+                BatteryAction::Status => {
+                    let (cap, stat, cons, prof) = get_battery_stats();
+                    println!("Battery: {}% ({}) | Conservation: {} | Profile: {}", cap, stat, cons, prof);
+                }
+                BatteryAction::ToggleConservation => toggle_conservation_mode(),
+                BatteryAction::CycleProfile => cycle_platform_profile(),
+            }
+        }
+        Commands::Output { action } => match action {
+            OutputAction::AutoScale => monitor_autoscale(),
+        },
+        Commands::Wifi { action } => {
+            let _ = action;
+            wifi_menu();
+        }
+        Commands::Browse => browse_menu(),
+        Commands::Calendar { action } => calendar_action(&action),
+        Commands::Bar { action } => match action {
+            BarAction::Select => bar_select(),
+            BarAction::NukeBack => nuke_back(),
+            BarAction::NukePpd => nuke_ppd(),
+            BarAction::NukeVol => nuke_vol(),
+        },
+        Commands::Screenshot { mode } => take_screenshot(&mode),
+        Commands::Files => files_picker(),
+        Commands::Mem => mem_info(),
         Commands::Reload => reload_desktop(),
         Commands::Caffeine { action } => match action.as_str() {
             "toggle" => caffeine_toggle(),
@@ -1196,5 +2187,16 @@ fn main() {
         Commands::Media { action } => {
             let _ = Command::new("playerctl").arg(action).output();
         }
+        Commands::Notes => {
+            let _ = Command::new("foot")
+                .args(["--app-id=foot.floating.notes", "-e", "nvim"])
+                .current_dir(dirs_home().join("Notes"))
+                .spawn();
+        }
+        Commands::Ssh => ssh_menu(),
+        Commands::System { action } => match action {
+            SystemAction::Fingerprint => fingerprint_menu(),
+            SystemAction::ResumeOffset => setup_hibernate_resume(),
+        },
     }
 }

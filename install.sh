@@ -219,6 +219,11 @@ if [ -d "$REPO_DIR/crates/rice-ctl" ]; then
     cargo build --release --manifest-path "$REPO_DIR/crates/rice-ctl/Cargo.toml"
     mkdir -p "$HOME/.local/bin"
     cp "$REPO_DIR/crates/rice-ctl/target/release/rice-ctl" "$HOME/.local/bin/rice-ctl"
+    
+    # Create convenience symlinks to rice-ctl multicall binary
+    for name in wall.sh rng.sh caf.sh cal.sh barsel.sh powermenu.sh ss.sh note.sh yazi-note.sh filerofi.sh mem.sh dnd-toggle.sh cycle-power-profile battery-rofi battery.sh browse.sh wifi.sh rofi-ssh power-manager fingerprint-setup setup-hibernate-resume.sh idle-suspend.sh lock.sh monitor-setup.sh reload.sh mute-debounce mic-debounce set-animation.sh set-theme.sh apply-wallpaper.sh; do
+        ln -sf "$HOME/.local/bin/rice-ctl" "$HOME/.local/bin/$name"
+    done
 fi
 
 # ~/.zshrc
@@ -245,12 +250,10 @@ sudo mkdir -p /usr/share/wayland-sessions
 sudo cp "$REPO_DIR/setup_assets/terminal.desktop" "/usr/share/wayland-sessions/terminal.desktop"
 
 # ---------------------------------------------------------------------------
-# 4. Script permissions
+# 4. Binary permissions
 # ---------------------------------------------------------------------------
 echo ""
-echo "[4/6] Setting script permissions..."
-[ -d "$HOME/.config/niri/scripts" ] && chmod +x "$HOME/.config/niri/scripts"/* 2>/dev/null || true
-[ -d "$HOME/.config/waybar/nuke-script" ] && chmod +x "$HOME/.config/waybar/nuke-script"/* 2>/dev/null || true
+echo "[4/6] Setting binary and script permissions..."
 [ -d "$HOME/.local/bin" ] && chmod +x "$HOME/.local/bin"/* 2>/dev/null || true
 
 # ---------------------------------------------------------------------------
@@ -306,14 +309,12 @@ sudo systemctl daemon-reload || true
 sudo systemctl enable --now powertop.service || true
 
 # ---------------------------------------------------------------------------
-# 6. Apply initial theme & wallpaper (Matugen dynamic extraction)
+# 6. Apply initial theme & wallpaper (Matugen dynamic extraction via rice-ctl)
 # ---------------------------------------------------------------------------
 echo ""
-echo "[6/6] Applying initial theme & extracting Matugen Material You colors..."
-if [ -x "$HOME/.config/niri/scripts/set-theme.sh" ]; then
-    "$HOME/.config/niri/scripts/set-theme.sh" blue || true
-elif [ -x "$HOME/.config/niri/scripts/apply-wallpaper.sh" ] && [ -f "$HOME/Pictures/Wall/silent_katana_samurai.mp4" ]; then
-    "$HOME/.config/niri/scripts/apply-wallpaper.sh" "$HOME/Pictures/Wall/silent_katana_samurai.mp4" || true
+echo "[6/6] Applying initial theme & extracting Matugen Material You colors via rice-ctl..."
+if command -v rice-ctl &>/dev/null; then
+    rice-ctl theme load blue || true
 fi
 
 # ---------------------------------------------------------------------------

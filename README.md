@@ -87,18 +87,14 @@ cd ~/niri-rice
 niri-rice/
 ├── install.sh                  # One-click automated installer
 ├── update.sh                   # Pull latest changes
+├── crates/
+│   └── rice-ctl/               # Unified native Rust desktop controller & theming engine
 ├── .config/
 │   ├── niri/
 │   │   ├── config.kdl          # Compositor config (keybinds, autostart, rules)
-│   │   ├── scripts/
-│   │   │   ├── lock.sh         # Smart lockscreen invoker
-│   │   │   ├── power.sh        # Rofi power menu (lock/suspend/reboot/shutdown)
-│   │   │   ├── reload.sh       # Reload Waybar + wallpaper
-│   │   │   ├── monitor-setup.sh# Dynamic display auto-scaling
-│   │   │   ├── mute-debounce   # Mute LED sync debounce helper
-│   │   │   └── mic-debounce    # Mic mute LED sync debounce helper
-│   │   └── waybar/             # Niri-specific Waybar config + CSS
-│   ├── waybar/                 # Shared Waybar modules and scripts
+│   │   ├── animations/         # Niri window motion curves
+│   │   └── themes/             # Material themes, cursors, and active wallpaper
+│   ├── waybar/                 # Waybar status bar configuration and styles
 │   ├── rofi/                   # App launcher theme and config
 │   ├── foot/                   # Foot terminal config
 │   ├── hypr/                   # hypridle config (idle/lock daemon)

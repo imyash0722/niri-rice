@@ -5,5 +5,5 @@ After=graphical-session.target
 [Service]
 Type=oneshot
 ExecStartPre=/bin/sleep 1
-ExecStart=%h/.config/niri/scripts/monitor-setup.sh
+ExecStart=%h/.local/bin/rice-ctl output auto-scale
 Restart=no

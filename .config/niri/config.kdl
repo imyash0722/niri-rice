@@ -52,8 +52,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#b8c3ff"
-        inactive-color "#121318"
+        active-color "#ffb68c"
+        inactive-color "#1a120d"
     }
 
     tab-indicator {
@@ -131,8 +131,7 @@ spawn-at-startup "/usr/lib/pam_kwallet_init"
 spawn-at-startup "kwalletd6"
 spawn-at-startup "sh" "-c" "pgrep -u $USER -x ssh-agent >/dev/null || ssh-agent -a \"${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/ssh-agent.socket\""
 
-// Monitor auto-scaling (4K=1.5, 2K=1.25, 1080p=1.0)
-spawn-at-startup "bash" "-c" "sleep 2 && ~/.config/niri/scripts/monitor-setup.sh"
+spawn-at-startup "rice-ctl" "output" "auto-scale";
 
 // Idle manager (hypridle)
 spawn-at-startup "hypridle"
