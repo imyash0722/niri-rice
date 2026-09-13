@@ -973,8 +973,16 @@ fn lock_screen() {
 }
 
 fn power_menu() {
-    let options = "󰌾\n󰍃\n󰤄\n󰒲\n󰜉\n󰐥\n";
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let ipc_path = PathBuf::from(&home).join(".config/kando/ipc-info.json");
+    if ipc_path.exists() {
+        if let Ok(mut child) = Command::new("kando").args(["--menu", "Power"]).spawn() {
+            let _ = child.wait();
+            return;
+        }
+    }
+
+    let options = "󰌾\n󰍃\n󰤄\n󰒲\n󰜉\n󰐥\n";
     let theme_path = PathBuf::from(&home).join(".config/rofi/powermenu.rasi");
 
     let mut child = match Command::new("rofi")

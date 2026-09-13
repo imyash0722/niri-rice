@@ -394,7 +394,8 @@ window-rule {
 window-rule {
     match app-id="kitty.nmtui"
     open-floating true
-    default-floating-size width=750 height=500
+    default-column-width { fixed 750; }
+    default-window-height { fixed 500; }
 }
 
 // ── Binds ────────────────────────────────────────────────
@@ -554,8 +555,8 @@ binds {
     Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
     Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
 
-    // Float / unfloat
-    Mod+Space { toggle-window-floating; }
+    // Float / unfloat (Sway convention, leaving Mod+Space for Kando Main HUD)
+    Mod+Shift+Space { toggle-window-floating; }
 
     // Fullscreen
     Mod+F { maximize-column; }
