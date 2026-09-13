@@ -1,7 +1,7 @@
-background-color=#181216ea
-text-color=#ecdfe5
-border-color=#f4b2e2
-progress-color=over #f4b2e2
+background-color=#111318ea
+text-color=#e1e2e9
+border-color=#a4c9fe
+progress-color=over #a4c9fe
 border-size=1
 border-radius=6
 icons=1
