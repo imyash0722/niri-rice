@@ -1673,7 +1673,7 @@ fn profile_status() {
     match cur.as_str() {
         "low-power" => {
             println!(
-                r#"{{"text": "󱄅 shaolin", "class": "shaolin", "tooltip": "Power Profile: Shaolin (Power-saver / Zen Stillness)\nClick to cycle: shaolin ➔ taiji ➔ cheonma"}}"#
+                r#"{{"text": "󰕹 shaolin", "class": "shaolin", "tooltip": "Power Profile: Shaolin (Power-saver / Zen Stillness)\nClick to cycle: shaolin ➔ taiji ➔ cheonma"}}"#
             );
         }
         "performance" => {
