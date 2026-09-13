@@ -1,0 +1,10 @@
+[SddmGreeterTheme]
+Name=Veila
+Description=Minimalist Veila-inspired theme for SDDM
+Author=imyash0722
+Type=config
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=veila
+Theme-API=2.0
+QtVersion=6

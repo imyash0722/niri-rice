@@ -238,6 +238,19 @@ sudo systemctl enable sddm.service || true
 sudo mkdir -p /usr/share/wayland-sessions
 sudo cp "$REPO_DIR/setup_assets/terminal.desktop" "/usr/share/wayland-sessions/terminal.desktop"
 
+# Deploy Veila SDDM theme with user write permissions for dynamic wallpaper sync
+sudo mkdir -p /usr/share/sddm/themes/veila
+sudo cp -r "$REPO_DIR/setup_assets/sddm-veila/"* /usr/share/sddm/themes/veila/
+sudo chown -R root:"$USER" /usr/share/sddm/themes/veila
+sudo chmod -R 775 /usr/share/sddm/themes/veila
+sudo touch /usr/share/sddm/themes/veila/wallpaper.png /usr/share/sddm/themes/veila/theme.conf
+sudo chmod 666 /usr/share/sddm/themes/veila/wallpaper.png /usr/share/sddm/themes/veila/theme.conf
+sudo mkdir -p /etc/sddm.conf.d
+sudo bash -c 'cat << EOF > /etc/sddm.conf.d/theme.conf
+[Theme]
+Current=veila
+EOF'
+
 # ---------------------------------------------------------------------------
 # 4. Binary permissions
 # ---------------------------------------------------------------------------

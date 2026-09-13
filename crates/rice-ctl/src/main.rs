@@ -628,6 +628,22 @@ fn set_wallpaper(file: &Path, size: u32) {
         .arg(&image_target)
         .output();
 
+    // Synchronize wallpaper to SDDM Veila theme if directory exists
+    let sddm_wall = Path::new("/usr/share/sddm/themes/veila/wallpaper.png");
+    if sddm_wall.parent().map_or(false, |p| p.exists()) {
+        let sync_result = (|| -> Result<(), std::io::Error> {
+            let mut src = fs::File::open(&image_target)?;
+            let mut dst = fs::File::create(sddm_wall)?;
+            std::io::copy(&mut src, &mut dst)?;
+            Ok(())
+        })();
+        if let Err(e) = sync_result {
+            eprintln!("[rice-ctl] Warning: Failed to sync SDDM wallpaper: {}", e);
+        } else {
+            println!("[rice-ctl] Synced wallpaper to SDDM Veila theme");
+        }
+    }
+
     println!("[rice-ctl] Theme and wallpaper switched successfully!");
 }
 

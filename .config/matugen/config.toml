@@ -36,4 +36,8 @@ post_hook = "pkill -SIGUSR1 -x kitty 2>/dev/null || true"
 input_path = "~/.config/matugen/templates/btop-theme.theme"
 output_path = "~/.config/btop/themes/matugen.theme"
 
+[templates.sddm]
+input_path = "~/.config/matugen/templates/sddm-theme.conf"
+output_path = "/usr/share/sddm/themes/veila/theme.conf"
+
 
