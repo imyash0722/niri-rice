@@ -426,9 +426,13 @@ binds {
     Mod+Shift+Return { spawn-sh "~/.local/bin/rice-ctl scratchpad toggle term"; }
     Mod+Alt+Return { spawn "kitty"; }
 
-    // Kando Radial Menus (Desktop Command Wheel - Instant WebSocket & Fullscreen aware)
-    Mod+Grave { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Main"; }
+    // Kando Radial Menus (Desktop Command Wheels - Instant WebSocket & Fullscreen aware)
+    Mod+Grave   { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Main"; }
     Mod+Shift+E { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Power"; }
+    Mod+Shift+Q { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Power"; }
+    Mod+Alt+M   { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Media"; }
+    Mod+Alt+T   { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Tools"; }
+    Mod+Shift+V { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Window"; }
 
     // App launcher (Mod+D / Copilot key)
     Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
@@ -439,9 +443,6 @@ binds {
 
     // Kill window
     Mod+Q repeat=false { close-window; }
-
-    // Power menu
-    Mod+Shift+Q { spawn-sh "~/.local/bin/rice-ctl power menu"; }
 
     // Lock screen
     Mod+L allow-inhibiting=false { spawn-sh "~/.local/bin/rice-ctl power lock"; }

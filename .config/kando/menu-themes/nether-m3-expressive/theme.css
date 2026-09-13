@@ -169,6 +169,46 @@
   }
 
   /* --------------------------------------------------------------------------
+     Material 3 Expressive Quick-Key Badge
+     -------------------------------------------------------------------------- */
+  .quick-key {
+    position: absolute;
+    top: calc(-1 * var(--dir-y, 0) * 24px);
+    left: calc(-1 * var(--dir-x, 0) * 24px);
+    transform: translate(-50%, -50%);
+    min-width: 20px;
+    height: 20px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    border-radius: 9999px;
+    border: 1px solid var(--accent-color);
+    background: var(--circle-color);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    color: var(--accent-color);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    white-space: nowrap;
+    opacity: 0;
+    z-index: 20;
+    pointer-events: none;
+    transition: var(--menu-transition), var(--color-transition);
+  }
+
+  &.child:not(.dragged) > .quick-key {
+    opacity: 1;
+  }
+
+  &.child.hovered > .quick-key {
+    background: var(--accent-color);
+    color: var(--submenu-items-hover-color);
+    transform: translate(-50%, -50%) scale(1.12);
+    box-shadow: 0 6px 16px var(--shadow-color), 0 0 10px var(--accent-color);
+  }
+
+  /* --------------------------------------------------------------------------
      Node Icons & Center Hub (Material 3 FAB Squircle)
      -------------------------------------------------------------------------- */
   .icon-layer {

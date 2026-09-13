@@ -7,7 +7,7 @@
   "enableDarkModeForMenuThemes": true,
   "enableSelectionWedges": false,
   "underlineQuickSelectKey": true,
-  "drawQuickSelectKey": false,
+  "drawQuickSelectKey": true,
   "fadeInDuration": 75,
   "fadeOutDuration": 100,
   "enableMenuAnimations": true,
@@ -20,5 +20,6 @@
   "settingsWindowFlavor": "transparent-dark",
   "trayIconFlavor": "none",
   "hardwareAcceleration": true,
-  "lazyInitialization": false
+  "lazyInitialization": false,
+  "wlrootsPointerGetTimeoutMouse": 30
 }

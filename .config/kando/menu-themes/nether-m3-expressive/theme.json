@@ -21,6 +21,7 @@
     "shadow-color": "#00000080"
   },
   "layers": [
+    { "class": "quick-key", "content": "quick-select-key" },
     { "class": "icon-layer", "content": "icon" },
     { "class": "label-layer", "content": "name" }
   ]
