@@ -931,8 +931,9 @@ fn set_animation(anim: &str) {
 }
 
 fn lock_screen() {
+    // Prevent double-locking if veila is already active
     let pgrep = Command::new("pgrep")
-        .args(["-x", "hyprlock"])
+        .args(["-x", "veila"])
         .output();
     if let Ok(out) = pgrep {
         if out.status.success() {
@@ -940,8 +941,13 @@ fn lock_screen() {
         }
     }
 
-    let _ = Command::new("hyprlock")
-        .arg("--immediate-render")
+    // Ensure veilad daemon is running (it should be via systemd, but start it as fallback)
+    let _ = Command::new("systemctl")
+        .args(["--user", "start", "veilad"])
+        .output();
+
+    let _ = Command::new("veila")
+        .arg("lock")
         .spawn();
 }
 

@@ -93,7 +93,7 @@ fi
 $AUR_HELPER -Syu --needed --noconfirm \
     google-chrome dolphin konsole \
     niri waybar rofi kitty fastfetch networkmanager plasma-nm \
-    cage alacritty fish zsh hypridle hyprlock btop cava mpv \
+    cage alacritty fish zsh hypridle veila-bin btop cava mpv \
     kde-cli-tools plasma-pa bluedevil bt-dualboot satty neovim \
     firefox-developer-edition grim slurp wl-clipboard cliphist \
     starship mako ffmpeg jq brightnessctl playerctl rofi-rbw \
@@ -278,6 +278,7 @@ sudo udevadm control --reload-rules
 # Enable monitor scaling systemd user service
 systemctl --user daemon-reload
 systemctl --user enable niri-monitor-setup.service || true
+systemctl --user enable veilad.service || true
 
 # Enable Powertop auto-tuning on boot (while exempting the buggy Wi-Fi card)
 sudo bash -c 'cat << EOF > /etc/systemd/system/powertop.service
