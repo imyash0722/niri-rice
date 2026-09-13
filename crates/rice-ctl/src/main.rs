@@ -2868,6 +2868,7 @@ fn main() {
         Commands::Dnd { action } => {
             if action == "toggle" {
                 let _ = Command::new("makoctl").args(["mode", "-t", "dnd"]).output();
+                let _ = Command::new("pkill").args(["-RTMIN+8", "waybar"]).output();
             }
         }
         Commands::History => notification_history_menu(),
