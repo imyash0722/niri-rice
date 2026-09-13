@@ -121,6 +121,22 @@ pub fn show_menu(menu_name: &str) -> Result<(), Box<dyn std::error::Error>> {
     let msg = format!(r#"{{"type":"show-menu","name":"{}"}}"#, menu_name);
     send_ws_frame(&mut stream, &msg)?;
 
+    // Actively focus Kando window so user can immediately interact via keyboard/mouse
+    if let Some(ref mut socket) = niri_socket {
+        for _ in 0..20 {
+            thread::sleep(Duration::from_millis(15));
+            if let Ok(Ok(Response::Windows(windows))) = socket.send(Request::Windows) {
+                if let Some(kando_win) = windows.iter().find(|w| {
+                    w.app_id.as_deref() == Some("menu.kando.Kando")
+                        || w.title.as_deref().unwrap_or("").starts_with("Kando")
+                }) {
+                    let _ = socket.send(Request::Action(Action::FocusWindow { id: kando_win.id }));
+                    break;
+                }
+            }
+        }
+    }
+
     // If we temporarily un-fullscreened a window, wait for Kando to close, then restore fullscreen
     if let Some(win_id) = fullscreen_window_id {
         // Wait on stream until closed or interaction message received

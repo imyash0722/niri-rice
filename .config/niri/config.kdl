@@ -386,8 +386,8 @@ window-rule {
 // Kando radial pie menu overlay: borderless, unshadowed floating surface
 window-rule {
     match app-id=r#"^menu\.kando\.Kando$"#
-    match title="^Kando.*"
     open-floating true
+    open-focused true
     focus-ring { off; }
     border { off; }
     shadow { off; }
