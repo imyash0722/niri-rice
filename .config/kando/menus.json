@@ -601,21 +601,6 @@
                 }
               },
               {
-                "name": "Fullscreen",
-                "icon": "fullscreen",
-                "iconTheme": "material-symbols-rounded",
-                "type": "button",
-                "selectWorkflow": {
-                  "quickSelectKey": "u",
-                  "actions": [
-                    {
-                      "type": "execute-command",
-                      "command": "niri msg action fullscreen-window"
-                    }
-                  ]
-                }
-              },
-              {
                 "name": "Center Column",
                 "icon": "vertical_align_center",
                 "iconTheme": "material-symbols-rounded",
@@ -641,36 +626,6 @@
                     {
                       "type": "execute-command",
                       "command": "niri msg action toggle-column-tabbed-display"
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "Close Window",
-                "icon": "close",
-                "iconTheme": "material-symbols-rounded",
-                "type": "button",
-                "selectWorkflow": {
-                  "quickSelectKey": "q",
-                  "actions": [
-                    {
-                      "type": "execute-command",
-                      "command": "niri msg action close-window"
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "Overview",
-                "icon": "view_quilt",
-                "iconTheme": "material-symbols-rounded",
-                "type": "button",
-                "selectWorkflow": {
-                  "quickSelectKey": "v",
-                  "actions": [
-                    {
-                      "type": "execute-command",
-                      "command": "niri msg action toggle-overview"
                     }
                   ]
                 }
@@ -1170,21 +1125,6 @@
             }
           },
           {
-            "name": "Fullscreen",
-            "icon": "fullscreen",
-            "iconTheme": "material-symbols-rounded",
-            "type": "button",
-            "selectWorkflow": {
-              "quickSelectKey": "u",
-              "actions": [
-                {
-                  "type": "execute-command",
-                  "command": "niri msg action fullscreen-window"
-                }
-              ]
-            }
-          },
-          {
             "name": "Center Column",
             "icon": "vertical_align_center",
             "iconTheme": "material-symbols-rounded",
@@ -1210,36 +1150,6 @@
                 {
                   "type": "execute-command",
                   "command": "niri msg action toggle-column-tabbed-display"
-                }
-              ]
-            }
-          },
-          {
-            "name": "Close Window",
-            "icon": "close",
-            "iconTheme": "material-symbols-rounded",
-            "type": "button",
-            "selectWorkflow": {
-              "quickSelectKey": "q",
-              "actions": [
-                {
-                  "type": "execute-command",
-                  "command": "niri msg action close-window"
-                }
-              ]
-            }
-          },
-          {
-            "name": "Overview",
-            "icon": "view_quilt",
-            "iconTheme": "material-symbols-rounded",
-            "type": "button",
-            "selectWorkflow": {
-              "quickSelectKey": "v",
-              "actions": [
-                {
-                  "type": "execute-command",
-                  "command": "niri msg action toggle-overview"
                 }
               ]
             }

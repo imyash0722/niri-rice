@@ -222,9 +222,6 @@ enum WifiAction {
 #[derive(Subcommand)]
 enum BarAction {
     Select,
-    NukeBack,
-    NukePpd,
-    NukeVol,
 }
 
 #[derive(Subcommand)]
@@ -2303,7 +2300,7 @@ fn calendar_action(action: &str) {
 }
 
 fn bar_select() {
-    let options = "main\nsmol\nnuke\n";
+    let options = "main\nsmol\n";
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
 
@@ -2340,47 +2337,6 @@ fn bar_select() {
         let _ = Command::new("waybar").args(["-c", &config, "-s", &style]).spawn();
     } else {
         let _ = Command::new("waybar").spawn();
-    }
-}
-
-fn nuke_back() {
-    let get = Command::new("brightnessctl").arg("get").output();
-    let max = Command::new("brightnessctl").arg("max").output();
-    let cur: u32 = get.ok().and_then(|o| String::from_utf8_lossy(&o.stdout).trim().parse().ok()).unwrap_or(0);
-    let total: u32 = max.ok().and_then(|o| String::from_utf8_lossy(&o.stdout).trim().parse().ok()).unwrap_or(1);
-    let percent = cur * 100 / total;
-    let filled = (percent * 10 + 50) / 100;
-    let empty = 10_u32.saturating_sub(filled);
-    let bar: String = "█".repeat(filled as usize) + &"░".repeat(empty as usize);
-    println!(" [{}] {}%", bar, percent);
-}
-
-fn nuke_ppd() {
-    let prof = fs::read_to_string("/sys/firmware/acpi/platform_profile").unwrap_or_default().trim().to_string();
-    match prof.as_str() {
-        "performance" => println!("!! CRITICAL !!"),
-        "balanced" => println!("STABLE"),
-        "low-power" => println!("|| FUEL EXHAUSTION ||"),
-        _ => println!("STABLE"),
-    }
-}
-
-fn nuke_vol() {
-    let Ok(out) = Command::new("wpctl").args(["get-volume", "@DEFAULT_AUDIO_SINK@"]).output() else {
-        println!(" [░░░░░░░░░░] 0%");
-        return;
-    };
-    let text = String::from_utf8_lossy(&out.stdout);
-    let muted = text.contains("[MUTED]");
-    let vol_float: f32 = text.split_whitespace().nth(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
-    let percent = if muted { 0 } else { (vol_float * 100.0) as u32 };
-    let filled = (percent * 10 + 50) / 100;
-    let empty = 10_u32.saturating_sub(filled);
-    let bar: String = "█".repeat(filled as usize) + &"░".repeat(empty as usize);
-    if muted {
-        println!(" [{}] MUTED", bar);
-    } else {
-        println!(" [{}] {}%", bar, percent);
     }
 }
 
@@ -2793,9 +2749,6 @@ fn main() {
         Commands::Calendar { action } => calendar_action(&action),
         Commands::Bar { action } => match action {
             BarAction::Select => bar_select(),
-            BarAction::NukeBack => nuke_back(),
-            BarAction::NukePpd => nuke_ppd(),
-            BarAction::NukeVol => nuke_vol(),
         },
         Commands::Screenshot { mode } => take_screenshot(&mode),
         Commands::Files => files_picker(),
