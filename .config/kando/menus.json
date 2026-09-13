@@ -49,7 +49,7 @@
                 }
               },
               {
-                "name": "Code Editor",
+                "name": "Neovim",
                 "icon": "code",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
@@ -58,7 +58,7 @@
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "codium"
+                      "command": "kitty -e nvim"
                     }
                   ]
                 }
@@ -238,37 +238,7 @@
             },
             "children": [
               {
-                "name": "Performance",
-                "icon": "bolt",
-                "iconTheme": "material-symbols-rounded",
-                "type": "button",
-                "selectWorkflow": {
-                  "quickSelectKey": "p",
-                  "actions": [
-                    {
-                      "type": "execute-command",
-                      "command": "powerprofilesctl set performance"
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "Balanced",
-                "icon": "balance",
-                "iconTheme": "material-symbols-rounded",
-                "type": "button",
-                "selectWorkflow": {
-                  "quickSelectKey": "b",
-                  "actions": [
-                    {
-                      "type": "execute-command",
-                      "command": "powerprofilesctl set balanced"
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "Power Saver",
+                "name": "Sipping (Power Save)",
                 "icon": "battery_saver",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
@@ -277,14 +247,29 @@
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "powerprofilesctl set power-saver"
+                      "command": "rice-ctl profile set sipping"
                     }
                   ]
                 }
               },
               {
-                "name": "Caffeine Toggle",
-                "icon": "coffee",
+                "name": "Sleep On (Balanced)",
+                "icon": "bedtime",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": {
+                  "quickSelectKey": "l",
+                  "actions": [
+                    {
+                      "type": "execute-command",
+                      "command": "rice-ctl profile set sleep-on"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Caffeinated (Performance)",
+                "icon": "bolt",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
@@ -292,22 +277,7 @@
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "rice-ctl caffeine toggle"
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "DND Toggle",
-                "icon": "notifications_off",
-                "iconTheme": "material-symbols-rounded",
-                "type": "button",
-                "selectWorkflow": {
-                  "quickSelectKey": "d",
-                  "actions": [
-                    {
-                      "type": "execute-command",
-                      "command": "rice-ctl dnd toggle"
+                      "command": "rice-ctl profile set caffeinated"
                     }
                   ]
                 }
@@ -325,46 +295,16 @@
             },
             "children": [
               {
-                "name": "Scan Nearby Wi-Fi...",
-                "icon": "wifi_find",
+                "name": "SSH Sessions",
+                "icon": "dns",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
-                  "quickSelectKey": "w",
+                  "quickSelectKey": "s",
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "kando-wifi"
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "Toggle Wi-Fi",
-                "icon": "wifi_off",
-                "iconTheme": "material-symbols-rounded",
-                "type": "button",
-                "selectWorkflow": {
-                  "quickSelectKey": "t",
-                  "actions": [
-                    {
-                      "type": "execute-command",
-                      "command": "nmcli radio wifi | grep -qi enabled && nmcli radio wifi off || nmcli radio wifi on"
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "Disconnect Wi-Fi",
-                "icon": "link_off",
-                "iconTheme": "material-symbols-rounded",
-                "type": "button",
-                "selectWorkflow": {
-                  "quickSelectKey": "d",
-                  "actions": [
-                    {
-                      "type": "execute-command",
-                      "command": "nmcli device disconnect wlan0"
+                      "command": "rice-ctl ssh"
                     }
                   ]
                 }
@@ -375,7 +315,7 @@
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
-                  "quickSelectKey": "s",
+                  "quickSelectKey": "n",
                   "actions": [
                     {
                       "type": "execute-command",
@@ -385,16 +325,16 @@
                 }
               },
               {
-                "name": "SSH Tinarchy",
-                "icon": "dns",
+                "name": "PESU Wi-Fi",
+                "icon": "wifi_protected_setup",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
-                  "quickSelectKey": "h",
+                  "quickSelectKey": "p",
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "kitty -e ssh tinarchy"
+                      "command": "pesu-wifi login"
                     }
                   ]
                 }

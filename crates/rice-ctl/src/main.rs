@@ -84,6 +84,12 @@ enum Commands {
         #[arg(default_value = "toggle")]
         action: String,
     },
+    /// Power profile manager (sipping, sleep on, caffeinated)
+    Profile {
+        #[arg(default_value = "status")]
+        action: String,
+        mode: Option<String>,
+    },
     /// Background apps drawer toggle and status
     BgApps {
         #[arg(default_value = "status")]
@@ -1551,62 +1557,135 @@ fn reload_desktop() {
     println!("[rice-ctl] Desktop reloaded successfully.");
 }
 
-fn caffeine_toggle() {
+fn set_power_profile(target: &str) {
     let flag = Path::new("/tmp/caffeine_active");
-    if flag.exists() {
-        let _ = fs::remove_file(flag);
-        let _ = Command::new("pkill")
-            .args(["-f", "systemd-inhibit.*caffeine"])
-            .output();
-        let _ = fs::write("/sys/firmware/acpi/platform_profile", "low-power");
-        let _ = Command::new("notify-send")
-            .args([
-                "-a",
-                "Power Manager",
-                "-i",
-                "preferences-system-power",
-                "Sleep Mode: Normal",
-                "Auto-sleep enabled, cool profile active",
-            ])
-            .output();
-    } else {
-        let _ = fs::File::create(flag);
-        let _ = Command::new("systemd-inhibit")
-            .args([
-                "--what=idle:sleep:handle-lid-switch",
-                "--who=Caffeine",
-                "--why=User requested no sleep",
-                "sleep",
-                "infinity",
-            ])
-            .spawn();
-        let _ = fs::write("/sys/firmware/acpi/platform_profile", "performance");
-        let _ = Command::new("notify-send")
-            .args([
-                "-a",
-                "Power Manager",
-                "-i",
-                "caffeine",
-                "Sleep Mode: Caffeinated",
-                "Sleep & idle disabled (Performance mode)",
-            ])
-            .output();
+    let state_file = Path::new("/tmp/power_profile_mode");
+    let normalized = match target.to_lowercase().as_str() {
+        "sipping" | "sip" | "power-saver" | "powersave" | "low-power" => "sipping",
+        "sleep-on" | "sleep on" | "sleep" | "balanced" | "balance" => "sleep-on",
+        "caffeinated" | "caffeine" | "perf" | "performance" => "caffeinated",
+        _ => "sleep-on",
+    };
+
+    match normalized {
+        "sipping" => {
+            if flag.exists() {
+                let _ = fs::remove_file(flag);
+            }
+            let _ = Command::new("pkill")
+                .args(["-f", "systemd-inhibit.*caffeine"])
+                .output();
+            let _ = fs::write("/sys/firmware/acpi/platform_profile", "low-power");
+            let _ = fs::write(state_file, "sipping");
+            let _ = Command::new("notify-send")
+                .args([
+                    "-a",
+                    "Power Profile",
+                    "-i",
+                    "battery-profile-powersave",
+                    "Power Profile: Sipping",
+                    "Power-saver mode active (minimal battery draw)",
+                ])
+                .output();
+        }
+        "caffeinated" => {
+            if !flag.exists() {
+                let _ = fs::File::create(flag);
+            }
+            let _ = Command::new("pkill")
+                .args(["-f", "systemd-inhibit.*caffeine"])
+                .output();
+            let _ = Command::new("systemd-inhibit")
+                .args([
+                    "--what=idle:sleep:handle-lid-switch",
+                    "--who=Caffeine",
+                    "--why=User requested no sleep",
+                    "sleep",
+                    "infinity",
+                ])
+                .spawn();
+            let _ = fs::write("/sys/firmware/acpi/platform_profile", "performance");
+            let _ = fs::write(state_file, "caffeinated");
+            let _ = Command::new("notify-send")
+                .args([
+                    "-a",
+                    "Power Profile",
+                    "-i",
+                    "battery-profile-performance",
+                    "Power Profile: Caffeinated",
+                    "Performance mode active (sleep & idle inhibited)",
+                ])
+                .output();
+        }
+        _ => {
+            // sleep-on / balanced
+            if flag.exists() {
+                let _ = fs::remove_file(flag);
+            }
+            let _ = Command::new("pkill")
+                .args(["-f", "systemd-inhibit.*caffeine"])
+                .output();
+            let _ = fs::write("/sys/firmware/acpi/platform_profile", "balanced");
+            let _ = fs::write(state_file, "sleep-on");
+            let _ = Command::new("notify-send")
+                .args([
+                    "-a",
+                    "Power Profile",
+                    "-i",
+                    "battery-profile-balanced",
+                    "Power Profile: Sleep On",
+                    "Balanced mode active (standard auto-sleep enabled)",
+                ])
+                .output();
+        }
     }
+
     let _ = Command::new("pkill")
         .args(["-RTMIN+13", "waybar"])
         .output();
+    let _ = Command::new("pkill")
+        .args(["-RTMIN+2", "waybar"])
+        .output();
 }
 
-fn caffeine_status() {
-    let flag = Path::new("/tmp/caffeine_active");
-    if flag.exists() {
-        println!(
-            r#"{{"text": " caffeinated", "class": "active", "tooltip": "Caffeine Active: Sleep Disabled (TLP AC/Perf)"}}"#
-        );
-    } else {
-        println!(
-            r#"{{"text": "󰒲 sleep on", "class": "inactive", "tooltip": "Sleep Enabled: Auto-suspend active (TLP Balanced)"}}"#
-        );
+fn profile_cycle() {
+    let cur = fs::read_to_string("/sys/firmware/acpi/platform_profile")
+        .unwrap_or_default()
+        .trim()
+        .to_string();
+
+    let next = match cur.as_str() {
+        "low-power" => "sleep-on",
+        "balanced" => "caffeinated",
+        "performance" => "sipping",
+        _ => "sleep-on",
+    };
+
+    set_power_profile(next);
+}
+
+fn profile_status() {
+    let cur = fs::read_to_string("/sys/firmware/acpi/platform_profile")
+        .unwrap_or_default()
+        .trim()
+        .to_string();
+
+    match cur.as_str() {
+        "low-power" => {
+            println!(
+                r#"{{"text": "󰾆 sipping", "class": "sipping", "tooltip": "Power Profile: Sipping (Power-saver)\nClick to cycle: sipping ➔ sleep on ➔ caffeinated"}}"#
+            );
+        }
+        "performance" => {
+            println!(
+                r#"{{"text": " caffeinated", "class": "caffeinated", "tooltip": "Power Profile: Caffeinated (Performance / Sleep Inhibited)\nClick to cycle: sipping ➔ sleep on ➔ caffeinated"}}"#
+            );
+        }
+        _ => {
+            println!(
+                r#"{{"text": "󰒲 sleep on", "class": "sleep-on", "tooltip": "Power Profile: Sleep On (Balanced / Auto-sleep)\nClick to cycle: sipping ➔ sleep on ➔ caffeinated"}}"#
+            );
+        }
     }
 }
 
@@ -2561,8 +2640,8 @@ fn main() {
         "caf.sh" | "caffeine" => {
             let action = args.get(1).map(|s| s.as_str()).unwrap_or("toggle");
             match action {
-                "toggle" => caffeine_toggle(),
-                _ => caffeine_status(),
+                "toggle" => profile_cycle(),
+                _ => profile_status(),
             }
             return;
         }
@@ -2755,8 +2834,23 @@ fn main() {
         Commands::Mem => mem_info(),
         Commands::Reload => reload_desktop(),
         Commands::Caffeine { action } => match action.as_str() {
-            "toggle" => caffeine_toggle(),
-            _ => caffeine_status(),
+            "toggle" => profile_cycle(),
+            _ => profile_status(),
+        },
+        Commands::Profile { action, mode } => match action.as_str() {
+            "cycle" | "toggle" => profile_cycle(),
+            "status" => profile_status(),
+            "set" => {
+                if let Some(m) = mode {
+                    set_power_profile(&m);
+                } else {
+                    profile_status();
+                }
+            }
+            "sipping" | "sip" => set_power_profile("sipping"),
+            "sleep-on" | "sleep" | "balanced" => set_power_profile("sleep-on"),
+            "caffeinated" | "perf" | "performance" => set_power_profile("caffeinated"),
+            _ => profile_status(),
         },
         Commands::BgApps { action } => match action.as_str() {
             "toggle" => bg_apps_toggle(),

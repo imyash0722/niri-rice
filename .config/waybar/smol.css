@@ -159,13 +159,26 @@ window#waybar.hidden {
 
 }
 
-#custom-caf-waybar{
+#custom-caf-waybar {
     padding: 0 4px;
     border-radius: 6px;
     margin: 4px 0;
-    background-color: alpha(@tertiary, 1);
-    color: @base;
+    color: @text;
+}
 
+#custom-caf-waybar.sipping {
+    background-color: alpha(@primary, 0.2);
+    color: @primary;
+}
+
+#custom-caf-waybar.sleep-on {
+    background-color: transparent;
+    color: @text;
+}
+
+#custom-caf-waybar.caffeinated {
+    background-color: alpha(@error, 0.3);
+    color: @error;
 }
 
 #custom-pacman {

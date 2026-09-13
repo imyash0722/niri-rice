@@ -24,8 +24,8 @@
     ],
 
 "custom/caf-waybar": {
-    "exec": "~/.local/bin/rice-ctl caffeine status",
-    "on-click": "~/.local/bin/rice-ctl caffeine toggle",
+    "exec": "~/.local/bin/rice-ctl profile status",
+    "on-click": "~/.local/bin/rice-ctl profile cycle",
     "return-type": "json",
     "signal": 13,
     "interval": 5,

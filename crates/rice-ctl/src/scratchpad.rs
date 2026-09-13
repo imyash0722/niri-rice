@@ -29,7 +29,7 @@ const PROFILES: &[ScratchpadProfile] = &[
     ScratchpadProfile {
         name: "term",
         app_id_pattern: "float.dropterm",
-        command: "kitty --class float.dropterm",
+        command: "kitty --class float.dropterm tmux new-session -A -s main",
         direction: ScratchpadDirection::FromTop,
         width_ratio: 0.65,
         height_ratio: 0.55,
