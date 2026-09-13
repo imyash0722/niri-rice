@@ -148,6 +148,9 @@ spawn-at-startup "sh" "-c" "sleep 2 && solaar --window=hide"
 // Kando radial pie menu daemon
 spawn-at-startup "/home/pineapple/.local/bin/kando"
 
+// Window swallowing daemon (piri-adapted)
+spawn-at-startup "sh" "-c" "~/.local/bin/rice-ctl swallow daemon"
+
 
 // ── Blur & Layer Rules (val-niri) ────────────────────────
 blur {
@@ -399,6 +402,12 @@ window-rule {
     default-window-height { fixed 500; }
 }
 
+// Directional floating scratchpads (dropterm, notes, calc)
+window-rule {
+    match app-id=r#"^float\."#
+    open-floating true
+}
+
 // ── Binds ────────────────────────────────────────────────
 // NOTE: Shortcuts are intentionally minimal here.
 // Full reference of your Sway shortcuts: /mnt/SHARED/LINUX/dotfiles/sway_shortcuts.txt
@@ -414,7 +423,7 @@ binds {
 
     // Terminal (Focus existing or spawn persistent Tmux main shell)
     Mod+Return { spawn-sh "~/.local/bin/rice-ctl terminal"; }
-    Mod+Shift+Return { spawn-sh "kitty --class kitty.floating"; }
+    Mod+Shift+Return { spawn-sh "~/.local/bin/rice-ctl scratchpad toggle term"; }
     Mod+Alt+Return { spawn "kitty"; }
 
     // Kando Radial Menus (Desktop Command Wheel)
@@ -444,8 +453,8 @@ binds {
     // File manager
     Mod+E { spawn-sh "env QT_QPA_PLATFORMTHEME=kde dolphin"; }
 
-    // Quick notes (Kitty nvim)
-    Mod+Alt+N { spawn-sh "cd ~/Notes && kitty --class kitty.floating.notes nvim"; }
+    // Quick notes (Scratchpad)
+    Mod+Alt+N { spawn-sh "~/.local/bin/rice-ctl scratchpad toggle notes"; }
 
     // Notification History (Rofi menu)
     Mod+N { spawn-sh "~/.local/bin/rice-ctl history"; }
@@ -467,7 +476,7 @@ binds {
     Mod+Alt+B   { spawn-sh "~/.local/bin/rice-ctl battery menu"; }
 
     // F12 & Keypad Special Keys
-    XF86Calculator       { spawn "kcalc"; }
+    XF86Calculator       { spawn-sh "~/.local/bin/rice-ctl scratchpad toggle calc"; }
     XF86Search           { spawn "rofi" "-show" "drun"; }
     XF86Explorer         { spawn "dolphin"; }
     XF86Sleep            { spawn-sh "~/.local/bin/rice-ctl power lock"; }

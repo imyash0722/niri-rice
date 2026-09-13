@@ -8,6 +8,9 @@ use std::io::{IsTerminal, Write};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+mod scratchpad;
+mod swallow;
+
 #[derive(Parser)]
 #[command(name = "rice-ctl")]
 #[command(
@@ -120,6 +123,22 @@ enum Commands {
         #[command(subcommand)]
         action: SystemAction,
     },
+    /// Window swallowing background daemon
+    Swallow {
+        #[arg(default_value = "daemon")]
+        action: String,
+    },
+    /// Directional floating scratchpad manager
+    Scratchpad {
+        #[command(subcommand)]
+        action: ScratchpadAction,
+    },
+}
+
+#[derive(Subcommand)]
+enum ScratchpadAction {
+    /// Toggle scratchpad (term, calc, notes)
+    Toggle { name: String },
 }
 
 #[derive(Subcommand)]
@@ -1599,11 +1618,11 @@ fn bg_apps_status() {
     let flag = Path::new("/tmp/waybar_bg_apps.state");
     if flag.exists() {
         println!(
-            r#"{{"text": ">", "class": "maximized", "tooltip": "Background apps (Expanded - click to collapse)"}}"#
+            r#"{{"text": "&gt;", "class": "maximized", "tooltip": "Background apps (Expanded - click to collapse)"}}"#
         );
     } else {
         println!(
-            r#"{{"text": "<", "class": "minimized", "tooltip": "Background apps (Collapsed - click to expand)"}}"#
+            r#"{{"text": "&lt;", "class": "minimized", "tooltip": "Background apps (Collapsed - click to expand)"}}"#
         );
     }
 }
@@ -2810,6 +2829,18 @@ fn main() {
         Commands::System { action } => match action {
             SystemAction::Fingerprint => fingerprint_menu(),
             SystemAction::ResumeOffset => setup_hibernate_resume(),
+        },
+        Commands::Swallow { action: _ } => {
+            if let Err(e) = swallow::run_swallow_daemon() {
+                eprintln!("[swallow error] {e}");
+            }
+        }
+        Commands::Scratchpad { action } => match action {
+            ScratchpadAction::Toggle { name } => {
+                if let Err(e) = scratchpad::toggle_scratchpad(&name) {
+                    eprintln!("[scratchpad error] {e}");
+                }
+            }
         },
     }
 }
