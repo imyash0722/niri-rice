@@ -309,24 +309,12 @@ systemctl --user daemon-reload
 systemctl --user enable niri-monitor-setup.service || true
 systemctl --user enable veilad.service || true
 
-# Enable Powertop auto-tuning on boot (while exempting the buggy Wi-Fi card and touchpad)
-sudo bash -c 'cat << EOF > /etc/systemd/system/powertop.service
-[Unit]
-Description=Powertop tunings
-After=multi-user.target network.target
-
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/usr/bin/powertop --auto-tune
-ExecStartPost=/usr/bin/iw dev wlan0 set power_save off
-ExecStartPost=/usr/local/bin/fix-touchpad-power.sh
-
-[Install]
-WantedBy=multi-user.target
-EOF'
+# Ensure TLP handles power management dynamically; PowerTOP is kept purely for interactive diagnosis (`sudo powertop`)
+sudo systemctl disable --now powertop.service 2>/dev/null || true
+sudo rm -f /etc/systemd/system/powertop.service 2>/dev/null || true
 sudo systemctl daemon-reload || true
-sudo systemctl enable --now powertop.service || true
+sudo systemctl enable --now tlp.service 2>/dev/null || true
+sudo tlp start 2>/dev/null || true
 
 # ---------------------------------------------------------------------------
 # 6. Apply initial theme & wallpaper (Matugen dynamic extraction via rice-ctl)
