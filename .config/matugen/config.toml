@@ -25,7 +25,7 @@ output_path = "~/.config/hypr/colors.conf"
 [templates.veila]
 input_path = "~/.config/matugen/templates/veila-config.toml"
 output_path = "~/.config/veila/config.toml"
-post_hook = "WALLPAPER=$(python3 -c \"import json,os; d=json.load(open(os.path.expanduser('~/.cache/wal/colors.json'))); print(d.get('wallpaper',''))\" 2>/dev/null); if [ -n \"$WALLPAPER\" ]; then sed -i \"s|WALLPAPER_PATH_PLACEHOLDER|$WALLPAPER|g\" ~/.config/veila/config.toml; fi; systemctl --user restart veilad 2>/dev/null || true"
+post_hook = "WALLPAPER=$(python3 -c \"import json,os; d=json.load(open(os.path.expanduser('~/.cache/wal/colors.json'))); print(d.get('wallpaper',''))\" 2>/dev/null); if [ -n \"$WALLPAPER\" ]; then sed -i \"s|WALLPAPER_PATH_PLACEHOLDER|$WALLPAPER|g\" ~/.config/veila/config.toml; fi; veila reload 2>/dev/null || systemctl --user restart veilad 2>/dev/null || true"
 
 [templates.kitty]
 input_path = "~/.config/matugen/templates/kitty-colors.conf"
