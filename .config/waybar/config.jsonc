@@ -19,10 +19,10 @@
 
     "modules-right": [
         "custom/recorder",
+        "group/bg",
         "battery",
         "group/sounds",
         "group/hw",
-        "group/bg",
         "custom/dunst",
         "custom/caf-waybar"
     ],

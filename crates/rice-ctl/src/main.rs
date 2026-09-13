@@ -973,7 +973,7 @@ fn lock_screen() {
 }
 
 fn power_menu() {
-    let options = "󰌾 Lock\n󰍃 Logout\n󰤄 Suspend\n󰒲 Hibernate\n󰜉 Reboot\n󰐥 Shutdown\n";
+    let options = "󰌾\n󰍃\n󰤄\n󰒲\n󰜉\n󰐥\n";
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let theme_path = PathBuf::from(&home).join(".config/rofi/powermenu.rasi");
 
@@ -999,17 +999,17 @@ fn power_menu() {
     };
     let choice = String::from_utf8_lossy(&output.stdout).trim().to_string();
 
-    if choice.contains("Lock") {
+    if choice.contains("󰌾") || choice.contains("Lock") {
         lock_screen();
-    } else if choice.contains("Logout") {
+    } else if choice.contains("󰍃") || choice.contains("Logout") {
         let _ = Command::new("niri").args(["msg", "action", "quit"]).output();
-    } else if choice.contains("Suspend") {
+    } else if choice.contains("󰤄") || choice.contains("Suspend") {
         let _ = Command::new("systemctl").arg("suspend").spawn();
-    } else if choice.contains("Hibernate") {
+    } else if choice.contains("󰒲") || choice.contains("Hibernate") {
         let _ = Command::new("systemctl").arg("hibernate").spawn();
-    } else if choice.contains("Reboot") {
+    } else if choice.contains("󰜉") || choice.contains("Reboot") {
         let _ = Command::new("systemctl").arg("reboot").spawn();
-    } else if choice.contains("Shutdown") {
+    } else if choice.contains("󰐥") || choice.contains("Shutdown") {
         let _ = Command::new("systemctl").arg("poweroff").spawn();
     }
 }

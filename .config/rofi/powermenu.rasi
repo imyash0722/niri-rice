@@ -1,6 +1,7 @@
 /**
  * Modern Glassmorphic Horizontal Power Menu Dialog
  * Material You dynamic tinting via colors.rasi
+ * Material 3 / Android Large Icon Tiles
  **/
 
 @import "colors.rasi"
@@ -18,15 +19,15 @@ window {
     location:                   center;
     anchor:                     center;
     fullscreen:                 false;
-    width:                      720px;
-    height:                     120px;
+    width:                      640px;
+    height:                     132px;
     x-offset:                   0px;
     y-offset:                   0px;
 
     enabled:                    true;
     border:                     2px;
     border-color:               @accent-color;
-    border-radius:              16px;
+    border-radius:              32px;
     background-color:           @bg0-alpha;
     cursor:                     "default";
 }
@@ -34,7 +35,7 @@ window {
 mainbox {
     enabled:                    true;
     spacing:                    0px;
-    padding:                    16px;
+    padding:                    18px;
     background-color:           transparent;
     children:                   [ "listview" ];
 }
@@ -50,7 +51,7 @@ listview {
     reverse:                    false;
     fixed-height:               true;
     fixed-columns:              true;
-    spacing:                    10px;
+    spacing:                    12px;
     background-color:           transparent;
     text-color:                 @fg0;
     cursor:                     "default";
@@ -58,24 +59,22 @@ listview {
 
 element {
     enabled:                    true;
-    padding:                    18px 0px;
-    border:                     1px;
-    border-color:               rgba(255, 255, 255, 0.08);
-    border-radius:              12px;
-    background-color:           rgba(255, 255, 255, 0.03);
-    text-color:                 @fg0;
+    padding:                    0px;
+    border:                     0px;
+    border-radius:              24px;
+    background-color:           @bg2;
+    text-color:                 @fg1;
     cursor:                     pointer;
 }
 
 element normal.normal, element alternate.normal {
-    background-color:           rgba(255, 255, 255, 0.03);
-    text-color:                 @fg0;
+    background-color:           @bg2;
+    text-color:                 @fg1;
 }
 
 element selected.normal, element selected.active {
-    background-color:           @accent-container;
-    border-color:               @accent-color;
-    text-color:                 @fg0;
+    background-color:           @accent-color;
+    text-color:                 @accent-fg;
 }
 
 element-text {
@@ -85,5 +84,5 @@ element-text {
     cursor:                     inherit;
     vertical-align:             0.5;
     horizontal-align:           0.5;
-    font:                       "Inter, JetBrainsMono Nerd Font Bold 12";
+    font:                       "JetBrainsMono Nerd Font 32";
 }
