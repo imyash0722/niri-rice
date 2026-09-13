@@ -1,0 +1,114 @@
+[General]
+ColorScheme=Matugen
+Name=Matugen
+AccentColor={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+shadeSortColumn=true
+
+[KDE]
+contrast=7
+
+[Colors:Window]
+BackgroundNormal={{ colors.surface.default.red }},{{ colors.surface.default.green }},{{ colors.surface.default.blue }}
+BackgroundAlternate={{ colors.surface_container.default.red }},{{ colors.surface_container.default.green }},{{ colors.surface_container.default.blue }}
+ForegroundNormal={{ colors.on_surface.default.red }},{{ colors.on_surface.default.green }},{{ colors.on_surface.default.blue }}
+ForegroundInactive={{ colors.outline.default.red }},{{ colors.outline.default.green }},{{ colors.outline.default.blue }}
+ForegroundActive={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundLink={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundVisited={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+ForegroundNegative={{ colors.error.default.red }},{{ colors.error.default.green }},{{ colors.error.default.blue }}
+ForegroundNeutral={{ colors.secondary.default.red }},{{ colors.secondary.default.green }},{{ colors.secondary.default.blue }}
+ForegroundPositive={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+DecorationFocus={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+DecorationHover={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+
+[Colors:View]
+BackgroundNormal={{ colors.surface_container_lowest.default.red }},{{ colors.surface_container_lowest.default.green }},{{ colors.surface_container_lowest.default.blue }}
+BackgroundAlternate={{ colors.surface_container_low.default.red }},{{ colors.surface_container_low.default.green }},{{ colors.surface_container_low.default.blue }}
+ForegroundNormal={{ colors.on_surface.default.red }},{{ colors.on_surface.default.green }},{{ colors.on_surface.default.blue }}
+ForegroundInactive={{ colors.outline.default.red }},{{ colors.outline.default.green }},{{ colors.outline.default.blue }}
+ForegroundActive={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundLink={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundVisited={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+ForegroundNegative={{ colors.error.default.red }},{{ colors.error.default.green }},{{ colors.error.default.blue }}
+ForegroundNeutral={{ colors.secondary.default.red }},{{ colors.secondary.default.green }},{{ colors.secondary.default.blue }}
+ForegroundPositive={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+DecorationFocus={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+DecorationHover={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+
+[Colors:Button]
+BackgroundNormal={{ colors.surface_container.default.red }},{{ colors.surface_container.default.green }},{{ colors.surface_container.default.blue }}
+BackgroundAlternate={{ colors.surface_container_high.default.red }},{{ colors.surface_container_high.default.green }},{{ colors.surface_container_high.default.blue }}
+ForegroundNormal={{ colors.on_surface.default.red }},{{ colors.on_surface.default.green }},{{ colors.on_surface.default.blue }}
+ForegroundInactive={{ colors.outline.default.red }},{{ colors.outline.default.green }},{{ colors.outline.default.blue }}
+ForegroundActive={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundLink={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundVisited={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+ForegroundNegative={{ colors.error.default.red }},{{ colors.error.default.green }},{{ colors.error.default.blue }}
+ForegroundNeutral={{ colors.secondary.default.red }},{{ colors.secondary.default.green }},{{ colors.secondary.default.blue }}
+ForegroundPositive={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+DecorationFocus={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+DecorationHover={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+
+[Colors:Selection]
+BackgroundNormal={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+BackgroundAlternate={{ colors.primary_container.default.red }},{{ colors.primary_container.default.green }},{{ colors.primary_container.default.blue }}
+ForegroundNormal={{ colors.on_primary.default.red }},{{ colors.on_primary.default.green }},{{ colors.on_primary.default.blue }}
+ForegroundInactive={{ colors.on_primary.default.red }},{{ colors.on_primary.default.green }},{{ colors.on_primary.default.blue }}
+ForegroundActive={{ colors.on_primary.default.red }},{{ colors.on_primary.default.green }},{{ colors.on_primary.default.blue }}
+ForegroundLink={{ colors.on_primary.default.red }},{{ colors.on_primary.default.green }},{{ colors.on_primary.default.blue }}
+ForegroundVisited={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+ForegroundNegative={{ colors.error.default.red }},{{ colors.error.default.green }},{{ colors.error.default.blue }}
+ForegroundNeutral={{ colors.secondary.default.red }},{{ colors.secondary.default.green }},{{ colors.secondary.default.blue }}
+ForegroundPositive={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+DecorationFocus={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+DecorationHover={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+
+[Colors:Header]
+BackgroundNormal={{ colors.surface_container_low.default.red }},{{ colors.surface_container_low.default.green }},{{ colors.surface_container_low.default.blue }}
+BackgroundAlternate={{ colors.surface_container.default.red }},{{ colors.surface_container.default.green }},{{ colors.surface_container.default.blue }}
+ForegroundNormal={{ colors.on_surface.default.red }},{{ colors.on_surface.default.green }},{{ colors.on_surface.default.blue }}
+ForegroundInactive={{ colors.outline.default.red }},{{ colors.outline.default.green }},{{ colors.outline.default.blue }}
+ForegroundActive={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundLink={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundVisited={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+ForegroundNegative={{ colors.error.default.red }},{{ colors.error.default.green }},{{ colors.error.default.blue }}
+ForegroundNeutral={{ colors.secondary.default.red }},{{ colors.secondary.default.green }},{{ colors.secondary.default.blue }}
+ForegroundPositive={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+DecorationFocus={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+DecorationHover={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+
+[Colors:Tooltip]
+BackgroundNormal={{ colors.surface_container_highest.default.red }},{{ colors.surface_container_highest.default.green }},{{ colors.surface_container_highest.default.blue }}
+BackgroundAlternate={{ colors.surface_container_high.default.red }},{{ colors.surface_container_high.default.green }},{{ colors.surface_container_high.default.blue }}
+ForegroundNormal={{ colors.on_surface.default.red }},{{ colors.on_surface.default.green }},{{ colors.on_surface.default.blue }}
+ForegroundInactive={{ colors.outline.default.red }},{{ colors.outline.default.green }},{{ colors.outline.default.blue }}
+ForegroundActive={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundLink={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundVisited={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+ForegroundNegative={{ colors.error.default.red }},{{ colors.error.default.green }},{{ colors.error.default.blue }}
+ForegroundNeutral={{ colors.secondary.default.red }},{{ colors.secondary.default.green }},{{ colors.secondary.default.blue }}
+ForegroundPositive={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+DecorationFocus={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+DecorationHover={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+
+[Colors:Complementary]
+BackgroundNormal={{ colors.surface_container_lowest.default.red }},{{ colors.surface_container_lowest.default.green }},{{ colors.surface_container_lowest.default.blue }}
+BackgroundAlternate={{ colors.surface_container_low.default.red }},{{ colors.surface_container_low.default.green }},{{ colors.surface_container_low.default.blue }}
+ForegroundNormal={{ colors.on_surface.default.red }},{{ colors.on_surface.default.green }},{{ colors.on_surface.default.blue }}
+ForegroundInactive={{ colors.outline.default.red }},{{ colors.outline.default.green }},{{ colors.outline.default.blue }}
+ForegroundActive={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundLink={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+ForegroundVisited={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+ForegroundNegative={{ colors.error.default.red }},{{ colors.error.default.green }},{{ colors.error.default.blue }}
+ForegroundNeutral={{ colors.secondary.default.red }},{{ colors.secondary.default.green }},{{ colors.secondary.default.blue }}
+ForegroundPositive={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+DecorationFocus={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+DecorationHover={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+
+[WM]
+activeBackground={{ colors.surface_container_high.default.red }},{{ colors.surface_container_high.default.green }},{{ colors.surface_container_high.default.blue }}
+activeForeground={{ colors.on_surface.default.red }},{{ colors.on_surface.default.green }},{{ colors.on_surface.default.blue }}
+activeBlend={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+inactiveBackground={{ colors.surface_container_lowest.default.red }},{{ colors.surface_container_lowest.default.green }},{{ colors.surface_container_lowest.default.blue }}
+inactiveForeground={{ colors.outline.default.red }},{{ colors.outline.default.green }},{{ colors.outline.default.blue }}
+inactiveBlend={{ colors.surface_container.default.red }},{{ colors.surface_container.default.green }},{{ colors.surface_container.default.blue }}

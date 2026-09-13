@@ -45,4 +45,10 @@ input_path = "~/.config/matugen/templates/kando-theme.json"
 output_path = "~/.config/kando/menu-themes/nether-m3-expressive/theme.json"
 post_hook = "kando --reload-menu-theme 2>/dev/null || true"
 
+[templates.kde]
+input_path = "~/.config/matugen/templates/kde-material-you.colors"
+output_path = "~/.local/share/color-schemes/Matugen.colors"
+post_hook = 'ACCENT=$(kreadconfig6 --file ~/.local/share/color-schemes/Matugen.colors --group General --key AccentColor 2>/dev/null); if [ -n "$ACCENT" ]; then kwriteconfig6 --file kdeglobals --group General --key AccentColor "$ACCENT"; kwriteconfig6 --file kdeglobals --group General --key LastUsedCustomAccentColor "$ACCENT"; fi; kwriteconfig6 --file kdeglobals --group General --key ColorScheme ""; plasma-apply-colorscheme Matugen 2>/dev/null || true'
+
+
 
