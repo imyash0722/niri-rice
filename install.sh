@@ -121,8 +121,11 @@ $AUR_HELPER -Syu --needed --noconfirm \
 # ---------------------------------------------------------------------------
 echo -e "\n[1.1/6] Configuring universal input, peripheral managers, and USB power rules..."
 if [ -d "$REPO_DIR/etc" ]; then
-    sudo mkdir -p /etc/keyd /etc/udev/rules.d /etc/modprobe.d /etc/bluetooth
+    sudo mkdir -p /etc/keyd /etc/udev/rules.d /etc/modprobe.d /etc/bluetooth /etc/libinput
     sudo cp -f "$REPO_DIR/etc/keyd/default.conf" /etc/keyd/default.conf 2>/dev/null || true
+    if [ -d "$REPO_DIR/etc/libinput" ]; then
+        sudo cp -f "$REPO_DIR/etc/libinput/"* /etc/libinput/ 2>/dev/null || true
+    fi
     if [ -d "$REPO_DIR/etc/udev/rules.d" ]; then
         sudo cp -f "$REPO_DIR/etc/udev/rules.d/"* /etc/udev/rules.d/ 2>/dev/null || true
     fi
