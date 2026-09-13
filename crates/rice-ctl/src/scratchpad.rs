@@ -105,6 +105,22 @@ fn calculate_hide_geometry(
     }
 }
 
+/// Helper to track fullscreen window un-fullscreened by scratchpad
+fn fs_state_file(name: &str) -> std::path::PathBuf {
+    std::env::temp_dir().join(format!("rice_scratchpad_fs_{name}"))
+}
+
+fn save_fs_state(name: &str, win_id: u64) {
+    let _ = std::fs::write(fs_state_file(name), win_id.to_string());
+}
+
+fn pop_fs_state(name: &str) -> Option<u64> {
+    let path = fs_state_file(name);
+    let id_str = std::fs::read_to_string(&path).ok()?;
+    let _ = std::fs::remove_file(path);
+    id_str.trim().parse().ok()
+}
+
 /// Query focused output dimensions (width, height)
 fn get_screen_dimensions(socket: &mut Socket) -> (f64, f64) {
     if let Ok(Ok(Response::FocusedOutput(Some(output)))) = socket.send(Request::FocusedOutput) {
@@ -174,11 +190,33 @@ pub fn toggle_scratchpad(name: &str) -> Result<(), Box<dyn std::error::Error>> {
                 x: PositionChange::SetFixed(hide_x),
                 y: PositionChange::SetFixed(hide_y),
             }));
+
+            // Restore any fullscreen window that was un-fullscreened
+            if let Some(fs_id) = pop_fs_state(profile.name) {
+                println!("[scratchpad] Restoring fullscreen for window {}", fs_id);
+                let _ = socket.send(Request::Action(Action::FullscreenWindow {
+                    id: Some(fs_id),
+                }));
+            }
+
             return Ok(());
         }
 
         // Window is hidden off-screen, on another workspace, or unfocused: Summon & focus
         println!("[scratchpad] Summoning '{}' (id: {}) to on-screen view", profile.name, wid);
+
+        // If current workspace has a fullscreen window, temporarily un-fullscreen it
+        if let Some(fs_win) = windows.iter().find(|w| {
+            !w.is_floating
+                && w.workspace_id == current_ws
+                && w.layout.tile_size == (screen_w, screen_h)
+        }) {
+            println!("[scratchpad] Temporarily un-fullscreening window {} on workspace...", fs_win.id);
+            let _ = socket.send(Request::Action(Action::FullscreenWindow {
+                id: Some(fs_win.id),
+            }));
+            save_fs_state(profile.name, fs_win.id);
+        }
 
         // Move to active workspace if on another workspace
         if let Some(ws_id) = current_ws {
@@ -216,6 +254,19 @@ pub fn toggle_scratchpad(name: &str) -> Result<(), Box<dyn std::error::Error>> {
         // Focus window
         let _ = socket.send(Request::Action(Action::FocusWindow { id: wid }));
     } else {
+        // If current workspace has a fullscreen window, temporarily un-fullscreen it
+        if let Some(fs_win) = windows.iter().find(|w| {
+            !w.is_floating
+                && w.workspace_id == current_ws
+                && w.layout.tile_size == (screen_w, screen_h)
+        }) {
+            println!("[scratchpad] Temporarily un-fullscreening window {} on workspace...", fs_win.id);
+            let _ = socket.send(Request::Action(Action::FullscreenWindow {
+                id: Some(fs_win.id),
+            }));
+            save_fs_state(profile.name, fs_win.id);
+        }
+
         // Window does not exist, spawn it detached
         println!("[scratchpad] Spawning scratchpad '{}': {}", profile.name, profile.command);
         let _ = Command::new("sh")

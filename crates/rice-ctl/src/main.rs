@@ -8,6 +8,7 @@ use std::io::{IsTerminal, Write};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+mod kando;
 mod scratchpad;
 mod swallow;
 
@@ -132,6 +133,12 @@ enum Commands {
     Scratchpad {
         #[command(subcommand)]
         action: ScratchpadAction,
+    },
+    /// High-performance Kando radial menu trigger with fullscreen awareness
+    Kando {
+        /// Menu name to show (e.g. Main, Power)
+        #[arg(default_value = "Main")]
+        menu: String,
     },
 }
 
@@ -2846,5 +2853,10 @@ fn main() {
                 }
             }
         },
+        Commands::Kando { menu } => {
+            if let Err(e) = kando::show_menu(&menu) {
+                eprintln!("[kando error] {e}");
+            }
+        }
     }
 }

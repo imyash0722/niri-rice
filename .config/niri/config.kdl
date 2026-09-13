@@ -426,9 +426,9 @@ binds {
     Mod+Shift+Return { spawn-sh "~/.local/bin/rice-ctl scratchpad toggle term"; }
     Mod+Alt+Return { spawn "kitty"; }
 
-    // Kando Radial Menus (Desktop Command Wheel)
-    Mod+Grave { spawn "/home/pineapple/.local/bin/kando" "--menu" "Main"; }
-    Mod+Shift+E { spawn "/home/pineapple/.local/bin/kando" "--menu" "Power"; }
+    // Kando Radial Menus (Desktop Command Wheel - Instant WebSocket & Fullscreen aware)
+    Mod+Grave { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Main"; }
+    Mod+Shift+E { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Power"; }
 
     // App launcher (Mod+D / Copilot key)
     Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
