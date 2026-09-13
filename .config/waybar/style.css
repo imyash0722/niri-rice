@@ -179,6 +179,29 @@ window#waybar.hidden {
     border-radius: 6px;
 }
 
+#custom-bg-toggle {
+    padding: 0 4px;
+    color: @text;
+    font-weight: bold;
+}
+
+#custom-bg-toggle:hover {
+    color: @primary;
+}
+
+#tray {
+    padding: 0 4px;
+    margin: 0;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
+
 #mpris {
     background-color: alpha(@secondary, 0.100);
 }

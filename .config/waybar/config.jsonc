@@ -22,6 +22,7 @@
         "battery",
         "group/sounds",
         "group/hw",
+        "group/bg",
         "custom/dunst",
         "custom/caf-waybar"
     ],
@@ -181,13 +182,32 @@
         ]
     },
 
-        "group/bg": {
+    "group/bg": {
         "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 300,
+            "children-class": "not-bg",
+            "transition-left-to-right": false,
+            "click-to-reveal": true
+        },
         "modules": [
-            "custom/steam",
-            "custom/vesktop",
-            "custom/spotify"
+            "custom/bg-toggle",
+            "tray"
         ]
+    },
+
+    "custom/bg-toggle": {
+        "exec": "~/.local/bin/rice-ctl bg-apps status",
+        "on-click": "~/.local/bin/rice-ctl bg-apps toggle",
+        "return-type": "json",
+        "signal": 14,
+        "interval": "once",
+        "tooltip": true
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 6
     },
 
     "group/sounds": {

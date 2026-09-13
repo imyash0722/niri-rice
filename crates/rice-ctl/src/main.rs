@@ -80,6 +80,11 @@ enum Commands {
         #[arg(default_value = "toggle")]
         action: String,
     },
+    /// Background apps drawer toggle and status
+    BgApps {
+        #[arg(default_value = "status")]
+        action: String,
+    },
     /// Audio volume and hardware LED controls
     Volume {
         #[command(subcommand)]
@@ -1466,6 +1471,7 @@ fn reload_desktop() {
         .args(["msg", "action", "load-config-file"])
         .output();
 
+    let _ = fs::remove_file("/tmp/waybar_bg_apps.state");
     let _ = Command::new("killall").arg("waybar").output();
     std::thread::sleep(std::time::Duration::from_millis(200));
     let _ = Command::new("waybar").spawn();
@@ -1558,6 +1564,31 @@ fn caffeine_status() {
     } else {
         println!(
             r#"{{"text": "󰒲 sleep on", "class": "inactive", "tooltip": "Sleep Enabled: Auto-suspend active (TLP Balanced)"}}"#
+        );
+    }
+}
+
+fn bg_apps_toggle() {
+    let flag = Path::new("/tmp/waybar_bg_apps.state");
+    if flag.exists() {
+        let _ = fs::remove_file(flag);
+    } else {
+        let _ = fs::File::create(flag);
+    }
+    let _ = Command::new("pkill")
+        .args(["-RTMIN+14", "waybar"])
+        .output();
+}
+
+fn bg_apps_status() {
+    let flag = Path::new("/tmp/waybar_bg_apps.state");
+    if flag.exists() {
+        println!(
+            r#"{{"text": ">", "class": "maximized", "tooltip": "Background apps (Expanded - click to collapse)"}}"#
+        );
+    } else {
+        println!(
+            r#"{{"text": "<", "class": "minimized", "tooltip": "Background apps (Collapsed - click to expand)"}}"#
         );
     }
 }
@@ -2627,6 +2658,10 @@ fn main() {
         Commands::Caffeine { action } => match action.as_str() {
             "toggle" => caffeine_toggle(),
             _ => caffeine_status(),
+        },
+        Commands::BgApps { action } => match action.as_str() {
+            "toggle" => bg_apps_toggle(),
+            _ => bg_apps_status(),
         },
         Commands::Volume { action } => match action {
             VolumeAction::MuteToggle => volume_mute_toggle(),
