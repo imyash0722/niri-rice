@@ -179,14 +179,36 @@ window#waybar.hidden {
     border-radius: 6px;
 }
 
-#custom-bg-toggle {
+#custom-bg-open,
+#custom-bg-close {
     padding: 0 4px;
     color: @text;
     font-weight: bold;
 }
 
-#custom-bg-toggle:hover {
+#custom-bg-open:hover,
+#custom-bg-close:hover {
     color: @primary;
+}
+
+#bg.expanded #custom-bg-open {
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    font-size: 0;
+    border: none;
+    opacity: 0;
+}
+
+#bg:not(.expanded) #custom-bg-close {
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    font-size: 0;
+    border: none;
+    opacity: 0;
 }
 
 #custom-discord,

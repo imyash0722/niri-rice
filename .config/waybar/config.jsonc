@@ -191,22 +191,23 @@
             "click-to-reveal": true
         },
         "modules": [
-            "custom/bg-toggle",
+            "custom/bg-open",
             "custom/discord",
             "custom/spotify",
             "custom/steam",
-            "tray"
+            "tray",
+            "custom/bg-close"
         ]
     },
 
-    "custom/bg-toggle": {
-        "exec": "~/.local/bin/rice-ctl bg-apps status",
-        "on-click": "~/.local/bin/rice-ctl bg-apps toggle",
-        "return-type": "json",
-        "signal": 14,
-        "interval": "once",
-        "tooltip": true,
-        "markup": false
+    "custom/bg-open": {
+        "format": "&lt;",
+        "tooltip-format": "Background apps (Click to expand)"
+    },
+
+    "custom/bg-close": {
+        "format": "&gt;",
+        "tooltip-format": "Background apps (Click to collapse)"
     },
 
     "custom/discord": {

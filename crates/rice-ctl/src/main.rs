@@ -1508,7 +1508,11 @@ fn reload_desktop() {
     let _ = fs::remove_file("/tmp/waybar_bg_apps.state");
     let _ = Command::new("killall").arg("waybar").output();
     std::thread::sleep(std::time::Duration::from_millis(200));
-    let _ = Command::new("waybar").spawn();
+    let _ = Command::new("waybar")
+        .stdin(std::process::Stdio::null())
+        .stdout(std::process::Stdio::null())
+        .stderr(std::process::Stdio::null())
+        .spawn();
 
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let active_wall = PathBuf::from(&home).join(".config/niri/themes/active-wallpaper.txt");
