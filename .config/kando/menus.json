@@ -238,8 +238,8 @@
             },
             "children": [
               {
-                "name": "Sipping (Power Save)",
-                "icon": "battery_saver",
+                "name": "Shaolin (Power Save)",
+                "icon": "self_improvement",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
@@ -247,37 +247,37 @@
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "rice-ctl profile set sipping"
+                      "command": "rice-ctl profile set shaolin"
                     }
                   ]
                 }
               },
               {
-                "name": "Sleep On (Balanced)",
-                "icon": "bedtime",
+                "name": "Wudang (Balanced)",
+                "icon": "balance",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
-                  "quickSelectKey": "l",
+                  "quickSelectKey": "w",
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "rice-ctl profile set sleep-on"
+                      "command": "rice-ctl profile set wudang"
                     }
                   ]
                 }
               },
               {
-                "name": "Caffeinated (Performance)",
-                "icon": "bolt",
+                "name": "Mount Hua (Performance)",
+                "icon": "local_florist",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
-                  "quickSelectKey": "c",
+                  "quickSelectKey": "m",
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "rice-ctl profile set caffeinated"
+                      "command": "rice-ctl profile set mount-hua"
                     }
                   ]
                 }

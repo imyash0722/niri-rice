@@ -172,12 +172,14 @@ window#waybar.hidden {
     color: @primary;
 }
 
+#custom-caf-waybar.wudang,
 #custom-caf-waybar.sleep-on,
 #custom-caf-waybar.taiji {
     background-color: transparent;
     color: @text;
 }
 
+#custom-caf-waybar.mount-hua,
 #custom-caf-waybar.cheonma,
 #custom-caf-waybar.caffeinated {
     background-color: alpha(@error, 0.3);

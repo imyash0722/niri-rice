@@ -84,7 +84,7 @@ enum Commands {
         #[arg(default_value = "toggle")]
         action: String,
     },
-    /// Power profile manager (shaolin, taiji, cheonma)
+    /// Power profile manager (shaolin, wudang, mount-hua)
     Profile {
         #[arg(default_value = "status")]
         action: String,
@@ -1561,10 +1561,10 @@ fn set_power_profile(target: &str) {
     let flag = Path::new("/tmp/caffeine_active");
     let state_file = Path::new("/tmp/power_profile_mode");
     let normalized = match target.to_lowercase().as_str() {
-        "shaolin" | "wuji" | "sipping" | "sip" | "power-saver" | "powersave" | "low-power" => "shaolin",
-        "taiji" | "tai-ji" | "wudang" | "sleep-on" | "sleep on" | "sleep" | "balanced" | "balance" => "taiji",
-        "cheonma" | "cheon-ma" | "demonic" | "caffeinated" | "caffeine" | "perf" | "performance" | "asura" => "cheonma",
-        _ => "taiji",
+        "shaolin" | "shao-lin" | "wuji" | "sipping" | "sip" | "power-saver" | "powersave" | "low-power" => "shaolin",
+        "wudang" | "wu-dang" | "taiji" | "tai-ji" | "sleep-on" | "sleep on" | "sleep" | "balanced" | "balance" => "wudang",
+        "mount-hua" | "mount hua" | "mounthua" | "huashan" | "hua-shan" | "hua" | "maehwa" | "plum-blossom" | "cheonma" | "caffeinated" | "caffeine" | "perf" | "performance" | "asura" => "mount-hua",
+        _ => "wudang",
     };
 
     match normalized {
@@ -1584,11 +1584,11 @@ fn set_power_profile(target: &str) {
                     "-i",
                     "battery-profile-powersave",
                     "Power Profile: Shaolin",
-                    "Shaolin mode active (minimal vital qi consumption / power-saver)",
+                    "Shaolin Sect mode active (minimal vital qi consumption / power-saver)",
                 ])
                 .output();
         }
-        "cheonma" => {
+        "mount-hua" => {
             if !flag.exists() {
                 let _ = fs::File::create(flag);
             }
@@ -1605,20 +1605,20 @@ fn set_power_profile(target: &str) {
                 ])
                 .spawn();
             let _ = fs::write("/sys/firmware/acpi/platform_profile", "performance");
-            let _ = fs::write(state_file, "cheonma");
+            let _ = fs::write(state_file, "mount-hua");
             let _ = Command::new("notify-send")
                 .args([
                     "-a",
                     "Power Profile",
                     "-i",
                     "battery-profile-performance",
-                    "Power Profile: Cheonma",
-                    "Heavenly Demon mode active (uninhibited martial power / sleep disabled)",
+                    "Power Profile: Mount Hua",
+                    "Mount Hua Sect mode active (Plum Blossom sword qi / peak performance / no sleep)",
                 ])
                 .output();
         }
         _ => {
-            // taiji / balanced
+            // wudang / balanced
             if flag.exists() {
                 let _ = fs::remove_file(flag);
             }
@@ -1626,15 +1626,15 @@ fn set_power_profile(target: &str) {
                 .args(["-f", "systemd-inhibit.*caffeine"])
                 .output();
             let _ = fs::write("/sys/firmware/acpi/platform_profile", "balanced");
-            let _ = fs::write(state_file, "taiji");
+            let _ = fs::write(state_file, "wudang");
             let _ = Command::new("notify-send")
                 .args([
                     "-a",
                     "Power Profile",
                     "-i",
                     "battery-profile-balanced",
-                    "Power Profile: Taiji",
-                    "Taiji mode active (harmonious balance of Yin & Yang / auto-sleep)",
+                    "Power Profile: Wudang",
+                    "Wudang Sect mode active (Taiji balance of Yin & Yang / auto-sleep)",
                 ])
                 .output();
         }
@@ -1655,10 +1655,10 @@ fn profile_cycle() {
         .to_string();
 
     let next = match cur.as_str() {
-        "low-power" => "taiji",
-        "balanced" => "cheonma",
+        "low-power" => "wudang",
+        "balanced" => "mount-hua",
         "performance" => "shaolin",
-        _ => "taiji",
+        _ => "wudang",
     };
 
     set_power_profile(next);
@@ -1673,17 +1673,17 @@ fn profile_status() {
     match cur.as_str() {
         "low-power" => {
             println!(
-                r#"{{"text": "󰕹 shaolin", "class": "shaolin", "tooltip": "Power Profile: Shaolin (Power-saver / Zen Stillness)\nClick to cycle: shaolin ➔ taiji ➔ cheonma"}}"#
+                r#"{{"text": "󰕹 shaolin", "class": "shaolin", "tooltip": "Power Profile: Shaolin (Power-saver / Zen Stillness)\nClick to cycle: shaolin ➔ wudang ➔ mount hua"}}"#
             );
         }
         "performance" => {
             println!(
-                r#"{{"text": "󰓥 cheonma", "class": "cheonma", "tooltip": "Power Profile: Cheonma (Performance / Demonic Might)\nClick to cycle: shaolin ➔ taiji ➔ cheonma"}}"#
+                r#"{{"text": "󰉊 mount hua", "class": "mount-hua", "tooltip": "Power Profile: Mount Hua (Performance / Plum Blossom Sword Qi)\nClick to cycle: shaolin ➔ wudang ➔ mount hua"}}"#
             );
         }
         _ => {
             println!(
-                r#"{{"text": "☯ taiji", "class": "taiji", "tooltip": "Power Profile: Taiji (Balanced / Taoist Harmony)\nClick to cycle: shaolin ➔ taiji ➔ cheonma"}}"#
+                r#"{{"text": "☯ wudang", "class": "wudang", "tooltip": "Power Profile: Wudang (Balanced / Taiji Harmony)\nClick to cycle: shaolin ➔ wudang ➔ mount hua"}}"#
             );
         }
     }
@@ -2848,8 +2848,8 @@ fn main() {
                 }
             }
             "shaolin" | "wuji" | "sipping" | "sip" => set_power_profile("shaolin"),
-            "taiji" | "tai-ji" | "wudang" | "sleep-on" | "sleep" | "balanced" => set_power_profile("taiji"),
-            "cheonma" | "cheon-ma" | "demonic" | "caffeinated" | "perf" | "performance" | "asura" => set_power_profile("cheonma"),
+            "wudang" | "taiji" | "tai-ji" | "sleep-on" | "sleep" | "balanced" => set_power_profile("wudang"),
+            "mount-hua" | "mount hua" | "mounthua" | "huashan" | "hua-shan" | "hua" | "maehwa" | "cheonma" | "cheon-ma" | "demonic" | "caffeinated" | "perf" | "performance" | "asura" => set_power_profile("mount-hua"),
             _ => profile_status(),
         },
         Commands::BgApps { action } => match action.as_str() {
