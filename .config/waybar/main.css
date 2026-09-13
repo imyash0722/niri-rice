@@ -189,6 +189,20 @@ window#waybar.hidden {
     color: @primary;
 }
 
+#custom-discord,
+#custom-spotify,
+#custom-steam {
+    padding: 0 4px;
+    font-size: 14px;
+    color: @text;
+}
+
+#custom-discord:hover,
+#custom-spotify:hover,
+#custom-steam:hover {
+    color: @primary;
+}
+
 #tray {
     padding: 0 4px;
     margin: 0;

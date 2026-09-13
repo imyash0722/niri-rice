@@ -85,6 +85,13 @@ enum Commands {
         #[arg(default_value = "status")]
         action: String,
     },
+    /// Background application status, focus, and close
+    App {
+        #[arg(default_value = "status")]
+        action: String,
+        #[arg(default_value = "discord")]
+        name: String,
+    },
     /// Audio volume and hardware LED controls
     Volume {
         #[command(subcommand)]
@@ -1601,6 +1608,98 @@ fn bg_apps_status() {
     }
 }
 
+fn is_app_running(name: &str) -> bool {
+    let patterns: &[&str] = match name {
+        "discord" => &["Discord", "discord", "vesktop", "Vesktop"],
+        "spotify" => &["spotify", "Spotify"],
+        "steam" => &["steam", "Steam"],
+        _ => &[name],
+    };
+    for pat in patterns {
+        if let Ok(out) = Command::new("pgrep").args(["-i", pat]).output() {
+            if !out.stdout.is_empty() {
+                return true;
+            }
+        }
+    }
+    false
+}
+
+fn app_status(name: &str) {
+    if !is_app_running(name) {
+        println!(r#"{{"text": "", "class": "hidden"}}"#);
+        return;
+    }
+    match name {
+        "discord" => {
+            println!(
+                r#"{{"text": "", "tooltip": "Discord (Running in background - click to focus)", "class": "discord"}}"#
+            );
+        }
+        "spotify" => {
+            println!(
+                r#"{{"text": "", "tooltip": "Spotify (Running in background - click to focus)", "class": "spotify"}}"#
+            );
+        }
+        "steam" => {
+            println!(
+                r#"{{"text": "", "tooltip": "Steam (Running in background - click to focus)", "class": "steam"}}"#
+            );
+        }
+        _ => {
+            println!(
+                r#"{{"text": "󰘔", "tooltip": "{name} (Running in background)", "class": "{name}"}}"#
+            );
+        }
+    }
+}
+
+fn app_focus(name: &str) {
+    let search = match name {
+        "discord" => "discord",
+        "spotify" => "spotify",
+        "steam" => "steam",
+        _ => name,
+    };
+    if let Ok(out) = Command::new("niri").args(["msg", "--json", "windows"]).output() {
+        if let Ok(val) = serde_json::from_slice::<serde_json::Value>(&out.stdout) {
+            if let Some(arr) = val.as_array() {
+                for win in arr {
+                    let app_id = win.get("app_id").and_then(|v| v.as_str()).unwrap_or("");
+                    let title = win.get("title").and_then(|v| v.as_str()).unwrap_or("");
+                    if app_id.to_lowercase().contains(search) || title.to_lowercase().contains(search) {
+                        if let Some(id) = win.get("id").and_then(|v| v.as_u64()) {
+                            let _ = Command::new("niri")
+                                .args(["msg", "action", "focus-window", "--id", &id.to_string()])
+                                .output();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    let exec = match name {
+        "discord" => "discord",
+        "spotify" => "spotify",
+        "steam" => "steam",
+        _ => name,
+    };
+    let _ = Command::new(exec).spawn();
+}
+
+fn app_close(name: &str) {
+    let targets: &[&str] = match name {
+        "discord" => &["Discord", "discord", "vesktop"],
+        "spotify" => &["spotify"],
+        "steam" => &["steam"],
+        _ => &[name],
+    };
+    for target in targets {
+        let _ = Command::new("pkill").args(["-i", target]).output();
+    }
+}
+
 fn monitor_autoscale() {
     let runtime = std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| "/run/user/1000".to_string());
 
@@ -2679,6 +2778,11 @@ fn main() {
         Commands::BgApps { action } => match action.as_str() {
             "toggle" => bg_apps_toggle(),
             _ => bg_apps_status(),
+        },
+        Commands::App { action, name } => match action.as_str() {
+            "focus" => app_focus(&name),
+            "close" => app_close(&name),
+            _ => app_status(&name),
         },
         Commands::Volume { action } => match action {
             VolumeAction::MuteToggle => volume_mute_toggle(),

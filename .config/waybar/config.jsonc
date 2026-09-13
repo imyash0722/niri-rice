@@ -192,6 +192,9 @@
         },
         "modules": [
             "custom/bg-toggle",
+            "custom/discord",
+            "custom/spotify",
+            "custom/steam",
             "tray"
         ]
     },
@@ -202,6 +205,34 @@
         "return-type": "json",
         "signal": 14,
         "interval": "once",
+        "tooltip": true,
+        "markup": false
+    },
+
+    "custom/discord": {
+        "exec": "~/.local/bin/rice-ctl app status discord",
+        "on-click": "~/.local/bin/rice-ctl app focus discord",
+        "on-click-right": "~/.local/bin/rice-ctl app close discord",
+        "return-type": "json",
+        "interval": 2,
+        "tooltip": true
+    },
+
+    "custom/spotify": {
+        "exec": "~/.local/bin/rice-ctl app status spotify",
+        "on-click": "~/.local/bin/rice-ctl app focus spotify",
+        "on-click-right": "~/.local/bin/rice-ctl app close spotify",
+        "return-type": "json",
+        "interval": 3,
+        "tooltip": true
+    },
+
+    "custom/steam": {
+        "exec": "~/.local/bin/rice-ctl app status steam",
+        "on-click": "~/.local/bin/rice-ctl app focus steam",
+        "on-click-right": "~/.local/bin/rice-ctl app close steam",
+        "return-type": "json",
+        "interval": 3,
         "tooltip": true
     },
 
