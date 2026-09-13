@@ -2,13 +2,13 @@
     bg0: #111318;
     bg0-alpha: #111318e6;
     bg1: #111318;
-    bg2: #272a2f;
-    fg0: #e1e2e9;
-    fg1: #c3c6cf;
-    accent-color: #a4c9fe;
-    accent-container: #204876;
-    accent-fg: #00315d;
+    bg2: #282a2f;
+    fg0: #e2e2e9;
+    fg1: #c4c6d0;
+    accent-color: #acc7ff;
+    accent-container: #2a4678;
+    accent-fg: #0f2f60;
     urgent-color: #ffb4ab;
-    border-color: #a4c9fe;
+    border-color: #acc7ff;
 }
 
