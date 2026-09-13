@@ -1,0 +1,84 @@
+[Background]
+Color={{ colors.surface_container_lowest.default.red }},{{ colors.surface_container_lowest.default.green }},{{ colors.surface_container_lowest.default.blue }}
+Transparency=false
+
+[BackgroundIntense]
+Color={{ colors.surface_container.default.red }},{{ colors.surface_container.default.green }},{{ colors.surface_container.default.blue }}
+Transparency=false
+
+[Color0]
+Color={{ colors.surface.default.red }},{{ colors.surface.default.green }},{{ colors.surface.default.blue }}
+Transparency=false
+
+[Color0Intense]
+Color={{ colors.outline.default.red }},{{ colors.outline.default.green }},{{ colors.outline.default.blue }}
+Transparency=false
+
+[Color1]
+Color=247,118,142
+Transparency=false
+
+[Color1Intense]
+Color=255,122,147
+Transparency=false
+
+[Color2]
+Color=158,206,106
+Transparency=false
+
+[Color2Intense]
+Color=185,242,124
+Transparency=false
+
+[Color3]
+Color=224,175,104
+Transparency=false
+
+[Color3Intense]
+Color=255,158,100
+Transparency=false
+
+[Color4]
+Color=122,162,247
+Transparency=false
+
+[Color4Intense]
+Color=137,180,250
+Transparency=false
+
+[Color5]
+Color={{ colors.primary.default.red }},{{ colors.primary.default.green }},{{ colors.primary.default.blue }}
+Transparency=false
+
+[Color5Intense]
+Color={{ colors.tertiary.default.red }},{{ colors.tertiary.default.green }},{{ colors.tertiary.default.blue }}
+Transparency=false
+
+[Color6]
+Color=125,207,255
+Transparency=false
+
+[Color6Intense]
+Color=180,249,248
+Transparency=false
+
+[Color7]
+Color={{ colors.on_surface.default.red }},{{ colors.on_surface.default.green }},{{ colors.on_surface.default.blue }}
+Transparency=false
+
+[Color7Intense]
+Color=255,255,255
+Transparency=false
+
+[Foreground]
+Color={{ colors.on_surface.default.red }},{{ colors.on_surface.default.green }},{{ colors.on_surface.default.blue }}
+Transparency=false
+
+[ForegroundIntense]
+Color=255,255,255
+Transparency=false
+
+[General]
+Description=Matugen
+Opacity=1
+Blur=false

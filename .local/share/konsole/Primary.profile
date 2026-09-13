@@ -1,5 +1,5 @@
 [Appearance]
-ColorScheme=TokyoNight
+ColorScheme=Matugen
 Font=Hack,13,-1,7,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
 
 [Cursor Options]

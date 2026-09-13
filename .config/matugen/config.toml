@@ -50,5 +50,10 @@ input_path = "~/.config/matugen/templates/kde-material-you.colors"
 output_path = "~/.local/share/color-schemes/Matugen.colors"
 post_hook = 'ACCENT=$(kreadconfig6 --file ~/.local/share/color-schemes/Matugen.colors --group General --key AccentColor 2>/dev/null); if [ -n "$ACCENT" ]; then kwriteconfig6 --file kdeglobals --group General --key AccentColor "$ACCENT"; kwriteconfig6 --file kdeglobals --group General --key LastUsedCustomAccentColor "$ACCENT"; fi; kwriteconfig6 --file kdeglobals --group General --key ColorScheme ""; plasma-apply-colorscheme Matugen 2>/dev/null || true'
 
+[templates.konsole]
+input_path = "~/.config/matugen/templates/konsole-theme.colorscheme"
+output_path = "~/.local/share/konsole/Matugen.colorscheme"
+
+
 
 
