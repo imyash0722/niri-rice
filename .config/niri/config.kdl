@@ -8,6 +8,7 @@ include "./themes/active-animations.kdl"
 
 // Enforce dark mode and KDE/Qt styling globally
 environment {
+    PATH "/home/pineapple/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
     XDG_MENU_PREFIX "plasma-"
     QT_QPA_PLATFORMTHEME "kde"
     QT_QPA_PLATFORM "wayland;xcb"
@@ -145,7 +146,7 @@ spawn-at-startup "sh" "-c" "sleep 1 && otd-daemon"
 spawn-at-startup "sh" "-c" "sleep 2 && solaar --window=hide"
 
 // Kando radial pie menu daemon
-spawn-at-startup "kando"
+spawn-at-startup "/home/pineapple/.local/bin/kando"
 
 
 // ── Blur & Layer Rules (val-niri) ────────────────────────
@@ -381,7 +382,7 @@ window-rule {
 
 // Kando radial pie menu overlay: borderless, unshadowed floating surface
 window-rule {
-    match app-id="kando"
+    match app-id=r#"^menu\.kando\.Kando$"#
     match title="^Kando.*"
     open-floating true
     focus-ring { off; }
@@ -417,8 +418,8 @@ binds {
     Mod+Alt+Return { spawn "kitty"; }
 
     // Kando Radial Menus (Desktop Command Wheel)
-    Mod+Space { spawn "kando" "--menu" "Main"; }
-    Mod+Shift+E { spawn "kando" "--menu" "Power"; }
+    Mod+Grave { spawn "/home/pineapple/.local/bin/kando" "--menu" "Main"; }
+    Mod+Shift+E { spawn "/home/pineapple/.local/bin/kando" "--menu" "Power"; }
 
     // App launcher (Mod+D / Copilot key)
     Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
@@ -461,7 +462,7 @@ binds {
     Mod+Shift+B { spawn "blueman-manager"; }
 
     // Network (Kando Radial Wi-Fi Wheel) & SSH Manager
-    Mod+Shift+W { spawn "kando-wifi"; }
+    Mod+Shift+W { spawn "/home/pineapple/.local/bin/kando-wifi"; }
     Mod+Alt+S   { spawn-sh "~/.local/bin/rice-ctl ssh"; }
     Mod+Alt+B   { spawn-sh "~/.local/bin/rice-ctl battery menu"; }
 
@@ -555,8 +556,8 @@ binds {
     Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
     Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
 
-    // Float / unfloat (Sway convention, leaving Mod+Space for Kando Main HUD)
-    Mod+Shift+Space { toggle-window-floating; }
+    // Float / unfloat (User default: Super+Space)
+    Mod+Space { toggle-window-floating; }
 
     // Fullscreen
     Mod+F { maximize-column; }

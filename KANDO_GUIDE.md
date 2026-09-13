@@ -27,10 +27,10 @@ The desktop uses a **Hybrid Radial HUD + Fuzzy Finder** architecture:
 ```mermaid
 flowchart TD
     subgraph "Hardware & User Input"
-        K_MAIN["Mod + Space"] -->|Invoke Main HUD| KANDO_BIN["~/.local/bin/kando"]
+        K_MAIN["Mod + Grave (Super + `)"] -->|Invoke Main HUD| KANDO_BIN["~/.local/bin/kando"]
         K_WIFI["Mod + Shift + W"] -->|Invoke Wi-Fi HUD| WIFI_BIN["~/.local/bin/kando-wifi"]
         K_POW["Mod + Shift + E"] -->|Invoke Power HUD| KANDO_BIN
-        K_FLOAT["Mod + Shift + Space"] -->|Window Float| NIRI["Niri Compositor"]
+        K_FLOAT["Mod + Space"] -->|Window Float / Tile| NIRI["Niri Compositor"]
         R_DRUN["Mod + D"] -->|Fuzzy App Search| ROFI["Rofi (drun)"]
     end
 
@@ -192,12 +192,12 @@ All shortcuts are registered and validated in `~/.config/niri/config.kdl`:
 ```kdl
 binds {
     // Kando Radial Menus
-    Mod+Space       { spawn "kando" "--menu" "Main"; }
-    Mod+Shift+W     { spawn "kando-wifi"; }
-    Mod+Shift+E     { spawn "kando" "--menu" "Power"; }
+    Mod+Grave       { spawn "/home/pineapple/.local/bin/kando" "--menu" "Main"; }
+    Mod+Shift+W     { spawn "/home/pineapple/.local/bin/kando-wifi"; }
+    Mod+Shift+E     { spawn "/home/pineapple/.local/bin/kando" "--menu" "Power"; }
 
-    // Window Management (Moved from Mod+Space to avoid collision)
-    Mod+Shift+Space { toggle-window-floating; }
+    // Window Management (User's primary tiling/floating toggle)
+    Mod+Space       { toggle-window-floating; }
 
     // Fallback Search Pickers
     Mod+D           { spawn "rofi" "-show" "drun"; }
