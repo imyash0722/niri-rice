@@ -165,7 +165,8 @@ window#waybar.hidden {
     border-color: alpha(@primary, 0.5);
 }
 
-#custom-caf-waybar.sleep-on {
+#custom-caf-waybar.sleep-on,
+#custom-caf-waybar.taiji {
     color: @text;
     background-color: transparent;
 }

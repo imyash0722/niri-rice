@@ -84,7 +84,7 @@ enum Commands {
         #[arg(default_value = "toggle")]
         action: String,
     },
-    /// Power profile manager (sipping, sleep on, caffeinated)
+    /// Power profile manager (sipping, taiji, caffeinated)
     Profile {
         #[arg(default_value = "status")]
         action: String,
@@ -1562,9 +1562,9 @@ fn set_power_profile(target: &str) {
     let state_file = Path::new("/tmp/power_profile_mode");
     let normalized = match target.to_lowercase().as_str() {
         "sipping" | "sip" | "power-saver" | "powersave" | "low-power" => "sipping",
-        "sleep-on" | "sleep on" | "sleep" | "balanced" | "balance" => "sleep-on",
+        "taiji" | "tai-ji" | "sleep-on" | "sleep on" | "sleep" | "balanced" | "balance" => "taiji",
         "caffeinated" | "caffeine" | "perf" | "performance" => "caffeinated",
-        _ => "sleep-on",
+        _ => "taiji",
     };
 
     match normalized {
@@ -1618,7 +1618,7 @@ fn set_power_profile(target: &str) {
                 .output();
         }
         _ => {
-            // sleep-on / balanced
+            // taiji / balanced
             if flag.exists() {
                 let _ = fs::remove_file(flag);
             }
@@ -1626,14 +1626,14 @@ fn set_power_profile(target: &str) {
                 .args(["-f", "systemd-inhibit.*caffeine"])
                 .output();
             let _ = fs::write("/sys/firmware/acpi/platform_profile", "balanced");
-            let _ = fs::write(state_file, "sleep-on");
+            let _ = fs::write(state_file, "taiji");
             let _ = Command::new("notify-send")
                 .args([
                     "-a",
                     "Power Profile",
                     "-i",
                     "battery-profile-balanced",
-                    "Power Profile: Sleep On",
+                    "Power Profile: Taiji",
                     "Balanced mode active (standard auto-sleep enabled)",
                 ])
                 .output();
@@ -1655,10 +1655,10 @@ fn profile_cycle() {
         .to_string();
 
     let next = match cur.as_str() {
-        "low-power" => "sleep-on",
+        "low-power" => "taiji",
         "balanced" => "caffeinated",
         "performance" => "sipping",
-        _ => "sleep-on",
+        _ => "taiji",
     };
 
     set_power_profile(next);
@@ -1673,17 +1673,17 @@ fn profile_status() {
     match cur.as_str() {
         "low-power" => {
             println!(
-                r#"{{"text": "󰾆 sipping", "class": "sipping", "tooltip": "Power Profile: Sipping (Power-saver)\nClick to cycle: sipping ➔ sleep on ➔ caffeinated"}}"#
+                r#"{{"text": "󰾆 sipping", "class": "sipping", "tooltip": "Power Profile: Sipping (Power-saver)\nClick to cycle: sipping ➔ taiji ➔ caffeinated"}}"#
             );
         }
         "performance" => {
             println!(
-                r#"{{"text": " caffeinated", "class": "caffeinated", "tooltip": "Power Profile: Caffeinated (Performance / Sleep Inhibited)\nClick to cycle: sipping ➔ sleep on ➔ caffeinated"}}"#
+                r#"{{"text": " caffeinated", "class": "caffeinated", "tooltip": "Power Profile: Caffeinated (Performance / Sleep Inhibited)\nClick to cycle: sipping ➔ taiji ➔ caffeinated"}}"#
             );
         }
         _ => {
             println!(
-                r#"{{"text": "󰒲 sleep on", "class": "sleep-on", "tooltip": "Power Profile: Sleep On (Balanced / Auto-sleep)\nClick to cycle: sipping ➔ sleep on ➔ caffeinated"}}"#
+                r#"{{"text": "☯ taiji", "class": "taiji", "tooltip": "Power Profile: Taiji (Balanced / Auto-sleep)\nClick to cycle: sipping ➔ taiji ➔ caffeinated"}}"#
             );
         }
     }
@@ -2848,7 +2848,7 @@ fn main() {
                 }
             }
             "sipping" | "sip" => set_power_profile("sipping"),
-            "sleep-on" | "sleep" | "balanced" => set_power_profile("sleep-on"),
+            "taiji" | "tai-ji" | "sleep-on" | "sleep" | "balanced" => set_power_profile("taiji"),
             "caffeinated" | "perf" | "performance" => set_power_profile("caffeinated"),
             _ => profile_status(),
         },

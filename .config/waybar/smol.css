@@ -171,7 +171,8 @@ window#waybar.hidden {
     color: @primary;
 }
 
-#custom-caf-waybar.sleep-on {
+#custom-caf-waybar.sleep-on,
+#custom-caf-waybar.taiji {
     background-color: transparent;
     color: @text;
 }
