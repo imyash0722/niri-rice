@@ -84,7 +84,7 @@ enum Commands {
         #[arg(default_value = "toggle")]
         action: String,
     },
-    /// Power profile manager (sipping, taiji, caffeinated)
+    /// Power profile manager (shaolin, taiji, cheonma)
     Profile {
         #[arg(default_value = "status")]
         action: String,
@@ -1561,14 +1561,14 @@ fn set_power_profile(target: &str) {
     let flag = Path::new("/tmp/caffeine_active");
     let state_file = Path::new("/tmp/power_profile_mode");
     let normalized = match target.to_lowercase().as_str() {
-        "sipping" | "sip" | "power-saver" | "powersave" | "low-power" => "sipping",
-        "taiji" | "tai-ji" | "sleep-on" | "sleep on" | "sleep" | "balanced" | "balance" => "taiji",
-        "caffeinated" | "caffeine" | "perf" | "performance" => "caffeinated",
+        "shaolin" | "wuji" | "sipping" | "sip" | "power-saver" | "powersave" | "low-power" => "shaolin",
+        "taiji" | "tai-ji" | "wudang" | "sleep-on" | "sleep on" | "sleep" | "balanced" | "balance" => "taiji",
+        "cheonma" | "cheon-ma" | "demonic" | "caffeinated" | "caffeine" | "perf" | "performance" | "asura" => "cheonma",
         _ => "taiji",
     };
 
     match normalized {
-        "sipping" => {
+        "shaolin" => {
             if flag.exists() {
                 let _ = fs::remove_file(flag);
             }
@@ -1576,19 +1576,19 @@ fn set_power_profile(target: &str) {
                 .args(["-f", "systemd-inhibit.*caffeine"])
                 .output();
             let _ = fs::write("/sys/firmware/acpi/platform_profile", "low-power");
-            let _ = fs::write(state_file, "sipping");
+            let _ = fs::write(state_file, "shaolin");
             let _ = Command::new("notify-send")
                 .args([
                     "-a",
                     "Power Profile",
                     "-i",
                     "battery-profile-powersave",
-                    "Power Profile: Sipping",
-                    "Power-saver mode active (minimal battery draw)",
+                    "Power Profile: Shaolin",
+                    "Shaolin mode active (minimal vital qi consumption / power-saver)",
                 ])
                 .output();
         }
-        "caffeinated" => {
+        "cheonma" => {
             if !flag.exists() {
                 let _ = fs::File::create(flag);
             }
@@ -1605,15 +1605,15 @@ fn set_power_profile(target: &str) {
                 ])
                 .spawn();
             let _ = fs::write("/sys/firmware/acpi/platform_profile", "performance");
-            let _ = fs::write(state_file, "caffeinated");
+            let _ = fs::write(state_file, "cheonma");
             let _ = Command::new("notify-send")
                 .args([
                     "-a",
                     "Power Profile",
                     "-i",
                     "battery-profile-performance",
-                    "Power Profile: Caffeinated",
-                    "Performance mode active (sleep & idle inhibited)",
+                    "Power Profile: Cheonma",
+                    "Heavenly Demon mode active (uninhibited martial power / sleep disabled)",
                 ])
                 .output();
         }
@@ -1634,7 +1634,7 @@ fn set_power_profile(target: &str) {
                     "-i",
                     "battery-profile-balanced",
                     "Power Profile: Taiji",
-                    "Balanced mode active (standard auto-sleep enabled)",
+                    "Taiji mode active (harmonious balance of Yin & Yang / auto-sleep)",
                 ])
                 .output();
         }
@@ -1656,8 +1656,8 @@ fn profile_cycle() {
 
     let next = match cur.as_str() {
         "low-power" => "taiji",
-        "balanced" => "caffeinated",
-        "performance" => "sipping",
+        "balanced" => "cheonma",
+        "performance" => "shaolin",
         _ => "taiji",
     };
 
@@ -1673,17 +1673,17 @@ fn profile_status() {
     match cur.as_str() {
         "low-power" => {
             println!(
-                r#"{{"text": "󰾆 sipping", "class": "sipping", "tooltip": "Power Profile: Sipping (Power-saver)\nClick to cycle: sipping ➔ taiji ➔ caffeinated"}}"#
+                r#"{{"text": "󱄅 shaolin", "class": "shaolin", "tooltip": "Power Profile: Shaolin (Power-saver / Zen Stillness)\nClick to cycle: shaolin ➔ taiji ➔ cheonma"}}"#
             );
         }
         "performance" => {
             println!(
-                r#"{{"text": " caffeinated", "class": "caffeinated", "tooltip": "Power Profile: Caffeinated (Performance / Sleep Inhibited)\nClick to cycle: sipping ➔ taiji ➔ caffeinated"}}"#
+                r#"{{"text": "󰓥 cheonma", "class": "cheonma", "tooltip": "Power Profile: Cheonma (Performance / Demonic Might)\nClick to cycle: shaolin ➔ taiji ➔ cheonma"}}"#
             );
         }
         _ => {
             println!(
-                r#"{{"text": "☯ taiji", "class": "taiji", "tooltip": "Power Profile: Taiji (Balanced / Auto-sleep)\nClick to cycle: sipping ➔ taiji ➔ caffeinated"}}"#
+                r#"{{"text": "☯ taiji", "class": "taiji", "tooltip": "Power Profile: Taiji (Balanced / Taoist Harmony)\nClick to cycle: shaolin ➔ taiji ➔ cheonma"}}"#
             );
         }
     }
@@ -2847,9 +2847,9 @@ fn main() {
                     profile_status();
                 }
             }
-            "sipping" | "sip" => set_power_profile("sipping"),
-            "taiji" | "tai-ji" | "sleep-on" | "sleep" | "balanced" => set_power_profile("taiji"),
-            "caffeinated" | "perf" | "performance" => set_power_profile("caffeinated"),
+            "shaolin" | "wuji" | "sipping" | "sip" => set_power_profile("shaolin"),
+            "taiji" | "tai-ji" | "wudang" | "sleep-on" | "sleep" | "balanced" => set_power_profile("taiji"),
+            "cheonma" | "cheon-ma" | "demonic" | "caffeinated" | "perf" | "performance" | "asura" => set_power_profile("cheonma"),
             _ => profile_status(),
         },
         Commands::BgApps { action } => match action.as_str() {

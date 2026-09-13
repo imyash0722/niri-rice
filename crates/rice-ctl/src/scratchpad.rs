@@ -39,9 +39,9 @@ const PROFILES: &[ScratchpadProfile] = &[
         name: "calc",
         app_id_pattern: "kcalc",
         command: "kcalc",
-        direction: ScratchpadDirection::FromBottom,
-        width_ratio: 0.30,
-        height_ratio: 0.45,
+        direction: ScratchpadDirection::FromLeft,
+        width_ratio: 0.20,
+        height_ratio: 0.38,
         margin: 24.0,
     },
     ScratchpadProfile {

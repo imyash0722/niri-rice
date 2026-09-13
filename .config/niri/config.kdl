@@ -55,8 +55,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#ffb1c1"
-        inactive-color "#191113"
+        active-color "#feb877"
+        inactive-color "#19120c"
     }
 
     tab-indicator {
@@ -425,6 +425,10 @@ binds {
     Mod+Return { spawn-sh "~/.local/bin/rice-ctl terminal"; }
     Mod+Shift+Return { spawn-sh "~/.local/bin/rice-ctl scratchpad toggle term"; }
     Mod+Alt+Return { spawn "kitty"; }
+
+    // Mouse Side Buttons (Razer DeathAdder V2 X HyperSpeed)
+    MouseForward { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Main"; }
+    MouseBack    { spawn-sh "~/.local/bin/rice-ctl scratchpad toggle term"; }
 
     // Kando Radial Menus (Desktop Command Wheels - Instant WebSocket & Fullscreen aware)
     Mod+Grave   { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Main"; }

@@ -159,6 +159,7 @@ window#waybar.hidden {
     color: @text;
 }
 
+#custom-caf-waybar.shaolin,
 #custom-caf-waybar.sipping {
     color: @primary;
     background-color: alpha(@primary, 0.12);
@@ -171,6 +172,7 @@ window#waybar.hidden {
     background-color: transparent;
 }
 
+#custom-caf-waybar.cheonma,
 #custom-caf-waybar.caffeinated {
     color: @error;
     background-color: alpha(@error, 0.15);
