@@ -159,6 +159,8 @@ window#waybar.hidden {
     color: @text;
 }
 
+#custom-caf-waybar.yi-jin-jing,
+#custom-caf-waybar.yijinjing,
 #custom-caf-waybar.shaolin,
 #custom-caf-waybar.sipping {
     color: @primary;
@@ -166,13 +168,15 @@ window#waybar.hidden {
     border-color: alpha(@primary, 0.5);
 }
 
+#custom-caf-waybar.taiji,
 #custom-caf-waybar.wudang,
-#custom-caf-waybar.sleep-on,
-#custom-caf-waybar.taiji {
+#custom-caf-waybar.sleep-on {
     color: @text;
     background-color: transparent;
 }
 
+#custom-caf-waybar.plum-blossom-sword,
+#custom-caf-waybar.plum-blossom,
 #custom-caf-waybar.mount-hua,
 #custom-caf-waybar.cheonma,
 #custom-caf-waybar.caffeinated {

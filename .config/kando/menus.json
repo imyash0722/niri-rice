@@ -238,46 +238,46 @@
             },
             "children": [
               {
-                "name": "Shaolin (Power Save)",
+                "name": "Yi Jin Jing (Power Save)",
                 "icon": "self_improvement",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
-                  "quickSelectKey": "s",
+                  "quickSelectKey": "y",
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "rice-ctl profile set shaolin"
+                      "command": "rice-ctl profile set yi-jin-jing"
                     }
                   ]
                 }
               },
               {
-                "name": "Wudang (Balanced)",
+                "name": "Taiji (Balanced)",
                 "icon": "balance",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
-                  "quickSelectKey": "w",
+                  "quickSelectKey": "t",
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "rice-ctl profile set wudang"
+                      "command": "rice-ctl profile set taiji"
                     }
                   ]
                 }
               },
               {
-                "name": "Mount Hua (Performance)",
+                "name": "Plum Blossom Sword (Performance)",
                 "icon": "local_florist",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
-                  "quickSelectKey": "m",
+                  "quickSelectKey": "p",
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "rice-ctl profile set mount-hua"
+                      "command": "rice-ctl profile set plum-blossom-sword"
                     }
                   ]
                 }
