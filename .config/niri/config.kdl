@@ -16,6 +16,8 @@ environment {
     KDE_SESSION_VERSION "6"
     GTK_USE_PORTAL "1"
     XDG_CURRENT_DESKTOP "niri:KDE"
+    EDITOR "nvim"
+    VISUAL "nvim"
 }
 
 // ── Input ────────────────────────────────────────────────

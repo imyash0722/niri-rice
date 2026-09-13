@@ -1925,19 +1925,6 @@ fn open_in_editor(path: &Path, line: Option<u32>) {
             }
         }
     }
-
-    let has_kate = Command::new("which").arg("kate").output().map(|o| o.status.success()).unwrap_or(false);
-    if has_kate {
-        let mut cmd = Command::new("kate");
-        if let Some(l) = line {
-            cmd.args(["-l", &l.to_string()]);
-        }
-        cmd.arg(path);
-        if cmd.spawn().is_ok() {
-            return;
-        }
-    }
-
     let mut cmd = Command::new("kitty");
     cmd.args(["--class", "kitty.floating"]);
     cmd.arg("nvim");

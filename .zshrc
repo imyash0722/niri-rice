@@ -1,5 +1,6 @@
 export SHELL="/usr/bin/zsh"
 export EDITOR="nvim"
+export VISUAL="nvim"
 export FORCE_HYPERLINK=1
 export COLORTERM="truecolor"
 export TERM_PROGRAM="${TERM_PROGRAM:-kitty}"
