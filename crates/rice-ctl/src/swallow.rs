@@ -2,6 +2,7 @@ use niri_ipc::socket::Socket;
 use niri_ipc::{Action, ColumnDisplay, Event, Request, Response, Window};
 use std::collections::{HashMap, HashSet};
 use std::fs;
+use std::process::Command;
 
 /// Helper to read PPID of a process from /proc/<pid>/stat
 fn get_ppid(pid: i32) -> Option<i32> {
@@ -15,11 +16,44 @@ fn get_ppid(pid: i32) -> Option<i32> {
     ppid_str.parse().ok()
 }
 
-/// Collect ancestor PIDs by climbing /proc/<pid>/stat
+/// Check if process is running inside tmux, and if so, find tmux client PID
+fn get_tmux_client_pid(pid: i32) -> Option<i32> {
+    let env_bytes = fs::read(format!("/proc/{pid}/environ")).ok()?;
+    for entry in env_bytes.split(|&b| b == 0) {
+        if entry.starts_with(b"TMUX_PANE=") {
+            let pane_str = std::str::from_utf8(&entry[10..]).ok()?;
+            let output = Command::new("tmux")
+                .args(["display-message", "-p", "-t", pane_str, "#{client_pid}"])
+                .output()
+                .ok()?;
+            if output.status.success() {
+                let client_str = std::str::from_utf8(&output.stdout).ok()?.trim();
+                return client_str.parse().ok();
+            }
+        }
+    }
+    None
+}
+
+/// Collect ancestor PIDs by climbing /proc/<pid>/stat (with tmux client awareness)
 fn get_ancestor_pids(mut pid: i32) -> Vec<i32> {
     let mut ancestors = Vec::new();
     let mut seen = HashSet::new();
     seen.insert(pid);
+
+    // If spawned from within tmux pane, trace tmux client and its parent terminal
+    if let Some(client_pid) = get_tmux_client_pid(pid) {
+        ancestors.push(client_pid);
+        let mut curr = client_pid;
+        while let Some(ppid) = get_ppid(curr) {
+            if ppid <= 1 || seen.contains(&ppid) {
+                break;
+            }
+            ancestors.push(ppid);
+            seen.insert(ppid);
+            curr = ppid;
+        }
+    }
 
     while let Some(ppid) = get_ppid(pid) {
         if ppid <= 1 || seen.contains(&ppid) {
