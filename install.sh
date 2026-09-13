@@ -123,7 +123,23 @@ echo -e "\n[1.1/6] Configuring universal input, peripheral managers, and USB pow
 if [ -d "$REPO_DIR/etc" ]; then
     sudo mkdir -p /etc/keyd /etc/udev/rules.d /etc/modprobe.d /etc/bluetooth
     sudo cp -f "$REPO_DIR/etc/keyd/default.conf" /etc/keyd/default.conf 2>/dev/null || true
-    sudo cp -f "$REPO_DIR/etc/udev/rules.d/50-usb-power.rules" /etc/udev/rules.d/50-usb-power.rules 2>/dev/null || true
+    if [ -d "$REPO_DIR/etc/udev/rules.d" ]; then
+        sudo cp -f "$REPO_DIR/etc/udev/rules.d/"* /etc/udev/rules.d/ 2>/dev/null || true
+    fi
+    if [ -f "$REPO_DIR/system-scripts/fix-touchpad-power.sh" ]; then
+        sudo cp -f "$REPO_DIR/system-scripts/fix-touchpad-power.sh" /usr/local/bin/fix-touchpad-power.sh
+        sudo chmod +x /usr/local/bin/fix-touchpad-power.sh
+    fi
+    if [ -f "$REPO_DIR/system-scripts/touchpad-sleep.sh" ]; then
+        sudo mkdir -p /usr/lib/systemd/system-sleep
+        sudo cp -f "$REPO_DIR/system-scripts/touchpad-sleep.sh" /usr/lib/systemd/system-sleep/touchpad-sleep.sh
+        sudo chmod +x /usr/lib/systemd/system-sleep/touchpad-sleep.sh
+    fi
+    if [ -f "$REPO_DIR/system-scripts/mt7921e-sleep.sh" ]; then
+        sudo mkdir -p /usr/lib/systemd/system-sleep
+        sudo cp -f "$REPO_DIR/system-scripts/mt7921e-sleep.sh" /usr/lib/systemd/system-sleep/mt7921e-sleep.sh
+        sudo chmod +x /usr/lib/systemd/system-sleep/mt7921e-sleep.sh
+    fi
     if [ -d "$REPO_DIR/etc/modprobe.d" ]; then
         sudo cp -f "$REPO_DIR/etc/modprobe.d/"* /etc/modprobe.d/ 2>/dev/null || true
     fi
@@ -134,7 +150,7 @@ if [ -d "$REPO_DIR/etc" ]; then
         sudo cp -f "$REPO_DIR/etc/pam.d/"* /etc/pam.d/ 2>/dev/null || true
     fi
     sudo udevadm control --reload 2>/dev/null || true
-    sudo udevadm trigger --subsystem-match=usb 2>/dev/null || true
+    sudo udevadm trigger 2>/dev/null || true
     sudo systemctl enable --now keyd 2>/dev/null || true
 fi
 
@@ -293,7 +309,7 @@ systemctl --user daemon-reload
 systemctl --user enable niri-monitor-setup.service || true
 systemctl --user enable veilad.service || true
 
-# Enable Powertop auto-tuning on boot (while exempting the buggy Wi-Fi card)
+# Enable Powertop auto-tuning on boot (while exempting the buggy Wi-Fi card and touchpad)
 sudo bash -c 'cat << EOF > /etc/systemd/system/powertop.service
 [Unit]
 Description=Powertop tunings
@@ -304,6 +320,7 @@ Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/bin/powertop --auto-tune
 ExecStartPost=/usr/bin/iw dev wlan0 set power_save off
+ExecStartPost=/usr/local/bin/fix-touchpad-power.sh
 
 [Install]
 WantedBy=multi-user.target

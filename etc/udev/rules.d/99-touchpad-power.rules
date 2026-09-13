@@ -1,0 +1,6 @@
+# Disable runtime PM autosuspend on AMD I2C platform controller and ELAN touchpad (Lenovo ThinkBook 16 G7)
+ACTION=="add|change", SUBSYSTEM=="platform", KERNEL=="AMDI0010:01", ATTR{power/control}="on"
+ACTION=="add|change", SUBSYSTEM=="i2c", KERNEL=="i2c-ELAN*", ATTR{power/control}="on"
+ACTION=="add|change", SUBSYSTEM=="hid", KERNEL=="0018:04F3:327E.*", ATTR{power/control}="on"
+ACTION=="add|change", SUBSYSTEM=="platform", KERNEL=="AMDI0010:01", RUN+="/usr/local/bin/fix-touchpad-power.sh"
+ACTION=="add|change", SUBSYSTEM=="i2c", KERNEL=="i2c-ELAN*", RUN+="/usr/local/bin/fix-touchpad-power.sh"
