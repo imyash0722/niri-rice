@@ -54,8 +54,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#f4b2e2"
-        inactive-color "#181216"
+        active-color "#ffb1c1"
+        inactive-color "#191113"
     }
 
     tab-indicator {
@@ -143,6 +143,9 @@ spawn-at-startup "sh" "-c" "sleep 1 && otd-daemon"
 
 // Logitech peripheral manager (runs in background)
 spawn-at-startup "sh" "-c" "sleep 2 && solaar --window=hide"
+
+// Kando radial pie menu daemon
+spawn-at-startup "kando"
 
 
 // ── Blur & Layer Rules (val-niri) ────────────────────────
@@ -376,6 +379,24 @@ window-rule {
     }
 }
 
+// Kando radial pie menu overlay: borderless, unshadowed floating surface
+window-rule {
+    match app-id="kando"
+    match title="^Kando.*"
+    open-floating true
+    focus-ring { off; }
+    border { off; }
+    shadow { off; }
+    default-floating-position x=0 y=0
+}
+
+// NMTUI network manager floating window
+window-rule {
+    match app-id="kitty.nmtui"
+    open-floating true
+    default-floating-size width=750 height=500
+}
+
 // ── Binds ────────────────────────────────────────────────
 // NOTE: Shortcuts are intentionally minimal here.
 // Full reference of your Sway shortcuts: /mnt/SHARED/LINUX/dotfiles/sway_shortcuts.txt
@@ -393,6 +414,10 @@ binds {
     Mod+Return { spawn-sh "~/.local/bin/rice-ctl terminal"; }
     Mod+Shift+Return { spawn-sh "kitty --class kitty.floating"; }
     Mod+Alt+Return { spawn "kitty"; }
+
+    // Kando Radial Menus (Desktop Command Wheel)
+    Mod+Space { spawn "kando" "--menu" "Main"; }
+    Mod+Shift+E { spawn "kando" "--menu" "Power"; }
 
     // App launcher (Mod+D / Copilot key)
     Mod+D { spawn-sh "pkill -x rofi || rofi -show drun"; }
@@ -434,8 +459,8 @@ binds {
     // Bluetooth
     Mod+Shift+B { spawn "blueman-manager"; }
 
-    // Network (nmtui) & SSH Manager
-    Mod+Shift+W { spawn-sh "kitty --class kitty.nmtui nmtui"; }
+    // Network (Kando Radial Wi-Fi Wheel) & SSH Manager
+    Mod+Shift+W { spawn "kando-wifi"; }
     Mod+Alt+S   { spawn-sh "~/.local/bin/rice-ctl ssh"; }
     Mod+Alt+B   { spawn-sh "~/.local/bin/rice-ctl battery menu"; }
 

@@ -1739,6 +1739,15 @@ fn battery_menu() {
 }
 
 fn wifi_menu() {
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let ipc_path = std::path::PathBuf::from(&home).join(".config/kando/ipc-info.json");
+    if ipc_path.exists() {
+        if let Ok(mut child) = Command::new("kando-wifi").spawn() {
+            let _ = child.wait();
+            return;
+        }
+    }
+
     let Ok(out) = Command::new("nmcli").args(["-t", "-f", "IN-USE,SIGNAL,SECURITY,SSID", "dev", "wifi", "list"]).output() else {
         eprintln!("[rice-ctl] Failed to run nmcli");
         return;

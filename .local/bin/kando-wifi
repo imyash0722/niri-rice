@@ -1,0 +1,200 @@
+#!/usr/bin/env node
+
+/**
+ * kando-wifi: Dynamic Material 3 Wi-Fi Radial Menu for Kando
+ * Connects to Kando via WebSocket IPC (show-custom-menu).
+ */
+
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+const { execSync, spawn } = require('child_process');
+
+const configDir = path.join(os.homedir(), '.config', 'kando');
+const infoPath = path.join(configDir, 'ipc-info.json');
+
+async function ensureKandoRunning() {
+  if (fs.existsSync(infoPath)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(infoPath, 'utf8'));
+      if (data && data.port) return data;
+    } catch (_) {}
+  }
+
+  // If not running, start kando daemon in background
+  const child = spawn('kando', [], {
+    detached: true,
+    stdio: 'ignore',
+    env: { ...process.env, XDG_CURRENT_DESKTOP: 'niri' }
+  });
+  child.unref();
+
+  // Wait up to 2 seconds for ipc-info.json
+  for (let i = 0; i < 20; i++) {
+    await new Promise(r => setTimeout(r, 100));
+    if (fs.existsSync(infoPath)) {
+      try {
+        const data = JSON.parse(fs.readFileSync(infoPath, 'utf8'));
+        if (data && data.port) return data;
+      } catch (_) {}
+    }
+  }
+
+  throw new Error('Kando daemon failed to start or publish IPC port.');
+}
+
+async function main() {
+  let ipcInfo;
+  try {
+    ipcInfo = await ensureKandoRunning();
+  } catch (err) {
+    console.error(`[kando-wifi] ${err.message}`);
+    process.exit(1);
+  }
+
+  // 1. Scan Wi-Fi networks using nmcli
+  let stdout = '';
+  try {
+    stdout = execSync('nmcli -t -f IN-USE,SIGNAL,SECURITY,SSID dev wifi list 2>/dev/null', {
+      encoding: 'utf8',
+      timeout: 3000
+    });
+  } catch (e) {
+    stdout = '';
+  }
+
+  // 2. Fetch known saved connections
+  const savedConnections = new Set();
+  try {
+    const connOut = execSync('nmcli -t -f NAME connection show 2>/dev/null', {
+      encoding: 'utf8',
+      timeout: 2000
+    });
+    connOut.split('\n').map(c => c.trim()).filter(Boolean).forEach(c => savedConnections.add(c));
+  } catch (_) {}
+
+  // 3. Deduplicate networks and find top signals
+  const networks = new Map();
+  let activeSsid = null;
+
+  stdout.split('\n').forEach(line => {
+    const parts = line.split(':');
+    if (parts.length >= 4) {
+      const inUse = parts[0].trim() === '*';
+      const signal = parseInt(parts[1].trim(), 10) || 0;
+      const security = parts[2].trim();
+      const ssid = parts.slice(3).join(':').trim();
+      if (ssid && ssid !== '--') {
+        if (inUse) activeSsid = ssid;
+        const existing = networks.get(ssid);
+        if (!existing || signal > existing.signal) {
+          networks.set(ssid, { inUse, signal, security });
+        }
+      }
+    }
+  });
+
+  const sorted = Array.from(networks.entries())
+    .sort((a, b) => b[1].signal - a[1].signal)
+    .slice(0, 5); // Top 5 nearby networks
+
+  // 4. Build RootMenuItem schema
+  const children = [];
+
+  // Toggle Wi-Fi slice
+  children.push({
+    type: 'button',
+    name: 'Toggle Wi-Fi',
+    icon: 'wifi_off',
+    iconTheme: 'material-symbols-rounded',
+    selectWorkflow: {
+      actions: [{
+        type: 'execute-command',
+        command: "nmcli radio wifi | grep -qi 'enabled' && nmcli radio wifi off || nmcli radio wifi on"
+      }]
+    }
+  });
+
+  // Top Network slices
+  sorted.forEach(([ssid, meta]) => {
+    const icon = meta.inUse ? 'wifi' : meta.signal > 70 ? 'wifi' : meta.signal > 40 ? 'wifi_2_bar' : 'wifi_1_bar';
+    const isSaved = savedConnections.has(ssid);
+    const lock = (meta.security && meta.security !== '--') ? ' 🔒' : '';
+    const label = meta.inUse ? `${ssid} [Active]` : `${ssid}${lock} (${meta.signal}%)`;
+
+    const cmd = meta.inUse
+      ? `notify-send "Wi-Fi" "Already connected to ${ssid}"`
+      : (isSaved || !meta.security || meta.security === '--')
+        ? `nmcli dev wifi connect "${ssid}"`
+        : `kitty --class kitty.nmtui -e nmtui`;
+
+    children.push({
+      type: 'button',
+      name: label,
+      icon: icon,
+      iconTheme: 'material-symbols-rounded',
+      selectWorkflow: {
+        actions: [{ type: 'execute-command', command: cmd }]
+      }
+    });
+  });
+
+  // Disconnect slice if connected
+  if (activeSsid) {
+    children.push({
+      type: 'button',
+      name: 'Disconnect',
+      icon: 'link_off',
+      iconTheme: 'material-symbols-rounded',
+      selectWorkflow: {
+        actions: [{ type: 'execute-command', command: 'nmcli device disconnect wlan0 2>/dev/null || nmcli dev disconnect $(nmcli -t -f DEVICE,TYPE d | grep wifi | cut -d: -f1)' }]
+      }
+    });
+  }
+
+  // Network Settings (NMTUI)
+  children.push({
+    type: 'button',
+    name: 'Network Settings',
+    icon: 'settings',
+    iconTheme: 'material-symbols-rounded',
+    selectWorkflow: {
+      actions: [{ type: 'execute-command', command: 'kitty --class kitty.nmtui -e nmtui' }]
+    }
+  });
+
+  const customMenu = {
+    type: 'root',
+    name: activeSsid ? `Wi-Fi: ${activeSsid}` : 'Wi-Fi Networks',
+    icon: activeSsid ? 'wifi' : 'wifi_find',
+    iconTheme: 'material-symbols-rounded',
+    children: children
+  };
+
+  // 5. Send via WebSocket
+  const ws = new WebSocket(`ws://127.0.0.1:${ipcInfo.port}`);
+
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ type: 'show-custom-menu', menu: customMenu }));
+    setTimeout(() => {
+      ws.close();
+      process.exit(0);
+    }, 200);
+  };
+
+  ws.onmessage = (event) => {
+    try {
+      const msg = JSON.parse(event.data);
+      if (msg.type === 'error') {
+        console.error('[kando-wifi] IPC error:', msg.description);
+      }
+    } catch (_) {}
+  };
+
+  ws.onerror = (e) => {
+    console.error('[kando-wifi] WebSocket IPC error:', e.message || e);
+    process.exit(1);
+  };
+}
+
+main();

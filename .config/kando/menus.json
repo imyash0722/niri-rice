@@ -1,0 +1,420 @@
+{
+  "version": "3.0.0-beta.1",
+  "menus": [
+    {
+      "root": {
+        "name": "Main",
+        "icon": "dashboard",
+        "iconTheme": "material-symbols-rounded",
+        "type": "root",
+        "children": [
+          {
+            "name": "Favorites",
+            "icon": "star",
+            "iconTheme": "material-symbols-rounded",
+            "type": "submenu",
+            "children": [
+              {
+                "name": "Browser",
+                "icon": "globe",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "zen-browser || firefox" }] }
+              },
+              {
+                "name": "Terminal",
+                "icon": "terminal",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "kitty" }] }
+              },
+              {
+                "name": "Code Editor",
+                "icon": "code",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "kate" }] }
+              },
+              {
+                "name": "File Manager",
+                "icon": "folder",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "dolphin" }] }
+              },
+              {
+                "name": "Discord",
+                "icon": "forum",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "vesktop" }] }
+              },
+              {
+                "name": "Music",
+                "icon": "music_note",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "spotify" }] }
+              },
+              {
+                "name": "Search All Apps...",
+                "icon": "search",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rofi -show drun" }] }
+              }
+            ]
+          },
+          {
+            "name": "Media",
+            "icon": "play_arrow",
+            "iconTheme": "material-symbols-rounded",
+            "type": "submenu",
+            "children": [
+              {
+                "name": "Play / Pause",
+                "icon": "play_circle",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "playerctl play-pause" }] }
+              },
+              {
+                "name": "Next Track",
+                "icon": "skip_next",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "playerctl next" }] }
+              },
+              {
+                "name": "Prev Track",
+                "icon": "skip_previous",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "playerctl previous" }] }
+              },
+              {
+                "name": "Mute Audio",
+                "icon": "volume_off",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl volume mute-toggle" }] }
+              },
+              {
+                "name": "Mute Mic",
+                "icon": "mic_off",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl volume mic-mute-toggle" }] }
+              }
+            ]
+          },
+          {
+            "name": "Profiles",
+            "icon": "speed",
+            "iconTheme": "material-symbols-rounded",
+            "type": "submenu",
+            "children": [
+              {
+                "name": "Performance",
+                "icon": "bolt",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "powerprofilesctl set performance" }] }
+              },
+              {
+                "name": "Balanced",
+                "icon": "balance",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "powerprofilesctl set balanced" }] }
+              },
+              {
+                "name": "Power Saver",
+                "icon": "battery_saver",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "powerprofilesctl set power-saver" }] }
+              },
+              {
+                "name": "Caffeine Toggle",
+                "icon": "coffee",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl caffeine toggle" }] }
+              },
+              {
+                "name": "DND Toggle",
+                "icon": "notifications_off",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "makoctl mode -t dnd" }] }
+              }
+            ]
+          },
+          {
+            "name": "Networks & Pickers",
+            "icon": "wifi",
+            "iconTheme": "material-symbols-rounded",
+            "type": "submenu",
+            "children": [
+              {
+                "name": "Scan Nearby Wi-Fi...",
+                "icon": "wifi_find",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "kando-wifi" }] }
+              },
+              {
+                "name": "Toggle Wi-Fi",
+                "icon": "wifi_off",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "nmcli radio wifi | grep -qi 'enabled' && nmcli radio wifi off || nmcli radio wifi on" }] }
+              },
+              {
+                "name": "Disconnect Wi-Fi",
+                "icon": "link_off",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "nmcli device disconnect wlan0" }] }
+              },
+              {
+                "name": "Network Settings",
+                "icon": "settings",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "kitty --class kitty.nmtui -e nmtui" }] }
+              },
+              {
+                "name": "Bookmarks",
+                "icon": "bookmark",
+                "iconTheme": "material-symbols-rounded",
+                "type": "submenu",
+                "children": [
+                  {
+                    "name": "GitHub",
+                    "icon": "code",
+                    "iconTheme": "material-symbols-rounded",
+                    "type": "button",
+                    "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "xdg-open https://github.com" }] }
+                  },
+                  {
+                    "name": "YouTube",
+                    "icon": "smart_display",
+                    "iconTheme": "material-symbols-rounded",
+                    "type": "button",
+                    "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "xdg-open https://youtube.com" }] }
+                  },
+                  {
+                    "name": "Reddit",
+                    "icon": "forum",
+                    "iconTheme": "material-symbols-rounded",
+                    "type": "button",
+                    "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "xdg-open https://reddit.com" }] }
+                  },
+                  {
+                    "name": "Gemini",
+                    "icon": "auto_awesome",
+                    "iconTheme": "material-symbols-rounded",
+                    "type": "button",
+                    "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "xdg-open https://gemini.google.com" }] }
+                  },
+                  {
+                    "name": "ArchWiki",
+                    "icon": "menu_book",
+                    "iconTheme": "material-symbols-rounded",
+                    "type": "button",
+                    "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "xdg-open https://wiki.archlinux.org" }] }
+                  }
+                ]
+              },
+              {
+                "name": "SSH Hosts",
+                "icon": "dns",
+                "iconTheme": "material-symbols-rounded",
+                "type": "submenu",
+                "children": [
+                  {
+                    "name": "Tinarchy",
+                    "icon": "terminal",
+                    "iconTheme": "material-symbols-rounded",
+                    "type": "button",
+                    "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "kitty -e ssh tinarchy" }] }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Power",
+            "icon": "power_settings_new",
+            "iconTheme": "material-symbols-rounded",
+            "type": "submenu",
+            "children": [
+              {
+                "name": "Lock Screen",
+                "icon": "lock",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "hyprlock || rice-ctl power lock" }] }
+              },
+              {
+                "name": "Suspend",
+                "icon": "bedtime",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "systemctl suspend" }] }
+              },
+              {
+                "name": "Hibernate",
+                "icon": "save",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "systemctl hibernate" }] }
+              },
+              {
+                "name": "Reboot",
+                "icon": "restart_alt",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "systemctl reboot" }] }
+              },
+              {
+                "name": "Shutdown",
+                "icon": "power_settings_new",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "systemctl poweroff" }] }
+              },
+              {
+                "name": "Exit Niri",
+                "icon": "logout",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "niri msg action quit" }] }
+              }
+            ]
+          },
+          {
+            "name": "Theming",
+            "icon": "palette",
+            "iconTheme": "material-symbols-rounded",
+            "type": "submenu",
+            "children": [
+              {
+                "name": "Random Wallpaper",
+                "icon": "shuffle",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl theme rng" }] }
+              },
+              {
+                "name": "Wallpaper Gallery",
+                "icon": "wallpaper",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl theme select" }] }
+              },
+              {
+                "name": "Waybar Style",
+                "icon": "view_compact",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl bar select" }] }
+              },
+              {
+                "name": "Reload Desktop",
+                "icon": "refresh",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl reload" }] }
+              }
+            ]
+          },
+          {
+            "name": "Window",
+            "icon": "aspect_ratio",
+            "iconTheme": "material-symbols-rounded",
+            "type": "submenu",
+            "children": [
+              {
+                "name": "Toggle Float",
+                "icon": "picture_in_picture",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "niri msg action toggle-window-floating" }] }
+              },
+              {
+                "name": "Fullscreen",
+                "icon": "fullscreen",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "niri msg action fullscreen-window" }] }
+              },
+              {
+                "name": "Center Column",
+                "icon": "vertical_align_center",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "niri msg action center-column" }] }
+              },
+              {
+                "name": "Tabbed Column",
+                "icon": "tab",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "niri msg action toggle-column-tabbed-display" }] }
+              }
+            ]
+          },
+          {
+            "name": "Tools",
+            "icon": "build",
+            "iconTheme": "material-symbols-rounded",
+            "type": "submenu",
+            "children": [
+              {
+                "name": "Dropterm",
+                "icon": "terminal",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl scratchpad toggle term" }] }
+              },
+              {
+                "name": "Calculator",
+                "icon": "calculate",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl scratchpad toggle calc" }] }
+              },
+              {
+                "name": "Quick Notes",
+                "icon": "edit_note",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl scratchpad toggle notes" }] }
+              },
+              {
+                "name": "Area Snip",
+                "icon": "crop",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl screenshot area" }] }
+              },
+              {
+                "name": "Full Snip",
+                "icon": "photo_camera",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": { "actions": [{ "type": "execute-command", "command": "rice-ctl screenshot screen" }] }
+              }
+            ]
+          }
+        ]
+      },
+      "shortcut": "",
+      "shortcutID": "Main",
+      "anchored": true
+    }
+  ]
+}

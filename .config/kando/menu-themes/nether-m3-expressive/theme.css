@@ -1,0 +1,292 @@
+/* ==========================================================================
+   Google Material 3 Expressive Android Theme for Kando
+   Adapted from Nether Labels (Simon Schneegans, Elfi Ox)
+   Design System: Material 3 Expressive / Material You (Android 15 & 16)
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('PlusJakartaSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+.menu-node {
+  --child-distance: 85px;
+  --grandchild-distance: 18px;
+  --grandchild-size: 14px;
+  --center-size: 82px;
+  --icon-size: 42px;
+  --connector-width: 10px;
+
+  /* Google Material 3 Expressive Motion Physics */
+  --m3-easing-emphasized: cubic-bezier(0.2, 0.0, 0.0, 1.0);
+  --m3-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  --m3-duration-short: 180ms;
+  --m3-duration-medium: 320ms;
+  --m3-duration-long: 500ms;
+
+  /* Transitions */
+  --menu-transition: transform var(--m3-duration-medium) var(--m3-easing-emphasized),
+                     left var(--m3-duration-medium) var(--m3-easing-emphasized),
+                     top var(--m3-duration-medium) var(--m3-easing-emphasized),
+                     width var(--m3-duration-medium) var(--m3-easing-emphasized),
+                     height var(--m3-duration-medium) var(--m3-easing-emphasized),
+                     opacity var(--m3-duration-short) var(--m3-easing-emphasized);
+  --connector-transition: width var(--m3-duration-short) var(--m3-easing-emphasized),
+                          opacity var(--m3-duration-short) var(--m3-easing-emphasized);
+  --color-transition: background-color var(--m3-duration-short) var(--m3-easing-emphasized),
+                      border-color var(--m3-duration-short) var(--m3-easing-emphasized),
+                      color var(--m3-duration-short) var(--m3-easing-emphasized),
+                      box-shadow var(--m3-duration-medium) var(--m3-easing-emphasized),
+                      transform var(--m3-duration-medium) var(--m3-easing-emphasized);
+
+  transition: var(--menu-transition);
+
+  /* Positioning ---------------------------------------------------------------------- */
+
+  /* Child items are positioned radially around the active node */
+  &.child {
+    transform: translate(
+      calc(max(var(--child-distance), 11px * var(--sibling-count)) * var(--dir-x)),
+      calc(max(var(--child-distance), 11px * var(--sibling-count)) * var(--dir-y))
+    );
+  }
+
+  /* Grandchild items are positioned around the child items */
+  &.grandchild {
+    transform: translate(
+      calc(var(--grandchild-distance) * var(--dir-x)),
+      calc(var(--grandchild-distance) * var(--dir-y))
+    );
+  }
+
+  /* M3 Expressive Zoom: Hovering a child scales surrounding children fluidly */
+  &.active:has(.hovered) > .child {
+    transform: scale(calc(1.18 - pow(var(--angle-diff) / 180, 0.25) * 0.18))
+      translate(
+        calc(max(var(--child-distance), 11px * var(--sibling-count)) * var(--dir-x)),
+        calc(max(var(--child-distance), 11px * var(--sibling-count)) * var(--dir-y))
+      );
+    z-index: 1 !important;
+
+    &.hovered:not(.type-submenu) {
+      z-index: 10 !important;
+      transform: scale(1.2)
+        translate(
+          calc(max(var(--child-distance), 11px * var(--sibling-count)) * var(--dir-x)),
+          calc(max(var(--child-distance), 11px * var(--sibling-count)) * var(--dir-y))
+        ) !important;
+    }
+  }
+
+  /* Theme Layers --------------------------------------------------------------------- */
+
+  .icon-container {
+    position: relative;
+    opacity: 0;
+    width: 100%;
+    clip-path: circle(46% at 50% 50%);
+    transition: var(--menu-transition);
+    color: var(--accent-color);
+  }
+
+  &.hovered:not(.parent):not(.level-0) > .icon-layer {
+    padding: 2px;
+  }
+
+  .label-layer,
+  .icon-layer {
+    position: absolute;
+    transition: var(--menu-transition);
+  }
+
+  /* --------------------------------------------------------------------------
+     M3 Expressive Pill / Capsule Label
+     -------------------------------------------------------------------------- */
+  .label-layer {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    opacity: 0;
+    background-color: var(--label-background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    white-space: nowrap;
+    height: var(--icon-size);
+    border-radius: 9999px; /* M3 Expressive Pill */
+    top: calc(-1 * var(--icon-size) / 2);
+    padding: calc(var(--icon-size) / 4.6) calc(var(--icon-size) / 2.6);
+    font-size: calc(var(--icon-size) / 3.1);
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    transition: var(--color-transition);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow: 0 8px 24px var(--shadow-color), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  &.hovered > .label-layer {
+    color: var(--text-hover-color);
+    background-color: var(--submenu-items-hover-color);
+    border-color: var(--hover-color);
+    box-shadow: 0 12px 30px var(--shadow-color), 0 0 18px var(--hover-color), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: scale(1.06);
+  }
+
+  /* Directional offsets for labels */
+  &.right > .label-layer {
+    left: calc(-1 * var(--icon-size) / 2);
+    padding-left: calc(var(--icon-size) + 8px);
+    transition: var(--menu-transition);
+  }
+
+  &.left > .label-layer {
+    right: calc(-1 * var(--icon-size) / 2);
+    padding-right: calc(var(--icon-size) + 8px);
+    transition: var(--menu-transition);
+  }
+
+  &.top > .label-layer {
+    bottom: calc(0.44 * var(--icon-size));
+    top: inherit;
+    transform: translateX(-50%);
+    margin-bottom: -5px;
+    transition: var(--menu-transition);
+  }
+
+  &.hovered.top > .label-layer {
+    margin-bottom: 4px;
+  }
+
+  &.bottom > .label-layer {
+    top: calc(0.44 * var(--icon-size));
+    transform: translateX(-50%);
+    margin-top: -5px;
+    transition: var(--menu-transition);
+  }
+
+  &.hovered.bottom > .label-layer {
+    margin-top: 4px;
+  }
+
+  /* --------------------------------------------------------------------------
+     Node Icons & Center Hub (Material 3 FAB Squircle)
+     -------------------------------------------------------------------------- */
+  .icon-layer {
+    top: calc(-0.46 * var(--icon-size));
+    left: calc(-0.46 * var(--icon-size));
+    width: calc(0.92 * var(--icon-size));
+    height: calc(0.92 * var(--icon-size));
+    border-radius: 50%;
+    background-color: var(--circle-color);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 6px 18px var(--shadow-color);
+    z-index: 1;
+  }
+
+  /* Center Hub: M3 Large FAB Squircle */
+  &.active > .icon-layer {
+    top: calc(-1 * var(--center-size) / 2);
+    left: calc(-1 * var(--center-size) / 2);
+    width: var(--center-size);
+    height: var(--center-size);
+    border-radius: 28px; /* Material 3 Continuous FAB Squircle */
+    border: 1.5px solid var(--border-color);
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    box-shadow: 0 12px 36px var(--shadow-color), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    transition: var(--menu-transition), var(--color-transition);
+  }
+
+  &.active:hover > .icon-layer {
+    border-color: var(--accent-color);
+    box-shadow: 0 16px 42px var(--shadow-color), 0 0 24px var(--accent-color);
+    transform: scale(1.08);
+  }
+
+  /* Grandchild (Submenu items indicator) */
+  &.grandchild > .icon-layer {
+    top: calc(-1 * var(--grandchild-size) / 2);
+    left: calc(-1 * var(--grandchild-size) / 2);
+    width: var(--grandchild-size);
+    height: var(--grandchild-size);
+    box-shadow: none;
+    background-color: var(--submenu-items-color);
+    border-radius: 50%;
+    transition: var(--color-transition), var(--menu-transition);
+  }
+
+  &.hovered > .grandchild > .icon-layer {
+    background-color: var(--submenu-items-hover-color);
+    top: calc(-0.55 * var(--grandchild-size));
+    left: calc(-0.55 * var(--grandchild-size));
+    width: calc(1.1 * var(--grandchild-size));
+    height: calc(1.1 * var(--grandchild-size));
+  }
+
+  &.hovered.type-submenu:has(> .label-layer):not(.level-0) > .icon-layer {
+    outline: 2px solid var(--submenu-items-hover-color);
+    transition: var(--color-transition);
+  }
+
+  &.type-submenu.parent:not(.active) > .grandchild > .icon-layer {
+    background-color: var(--shrinked-outline-color);
+    top: calc(-0.55 * var(--grandchild-size));
+    left: calc(-0.55 * var(--grandchild-size));
+    width: calc(1.1 * var(--grandchild-size));
+    height: calc(1.1 * var(--grandchild-size));
+    box-shadow: 0 0 10px var(--shadow-color);
+  }
+
+  &.type-submenu.parent:not(.active) > .icon-layer {
+    outline: 2px solid var(--shrinked-outline-color);
+    transition: var(--color-transition);
+  }
+
+  /* Visibility */
+  &.child > .label-layer {
+    transition: var(--menu-transition);
+    opacity: 1;
+  }
+
+  &.active > .icon-layer > .icon-container,
+  &.parent > .icon-layer > .icon-container,
+  &.child > .icon-layer > .icon-container {
+    transition: var(--menu-transition);
+    opacity: 1;
+  }
+
+  &.dragged.type-submenu {
+    transition: none;
+  }
+
+  /* --------------------------------------------------------------------------
+     Radial Connectors
+     -------------------------------------------------------------------------- */
+  .connector {
+    transition: var(--connector-transition);
+    height: var(--connector-width);
+    top: calc(-1 * var(--connector-width) / 2);
+    background-color: var(--connector-color);
+    border-radius: 4px;
+    opacity: 0;
+    box-shadow: 0 0 10px var(--shadow-color);
+  }
+
+  &:has(> .dragged) > .connector,
+  &:has(> .clicked) > .connector {
+    transition: none;
+  }
+
+  &:has(> .parent) > .connector,
+  &:has(> .active.type-submenu) > .connector,
+  &:has(> .dragged.type-submenu) > .connector {
+    opacity: 1;
+  }
+}
+
+/* Center Text */
+.center-text {
+  display: none;
+}

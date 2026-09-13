@@ -1,0 +1,27 @@
+{
+  "name": "Nether M3 Expressive",
+  "author": "Google Material 3 Expressive (Adapted for Kando)",
+  "license": "CC0-1.0",
+  "themeVersion": "3.0",
+  "engineVersion": 1,
+  "maxMenuRadius": 170,
+  "drawChildrenBelow": false,
+  "colors": {
+    "accent-color": "#ffb1c1",
+    "hover-color": "#ffb1c1",
+    "submenu-items-hover-color": "#713343",
+    "text-hover-color": "#ffd9df",
+    "connector-color": "#ffb1c1",
+    "shrinked-outline-color": "#ffb1c1",
+    "circle-color": "#3c3234",
+    "border-color": "#5243454D",
+    "submenu-items-color": "#261d1f",
+    "label-background-color": "#191113BF",
+    "text-color": "#efdee0",
+    "shadow-color": "#00000080"
+  },
+  "layers": [
+    { "class": "icon-layer", "content": "icon" },
+    { "class": "label-layer", "content": "name" }
+  ]
+}
