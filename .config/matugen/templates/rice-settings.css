@@ -205,3 +205,23 @@ scrollbar slider:hover {
 *:focus {
     outline-color: alpha({{ colors.primary.default.hex }}, 0.50);
 }
+
+/* ── Wallpaper Grid Thumbnails ── */
+button.wall-thumb-btn {
+    border-radius: 10px;
+    padding: 3px;
+    border: 2px solid transparent;
+    background-color: alpha({{ colors.surface_container_highest.default.hex }}, 0.35);
+    transition: all 180ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+button.wall-thumb-btn:hover {
+    border-color: alpha({{ colors.primary.default.hex }}, 0.60);
+    background-color: alpha({{ colors.primary.default.hex }}, 0.12);
+}
+
+button.wall-thumb-btn.active-wall {
+    border: 2px solid {{ colors.primary.default.hex }};
+    box-shadow: 0 0 10px alpha({{ colors.primary.default.hex }}, 0.55);
+    background-color: alpha({{ colors.primary.default.hex }}, 0.20);
+}

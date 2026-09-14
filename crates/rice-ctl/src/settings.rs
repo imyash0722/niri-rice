@@ -1,6 +1,9 @@
+use std::cell::RefCell;
+use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::rc::Rc;
 use std::sync::mpsc;
 use std::thread;
 
@@ -200,16 +203,33 @@ fn patch_shadow(enabled: bool) {
 
 fn load_matugen_css() {
     let css_path = get_cache_dir().join("theme.css");
-    if css_path.exists() {
-        if let Some(display) = Display::default() {
-            let provider = CssProvider::new();
-            provider.load_from_path(&css_path);
-            gtk4::style_context_add_provider_for_display(
-                &display,
-                &provider,
-                gtk4::STYLE_PROVIDER_PRIORITY_USER,
-            );
+    if let Some(display) = Display::default() {
+        let provider = CssProvider::new();
+        if css_path.exists() {
+            if let Ok(content) = fs::read_to_string(&css_path) {
+                provider.load_from_data(&content);
+            }
         }
+        gtk4::style_context_add_provider_for_display(
+            &display,
+            &provider,
+            gtk4::STYLE_PROVIDER_PRIORITY_USER,
+        );
+
+        let mut last_mtime = fs::metadata(&css_path).and_then(|m| m.modified()).ok();
+        glib::timeout_add_local(std::time::Duration::from_millis(300), move || {
+            if let Ok(meta) = fs::metadata(&css_path) {
+                if let Ok(mtime) = meta.modified() {
+                    if last_mtime != Some(mtime) {
+                        last_mtime = Some(mtime);
+                        if let Ok(content) = fs::read_to_string(&css_path) {
+                            provider.load_from_data(&content);
+                        }
+                    }
+                }
+            }
+            glib::ControlFlow::Continue
+        });
     }
 }
 
@@ -270,10 +290,6 @@ fn sync_desktop_colors(wall_path: &str, scheme: &str, mode: &str, contrast: f64)
             ])
             .output();
 
-        glib::idle_add_local_once(|| {
-            load_matugen_css();
-        });
-
         let wal_cache = get_home().join(".cache/wal/colors.json");
         let mut primary_color = "#feb877".to_string();
         if let Ok(data) = fs::read_to_string(&wal_cache) {
@@ -283,14 +299,7 @@ fn sync_desktop_colors(wall_path: &str, scheme: &str, mode: &str, contrast: f64)
                 }
             }
         }
-        crate::sync_animation_colors(&primary_color);
-
-        let _ = Command::new("killall").args(["-SIGUSR2", "waybar"]).output();
-        let _ = Command::new("makoctl").arg("reload").output();
-        let _ = Command::new("pkill").args(["-SIGUSR1", "-x", "kitty"]).output();
-        let _ = Command::new("niri")
-            .args(["msg", "action", "do-screen-transition"])
-            .output();
+        crate::apply_desktop_colors(Some(&primary_color));
     });
 }
 
@@ -521,6 +530,37 @@ fn build_appearance_page() -> PreferencesPage {
     cur_row.add_suffix(&btn_box);
     wall_grp.add(&cur_row);
 
+    let cur_row_watcher = cur_row.clone();
+    let wall_file = get_home().join(".config/niri/themes/active-wallpaper.txt");
+    let mut last_wall_mtime = fs::metadata(&wall_file).and_then(|m| m.modified()).ok();
+
+    let thumb_buttons: Rc<RefCell<HashMap<PathBuf, Button>>> = Rc::new(RefCell::new(HashMap::new()));
+    let tb_watcher = thumb_buttons.clone();
+    let wall_file_c = wall_file.clone();
+
+    glib::timeout_add_local(std::time::Duration::from_millis(400), move || {
+        if let Ok(meta) = fs::metadata(&wall_file_c) {
+            if let Ok(mtime) = meta.modified() {
+                if last_wall_mtime != Some(mtime) {
+                    last_wall_mtime = Some(mtime);
+                    let active = read_file_str(&wall_file_c).trim().to_string();
+                    if let Some(name) = Path::new(&active).file_name().and_then(|s| s.to_str()) {
+                        cur_row_watcher.set_subtitle(name);
+                    }
+                    let active_pb = PathBuf::from(&active);
+                    for (p, b) in tb_watcher.borrow().iter() {
+                        if p == &active_pb {
+                            b.add_css_class("active-wall");
+                        } else {
+                            b.remove_css_class("active-wall");
+                        }
+                    }
+                }
+            }
+        }
+        glib::ControlFlow::Continue
+    });
+
     // FlowBox with async thumbnail loading
     let scroll = ScrolledWindow::builder()
         .min_content_height(240)
@@ -588,6 +628,8 @@ fn build_appearance_page() -> PreferencesPage {
     let flowbox_clone = flowbox.clone();
     let spinner_clone = spinner.clone();
     let active_wall_clone = active_wall.clone();
+    let tb_recv = thumb_buttons.clone();
+    let tb_click = thumb_buttons.clone();
 
     glib::timeout_add_local(std::time::Duration::from_millis(30), move || {
         let mut count = 0;
@@ -597,6 +639,7 @@ fn build_appearance_page() -> PreferencesPage {
                     count += 1;
                     let btn = Button::builder().build();
                     btn.add_css_class("flat");
+                    btn.add_css_class("wall-thumb-btn");
                     btn.set_tooltip_text(wall.file_name().and_then(|s| s.to_str()));
 
                     let pb = thumb_path.as_ref().and_then(|p| Pixbuf::from_file(p).ok());
@@ -618,14 +661,22 @@ fn build_appearance_page() -> PreferencesPage {
                     }
 
                     if wall.to_string_lossy() == active_wall_clone {
-                        btn.add_css_class("suggested-action");
+                        btn.add_css_class("active-wall");
                     }
 
                     let w_clone = wall.clone();
                     let cr = cur_row_clone.clone();
+                    let tc = tb_click.clone();
                     btn.connect_clicked(move |_| {
                         if let Some(name) = w_clone.file_name().and_then(|s| s.to_str()) {
                             cr.set_subtitle(name);
+                        }
+                        for (p, b) in tc.borrow().iter() {
+                            if p == &w_clone {
+                                b.add_css_class("active-wall");
+                            } else {
+                                b.remove_css_class("active-wall");
+                            }
                         }
                         let w = w_clone.clone();
                         thread::spawn(move || {
@@ -633,6 +684,7 @@ fn build_appearance_page() -> PreferencesPage {
                         });
                     });
 
+                    tb_recv.borrow_mut().insert(wall.clone(), btn.clone());
                     flowbox_clone.insert(&btn, -1);
                     if count >= 6 {
                         return glib::ControlFlow::Continue;
@@ -1562,6 +1614,5 @@ pub fn launch() {
         .build();
 
     app.connect_activate(build_ui);
-    let args: Vec<String> = std::env::args().collect();
-    app.run_with_args(&args);
+    app.run_with_args::<&str>(&["rice-settings"]);
 }

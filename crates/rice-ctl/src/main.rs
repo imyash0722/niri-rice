@@ -432,7 +432,7 @@ pub(crate) fn apply_cursor(variant: &str, size: u32) {
     );
 }
 
-fn apply_desktop_colors(target_color: Option<&str>) {
+pub(crate) fn apply_desktop_colors(target_color: Option<&str>) {
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let wal_cache = PathBuf::from(&home).join(".cache/wal/colors.json");
     if !wal_cache.exists() {
@@ -543,7 +543,37 @@ fn apply_desktop_colors(target_color: Option<&str>) {
         .args(["--systemd", "--all"])
         .output();
 
+    let gnome_accent = hex_to_gnome_accent(&primary);
+    let _ = Command::new("gsettings")
+        .args(["set", "org.gnome.desktop.interface", "accent-color", gnome_accent])
+        .output();
+
     sync_animation_colors(&primary);
+}
+
+fn hex_to_gnome_accent(hex: &str) -> &'static str {
+    let (r, g, b) = hex_to_rgb(hex);
+    let candidates: [(&str, f32, f32, f32); 9] = [
+        ("blue", 0.21, 0.51, 0.98),
+        ("teal", 0.13, 0.77, 0.75),
+        ("green", 0.29, 0.76, 0.44),
+        ("yellow", 0.97, 0.76, 0.18),
+        ("orange", 1.00, 0.53, 0.22),
+        ("red", 0.95, 0.25, 0.25),
+        ("pink", 0.96, 0.40, 0.69),
+        ("purple", 0.61, 0.35, 0.87),
+        ("slate", 0.53, 0.57, 0.63),
+    ];
+    let mut best_name = "blue";
+    let mut min_dist = f32::MAX;
+    for (name, cr, cg, cb) in candidates {
+        let dist = (r - cr).powi(2) + (g - cg).powi(2) + (b - cb).powi(2);
+        if dist < min_dist {
+            min_dist = dist;
+            best_name = name;
+        }
+    }
+    best_name
 }
 
 pub(crate) fn set_wallpaper(file: &Path, size: u32) {
