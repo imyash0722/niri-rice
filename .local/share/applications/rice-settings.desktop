@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Rice Settings
+GenericName=Desktop Settings
+Comment=Configure niri rice themes, wallpapers, power, input, and layout
+Exec=rice-settings
+Icon=preferences-system
+Terminal=false
+Type=Application
+Categories=Settings;DesktopSettings;GTK;
+Keywords=theme;wallpaper;matugen;power;battery;niri;settings;rice;
+StartupNotify=true

@@ -512,6 +512,21 @@
                     }
                   ]
                 }
+              },
+              {
+                "name": "Rice Settings",
+                "icon": "tune",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": {
+                  "quickSelectKey": "s",
+                  "actions": [
+                    {
+                      "type": "execute-command",
+                      "command": "rice-settings"
+                    }
+                  ]
+                }
               }
             ]
           },
@@ -668,6 +683,21 @@
                     {
                       "type": "execute-command",
                       "command": "grim -g \"$(slurp -p)\" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Rice Settings",
+                "icon": "tune",
+                "iconTheme": "material-symbols-rounded",
+                "type": "button",
+                "selectWorkflow": {
+                  "quickSelectKey": "e",
+                  "actions": [
+                    {
+                      "type": "execute-command",
+                      "command": "rice-settings"
                     }
                   ]
                 }
@@ -1030,6 +1060,21 @@
                 {
                   "type": "execute-command",
                   "command": "grim -g \"$(slurp -p)\" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Rice Settings",
+            "icon": "tune",
+            "iconTheme": "material-symbols-rounded",
+            "type": "button",
+            "selectWorkflow": {
+              "quickSelectKey": "e",
+              "actions": [
+                {
+                  "type": "execute-command",
+                  "command": "rice-settings"
                 }
               ]
             }

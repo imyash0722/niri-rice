@@ -11,6 +11,7 @@ use std::process::Command;
 mod kando;
 mod scratchpad;
 mod swallow;
+mod settings;
 
 #[derive(Parser)]
 #[command(name = "rice-ctl")]
@@ -25,6 +26,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Desktop Settings control center GUI
+    Settings,
     /// Theme and wallpaper management
     Theme {
         #[command(subcommand)]
@@ -350,7 +353,7 @@ fn find_matugen_bin() -> PathBuf {
     PathBuf::from("matugen")
 }
 
-fn apply_cursor(variant: &str, size: u32) {
+pub(crate) fn apply_cursor(variant: &str, size: u32) {
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
 
     let niri_themes = PathBuf::from(&home).join(".config/niri/themes");
@@ -539,9 +542,11 @@ fn apply_desktop_colors(target_color: Option<&str>) {
     let _ = Command::new("dbus-update-activation-environment")
         .args(["--systemd", "--all"])
         .output();
+
+    sync_animation_colors(&primary);
 }
 
-fn set_wallpaper(file: &Path, size: u32) {
+pub(crate) fn set_wallpaper(file: &Path, size: u32) {
     let canonical = fs::canonicalize(file).unwrap_or_else(|_| file.to_path_buf());
     if !canonical.exists() {
         eprintln!(
@@ -688,7 +693,7 @@ fn set_wallpaper(file: &Path, size: u32) {
     println!("[rice-ctl] Theme and wallpaper switched successfully!");
 }
 
-fn select_wallpaper(size: u32) {
+pub(crate) fn select_wallpaper(size: u32) {
     let pkill_output = Command::new("pkill")
         .args(["-f", "rofi.*wallpaper-select.rasi"])
         .output();
@@ -877,7 +882,7 @@ fn select_wallpaper(size: u32) {
     }
 }
 
-fn random_wallpaper(dir: Option<PathBuf>, size: u32) {
+pub(crate) fn random_wallpaper(dir: Option<PathBuf>, size: u32) {
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let wall_dir = dir.unwrap_or_else(|| PathBuf::from(&home).join("Pictures/Wall"));
 
@@ -924,7 +929,7 @@ fn random_wallpaper(dir: Option<PathBuf>, size: u32) {
     }
 }
 
-fn load_theme(theme: &str, size: u32) {
+pub(crate) fn load_theme(theme: &str, size: u32) {
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let themes_dir = PathBuf::from(&home).join(".config/niri/themes");
     let theme_dir = themes_dir.join(theme);
@@ -967,24 +972,73 @@ fn load_theme(theme: &str, size: u32) {
     println!("[rice-ctl] Theme '{}' applied successfully!", theme);
 }
 
-fn set_animation(anim: &str) {
+pub(crate) fn sync_animation_colors(primary_color: &str) {
+    let (r, g, b) = hex_to_rgb(primary_color);
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
+    let themes_dir = PathBuf::from(&home).join(".config/niri/themes");
+    let name_file = themes_dir.join("active-animation-name.txt");
+    let anim_name = fs::read_to_string(&name_file).unwrap_or_else(|_| "matugen-glow".to_string());
+    let anim_name = anim_name.trim();
+
+    let anim_file = PathBuf::from(&home).join(format!(".config/niri/animations/{}.kdl", anim_name));
+    if !anim_file.exists() {
+        return;
+    }
+
+    if let Ok(content) = fs::read_to_string(&anim_file) {
+        let rgb_str = format!("vec3({:.3}, {:.3}, {:.3})", r, g, b);
+        let re_matugen = Regex::new(r"const\s+vec3\s+MATUGEN_COLOR\s*=\s*vec3\([^)]+\);").unwrap();
+        let re_effect = Regex::new(r"const\s+vec3\s+EFFECT_COLOR\s*=\s*vec3\([^)]+\);").unwrap();
+        let re_tint = Regex::new(r"vec3\s+tint\s*=\s*vec3\([^)]+\);").unwrap();
+        let re_flame = Regex::new(r"vec3\s+flame\s*=\s*vec3\([^)]+\);").unwrap();
+
+        let mut updated = content;
+        updated = re_matugen.replace_all(&updated, format!("const vec3 MATUGEN_COLOR = {};", rgb_str)).to_string();
+        updated = re_effect.replace_all(&updated, format!("const vec3 EFFECT_COLOR = {};", rgb_str)).to_string();
+        updated = re_tint.replace_all(&updated, format!("vec3 tint = {};", rgb_str)).to_string();
+        updated = re_flame.replace_all(&updated, format!("vec3 flame = {};", rgb_str)).to_string();
+
+        let target = themes_dir.join("active-animations.kdl");
+        let _ = fs::write(target, updated);
+
+        if std::env::var("NIRI_SOCKET").is_ok() {
+            let _ = Command::new("niri")
+                .args(["msg", "action", "load-config-file"])
+                .output();
+        }
+    }
+}
+
+pub(crate) fn set_animation(anim: &str) {
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let anim_file = PathBuf::from(&home).join(format!(".config/niri/animations/{}.kdl", anim));
     if !anim_file.exists() {
         eprintln!("[rice-ctl] Animation '{}' not found.", anim);
         return;
     }
-    let content = format!("include \"../animations/{}.kdl\"\n", anim);
-    let _ = fs::write(
-        PathBuf::from(&home).join(".config/niri/themes/active-animations.kdl"),
-        content,
-    );
+
+    let themes_dir = PathBuf::from(&home).join(".config/niri/themes");
+    let _ = fs::create_dir_all(&themes_dir);
+    let _ = fs::write(themes_dir.join("active-animation-name.txt"), anim);
+
+    let wal_cache = PathBuf::from(&home).join(".cache/wal/colors.json");
+    let mut primary_color = "#feb877".to_string();
+    if let Ok(data) = fs::read_to_string(&wal_cache) {
+        if let Ok(cache) = serde_json::from_str::<WalCache>(&data) {
+            if let Some(p) = cache.special.get("cursor").or_else(|| cache.colors.get("color5")) {
+                primary_color = p.clone();
+            }
+        }
+    }
+
+    sync_animation_colors(&primary_color);
+
     if std::env::var("NIRI_SOCKET").is_ok() {
         let _ = Command::new("niri")
             .args(["msg", "action", "do-screen-transition"])
             .output();
     }
-    println!("[rice-ctl] Animation '{}' applied successfully!", anim);
+    println!("[rice-ctl] Animation '{}' with dynamic Matugen color applied successfully!", anim);
 }
 
 fn lock_screen() {
@@ -1225,7 +1279,7 @@ struct MakoNotificationItem {
     urgency: Option<String>,
 }
 
-fn notification_history_menu() {
+pub(crate) fn notification_history_menu() {
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
     let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
 
@@ -1508,7 +1562,7 @@ fn setup_hibernate_resume() {
     }
 }
 
-fn reload_desktop() {
+pub(crate) fn reload_desktop() {
     println!("[rice-ctl] Reloading Niri rice desktop environment...");
 
     let _ = Command::new("niri")
@@ -1557,7 +1611,7 @@ fn reload_desktop() {
     println!("[rice-ctl] Desktop reloaded successfully.");
 }
 
-fn set_power_profile(target: &str) {
+pub(crate) fn set_power_profile(target: &str) {
     let flag = Path::new("/tmp/caffeine_active");
     let state_file = Path::new("/tmp/power_profile_mode");
     let normalized = match target.to_lowercase().as_str() {
@@ -1824,7 +1878,7 @@ fn app_close(name: &str) {
     }
 }
 
-fn monitor_autoscale() {
+pub(crate) fn monitor_autoscale() {
     let runtime = std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| "/run/user/1000".to_string());
 
     for _ in 0..20 {
@@ -1894,7 +1948,7 @@ fn get_battery_stats() -> (u32, String, u32, String) {
     (capacity, status, conservation, profile)
 }
 
-fn toggle_conservation_mode() {
+pub(crate) fn toggle_conservation_mode() {
     let path = "/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode";
     let cur = fs::read_to_string(path).unwrap_or_else(|_| "0".to_string()).trim().to_string();
     let next = if cur == "1" { "0" } else { "1" };
@@ -2789,12 +2843,17 @@ fn main() {
             idle_suspend();
             return;
         }
+        "rice-settings" => {
+            settings::launch();
+            return;
+        }
         _ => {}
     }
 
     let cli = Cli::parse();
 
     match cli.command {
+        Commands::Settings => settings::launch(),
         Commands::Theme { action } => match action {
             ThemeAction::Select { size } => select_wallpaper(size),
             ThemeAction::Set { file, size } => set_wallpaper(&file, size),

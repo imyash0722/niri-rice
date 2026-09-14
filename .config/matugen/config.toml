@@ -54,6 +54,11 @@ post_hook = 'ACCENT=$(kreadconfig6 --file ~/.local/share/color-schemes/Matugen.c
 input_path = "~/.config/matugen/templates/konsole-theme.colorscheme"
 output_path = "~/.local/share/konsole/Matugen.colorscheme"
 
+[templates.rice-settings]
+input_path = "~/.config/matugen/templates/rice-settings.css"
+output_path = "~/.cache/rice-settings/theme.css"
+
+
 
 
 

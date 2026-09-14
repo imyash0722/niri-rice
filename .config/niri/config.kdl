@@ -245,6 +245,21 @@ window-rule {
     }
 }
 
+// Rice Settings Control Center: frosted glass blur & soft shadow
+window-rule {
+    match app-id=r#"^(com\.niri\.rice\.settings|rice-settings|rice-ctl)$"#
+    background-effect {
+        blur true
+    }
+    shadow {
+        on
+        softness 25
+        spread 4
+        offset x=0 y=6
+        color "#0007"
+    }
+}
+
 // Terminal floating window
 window-rule {
     match app-id="kitty.floating"
@@ -470,7 +485,8 @@ binds {
     // Password manager
     Mod+P { spawn-sh "rofi-rbw --selector rofi --typer wtype --clipboarder wl-copy"; }
 
-    // Settings
+    // Settings (Rice Control Center)
+    Mod+I           { spawn-sh "~/.local/bin/rice-settings"; }
 
     // Bluetooth
     Mod+Shift+B { spawn "blueman-manager"; }
