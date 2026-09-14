@@ -238,16 +238,16 @@
             },
             "children": [
               {
-                "name": "Yi Jin Jing (Power Save)",
-                "icon": "self_improvement",
+                "name": "Nine Yin (Power Saving)",
+                "icon": "dark_mode",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
-                  "quickSelectKey": "y",
+                  "quickSelectKey": "s",
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "rice-ctl profile set yi-jin-jing"
+                      "command": "rice-ctl profile set nine-yin"
                     }
                   ]
                 }
@@ -268,8 +268,8 @@
                 }
               },
               {
-                "name": "Plum Blossom Sword (Performance)",
-                "icon": "local_florist",
+                "name": "Nine Yang (Performance)",
+                "icon": "light_mode",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
@@ -277,7 +277,7 @@
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "rice-ctl profile set plum-blossom-sword"
+                      "command": "rice-ctl profile set nine-yang"
                     }
                   ]
                 }

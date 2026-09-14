@@ -84,7 +84,7 @@ enum Commands {
         #[arg(default_value = "toggle")]
         action: String,
     },
-    /// Power profile manager (yi-jin-jing, taiji, plum-blossom-sword)
+    /// Power profile manager (nine-yin, taiji, nine-yang)
     Profile {
         #[arg(default_value = "status")]
         action: String,
@@ -1561,14 +1561,14 @@ fn set_power_profile(target: &str) {
     let flag = Path::new("/tmp/caffeine_active");
     let state_file = Path::new("/tmp/power_profile_mode");
     let normalized = match target.to_lowercase().as_str() {
-        "yi-jin-jing" | "yijinjing" | "yi jin jing" | "yijin" | "yi-jin" | "shaolin" | "shao-lin" | "wuji" | "sipping" | "sip" | "power-saver" | "powersave" | "low-power" | "vajra" => "yi-jin-jing",
+        "nine-yin" | "nine yin" | "nineyin" | "9-yin" | "9yin" | "yin" | "yi-jin-jing" | "yijinjing" | "yi jin jing" | "shaolin" | "sipping" | "sip" | "power-saver" | "powersave" | "power-saving" | "low-power" => "nine-yin",
         "taiji" | "tai-ji" | "wudang" | "wu-dang" | "sleep-on" | "sleep on" | "sleep" | "balanced" | "balance" => "taiji",
-        "plum-blossom-sword" | "plum blossom sword" | "plum-blossom" | "plum blossom" | "plumblossom" | "maehwa" | "maehwa-sword" | "maehwa sword" | "mount-hua" | "mount hua" | "mounthua" | "huashan" | "hua-shan" | "hua" | "cheonma" | "caffeinated" | "caffeine" | "perf" | "performance" | "asura" => "plum-blossom-sword",
+        "nine-yang" | "nine yang" | "nineyang" | "9-yang" | "9yang" | "yang" | "plum-blossom-sword" | "plum blossom sword" | "plum-blossom" | "plum blossom" | "maehwa" | "mount-hua" | "mount hua" | "mounthua" | "huashan" | "caffeinated" | "caffeine" | "perf" | "performance" => "nine-yang",
         _ => "taiji",
     };
 
     match normalized {
-        "yi-jin-jing" => {
+        "nine-yin" => {
             if flag.exists() {
                 let _ = fs::remove_file(flag);
             }
@@ -1576,19 +1576,19 @@ fn set_power_profile(target: &str) {
                 .args(["-f", "systemd-inhibit.*caffeine"])
                 .output();
             let _ = fs::write("/sys/firmware/acpi/platform_profile", "low-power");
-            let _ = fs::write(state_file, "yi-jin-jing");
+            let _ = fs::write(state_file, "nine-yin");
             let _ = Command::new("notify-send")
                 .args([
                     "-a",
                     "Power Profile",
                     "-i",
                     "battery-profile-powersave",
-                    "Power Profile: Yi Jin Jing",
-                    "Shaolin Sect ultimate divine art active (vital qi cultivation / power-saver)",
+                    "Power Profile: Nine Yin",
+                    "Power saving",
                 ])
                 .output();
         }
-        "plum-blossom-sword" => {
+        "nine-yang" => {
             if !flag.exists() {
                 let _ = fs::File::create(flag);
             }
@@ -1605,15 +1605,15 @@ fn set_power_profile(target: &str) {
                 ])
                 .spawn();
             let _ = fs::write("/sys/firmware/acpi/platform_profile", "performance");
-            let _ = fs::write(state_file, "plum-blossom-sword");
+            let _ = fs::write(state_file, "nine-yang");
             let _ = Command::new("notify-send")
                 .args([
                     "-a",
                     "Power Profile",
                     "-i",
                     "battery-profile-performance",
-                    "Power Profile: Plum Blossom Sword",
-                    "Mount Hua Sect ultimate sword art active (piercing sword qi / peak performance / no sleep)",
+                    "Power Profile: Nine Yang",
+                    "Performance",
                 ])
                 .output();
         }
@@ -1634,7 +1634,7 @@ fn set_power_profile(target: &str) {
                     "-i",
                     "battery-profile-balanced",
                     "Power Profile: Taiji",
-                    "Wudang Sect ultimate martial art active (Taiji balance of Yin & Yang / auto-sleep)",
+                    "Balanced",
                 ])
                 .output();
         }
@@ -1656,8 +1656,8 @@ fn profile_cycle() {
 
     let next = match cur.as_str() {
         "low-power" => "taiji",
-        "balanced" => "plum-blossom-sword",
-        "performance" => "yi-jin-jing",
+        "balanced" => "nine-yang",
+        "performance" => "nine-yin",
         _ => "taiji",
     };
 
@@ -1673,17 +1673,17 @@ fn profile_status() {
     match cur.as_str() {
         "low-power" => {
             println!(
-                r#"{{"text": "󰕹 yi jin jing", "class": "yi-jin-jing", "tooltip": "Power Profile: Yi Jin Jing (Shaolin Sect / Power-saver)\nClick to cycle: yi jin jing ➔ taiji ➔ plum blossom sword"}}"#
+                r#"{{"text": "󰃚 nine yin", "class": "nine-yin", "tooltip": "Power Profile: Nine Yin (Power saving)\nClick to cycle: nine yin ➔ taiji ➔ nine yang"}}"#
             );
         }
         "performance" => {
             println!(
-                r#"{{"text": "󰉊 plum blossom sword", "class": "plum-blossom-sword", "tooltip": "Power Profile: Plum Blossom Sword (Mount Hua Sect / Performance)\nClick to cycle: yi jin jing ➔ taiji ➔ plum blossom sword"}}"#
+                r#"{{"text": "󰖨 nine yang", "class": "nine-yang", "tooltip": "Power Profile: Nine Yang (Performance)\nClick to cycle: nine yin ➔ taiji ➔ nine yang"}}"#
             );
         }
         _ => {
             println!(
-                r#"{{"text": "☯ taiji", "class": "taiji", "tooltip": "Power Profile: Taiji (Wudang Sect / Balanced)\nClick to cycle: yi jin jing ➔ taiji ➔ plum blossom sword"}}"#
+                r#"{{"text": "☯ taiji", "class": "taiji", "tooltip": "Power Profile: Taiji (Balanced)\nClick to cycle: nine yin ➔ taiji ➔ nine yang"}}"#
             );
         }
     }
@@ -2847,9 +2847,9 @@ fn main() {
                     profile_status();
                 }
             }
-            "yi-jin-jing" | "yijinjing" | "yi jin jing" | "yijin" | "shaolin" | "wuji" | "sipping" | "sip" => set_power_profile("yi-jin-jing"),
+            "nine-yin" | "nine yin" | "nineyin" | "9-yin" | "9yin" | "yin" | "yi-jin-jing" | "yijinjing" | "yi jin jing" | "shaolin" | "wuji" | "sipping" | "sip" => set_power_profile("nine-yin"),
             "taiji" | "tai-ji" | "wudang" | "sleep-on" | "sleep" | "balanced" => set_power_profile("taiji"),
-            "plum-blossom-sword" | "plum blossom sword" | "plum-blossom" | "plum blossom" | "maehwa" | "mount-hua" | "mount hua" | "mounthua" | "huashan" | "hua-shan" | "hua" | "cheonma" | "cheon-ma" | "demonic" | "caffeinated" | "perf" | "performance" | "asura" => set_power_profile("plum-blossom-sword"),
+            "nine-yang" | "nine yang" | "nineyang" | "9-yang" | "9yang" | "yang" | "plum-blossom-sword" | "plum blossom sword" | "plum-blossom" | "plum blossom" | "maehwa" | "mount-hua" | "mount hua" | "mounthua" | "huashan" | "hua-shan" | "hua" | "cheonma" | "cheon-ma" | "demonic" | "caffeinated" | "perf" | "performance" | "asura" => set_power_profile("nine-yang"),
             _ => profile_status(),
         },
         Commands::BgApps { action } => match action.as_str() {

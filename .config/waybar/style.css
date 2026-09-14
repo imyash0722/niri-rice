@@ -159,6 +159,7 @@ window#waybar.hidden {
     color: @text;
 }
 
+#custom-caf-waybar.nine-yin,
 #custom-caf-waybar.yi-jin-jing,
 #custom-caf-waybar.yijinjing,
 #custom-caf-waybar.shaolin,
@@ -175,6 +176,7 @@ window#waybar.hidden {
     background-color: transparent;
 }
 
+#custom-caf-waybar.nine-yang,
 #custom-caf-waybar.plum-blossom-sword,
 #custom-caf-waybar.plum-blossom,
 #custom-caf-waybar.mount-hua,
