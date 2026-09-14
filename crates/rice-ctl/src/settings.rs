@@ -486,12 +486,34 @@ fn build_appearance_page() -> PreferencesPage {
     let browse_btn = Button::with_label("Browse Gallery…");
     browse_btn.add_css_class("suggested-action");
     browse_btn.connect_clicked(|_| {
-        crate::select_wallpaper(32);
+        thread::spawn(|| {
+            crate::select_wallpaper(32);
+        });
     });
 
     let rand_btn = Button::with_label("Random");
-    rand_btn.connect_clicked(|_| {
-        crate::random_wallpaper(None, 32);
+    let cr_rand = cur_row.clone();
+    rand_btn.connect_clicked(move |_| {
+        let (tx, rx) = mpsc::channel::<String>();
+        let cr = cr_rand.clone();
+        glib::timeout_add_local(std::time::Duration::from_millis(50), move || {
+            if let Ok(name) = rx.try_recv() {
+                cr.set_subtitle(&name);
+                glib::ControlFlow::Break
+            } else {
+                glib::ControlFlow::Continue
+            }
+        });
+        thread::spawn(move || {
+            crate::random_wallpaper(None, 32);
+            let active = get_active_wallpaper();
+            let cur_name = Path::new(&active)
+                .file_name()
+                .and_then(|s| s.to_str())
+                .unwrap_or("(none)")
+                .to_string();
+            let _ = tx.send(cur_name);
+        });
     });
 
     btn_box.append(&browse_btn);
@@ -567,52 +589,64 @@ fn build_appearance_page() -> PreferencesPage {
     let spinner_clone = spinner.clone();
     let active_wall_clone = active_wall.clone();
 
-    glib::idle_add_local(move || {
+    glib::timeout_add_local(std::time::Duration::from_millis(30), move || {
         let mut count = 0;
-        while let Ok((wall, thumb_path, is_vid)) = rx.try_recv() {
-            count += 1;
-            let btn = Button::builder().build();
-            btn.add_css_class("flat");
-            btn.set_tooltip_text(wall.file_name().and_then(|s| s.to_str()));
+        loop {
+            match rx.try_recv() {
+                Ok((wall, thumb_path, is_vid)) => {
+                    count += 1;
+                    let btn = Button::builder().build();
+                    btn.add_css_class("flat");
+                    btn.set_tooltip_text(wall.file_name().and_then(|s| s.to_str()));
 
-            let pb = thumb_path.as_ref().and_then(|p| Pixbuf::from_file(p).ok());
-            if let Some(pix) = pb {
-                let pic = Picture::for_pixbuf(&pix);
-                pic.set_size_request(THUMB_W, THUMB_H);
-                pic.set_can_shrink(true);
-                btn.set_child(Some(&pic));
-            } else {
-                let box_ph = GtkBox::new(Orientation::Vertical, 4);
-                box_ph.set_size_request(THUMB_W, THUMB_H);
-                box_ph.set_halign(Align::Center);
-                box_ph.set_valign(Align::Center);
-                let icon = if is_vid { "video-x-generic-symbolic" } else { "image-x-generic-symbolic" };
-                let img = Image::from_icon_name(icon);
-                img.set_pixel_size(28);
-                box_ph.append(&img);
-                btn.set_child(Some(&box_ph));
-            }
+                    let pb = thumb_path.as_ref().and_then(|p| Pixbuf::from_file(p).ok());
+                    if let Some(pix) = pb {
+                        let pic = Picture::for_pixbuf(&pix);
+                        pic.set_size_request(THUMB_W, THUMB_H);
+                        pic.set_can_shrink(true);
+                        btn.set_child(Some(&pic));
+                    } else {
+                        let box_ph = GtkBox::new(Orientation::Vertical, 4);
+                        box_ph.set_size_request(THUMB_W, THUMB_H);
+                        box_ph.set_halign(Align::Center);
+                        box_ph.set_valign(Align::Center);
+                        let icon = if is_vid { "video-x-generic-symbolic" } else { "image-x-generic-symbolic" };
+                        let img = Image::from_icon_name(icon);
+                        img.set_pixel_size(28);
+                        box_ph.append(&img);
+                        btn.set_child(Some(&box_ph));
+                    }
 
-            if wall.to_string_lossy() == active_wall_clone {
-                btn.add_css_class("suggested-action");
-            }
+                    if wall.to_string_lossy() == active_wall_clone {
+                        btn.add_css_class("suggested-action");
+                    }
 
-            let w_clone = wall.clone();
-            let cr = cur_row_clone.clone();
-            btn.connect_clicked(move |_| {
-                crate::set_wallpaper(&w_clone, 32);
-                if let Some(name) = w_clone.file_name().and_then(|s| s.to_str()) {
-                    cr.set_subtitle(name);
+                    let w_clone = wall.clone();
+                    let cr = cur_row_clone.clone();
+                    btn.connect_clicked(move |_| {
+                        if let Some(name) = w_clone.file_name().and_then(|s| s.to_str()) {
+                            cr.set_subtitle(name);
+                        }
+                        let w = w_clone.clone();
+                        thread::spawn(move || {
+                            crate::set_wallpaper(&w, 32);
+                        });
+                    });
+
+                    flowbox_clone.insert(&btn, -1);
+                    if count >= 6 {
+                        return glib::ControlFlow::Continue;
+                    }
                 }
-            });
-
-            flowbox_clone.insert(&btn, -1);
-            if count >= 8 {
-                return glib::ControlFlow::Continue;
+                Err(mpsc::TryRecvError::Empty) => {
+                    return glib::ControlFlow::Continue;
+                }
+                Err(mpsc::TryRecvError::Disconnected) => {
+                    spinner_clone.set_visible(false);
+                    return glib::ControlFlow::Break;
+                }
             }
         }
-        spinner_clone.set_visible(false);
-        glib::ControlFlow::Break
     });
 
 
@@ -734,8 +768,11 @@ fn build_appearance_page() -> PreferencesPage {
     apply_cur_btn.connect_clicked(move |_| {
         let idx = cc.selected() as usize;
         if let Some(t) = cursors_clone.get(idx) {
+            let t = t.clone();
             let size = cs.value() as u32;
-            crate::apply_cursor(t, size);
+            thread::spawn(move || {
+                crate::apply_cursor(&t, size);
+            });
         }
     });
     apply_cur_row.add_suffix(&apply_cur_btn);
@@ -1030,7 +1067,7 @@ fn build_layout_page() -> PreferencesPage {
     });
 
     // Actions
-    let act_grp = PreferencesGroup::builder().title("Display & Desktop").build();
+    let act_grp = PreferencesGroup::builder().title("Display and Desktop").build();
     page.add(&act_grp);
 
     let scale_row = ActionRow::builder()
@@ -1040,7 +1077,9 @@ fn build_layout_page() -> PreferencesPage {
     let scale_btn = Button::with_label("Auto Scale");
     scale_btn.set_valign(Align::Center);
     scale_btn.connect_clicked(|_| {
-        crate::monitor_autoscale();
+        thread::spawn(|| {
+            crate::monitor_autoscale();
+        });
     });
     scale_row.add_suffix(&scale_btn);
     act_grp.add(&scale_row);
@@ -1052,7 +1091,9 @@ fn build_layout_page() -> PreferencesPage {
     let reload_btn = Button::with_label("Reload");
     reload_btn.set_valign(Align::Center);
     reload_btn.connect_clicked(|_| {
-        crate::reload_desktop();
+        thread::spawn(|| {
+            crate::reload_desktop();
+        });
     });
     reload_row.add_suffix(&reload_btn);
     act_grp.add(&reload_row);
@@ -1363,7 +1404,10 @@ fn build_animations_page() -> PreferencesPage {
     apply_btn.connect_clicked(move |_| {
         let idx = ac.selected() as usize;
         if let Some(name) = presets_clone.get(idx) {
-            crate::set_animation(name);
+            let name = name.clone();
+            thread::spawn(move || {
+                crate::set_animation(&name);
+            });
         }
     });
     apply_row.add_suffix(&apply_btn);
@@ -1435,7 +1479,7 @@ fn build_ui(app: &Application) {
     content_box.set_hexpand(true);
     content_box.set_vexpand(true);
 
-    let content_title = WindowTitle::new("Appearance", "Desktop Theme & Wallpaper");
+    let content_title = WindowTitle::new("Appearance", "Desktop Theme and Wallpaper");
     let content_header = HeaderBar::new();
     content_header.set_show_end_title_buttons(true);
     content_header.set_title_widget(Some(&content_title));
@@ -1450,13 +1494,13 @@ fn build_ui(app: &Application) {
     main_box.append(&content_box);
 
     let pages: Vec<(&str, &str, &str, PreferencesPage)> = vec![
-        ("Appearance", "Desktop Theme & Wallpaper", "preferences-desktop-wallpaper-symbolic", build_appearance_page()),
-        ("Power", "Power Profiles & Battery Lifespan", "battery-symbolic", build_power_page()),
-        ("Input", "Touchpad, Keyboard & Cursors", "input-touchpad-symbolic", build_input_page()),
-        ("Layout", "Gaps, Borders, Shadows & Blur", "view-grid-symbolic", build_layout_page()),
-        ("Notifications", "Mako Daemon & History Hub", "notification-symbolic", build_notifications_page()),
-        ("Default Apps", "System Association & Handlers", "application-x-executable-symbolic", build_defaults_page()),
-        ("Animations", "Niri Window Shaders & Physics", "media-playback-start-symbolic", build_animations_page()),
+        ("Appearance", "Desktop Theme and Wallpaper", "preferences-desktop-wallpaper-symbolic", build_appearance_page()),
+        ("Power", "Power Profiles and Battery Lifespan", "battery-symbolic", build_power_page()),
+        ("Input", "Touchpad, Keyboard and Cursors", "input-touchpad-symbolic", build_input_page()),
+        ("Layout", "Gaps, Borders, Shadows and Blur", "view-grid-symbolic", build_layout_page()),
+        ("Notifications", "Mako Daemon and History Hub", "notification-symbolic", build_notifications_page()),
+        ("Default Apps", "System Association and Handlers", "application-x-executable-symbolic", build_defaults_page()),
+        ("Animations", "Niri Window Shaders and Physics", "media-playback-start-symbolic", build_animations_page()),
     ];
 
     for (name, _, icon, page_widget) in &pages {

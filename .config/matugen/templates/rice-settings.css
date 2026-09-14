@@ -105,10 +105,7 @@ headerbar windowtitle .subtitle {
 
 /* ── Preferences Groups & Material 3 Cards ── */
 preferencesgroup {
-    margin-top: 14px;
-    margin-bottom: 14px;
-    margin-start: 18px;
-    margin-end: 18px;
+    margin: 14px 18px;
 }
 
 preferencesgroup > label.title {
