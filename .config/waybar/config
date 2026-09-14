@@ -159,13 +159,14 @@
     },
 
     "custom/dunst": {
-        "format": "{}",
-        "exec": "makoctl mode | grep -q dnd && echo '󰂛' || echo ''",
-        "on-click": "makoctl mode -t dnd; pkill -RTMIN+8 waybar",
-        "on-click-right": "makoctl dismiss -a",
+        "exec": "rice-ctl dnd status",
+        "return-type": "json",
+        "on-click": "rice-ctl history",
+        "on-click-right": "rice-ctl dnd toggle",
+        "on-click-middle": "makoctl dismiss -a",
         "interval": 5,
         "signal": 8,
-        "tooltip-format": "Left click: Toggle DND\nRight click: Dismiss all"
+        "tooltip": true
     },
 
     "custom/recorder": {

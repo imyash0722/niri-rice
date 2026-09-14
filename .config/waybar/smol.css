@@ -159,11 +159,16 @@ window#waybar.hidden {
 
 }
 
+#custom-dunst,
 #custom-caf-waybar {
     padding: 0 4px;
     border-radius: 6px;
     margin: 4px 0;
     color: @text;
+}
+
+#custom-dunst.dnd {
+    color: @error;
 }
 
 #custom-caf-waybar.nine-yin,

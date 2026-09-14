@@ -159,6 +159,11 @@ window#waybar.hidden {
     color: @text;
 }
 
+#custom-dunst.dnd {
+    color: @error;
+    border-color: alpha(@error, 0.6);
+}
+
 #custom-caf-waybar.nine-yin,
 #custom-caf-waybar.yi-jin-jing,
 #custom-caf-waybar.yijinjing,

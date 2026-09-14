@@ -153,10 +153,14 @@
     },
 
     "custom/dunst": {
-    "format": "{}",
-    "exec": "dunstctl is-paused | grep -q true && echo '' || echo ''",
-    "on-click": "~/.local/bin/rice-ctl dnd toggle",
-    "signal": 8
+        "exec": "rice-ctl dnd status",
+        "return-type": "json",
+        "on-click": "rice-ctl history",
+        "on-click-right": "rice-ctl dnd toggle",
+        "on-click-middle": "makoctl dismiss -a",
+        "interval": 5,
+        "signal": 8,
+        "tooltip": true
     },
 
     "custom/recorder": {

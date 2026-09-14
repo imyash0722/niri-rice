@@ -239,7 +239,7 @@
             "children": [
               {
                 "name": "Nine Yin (Power Saving)",
-                "icon": "dark_mode",
+                "icon": "ac_unit",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {
@@ -269,7 +269,7 @@
               },
               {
                 "name": "Nine Yang (Performance)",
-                "icon": "light_mode",
+                "icon": "local_fire_department",
                 "iconTheme": "material-symbols-rounded",
                 "type": "button",
                 "selectWorkflow": {

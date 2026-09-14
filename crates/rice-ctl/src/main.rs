@@ -1673,12 +1673,12 @@ fn profile_status() {
     match cur.as_str() {
         "low-power" => {
             println!(
-                r#"{{"text": "󰃚 nine yin", "class": "nine-yin", "tooltip": "Power Profile: Nine Yin (Power saving)\nClick to cycle: nine yin ➔ taiji ➔ nine yang"}}"#
+                r#"{{"text": "󰜗 nine yin", "class": "nine-yin", "tooltip": "Power Profile: Nine Yin (Power saving)\nClick to cycle: nine yin ➔ taiji ➔ nine yang"}}"#
             );
         }
         "performance" => {
             println!(
-                r#"{{"text": "󰖨 nine yang", "class": "nine-yang", "tooltip": "Power Profile: Nine Yang (Performance)\nClick to cycle: nine yin ➔ taiji ➔ nine yang"}}"#
+                r#"{{"text": "󰈸 nine yang", "class": "nine-yang", "tooltip": "Power Profile: Nine Yang (Performance)\nClick to cycle: nine yin ➔ taiji ➔ nine yang"}}"#
             );
         }
         _ => {
@@ -1710,6 +1710,24 @@ fn bg_apps_status() {
     } else {
         println!(
             r#"{{"text": "&lt;", "class": "minimized", "tooltip": "Background apps (Collapsed - click to expand)"}}"#
+        );
+    }
+}
+
+fn dnd_status() {
+    let out = Command::new("makoctl").arg("mode").output();
+    let mode_str = out
+        .map(|o| String::from_utf8_lossy(&o.stdout).to_string())
+        .unwrap_or_default();
+    let is_dnd = mode_str.lines().any(|l| l.trim() == "dnd");
+
+    if is_dnd {
+        println!(
+            r#"{{"text": "󰂛", "class": "dnd", "tooltip": "Notifications: DND Active (Silenced)\nLeft click: Notification History\nRight click: Turn off DND\nMiddle click: Dismiss all"}}"#
+        );
+    } else {
+        println!(
+            r#"{{"text": "󰂚", "class": "normal", "tooltip": "Notifications: Active\nLeft click: Notification History\nRight click: Toggle DND\nMiddle click: Dismiss all"}}"#
         );
     }
 }
@@ -2865,12 +2883,13 @@ fn main() {
             VolumeAction::MuteToggle => volume_mute_toggle(),
             VolumeAction::MicMuteToggle => mic_mute_toggle(),
         },
-        Commands::Dnd { action } => {
-            if action == "toggle" {
+        Commands::Dnd { action } => match action.as_str() {
+            "status" => dnd_status(),
+            _ => {
                 let _ = Command::new("makoctl").args(["mode", "-t", "dnd"]).output();
                 let _ = Command::new("pkill").args(["-RTMIN+8", "waybar"]).output();
             }
-        }
+        },
         Commands::History => notification_history_menu(),
         Commands::Media { action } => {
             let _ = Command::new("playerctl").arg(action).output();
