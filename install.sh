@@ -331,7 +331,7 @@ sudo tlp start 2>/dev/null || true
 echo ""
 echo "[6/6] Applying initial theme & extracting Matugen Material You colors via rice-ctl..."
 if command -v rice-ctl &>/dev/null; then
-    rice-ctl theme load blue || true
+    rice-ctl theme random || true
 fi
 
 # ---------------------------------------------------------------------------

@@ -1,6 +1,0 @@
-include "../animations/pixelate.kdl"
-focus-ring {
-    width 1
-    active-color "#768E92"
-    inactive-color "#0a1118"
-}

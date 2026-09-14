@@ -15,9 +15,8 @@ use gtk4::{
 };
 use libadwaita::prelude::*;
 use libadwaita::{
-    ActionRow, Application, ApplicationWindow, ColorScheme, ComboRow, HeaderBar, NavigationPage,
-    NavigationSplitView, PreferencesGroup, PreferencesPage, SpinRow, StyleManager, SwitchRow,
-    ToolbarView, WindowTitle,
+    ActionRow, Application, ApplicationWindow, ColorScheme, ComboRow, HeaderBar,
+    PreferencesGroup, PreferencesPage, SpinRow, StyleManager, SwitchRow, WindowTitle,
 };
 use regex::Regex;
 
@@ -208,7 +207,7 @@ fn load_matugen_css() {
             gtk4::style_context_add_provider_for_display(
                 &display,
                 &provider,
-                gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION,
+                gtk4::STYLE_PROVIDER_PRIORITY_USER,
             );
         }
     }
@@ -616,35 +615,6 @@ fn build_appearance_page() -> PreferencesPage {
         glib::ControlFlow::Break
     });
 
-    // Preset Themes
-    let preset_grp = PreferencesGroup::builder()
-        .title("Preset Themes")
-        .description("Curated wallpaper + color palette bundles")
-        .build();
-    page.add(&preset_grp);
-
-    let presets = ["blue", "cyan", "green", "pink", "custom"];
-    let preset_list = StringList::new(&presets);
-    let preset_combo = ComboRow::builder()
-        .title("Color Theme")
-        .model(&preset_list)
-        .selected(0)
-        .build();
-    preset_grp.add(&preset_combo);
-
-    let apply_preset_row = ActionRow::builder().build();
-    let apply_preset_btn = Button::with_label("Apply Preset");
-    apply_preset_btn.add_css_class("suggested-action");
-    apply_preset_btn.set_valign(Align::Center);
-    let pc = preset_combo.clone();
-    apply_preset_btn.connect_clicked(move |_| {
-        let idx = pc.selected() as usize;
-        if idx < presets.len() {
-            crate::load_theme(presets[idx], 32);
-        }
-    });
-    apply_preset_row.add_suffix(&apply_preset_btn);
-    preset_grp.add(&apply_preset_row);
 
     // Matugen Material You Colors
     let mat_grp = PreferencesGroup::builder()
@@ -712,32 +682,24 @@ fn build_appearance_page() -> PreferencesPage {
     regen_row.add_suffix(&regen_btn);
     mat_grp.add(&regen_row);
 
-    // Waybar Style Selector
+    // Waybar Status Bar
     let bar_grp = PreferencesGroup::builder()
         .title("Waybar Status Bar")
-        .description("Select status bar styling and layout")
+        .description("Main desktop status bar and system indicators")
         .build();
     page.add(&bar_grp);
 
-    let bar_styles = ["Main (Full Bar with Drawers)", "Smol (Compact Minimal Island)"];
-    let bar_list = StringList::new(&bar_styles);
-    let bar_combo = ComboRow::builder()
-        .title("Bar Style")
-        .model(&bar_list)
-        .selected(0)
+    let reload_bar_row = ActionRow::builder()
+        .title("Main Status Bar")
+        .subtitle("Drawers, system monitors, workspace pills, and media controls")
         .build();
-    bar_grp.add(&bar_combo);
-
-    bar_combo.connect_selected_notify(|combo| {
-        let style = if combo.selected() == 1 { "smol" } else { "main" };
-        let cfg = get_home().join(format!(".config/waybar/{}.jsonc", style));
-        let css = get_home().join(format!(".config/waybar/{}.css", style));
-        let _ = Command::new("killall").arg("waybar").output();
-        thread::sleep(std::time::Duration::from_millis(200));
-        let _ = Command::new("waybar")
-            .args(["-c", &cfg.to_string_lossy(), "-s", &css.to_string_lossy()])
-            .spawn();
+    let reload_bar_btn = Button::with_label("Reload Bar");
+    reload_bar_btn.set_valign(Align::Center);
+    reload_bar_btn.connect_clicked(|_| {
+        let _ = Command::new("rice-ctl").args(["bar", "select"]).spawn();
     });
+    reload_bar_row.add_suffix(&reload_bar_btn);
+    bar_grp.add(&reload_bar_row);
 
     // Cursor Settings
     let cur_grp = PreferencesGroup::builder().title("Cursor").build();
@@ -790,7 +752,7 @@ fn build_power_page() -> PreferencesPage {
 
     let prof_grp = PreferencesGroup::builder()
         .title("Power Profile")
-        .description("Daoist internal martial arts triad: Nine Yin, Taiji, and Nine Yang")
+        .description("Daoist triad: Nine Yin (Power Saver), Taiji (Balanced), and Nine Yang (Performance with automatic Caffeine sleep-inhibition)")
         .build();
     page.add(&prof_grp);
 
@@ -904,40 +866,6 @@ fn build_power_page() -> PreferencesPage {
     apply_idle_row.add_suffix(&apply_idle_btn);
     idle_grp.add(&apply_idle_row);
 
-    // Caffeine
-    let caf_grp = PreferencesGroup::builder()
-        .title("Caffeine")
-        .description("Inhibit sleep and screen locking")
-        .build();
-    page.add(&caf_grp);
-
-    let is_caff = Path::new("/tmp/caffeine_active").exists();
-    let caf_switch = SwitchRow::builder()
-        .title("Keep Awake (Caffeine)")
-        .subtitle("Block automatic display sleep and system suspend")
-        .active(is_caff)
-        .build();
-    caf_grp.add(&caf_switch);
-
-    caf_switch.connect_active_notify(|_| {
-        let flag = Path::new("/tmp/caffeine_active");
-        if flag.exists() {
-            let _ = fs::remove_file(flag);
-            let _ = Command::new("pkill").args(["-f", "systemd-inhibit.*caffeine"]).output();
-        } else {
-            let _ = fs::File::create(flag);
-            let _ = Command::new("systemd-inhibit")
-                .args([
-                    "--what=idle:sleep:handle-lid-switch",
-                    "--who=Caffeine",
-                    "--why=User requested no sleep",
-                    "sleep",
-                    "infinity",
-                ])
-                .spawn();
-        }
-        let _ = Command::new("pkill").args(["-RTMIN+13", "waybar"]).output();
-    });
 
     page
 }
@@ -1472,79 +1400,83 @@ fn build_ui(app: &Application) {
         .default_width(980)
         .default_height(720)
         .build();
+    window.add_css_class("rice-settings-window");
 
-    let split = NavigationSplitView::new();
-    split.set_max_sidebar_width(220.0);
-    split.set_min_sidebar_width(170.0);
-    split.set_sidebar_width_fraction(0.22);
-    window.set_content(Some(&split));
+    let main_box = GtkBox::new(Orientation::Horizontal, 0);
+    main_box.add_css_class("rice-main-box");
+    window.set_content(Some(&main_box));
 
-    // Sidebar
+    // Sidebar Container
     let sidebar_box = GtkBox::new(Orientation::Vertical, 0);
-    let sidebar_tb = ToolbarView::new();
-    sidebar_tb.set_content(Some(&sidebar_box));
+    sidebar_box.add_css_class("rice-sidebar");
+    sidebar_box.set_size_request(230, -1);
 
     let sidebar_header = HeaderBar::new();
     sidebar_header.set_show_end_title_buttons(false);
-    sidebar_header.set_title_widget(Some(&WindowTitle::new("Settings", "")));
-    sidebar_tb.add_top_bar(&sidebar_header);
+    sidebar_header.set_title_widget(Some(&WindowTitle::new("Rice Settings", "Control Center")));
+    sidebar_box.append(&sidebar_header);
 
-    let sidebar_nav = NavigationPage::builder()
-        .title("Settings")
-        .child(&sidebar_tb)
+    let sidebar_scroll = ScrolledWindow::builder()
+        .hscrollbar_policy(PolicyType::Never)
+        .vscrollbar_policy(PolicyType::Automatic)
+        .vexpand(true)
         .build();
-    split.set_sidebar(Some(&sidebar_nav));
 
     let sidebar_list = ListBox::new();
-    sidebar_list.add_css_class("navigation-sidebar");
+    sidebar_list.add_css_class("rice-sidebar-list");
     sidebar_list.set_selection_mode(SelectionMode::Single);
-    sidebar_box.append(&sidebar_list);
+    sidebar_scroll.set_child(Some(&sidebar_list));
+    sidebar_box.append(&sidebar_scroll);
+    main_box.append(&sidebar_box);
 
-    // Content Stack
-    let stack = Stack::new();
-    stack.set_transition_type(StackTransitionType::Crossfade);
-    stack.set_transition_duration(120);
+    // Content Container
+    let content_box = GtkBox::new(Orientation::Vertical, 0);
+    content_box.add_css_class("rice-content");
+    content_box.set_hexpand(true);
+    content_box.set_vexpand(true);
 
-    let content_title = WindowTitle::new("Appearance", "");
+    let content_title = WindowTitle::new("Appearance", "Desktop Theme & Wallpaper");
     let content_header = HeaderBar::new();
+    content_header.set_show_end_title_buttons(true);
     content_header.set_title_widget(Some(&content_title));
+    content_box.append(&content_header);
 
-    let content_tb = ToolbarView::new();
-    content_tb.add_top_bar(&content_header);
-    content_tb.set_content(Some(&stack));
+    let stack = Stack::new();
+    stack.set_transition_type(StackTransitionType::SlideLeftRight);
+    stack.set_transition_duration(200);
+    stack.set_vexpand(true);
+    stack.set_hexpand(true);
+    content_box.append(&stack);
+    main_box.append(&content_box);
 
-    let content_nav = NavigationPage::builder()
-        .title("Content")
-        .child(&content_tb)
-        .build();
-    split.set_content(Some(&content_nav));
-
-    let pages: Vec<(&str, &str, PreferencesPage)> = vec![
-        ("Appearance", "preferences-desktop-wallpaper-symbolic", build_appearance_page()),
-        ("Power", "battery-symbolic", build_power_page()),
-        ("Input", "input-touchpad-symbolic", build_input_page()),
-        ("Layout", "view-grid-symbolic", build_layout_page()),
-        ("Notifications", "notification-symbolic", build_notifications_page()),
-        ("Default Apps", "application-x-executable-symbolic", build_defaults_page()),
-        ("Animations", "media-playback-start-symbolic", build_animations_page()),
+    let pages: Vec<(&str, &str, &str, PreferencesPage)> = vec![
+        ("Appearance", "Desktop Theme & Wallpaper", "preferences-desktop-wallpaper-symbolic", build_appearance_page()),
+        ("Power", "Power Profiles & Battery Lifespan", "battery-symbolic", build_power_page()),
+        ("Input", "Touchpad, Keyboard & Cursors", "input-touchpad-symbolic", build_input_page()),
+        ("Layout", "Gaps, Borders, Shadows & Blur", "view-grid-symbolic", build_layout_page()),
+        ("Notifications", "Mako Daemon & History Hub", "notification-symbolic", build_notifications_page()),
+        ("Default Apps", "System Association & Handlers", "application-x-executable-symbolic", build_defaults_page()),
+        ("Animations", "Niri Window Shaders & Physics", "media-playback-start-symbolic", build_animations_page()),
     ];
 
-    for (name, icon, page_widget) in &pages {
+    for (name, _, icon, page_widget) in &pages {
         let scroll = ScrolledWindow::builder()
             .hscrollbar_policy(PolicyType::Never)
             .vscrollbar_policy(PolicyType::Automatic)
             .child(page_widget)
+            .vexpand(true)
+            .hexpand(true)
             .build();
         stack.add_named(&scroll, Some(name));
 
         let row_box = GtkBox::new(Orientation::Horizontal, 12);
-        row_box.set_margin_top(10);
-        row_box.set_margin_bottom(10);
-        row_box.set_margin_start(12);
-        row_box.set_margin_end(12);
+        row_box.set_margin_top(8);
+        row_box.set_margin_bottom(8);
+        row_box.set_margin_start(10);
+        row_box.set_margin_end(10);
 
         let img = Image::from_icon_name(*icon);
-        img.set_pixel_size(16);
+        img.set_pixel_size(18);
         let lbl = Label::new(Some(name));
         lbl.set_xalign(0.0);
         lbl.set_hexpand(true);
@@ -1553,6 +1485,7 @@ fn build_ui(app: &Application) {
         row_box.append(&lbl);
 
         let lb_row = ListBoxRow::new();
+        lb_row.add_css_class("rice-sidebar-row");
         lb_row.set_child(Some(&row_box));
         sidebar_list.append(&lb_row);
     }
@@ -1563,16 +1496,15 @@ fn build_ui(app: &Application) {
 
     let stack_c = stack.clone();
     let title_c = content_title.clone();
-    let split_c = split.clone();
-    let page_names: Vec<String> = pages.iter().map(|p| p.0.to_string()).collect();
+    let page_meta: Vec<(String, String)> = pages.iter().map(|(n, s, _, _)| (n.to_string(), s.to_string())).collect();
 
     sidebar_list.connect_row_selected(move |_, row| {
         if let Some(r) = row {
             let idx = r.index() as usize;
-            if let Some(name) = page_names.get(idx) {
+            if let Some((name, sub)) = page_meta.get(idx) {
                 stack_c.set_visible_child_name(name);
                 title_c.set_title(name);
-                split_c.set_show_content(true);
+                title_c.set_subtitle(sub);
             }
         }
     });

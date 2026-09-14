@@ -1,6 +1,0 @@
-include "../animations/bloom.kdl"
-focus-ring {
-    width 1
-    active-color "#ADD3FA"
-    inactive-color "#3c1e6d"
-}

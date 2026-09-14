@@ -929,47 +929,8 @@ pub(crate) fn random_wallpaper(dir: Option<PathBuf>, size: u32) {
     }
 }
 
-pub(crate) fn load_theme(theme: &str, size: u32) {
-    let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
-    let themes_dir = PathBuf::from(&home).join(".config/niri/themes");
-    let theme_dir = themes_dir.join(theme);
-
-    if !theme_dir.exists() {
-        eprintln!(
-            "Error: Theme '{}' not found in {}",
-            theme,
-            themes_dir.display()
-        );
-        return;
-    }
-
-    println!("[rice-ctl] Applying theme: {}...", theme);
-
-    let niri_kdl = theme_dir.join("niri.kdl");
-    if let Ok(content) = fs::read_to_string(&niri_kdl) {
-        let anim_lines: Vec<&str> = content
-            .lines()
-            .filter(|l| l.trim().starts_with("include"))
-            .collect();
-        let _ = fs::write(
-            themes_dir.join("active-animations.kdl"),
-            anim_lines.join("\n"),
-        );
-    }
-
-    let wall_png = theme_dir.join("wallpaper.png");
-    let wall_mp4 = theme_dir.join("wallpaper.mp4");
-    let target_wall = if wall_png.exists() {
-        wall_png
-    } else if wall_mp4.exists() {
-        wall_mp4
-    } else {
-        eprintln!("Warning: No wallpaper found for theme {}", theme);
-        return;
-    };
-
-    set_wallpaper(&target_wall, size);
-    println!("[rice-ctl] Theme '{}' applied successfully!", theme);
+pub(crate) fn load_theme(_theme: &str, _size: u32) {
+    println!("[rice-ctl] Preset themes have been removed. Colors are now dynamically extracted from wallpapers via Matugen. Use 'rice-ctl theme select' or 'rice-ctl theme random'.");
 }
 
 pub(crate) fn sync_animation_colors(primary_color: &str) {
@@ -2451,44 +2412,20 @@ fn calendar_action(action: &str) {
 }
 
 fn bar_select() {
-    let options = "main\nsmol\n";
     let home = std::env::var("HOME").unwrap_or_else(|_| "/home/pineapple".to_string());
-    let theme_path = PathBuf::from(&home).join(".config/rofi/dmenu.rasi");
-
-    let mut child = match Command::new("rofi")
-        .args(["-dmenu", "-p", "󱂬 Waybar Mode", "-theme", &theme_path.to_string_lossy()])
-        .stdin(std::process::Stdio::piped())
-        .stdout(std::process::Stdio::piped())
-        .spawn()
-    {
-        Ok(c) => c,
-        Err(e) => {
-            eprintln!("Error spawning rofi bar select: {}", e);
-            return;
-        }
-    };
-
-    if let Some(mut stdin) = child.stdin.take() {
-        let _ = stdin.write_all(options.as_bytes());
-    }
-
-    let Ok(output) = child.wait_with_output() else { return };
-    let choice = String::from_utf8_lossy(&output.stdout).trim().to_string();
-    if choice.is_empty() {
-        return;
-    }
-
+    println!("[rice-ctl] Reloading main Waybar status bar...");
     let _ = Command::new("killall").arg("waybar").output();
     std::thread::sleep(std::time::Duration::from_millis(200));
 
-    let config = format!("{}/.config/waybar/{}.jsonc", home, choice);
-    let style = format!("{}/.config/waybar/{}.css", home, choice);
+    let config = format!("{}/.config/waybar/config", home);
+    let style = format!("{}/.config/waybar/style.css", home);
 
     if Path::new(&config).exists() && Path::new(&style).exists() {
         let _ = Command::new("waybar").args(["-c", &config, "-s", &style]).spawn();
     } else {
         let _ = Command::new("waybar").spawn();
     }
+    println!("[rice-ctl] Main Waybar reloaded successfully.");
 }
 
 fn take_screenshot(mode: &str) {
@@ -2911,7 +2848,10 @@ fn main() {
         Commands::Mem => mem_info(),
         Commands::Reload => reload_desktop(),
         Commands::Caffeine { action } => match action.as_str() {
-            "toggle" => profile_cycle(),
+            "toggle" => {
+                println!("[rice-ctl] Caffeine mode is tied to Nine Yang (Performance). Switching to Nine Yang...");
+                set_power_profile("nine-yang");
+            }
             _ => profile_status(),
         },
         Commands::Profile { action, mode } => match action.as_str() {

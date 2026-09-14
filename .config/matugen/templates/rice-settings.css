@@ -1,4 +1,4 @@
-/* Matugen Material You Palette for Rice Settings */
+/* Matugen Material You Palette for Rice Settings Control Center */
 @define-color accent_color {{ colors.primary.default.hex }};
 @define-color accent_bg_color {{ colors.primary.default.hex }};
 @define-color accent_fg_color {{ colors.on_primary.default.hex }};
@@ -21,47 +21,190 @@
 @define-color dialog_bg_color {{ colors.surface_container.default.hex }};
 @define-color dialog_fg_color {{ colors.on_surface.default.hex }};
 
-/* Glass styling aligned with Niri frosted glass blur */
-window.background {
-    background-color: alpha({{ colors.background.default.hex }}, 0.82);
+/* ── Universal Terminal-Like Glass Window Styling ── */
+window.rice-settings-window,
+window.rice-settings-window.background,
+window.rice-settings-window contents {
+    background-color: alpha({{ colors.background.default.hex }}, 0.85);
+    color: {{ colors.on_surface.default.hex }};
+    border: 1px solid alpha({{ colors.primary.default.hex }}, 0.28);
+    border-radius: 14px;
 }
 
-.navigation-sidebar {
-    background-color: alpha({{ colors.surface.default.hex }}, 0.45);
-    border-right: 1px solid alpha({{ colors.outline_variant.default.hex }}, 0.25);
+/* Force inner Libadwaita / GTK containers to be transparent */
+.rice-main-box,
+preferencespage,
+preferencespage > scrolledwindow,
+preferencespage > scrolledwindow > viewport,
+stack,
+stack > scrolledwindow,
+stack > scrolledwindow > viewport {
+    background-color: transparent;
+    background: transparent;
 }
 
-.navigation-sidebar row:selected {
-    background-color: alpha({{ colors.primary.default.hex }}, 0.22);
-    color: {{ colors.primary.default.hex }};
-    font-weight: 600;
+/* ── Sidebar Styling (Frosted Panel & Animated Pills) ── */
+.rice-sidebar {
+    background-color: alpha({{ colors.surface.default.hex }}, 0.40);
+    border-right: 1px solid alpha({{ colors.outline_variant.default.hex }}, 0.22);
+}
+
+.rice-sidebar-list {
+    background-color: transparent;
+    background: transparent;
+    padding: 10px 8px;
+}
+
+.rice-sidebar-row {
+    background-color: transparent;
     border-radius: 10px;
+    margin: 3px 6px;
+    padding: 2px 4px;
+    color: alpha({{ colors.on_surface.default.hex }}, 0.85);
+    transition: all 180ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.rice-sidebar-row:hover {
+    background-color: alpha({{ colors.primary.default.hex }}, 0.14);
+    color: {{ colors.on_surface.default.hex }};
+}
+
+.rice-sidebar-row:selected,
+.rice-sidebar-row:active {
+    background-color: alpha({{ colors.primary.default.hex }}, 0.25);
+    color: {{ colors.primary.default.hex }};
+    font-weight: 700;
+    box-shadow: inset 3px 0 0 {{ colors.primary.default.hex }};
+}
+
+.rice-sidebar-row:selected image,
+.rice-sidebar-row:selected label {
+    color: {{ colors.primary.default.hex }};
+}
+
+/* ── Headerbars (Blended Minimal Glass Headers) ── */
+headerbar {
+    background-color: alpha({{ colors.background.default.hex }}, 0.30);
+    border-bottom: 1px solid alpha({{ colors.outline_variant.default.hex }}, 0.18);
+    box-shadow: none;
+    color: {{ colors.on_surface.default.hex }};
+    min-height: 48px;
+    padding: 0 12px;
+}
+
+headerbar windowtitle .title {
+    font-weight: 700;
+    color: {{ colors.on_surface.default.hex }};
+    font-size: 14px;
+}
+
+headerbar windowtitle .subtitle {
+    font-size: 11px;
+    color: alpha({{ colors.on_surface.default.hex }}, 0.65);
+}
+
+/* ── Preferences Groups & Material 3 Cards ── */
+preferencesgroup {
+    margin-top: 14px;
+    margin-bottom: 14px;
+    margin-start: 18px;
+    margin-end: 18px;
+}
+
+preferencesgroup > label.title {
+    color: {{ colors.primary.default.hex }};
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+preferencesgroup > label.description {
+    color: alpha({{ colors.on_surface.default.hex }}, 0.70);
+    font-size: 12px;
+    margin-bottom: 8px;
 }
 
 preferencesgroup list.boxed-list,
 .card {
-    background-color: alpha({{ colors.surface_container_highest.default.hex }}, 0.50);
-    border: 1px solid alpha({{ colors.outline_variant.default.hex }}, 0.20);
+    background-color: alpha({{ colors.surface_container_highest.default.hex }}, 0.45);
+    border: 1px solid alpha({{ colors.outline_variant.default.hex }}, 0.22);
     border-radius: 12px;
+    box-shadow: none;
+    transition: all 200ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-headerbar {
-    background-color: alpha({{ colors.background.default.hex }}, 0.50);
-    border-bottom: 1px solid alpha({{ colors.outline_variant.default.hex }}, 0.15);
+preferencesgroup list.boxed-list:hover {
+    border-color: alpha({{ colors.primary.default.hex }}, 0.35);
 }
 
+row.activatable:hover {
+    background-color: alpha({{ colors.primary.default.hex }}, 0.08);
+}
+
+/* ── Material You Interactive Buttons ── */
 button.suggested-action {
     background-color: {{ colors.primary.default.hex }};
     color: {{ colors.on_primary.default.hex }};
     border-radius: 10px;
-    font-weight: 600;
+    font-weight: 700;
+    border: none;
+    padding: 6px 14px;
+    transition: all 180ms ease-out;
 }
 
 button.suggested-action:hover {
-    background-color: alpha({{ colors.primary.default.hex }}, 0.88);
+    background-color: alpha({{ colors.primary.default.hex }}, 0.90);
+    box-shadow: 0 0 12px alpha({{ colors.primary.default.hex }}, 0.40);
+}
+
+button.suggested-action:active {
+    background-color: alpha({{ colors.primary.default.hex }}, 0.75);
+}
+
+/* ── Dynamic Switches ── */
+switch {
+    border-radius: 14px;
+    transition: all 200ms ease-in-out;
+    background-color: alpha({{ colors.surface_container.default.hex }}, 0.60);
 }
 
 switch:checked {
     background-color: {{ colors.primary.default.hex }};
-    color: {{ colors.on_primary.default.hex }};
+}
+
+switch:checked slider {
+    background-color: {{ colors.on_primary.default.hex }};
+}
+
+/* ── Value Sliders ── */
+scale highlight {
+    background-color: {{ colors.primary.default.hex }};
+    border-radius: 4px;
+}
+
+scale slider {
+    background-color: {{ colors.primary.default.hex }};
+    border: 2px solid {{ colors.on_primary.default.hex }};
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+/* ── Minimalist Scrollbars ── */
+scrollbar slider {
+    background-color: alpha({{ colors.outline.default.hex }}, 0.30);
+    border-radius: 8px;
+    min-width: 6px;
+    min-height: 6px;
+}
+
+scrollbar slider:hover {
+    background-color: alpha({{ colors.primary.default.hex }}, 0.60);
+}
+
+/* ── Focus Outline ── */
+*:focus {
+    outline-color: alpha({{ colors.primary.default.hex }}, 0.50);
 }
