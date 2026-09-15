@@ -32,10 +32,6 @@ input_path = "~/.config/matugen/templates/kitty-colors.conf"
 output_path = "~/.config/kitty/colors.conf"
 post_hook = "pkill -SIGUSR1 -x kitty 2>/dev/null || true"
 
-[templates.wezterm]
-input_path = "~/.config/matugen/templates/wezterm-colors.lua"
-output_path = "~/.config/wezterm/colors.lua"
-
 [templates.btop]
 input_path = "~/.config/matugen/templates/btop-theme.theme"
 output_path = "~/.config/btop/themes/matugen.theme"
