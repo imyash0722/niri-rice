@@ -10,9 +10,8 @@ end
 config.font = wezterm.font('JetBrainsMono Nerd Font')
 config.font_size = 12.0
 
--- ── Shell & Process Behavior (Matching Kitty shell & close_on_child_death) ──
+-- ── Shell ──
 config.default_prog = { '/usr/bin/zsh' }
-config.window_close_confirmation = 'NeverPrompt' -- confirm_os_window_close 0
 
 -- ── Cursor: Solid Brick Rectangle with Continuous Tron Trail (No Translucency) ──
 config.default_cursor_style = 'SteadyBlock'
@@ -22,15 +21,8 @@ config.cursor_trail = true
 config.cursor_trail_decay = 0.30
 config.max_fps = 60
 
--- ── Window Styling & Translucency (Exact Kitty Parity with Frosted Glass Blur) ──
+-- ── Window Styling & Translucency (Exact Kitty Parity) ──
 config.window_background_opacity = 0.90
-config.text_background_opacity = 1.0
-
--- Compositor Background Blur (matching Kitty background_blur 1)
-config.wayland_window_background_blur = true
-config.macos_window_background_blur = 20
-config.win32_system_backdrop = 'Acrylic'
-
 config.window_padding = {
   left = 14,
   right = 14,
@@ -39,19 +31,6 @@ config.window_padding = {
 }
 config.window_decorations = 'RESIZE'
 config.enable_tab_bar = false
-
--- Window dimensions (matching Kitty initial_window_width 960, initial_window_height 600)
-config.adjust_window_size_when_changing_font_size = false -- remember_window_size no
-config.initial_cols = 100
-config.initial_rows = 28
-
--- ── Mouse & Bell (Matching Kitty mouse_hide_wait, audio/visual bell) ──
-config.hide_mouse_cursor_when_typing = true -- mouse_hide_wait 3.0
-config.audible_bell = 'Disabled'           -- enable_audio_bell no
-config.visual_bell = {
-  fade_in_duration_ms = 0,
-  fade_out_duration_ms = 0,
-}
 
 -- ── Dynamic Material You / Matugen Color Palette ──
 local function load_matugen_colors()
@@ -115,41 +94,26 @@ if theme_colors then
   config.colors = theme_colors
 end
 
--- ── Keybindings (Full Kitty Rice & Tmux Fast Switching Parity) ──
+-- ── Keybindings (Matching Kitty Rice & Tmux Fast Switching) ──
 config.keys = {
   -- Tmux Fast Tab Switching parity with Kitty
   { key = 'Tab', mods = 'CTRL', action = wezterm.action.SendString '\x1b[27;5;9~' },
   { key = 'Tab', mods = 'CTRL|SHIFT', action = wezterm.action.SendString '\x1b[27;6;9~' },
 
-  -- Clipboard copy & paste (ctrl+shift+c / ctrl+shift+v)
+  -- Clipboard copy & paste
   { key = 'c', mods = 'CTRL|SHIFT', action = wezterm.action.CopyTo 'Clipboard' },
   { key = 'v', mods = 'CTRL|SHIFT', action = wezterm.action.PasteFrom 'Clipboard' },
 
-  -- Font size adjustment (ctrl+plus, ctrl+minus, ctrl+0, plus keypad variants)
+  -- Font size adjustment
   { key = '=', mods = 'CTRL', action = wezterm.action.IncreaseFontSize },
   { key = '+', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
-  { key = 'NumpadAdd', mods = 'CTRL', action = wezterm.action.IncreaseFontSize },
   { key = '-', mods = 'CTRL', action = wezterm.action.DecreaseFontSize },
   { key = '_', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
-  { key = 'NumpadSubtract', mods = 'CTRL', action = wezterm.action.DecreaseFontSize },
   { key = '0', mods = 'CTRL', action = wezterm.action.ResetFontSize },
-  { key = 'Numpad0', mods = 'CTRL', action = wezterm.action.ResetFontSize },
 
-  -- Scrollback navigation (page_up / page_down)
+  -- Scrollback navigation
   { key = 'PageUp', mods = 'NONE', action = wezterm.action.ScrollByPage(-1) },
   { key = 'PageDown', mods = 'NONE', action = wezterm.action.ScrollByPage(1) },
-
-  -- Link / URL Hints (matching Kitty ctrl+shift+e open_url_with_hints)
-  { key = 'e', mods = 'CTRL|SHIFT', action = wezterm.action.QuickSelect },
-}
-
--- ── Mouse Bindings (Ctrl+Click to open URLs matching Kitty) ──
-config.mouse_bindings = {
-  {
-    event = { Up = { streak = 1, button = 'Left' } },
-    mods = 'CTRL',
-    action = wezterm.action.OpenLinkAtMouseCursor,
-  },
 }
 
 return config
