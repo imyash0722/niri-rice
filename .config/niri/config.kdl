@@ -221,7 +221,7 @@ window-rule {
 
 // Terminal (consistent frosted glass): blur true without harsh opacity jumps
 window-rule {
-    match app-id=r#"^(kitty|org\.wezfurlong\.wezterm|wezterm).*"#
+    match app-id=r#"^(org\.wezfurlong\.wezterm|wezterm).*"#
     opacity 1.0
     background-effect {
         blur true
@@ -262,7 +262,7 @@ window-rule {
 
 // Terminal floating window
 window-rule {
-    match app-id=r#"^(kitty|wezterm)\.floating$"#
+    match app-id=r#"^wezterm\.floating$"#
     open-floating true
 }
 
@@ -334,22 +334,22 @@ window-rule {
 
 // Terminal floating app-ids (batctl, notes, nmtui, ssh)
 window-rule {
-    match app-id=r#"^(kitty|wezterm)\.batctl$"#
+    match app-id=r#"^wezterm\.batctl$"#
     open-floating true
 }
 
 window-rule {
-    match app-id=r#"^(kitty|wezterm)\.floating\.notes$"#
+    match app-id=r#"^wezterm\.floating\.notes$"#
     open-floating true
 }
 
 window-rule {
-    match app-id=r#"^(kitty|wezterm)\.nmtui$"#
+    match app-id=r#"^wezterm\.nmtui$"#
     open-floating true
 }
 
 window-rule {
-    match app-id=r#"^(kitty|wezterm)\.ssh$"#
+    match app-id=r#"^wezterm\.ssh$"#
     open-floating true
 }
 
@@ -411,7 +411,7 @@ window-rule {
 
 // NMTUI network manager floating window
 window-rule {
-    match app-id=r#"^(kitty|wezterm)\.nmtui$"#
+    match app-id=r#"^wezterm\.nmtui$"#
     open-floating true
     default-column-width { fixed 750; }
     default-window-height { fixed 500; }

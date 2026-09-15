@@ -19,7 +19,7 @@ config.cursor_trail = true
 config.cursor_trail_decay = 0.30
 
 -- ── 4. Window Styling & Translucency (Translated from kitty.conf) ───────────
-config.window_background_opacity = 0.90
+config.window_background_opacity = 0.82
 config.window_decorations = 'NONE'
 config.window_padding = {
   left = 14,
