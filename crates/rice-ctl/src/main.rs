@@ -484,7 +484,6 @@ pub(crate) fn apply_desktop_colors(target_color: Option<&str>) {
     }
 
     let _ = Command::new("makoctl").arg("reload").output();
-    let _ = Command::new("pkill").args(["-SIGUSR1", "-x", "kitty"]).output();
 
     if std::env::var("NIRI_SOCKET").is_ok() {
         let _ = Command::new("niri")
@@ -2800,18 +2799,10 @@ fn main() {
             return;
         }
         "note.sh" | "yazi-note.sh" => {
-            let has_wezterm = Command::new("which").arg("wezterm").output().map(|o| o.status.success()).unwrap_or(false);
-            if has_wezterm {
-                let _ = Command::new("wezterm")
-                    .args(["start", "--class", "wezterm.floating.notes", "--", "nvim"])
-                    .current_dir(dirs_home().join("Notes"))
-                    .spawn();
-            } else {
-                let _ = Command::new("kitty")
-                    .args(["--class", "kitty.floating.notes", "nvim"])
-                    .current_dir(dirs_home().join("Notes"))
-                    .spawn();
-            }
+            let _ = Command::new("wezterm-trail")
+                .args(["start", "--class", "wezterm.floating.notes", "--", "nvim"])
+                .current_dir(dirs_home().join("Notes"))
+                .spawn();
             return;
         }
         "filerofi.sh" => {
@@ -2996,18 +2987,10 @@ fn main() {
             let _ = Command::new("playerctl").arg(action).output();
         }
         Commands::Notes => {
-            let has_wezterm = Command::new("which").arg("wezterm").output().map(|o| o.status.success()).unwrap_or(false);
-            if has_wezterm {
-                let _ = Command::new("wezterm")
-                    .args(["start", "--class", "wezterm.floating.notes", "--", "nvim"])
-                    .current_dir(dirs_home().join("Notes"))
-                    .spawn();
-            } else {
-                let _ = Command::new("kitty")
-                    .args(["--class", "kitty.floating.notes", "nvim"])
-                    .current_dir(dirs_home().join("Notes"))
-                    .spawn();
-            }
+            let _ = Command::new("wezterm-trail")
+                .args(["start", "--class", "wezterm.floating.notes", "--", "nvim"])
+                .current_dir(dirs_home().join("Notes"))
+                .spawn();
         }
         Commands::Open { target } => open_target(&target),
         Commands::LinkPicker => link_picker(),

@@ -1,24 +1,24 @@
 local wezterm = require 'wezterm'
+local act = wezterm.action
 local config = wezterm.config_builder()
 
--- ── 1. Dynamic Material You Theming (Translated from: include ./colors.conf) ──
+-- ── 1. Dynamic Material You Theming via Matugen ──────────────────────────────
 local ok, matugen_colors = pcall(require, 'colors')
 if ok and matugen_colors then
   config.colors = matugen_colors
 end
 
--- ── 2. Font & Typography (Translated from: font_family, bold/italic, font_size 12.0) ──
+-- ── 2. Font & Typography (Translated from kitty.conf) ────────────────────────
 config.font = wezterm.font('JetBrainsMono Nerd Font')
 config.font_size = 12.0
 
--- ── 3. Cursor & Animation (Translated from: cursor_shape beam, cursor_trail 1) ──
--- Solid brick rectangle mode with Kitty-parity smooth continuous deformation trail
+-- ── 3. Custom Animated Cursor Trail (User's WezTerm Trail Engine) ───────────
 config.default_cursor_style = 'SteadyBlock'
 config.cursor_blink_rate = 0
 config.cursor_trail = true
 config.cursor_trail_decay = 0.30
 
--- ── 4. Window Styling & Translucency (Translated from: background_opacity, window_padding_width, hide_window_decorations, etc.) ──
+-- ── 4. Window Styling & Translucency (Translated from kitty.conf) ───────────
 config.window_background_opacity = 0.90
 config.window_decorations = 'NONE'
 config.window_padding = {
@@ -30,28 +30,25 @@ config.window_padding = {
 config.initial_cols = 100
 config.initial_rows = 30
 config.window_close_confirmation = 'NeverPrompt'
-config.hide_tab_bar_if_only_one_tab = true
-config.use_fancy_tab_bar = false
-config.tab_bar_at_bottom = false
 config.audible_bell = 'Disabled'
 config.check_for_updates = false
-
--- ── 5. Shell & Session (Translated from: shell /usr/bin/zsh, close_on_child_death no) ──
-config.default_prog = { '/usr/bin/zsh' }
+config.scrollback_lines = 100000
 config.exit_behavior = 'CloseOnCleanExit'
 
--- ── 6. Mouse & Interaction (Translated from: mouse_hide_wait, detect_urls, underline_hyperlinks) ──
+-- ── 5. Shell & Default Session ───────────────────────────────────────────────
+config.default_prog = { '/usr/bin/zsh' }
+
+-- ── 6. Mouse & Interaction (Translated from kitty.conf & tmux.conf) ─────────
 config.hide_mouse_cursor_when_typing = true
 config.underline_position = -2
 
--- ── 7. URLs & Hyperlinks Clickability (Translated from: url_prefixes, open-actions.conf) ──
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 table.insert(config.hyperlink_rules, {
   regex = [[\b(?:file|ftp|ftps|gemini|git|gopher|http|https|irc|ircs|kitty|mailto|news|sftp|ssh):(?://)?\S+]],
   format = '$0',
 })
 
--- Smart Opener: route clicked URLs through rice-ctl open (Matching open-actions.conf)
+-- Universal URL Opener (Routes via rice-ctl open)
 wezterm.on('open-uri', function(window, pane, uri)
   wezterm.background_child_process {
     '/home/pineapple/.local/bin/rice-ctl',
@@ -61,56 +58,172 @@ wezterm.on('open-uri', function(window, pane, uri)
   return false
 end)
 
--- ── 8. Mouse Bindings (Translated from: mouse_map left/ctrl+left/shift+left) ──
 config.mouse_bindings = {
   -- Ctrl+Click to open links / URLs
   {
     event = { Up = { streak = 1, button = 'Left' } },
     mods = 'CTRL',
-    action = wezterm.action.OpenLinkAtMouseCursor,
+    action = act.OpenLinkAtMouseCursor,
   },
   -- Shift+Click fallback
   {
     event = { Up = { streak = 1, button = 'Left' } },
     mods = 'SHIFT',
-    action = wezterm.action.OpenLinkAtMouseCursor,
+    action = act.OpenLinkAtMouseCursor,
   },
 }
 
--- ── 9. Keybindings (Translated from: map in kitty.conf) ──
-config.keys = {
-  -- Clipboard & Copy/Paste (map ctrl+shift+c / ctrl+shift+v)
-  { key = 'c', mods = 'CTRL|SHIFT', action = wezterm.action.CopyTo 'Clipboard' },
-  { key = 'v', mods = 'CTRL|SHIFT', action = wezterm.action.PasteFrom 'Clipboard' },
+-- ── 7. Tmux-Harmonized Tab Bar & Status Bar (Translated from tmux.conf) ─────
+config.use_fancy_tab_bar = false
+config.tab_bar_at_bottom = false
+config.tab_max_width = 32
+config.show_tab_index_in_tab_bar = false
+config.hide_tab_bar_if_only_one_tab = true
 
-  -- Tmux Fast Tab Switching (map ctrl+tab / ctrl+shift+tab)
-  { key = 'Tab', mods = 'CTRL', action = wezterm.action.SendString '\x1b[27;5;9~' },
-  { key = 'Tab', mods = 'CTRL|SHIFT', action = wezterm.action.SendString '\x1b[27;6;9~' },
+wezterm.on('format-tab-title', function(tab, tabs, panes, cfg, hover, max_width)
+  local title = tab.active_pane.title
+  if #title > 24 then
+    title = string.sub(title, 1, 21) .. '...'
+  end
+  local index = tab.tab_index + 1
+  local colors = cfg.colors or {}
+  local accent = colors.cursor_bg or '#adc6ff'
+  local bg = colors.background or '#111318'
+  local muted = colors.scrollbar_thumb or '#44474f'
 
-  -- Scroll (map page_up / page_down)
-  { key = 'PageUp', action = wezterm.action.ScrollByPage(-1) },
-  { key = 'PageDown', action = wezterm.action.ScrollByPage(1) },
+  if tab.is_active then
+    return {
+      { Background = { Color = bg } },
+      { Foreground = { Color = accent } },
+      { Attribute = { Intensity = 'Bold' } },
+      { Text = ' ' .. index .. ':' .. title .. '* ' },
+    }
+  else
+    return {
+      { Background = { Color = bg } },
+      { Foreground = { Color = muted } },
+      { Text = ' ' .. index .. ':' .. title .. ' ' },
+    }
+  end
+end)
 
-  -- Zoom / Font Scaling (map ctrl+plus, ctrl+equal, ctrl+minus, ctrl+underscore, ctrl+0)
-  { key = '=', mods = 'CTRL', action = wezterm.action.IncreaseFontSize },
-  { key = '+', mods = 'CTRL', action = wezterm.action.IncreaseFontSize },
-  { key = '+', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
-  { key = '-', mods = 'CTRL', action = wezterm.action.DecreaseFontSize },
-  { key = '_', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
-  { key = '0', mods = 'CTRL', action = wezterm.action.ResetFontSize },
+wezterm.on('update-right-status', function(window, pane)
+  local time = wezterm.strftime '%H:%M '
+  local colors = window:effective_config().colors or {}
+  local accent = colors.cursor_bg or '#adc6ff'
+  local fg = colors.foreground or '#e2e2e9'
 
-  -- Keyboard Hints (map ctrl+shift+e open_url_with_hints & ctrl+shift+p hints)
-  { key = 'e', mods = 'CTRL|SHIFT', action = wezterm.action.QuickSelect },
+  window:set_right_status(wezterm.format {
+    { Foreground = { Color = fg } },
+    { Text = time },
+    { Foreground = { Color = accent } },
+    { Text = '• ' },
+  })
+end)
+
+-- ── 8. Multiplexer Leader Key (Prefix: Ctrl+Space from tmux.conf) ───────────
+config.leader = { key = 'Space', mods = 'CTRL', timeout_milliseconds = 1500 }
+
+-- ── 9. Keybindings (Full Migration of Kitty & Tmux) ──────────────────────────
+local keys = {
+  -- Clipboard (Kitty: map ctrl+shift+c / ctrl+shift+v)
+  { key = 'c', mods = 'CTRL|SHIFT', action = act.CopyTo 'Clipboard' },
+  { key = 'v', mods = 'CTRL|SHIFT', action = act.PasteFrom 'Clipboard' },
+
+  -- Native Tab Creation (Super+T, Leader+c, Ctrl+Shift+T)
+  { key = 't', mods = 'SUPER', action = act.SpawnTab 'CurrentPaneDomain' },
+  { key = 't', mods = 'CTRL|SHIFT', action = act.SpawnTab 'CurrentPaneDomain' },
+  { key = 'c', mods = 'LEADER', action = act.SpawnTab 'CurrentPaneDomain' },
+
+  -- Close Tab / Window (Tmux: bind-key -n C-w kill-window)
+  { key = 'w', mods = 'CTRL', action = act.CloseCurrentTab { confirm = false } },
+  { key = 'w', mods = 'SUPER', action = act.CloseCurrentTab { confirm = false } },
+
+  -- Fast Tab Switching (Kitty & Tmux: Ctrl+Tab and Ctrl+Shift+Tab)
+  { key = 'Tab', mods = 'CTRL', action = act.ActivateTabRelative(1) },
+  { key = 'Tab', mods = 'CTRL|SHIFT', action = act.ActivateTabRelative(-1) },
+
+  -- Pane Splitting (Tmux: bind | split-window -h, bind - split-window -v)
+  { key = '|', mods = 'LEADER', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+  { key = '|', mods = 'LEADER|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+  { key = '%', mods = 'LEADER', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+  { key = '%', mods = 'LEADER|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+  { key = '-', mods = 'LEADER', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },
+  { key = '"', mods = 'LEADER', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },
+  { key = '"', mods = 'LEADER|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },
+
+  -- Vim-Style Pane Navigation (Tmux: bind h/j/k/l select-pane)
+  { key = 'h', mods = 'LEADER', action = act.ActivatePaneDirection 'Left' },
+  { key = 'j', mods = 'LEADER', action = act.ActivatePaneDirection 'Down' },
+  { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection 'Up' },
+  { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection 'Right' },
+
+  -- Pane Zoom Toggle (Tmux: bind z resize-pane -Z)
+  { key = 'z', mods = 'LEADER', action = act.TogglePaneZoomState },
+
+  -- Close Pane (Tmux: bind x kill-pane)
+  { key = 'x', mods = 'LEADER', action = act.CloseCurrentPane { confirm = false } },
+
+  -- Pane Resizing (Tmux: arrows with leader)
+  { key = 'LeftArrow', mods = 'LEADER', action = act.AdjustPaneSize { 'Left', 5 } },
+  { key = 'RightArrow', mods = 'LEADER', action = act.AdjustPaneSize { 'Right', 5 } },
+  { key = 'UpArrow', mods = 'LEADER', action = act.AdjustPaneSize { 'Up', 5 } },
+  { key = 'DownArrow', mods = 'LEADER', action = act.AdjustPaneSize { 'Down', 5 } },
+
+  -- Vi Copy Mode (Tmux: bind-key -T copy-mode-vi / prefix + [)
+  { key = '[', mods = 'LEADER', action = act.ActivateCopyMode },
+
+  -- Fuzzy Link & Text Picker (Tmux: prefix + u link-picker, Kitty: ctrl+shift+e)
+  {
+    key = 'u',
+    mods = 'LEADER',
+    action = act.QuickSelectArgs {
+      patterns = {
+        [[\bhttps?://\S+]],
+        [[\b(?:file|ftp|git)://\S+]],
+        [[(?:[/\w.-]+/[/\w.-]+)]],
+      },
+    },
+  },
+  { key = 'e', mods = 'CTRL|SHIFT', action = act.QuickSelect },
   {
     key = 'p',
     mods = 'CTRL|SHIFT',
-    action = wezterm.action.QuickSelectArgs {
+    action = act.QuickSelectArgs {
       patterns = {
         [[(?:[/\w.-]+/[/\w.-]+)]],
         [[\bhttps?://\S+]],
       },
     },
   },
+
+  -- Scroll (Kitty: map page_up / page_down)
+  { key = 'PageUp', action = act.ScrollByPage(-1) },
+  { key = 'PageDown', action = act.ScrollByPage(1) },
+
+  -- Font Size & Zoom (Kitty: map ctrl+plus, ctrl+minus, ctrl+0)
+  { key = '=', mods = 'CTRL', action = act.IncreaseFontSize },
+  { key = '+', mods = 'CTRL', action = act.IncreaseFontSize },
+  { key = '+', mods = 'CTRL|SHIFT', action = act.IncreaseFontSize },
+  { key = '-', mods = 'CTRL', action = act.DecreaseFontSize },
+  { key = '_', mods = 'CTRL|SHIFT', action = act.DecreaseFontSize },
+  { key = '0', mods = 'CTRL', action = act.ResetFontSize },
 }
+
+-- Numeric Tab Switching (Tmux 1-based indexing: Leader+1..9 or Super+1..9)
+for i = 1, 9 do
+  table.insert(keys, {
+    key = tostring(i),
+    mods = 'LEADER',
+    action = act.ActivateTab(i - 1),
+  })
+  table.insert(keys, {
+    key = tostring(i),
+    mods = 'SUPER',
+    action = act.ActivateTab(i - 1),
+  })
+end
+
+config.keys = keys
 
 return config
