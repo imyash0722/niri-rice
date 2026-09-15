@@ -1410,8 +1410,8 @@ fn ssh_menu() {
         .args([
             "-show", "ssh",
             "-theme", &theme_path.to_string_lossy(),
-            "-terminal", "wezterm",
-            "-ssh-command", "wezterm start --class wezterm.ssh -- ssh {host}",
+            "-terminal", "wezterm-trail",
+            "-ssh-command", "wezterm-trail start --class wezterm.ssh -- ssh {host}",
             "-display-ssh", "󰢹 SSH",
         ])
         .spawn();
@@ -2099,7 +2099,7 @@ fn wifi_menu() {
             let _ = Command::new("nmcli").args(["radio", "wifi", next]).output();
         });
     } else if choice.contains("Network Settings") {
-        let _ = Command::new("wezterm").args(["start", "--class", "wezterm.nmtui", "--", "nmtui"]).spawn();
+        let _ = Command::new("wezterm-trail").args(["start", "--class", "wezterm.nmtui", "--", "nmtui"]).spawn();
     } else {
         for (ssid, in_use, _, sec) in &items {
             if choice.contains(ssid) {
@@ -2243,7 +2243,7 @@ fn open_in_editor(path: &Path, line: Option<u32>) {
             }
         }
     }
-    let mut cmd = Command::new("wezterm");
+    let mut cmd = Command::new("wezterm-trail");
     cmd.args(["start", "--class", "wezterm.floating", "--", "nvim"]);
     if let Some(l) = line {
         cmd.arg(format!("+{}", l));
@@ -2537,12 +2537,12 @@ fn is_terminal_window(w: &NiriWindow) -> bool {
     let Some(ref app_id) = w.app_id else { return false };
     matches!(
         app_id.as_str(),
-        "wezterm" | "wezterm.floating" | "org.wezfurlong.wezterm" | "kitty" | "kitty.floating"
+        "wezterm" | "wezterm.floating" | "org.wezfurlong.wezterm"
     )
 }
 
 fn spawn_main_terminal() {
-    let _ = Command::new("wezterm")
+    let _ = Command::new("wezterm-trail")
         .args(["start", "--", "tmux", "new-session", "-A", "-s", "main"])
         .spawn();
 }
