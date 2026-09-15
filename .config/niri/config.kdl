@@ -154,7 +154,7 @@ spawn-at-startup "sh" "-c" "~/.local/bin/rice-ctl swallow daemon"
 
 // ── Blur & Layer Rules (val-niri) ────────────────────────
 blur {
-    passes 4
+    passes 6
     offset 4
     noise 0.02
     saturation 1.4
@@ -421,6 +421,15 @@ window-rule {
 window-rule {
     match app-id=r#"^float\."#
     open-floating true
+}
+
+// WezTerm scratchpads: keep translucency + blur (overrides the is-floating opacity:1.0 rule)
+window-rule {
+    match app-id=r#"^float\.(dropterm|notes)$"#
+    opacity 1.0
+    background-effect {
+        blur true
+    }
 }
 
 // ── Binds ────────────────────────────────────────────────
