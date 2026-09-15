@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=WezTerm (Trail Test)
+Comment=WezTerm with Kitty-style smooth gliding cursor and liquid trail
+Keywords=shell;prompt;command;commandline;cmd;terminal;trail;
+Icon=org.wezfurlong.wezterm
+StartupWMClass=org.wezfurlong.wezterm
+TryExec=/home/pineapple/.local/bin/wezterm-trail
+Exec=/home/pineapple/.local/bin/wezterm-trail start --cwd .
+Type=Application
+Categories=System;TerminalEmulator;Utility;
+Terminal=false
