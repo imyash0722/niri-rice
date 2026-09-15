@@ -55,8 +55,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#feb877"
-        inactive-color "#19120c"
+        active-color "#f4b2e2"
+        inactive-color "#181216"
     }
 
     tab-indicator {
@@ -221,7 +221,7 @@ window-rule {
 
 // Terminal (consistent frosted glass): blur true without harsh opacity jumps
 window-rule {
-    match app-id=r#"^kitty.*"#
+    match app-id=r#"^(kitty|org\.wezfurlong\.wezterm|wezterm).*"#
     opacity 1.0
     background-effect {
         blur true
@@ -262,7 +262,7 @@ window-rule {
 
 // Terminal floating window
 window-rule {
-    match app-id="kitty.floating"
+    match app-id=r#"^(kitty|wezterm)\.floating$"#
     open-floating true
 }
 
@@ -334,22 +334,22 @@ window-rule {
 
 // Terminal floating app-ids (batctl, notes, nmtui, ssh)
 window-rule {
-    match app-id="kitty.batctl"
+    match app-id=r#"^(kitty|wezterm)\.batctl$"#
     open-floating true
 }
 
 window-rule {
-    match app-id="kitty.floating.notes"
+    match app-id=r#"^(kitty|wezterm)\.floating\.notes$"#
     open-floating true
 }
 
 window-rule {
-    match app-id="kitty.nmtui"
+    match app-id=r#"^(kitty|wezterm)\.nmtui$"#
     open-floating true
 }
 
 window-rule {
-    match app-id="kitty.ssh"
+    match app-id=r#"^(kitty|wezterm)\.ssh$"#
     open-floating true
 }
 
@@ -411,7 +411,7 @@ window-rule {
 
 // NMTUI network manager floating window
 window-rule {
-    match app-id="kitty.nmtui"
+    match app-id=r#"^(kitty|wezterm)\.nmtui$"#
     open-floating true
     default-column-width { fixed 750; }
     default-window-height { fixed 500; }
@@ -439,7 +439,7 @@ binds {
     // Terminal (Focus existing or spawn persistent Tmux main shell)
     Mod+Return { spawn-sh "~/.local/bin/rice-ctl terminal"; }
     Mod+Shift+Return { spawn-sh "~/.local/bin/rice-ctl scratchpad toggle term"; }
-    Mod+Alt+Return { spawn "kitty"; }
+    Mod+Alt+Return { spawn "wezterm"; }
 
     // Mouse Side Buttons (Razer DeathAdder V2 X HyperSpeed)
     MouseForward { spawn "/home/pineapple/.local/bin/rice-ctl" "kando" "Main"; }

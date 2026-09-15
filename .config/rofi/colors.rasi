@@ -1,14 +1,14 @@
 * {
-    bg0: #19120c;
-    bg0-alpha: #19120ce6;
-    bg1: #19120c;
-    bg2: #312822;
-    fg0: #efe0d5;
-    fg1: #d5c3b6;
-    accent-color: #feb877;
-    accent-container: #6a3b03;
-    accent-fg: #4b2800;
+    bg0: #181216;
+    bg0-alpha: #181216e6;
+    bg1: #181216;
+    bg2: #2f282c;
+    fg0: #ecdfe5;
+    fg1: #d2c2ca;
+    accent-color: #f4b2e2;
+    accent-container: #67355d;
+    accent-fg: #4e1e46;
     urgent-color: #ffb4ab;
-    border-color: #feb877;
+    border-color: #f4b2e2;
 }
 

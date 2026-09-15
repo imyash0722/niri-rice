@@ -29,7 +29,7 @@ const PROFILES: &[ScratchpadProfile] = &[
     ScratchpadProfile {
         name: "term",
         app_id_pattern: "float.dropterm",
-        command: "kitty --class float.dropterm tmux new-session -A -s main",
+        command: "wezterm start --class float.dropterm -- tmux new-session -A -s main",
         direction: ScratchpadDirection::FromTop,
         width_ratio: 0.65,
         height_ratio: 0.55,
@@ -47,7 +47,7 @@ const PROFILES: &[ScratchpadProfile] = &[
     ScratchpadProfile {
         name: "notes",
         app_id_pattern: "float.notes",
-        command: "kitty --class float.notes -e nvim ~/notes.md",
+        command: "wezterm start --class float.notes -- nvim ~/notes.md",
         direction: ScratchpadDirection::FromRight,
         width_ratio: 0.45,
         height_ratio: 0.75,

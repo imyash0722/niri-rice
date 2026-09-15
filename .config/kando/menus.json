@@ -43,7 +43,7 @@
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "kitty"
+                      "command": "wezterm"
                     }
                   ]
                 }
@@ -58,7 +58,7 @@
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "kitty -e nvim"
+                      "command": "wezterm -e nvim"
                     }
                   ]
                 }
@@ -319,7 +319,7 @@
                   "actions": [
                     {
                       "type": "execute-command",
-                      "command": "kitty --class kitty.nmtui -e nmtui"
+                      "command": "wezterm start --class wezterm.nmtui -- nmtui"
                     }
                   ]
                 }

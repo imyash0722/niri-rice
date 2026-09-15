@@ -1,6 +1,6 @@
 [Default Applications]
 x-scheme-handler/discord=vesktop.desktop
-x-scheme-handler/terminal=kitty.desktop
+x-scheme-handler/terminal=wezterm.desktop
 x-scheme-handler/http=firefox-developer-edition.desktop
 x-scheme-handler/https=firefox-developer-edition.desktop
 inode/directory=org.kde.dolphin.desktop

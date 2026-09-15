@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=WezTerm Trail
+Comment=Wez's Terminal Emulator with Animated Cursor Trail
+Exec=/home/pineapple/.local/bin/wezterm-gui-trail start -- %u
+Icon=org.wezfurlong.wezterm
+Type=Application
+Categories=System;TerminalEmulator;Utility;
+Terminal=false

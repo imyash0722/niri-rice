@@ -1,7 +1,7 @@
 configuration {
     modi: "drun,run,window";
     show-icons: true;
-    terminal: "kitty";
+    terminal: "wezterm";
     icon-theme: "breeze-dark";
 }
 @theme "launcher"

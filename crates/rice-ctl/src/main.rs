@@ -1408,8 +1408,8 @@ fn ssh_menu() {
         .args([
             "-show", "ssh",
             "-theme", &theme_path.to_string_lossy(),
-            "-terminal", "kitty",
-            "-ssh-command", "kitty --class kitty.ssh -T '{host}' ssh {host}",
+            "-terminal", "wezterm",
+            "-ssh-command", "wezterm start --class wezterm.ssh -- ssh {host}",
             "-display-ssh", "󰢹 SSH",
         ])
         .spawn();
@@ -2097,7 +2097,7 @@ fn wifi_menu() {
             let _ = Command::new("nmcli").args(["radio", "wifi", next]).output();
         });
     } else if choice.contains("Network Settings") {
-        let _ = Command::new("kitty").args(["--class", "kitty.nmtui", "nmtui"]).spawn();
+        let _ = Command::new("wezterm").args(["start", "--class", "wezterm.nmtui", "--", "nmtui"]).spawn();
     } else {
         for (ssid, in_use, _, sec) in &items {
             if choice.contains(ssid) {
@@ -2241,9 +2241,8 @@ fn open_in_editor(path: &Path, line: Option<u32>) {
             }
         }
     }
-    let mut cmd = Command::new("kitty");
-    cmd.args(["--class", "kitty.floating"]);
-    cmd.arg("nvim");
+    let mut cmd = Command::new("wezterm");
+    cmd.args(["start", "--class", "wezterm.floating", "--", "nvim"]);
     if let Some(l) = line {
         cmd.arg(format!("+{}", l));
     }
@@ -2534,12 +2533,15 @@ struct NiriWindow {
 
 fn is_terminal_window(w: &NiriWindow) -> bool {
     let Some(ref app_id) = w.app_id else { return false };
-    matches!(app_id.as_str(), "kitty" | "kitty.floating")
+    matches!(
+        app_id.as_str(),
+        "wezterm" | "wezterm.floating" | "org.wezfurlong.wezterm" | "kitty" | "kitty.floating"
+    )
 }
 
 fn spawn_main_terminal() {
-    let _ = Command::new("kitty")
-        .args(["tmux", "new-session", "-A", "-s", "main"])
+    let _ = Command::new("wezterm")
+        .args(["start", "--", "tmux", "new-session", "-A", "-s", "main"])
         .spawn();
 }
 
@@ -2736,10 +2738,18 @@ fn main() {
             return;
         }
         "note.sh" | "yazi-note.sh" => {
-            let _ = Command::new("kitty")
-                .args(["--class", "kitty.floating.notes", "nvim"])
-                .current_dir(dirs_home().join("Notes"))
-                .spawn();
+            let has_wezterm = Command::new("which").arg("wezterm").output().map(|o| o.status.success()).unwrap_or(false);
+            if has_wezterm {
+                let _ = Command::new("wezterm")
+                    .args(["start", "--class", "wezterm.floating.notes", "--", "nvim"])
+                    .current_dir(dirs_home().join("Notes"))
+                    .spawn();
+            } else {
+                let _ = Command::new("kitty")
+                    .args(["--class", "kitty.floating.notes", "nvim"])
+                    .current_dir(dirs_home().join("Notes"))
+                    .spawn();
+            }
             return;
         }
         "filerofi.sh" => {
@@ -2924,10 +2934,18 @@ fn main() {
             let _ = Command::new("playerctl").arg(action).output();
         }
         Commands::Notes => {
-            let _ = Command::new("kitty")
-                .args(["--class", "kitty.floating.notes", "nvim"])
-                .current_dir(dirs_home().join("Notes"))
-                .spawn();
+            let has_wezterm = Command::new("which").arg("wezterm").output().map(|o| o.status.success()).unwrap_or(false);
+            if has_wezterm {
+                let _ = Command::new("wezterm")
+                    .args(["start", "--class", "wezterm.floating.notes", "--", "nvim"])
+                    .current_dir(dirs_home().join("Notes"))
+                    .spawn();
+            } else {
+                let _ = Command::new("kitty")
+                    .args(["--class", "kitty.floating.notes", "nvim"])
+                    .current_dir(dirs_home().join("Notes"))
+                    .spawn();
+            }
         }
         Commands::Open { target } => open_target(&target),
         Commands::LinkPicker => link_picker(),

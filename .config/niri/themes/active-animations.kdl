@@ -12,7 +12,7 @@ animations {
         curve "ease-out-cubic"
 
         custom-shader r"
-            const vec3 MATUGEN_COLOR = vec3(0.996, 0.722, 0.467);
+            const vec3 MATUGEN_COLOR = vec3(0.957, 0.698, 0.886);
 
             vec4 open_color(vec3 coords_geo, vec3 size_geo) {
                 float p = niri_clamped_progress;
@@ -51,7 +51,7 @@ animations {
         curve "ease-out-cubic"
 
         custom-shader r"
-            const vec3 MATUGEN_COLOR = vec3(0.996, 0.722, 0.467);
+            const vec3 MATUGEN_COLOR = vec3(0.957, 0.698, 0.886);
 
             vec4 close_color(vec3 coords_geo, vec3 size_geo) {
                 float p = niri_clamped_progress; // 0.0 = starting to close, 1.0 = fully closed

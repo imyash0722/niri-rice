@@ -3,7 +3,7 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 export FORCE_HYPERLINK=1
 export COLORTERM="truecolor"
-export TERM_PROGRAM="${TERM_PROGRAM:-kitty}"
+export TERM_PROGRAM="${TERM_PROGRAM:-wezterm}"
 
 # # [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 

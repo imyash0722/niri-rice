@@ -199,8 +199,8 @@ echo "[2/6] Symlinking config files..."
 link_dir_contents "$REPO_DIR/.config" "$HOME/.config"
 ln -sf mimeapps.list "$HOME/.config/kde-mimeapps.list" 2>/dev/null || cp -f "$HOME/.config/mimeapps.list" "$HOME/.config/kde-mimeapps.list" 2>/dev/null || true
 if command -v kwriteconfig6 &>/dev/null; then
-    kwriteconfig6 --file kdeglobals --group General --key TerminalApplication kitty 2>/dev/null || true
-    kwriteconfig6 --file kdeglobals --group General --key TerminalService kitty.desktop 2>/dev/null || true
+    kwriteconfig6 --file kdeglobals --group General --key TerminalApplication wezterm 2>/dev/null || true
+    kwriteconfig6 --file kdeglobals --group General --key TerminalService wezterm.desktop 2>/dev/null || true
 fi
 git config --global core.editor nvim 2>/dev/null || true
 

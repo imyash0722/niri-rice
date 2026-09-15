@@ -126,7 +126,7 @@ async function main() {
       ? `notify-send "Wi-Fi" "Already connected to ${ssid}"`
       : (isSaved || !meta.security || meta.security === '--')
         ? `nmcli dev wifi connect "${ssid}"`
-        : `kitty --class kitty.nmtui -e nmtui`;
+        : `wezterm start --class wezterm.nmtui -- nmtui`;
 
     children.push({
       type: 'button',
@@ -159,7 +159,7 @@ async function main() {
     icon: 'settings',
     iconTheme: 'material-symbols-rounded',
     selectWorkflow: {
-      actions: [{ type: 'execute-command', command: 'kitty --class kitty.nmtui -e nmtui' }]
+      actions: [{ type: 'execute-command', command: 'wezterm start --class wezterm.nmtui -- nmtui' }]
     }
   });
 

@@ -1027,8 +1027,8 @@ fn build_input_page() -> PreferencesPage {
     nvim_btn.set_valign(Align::Center);
     nvim_btn.connect_clicked(|_| {
         let path = get_home().join(".config/niri/config.kdl");
-        let _ = Command::new("kitty")
-            .args(["--", "nvim", &path.to_string_lossy()])
+        let _ = Command::new("wezterm")
+            .args(["start", "--", "nvim", &path.to_string_lossy()])
             .spawn();
     });
     nvim_row.add_suffix(&nvim_btn);

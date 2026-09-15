@@ -58,7 +58,7 @@
 
     "cpu": {
         "format": " {usage}%",
-        "on-click": "kitty -e btop",
+        "on-click": "wezterm -e btop",
         "tooltip": false
     },
 
