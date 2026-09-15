@@ -65,46 +65,7 @@ config.mouse_bindings = {
 }
 
 -- ── Tab Bar ───────────────────────────────────────────────────────────────────
-config.use_fancy_tab_bar = false
-config.tab_bar_at_bottom = false
-config.tab_max_width = 32
-config.show_tab_index_in_tab_bar = false
-config.hide_tab_bar_if_only_one_tab = true
-
-wezterm.on('format-tab-title', function(tab, tabs, panes, cfg, hover, max_width)
-  local title = tab.active_pane.title
-  if #title > 24 then title = string.sub(title, 1, 21) .. '...' end
-  local index = tab.tab_index + 1
-  local c = cfg.colors or {}
-  local accent = c.cursor_bg or '#adc6ff'
-  local bg     = c.background or '#111318'
-  local muted  = c.scrollbar_thumb or '#44474f'
-
-  if tab.is_active then
-    return {
-      { Background = { Color = bg } },
-      { Foreground = { Color = accent } },
-      { Attribute = { Intensity = 'Bold' } },
-      { Text = ' ' .. index .. ':' .. title .. '* ' },
-    }
-  else
-    return {
-      { Background = { Color = bg } },
-      { Foreground = { Color = muted } },
-      { Text = ' ' .. index .. ':' .. title .. ' ' },
-    }
-  end
-end)
-
-wezterm.on('update-right-status', function(window, pane)
-  local c = window:effective_config().colors or {}
-  window:set_right_status(wezterm.format {
-    { Foreground = { Color = c.foreground or '#e2e2e9' } },
-    { Text = wezterm.strftime '%H:%M ' },
-    { Foreground = { Color = c.cursor_bg or '#adc6ff' } },
-    { Text = '• ' },
-  })
-end)
+config.enable_tab_bar = false
 
 -- ── Leader (Ctrl+Space) ───────────────────────────────────────────────────────
 config.leader = { key = 'Space', mods = 'CTRL', timeout_milliseconds = 1500 }
