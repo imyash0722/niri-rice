@@ -128,6 +128,9 @@ enum Commands {
     Ssh,
     /// Focus open terminal or launch main terminal
     Terminal,
+    /// Open new tab in active tmux session and focus terminal
+    #[command(name = "tmux-tab")]
+    TmuxTab,
     /// System setup and administration tools
     System {
         #[command(subcommand)]
@@ -2597,6 +2600,65 @@ fn focus_or_spawn_terminal() {
     }
 }
 
+fn ensure_terminal_focused() {
+    let output = Command::new("niri")
+        .args(["msg", "-j", "windows"])
+        .output();
+
+    let Ok(out) = output else {
+        spawn_main_terminal();
+        return;
+    };
+
+    let Ok(windows): Result<Vec<NiriWindow>, _> = serde_json::from_slice(&out.stdout) else {
+        spawn_main_terminal();
+        return;
+    };
+
+    let mut term_windows: Vec<&NiriWindow> = windows
+        .iter()
+        .filter(|w| is_terminal_window(w))
+        .collect();
+
+    if term_windows.is_empty() {
+        spawn_main_terminal();
+        return;
+    }
+
+    if term_windows.iter().any(|w| w.is_focused) {
+        return;
+    }
+
+    term_windows.sort_by(|a, b| {
+        let ts_a = a.focus_timestamp.as_ref().map(|t| (t.secs, t.nanos)).unwrap_or((0, 0));
+        let ts_b = b.focus_timestamp.as_ref().map(|t| (t.secs, t.nanos)).unwrap_or((0, 0));
+        ts_b.cmp(&ts_a)
+    });
+
+    let target_id = term_windows[0].id;
+    let _ = Command::new("niri")
+        .args(["msg", "action", "focus-window", "--id", &target_id.to_string()])
+        .spawn();
+}
+
+fn open_tmux_tab() {
+    let has_tmux_session = Command::new("tmux")
+        .args(["has-session"])
+        .output()
+        .map(|o| o.status.success())
+        .unwrap_or(false);
+
+    if has_tmux_session {
+        let _ = Command::new("tmux")
+            .args(["new-window", "-c", "#{pane_current_path}"])
+            .output();
+
+        ensure_terminal_focused();
+    } else {
+        spawn_main_terminal();
+    }
+}
+
 fn mem_info() {
     let _ = Command::new("notify-send")
         .args([
@@ -2951,6 +3013,7 @@ fn main() {
         Commands::LinkPicker => link_picker(),
         Commands::Ssh => ssh_menu(),
         Commands::Terminal => focus_or_spawn_terminal(),
+        Commands::TmuxTab => open_tmux_tab(),
         Commands::System { action } => match action {
             SystemAction::Fingerprint => fingerprint_menu(),
             SystemAction::ResumeOffset => setup_hibernate_resume(),
