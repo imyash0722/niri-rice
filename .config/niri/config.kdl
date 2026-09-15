@@ -55,8 +55,8 @@ layout {
 
     focus-ring {
         width 1
-        active-color "#feb877"
-        inactive-color "#19120c"
+        active-color "#d7bafb"
+        inactive-color "#151218"
     }
 
     tab-indicator {
@@ -221,7 +221,7 @@ window-rule {
 
 // Terminal (consistent frosted glass): blur true without harsh opacity jumps
 window-rule {
-    match app-id=r#"^kitty.*"#
+    match app-id=r#"^(kitty|org\.wezfurlong\.wezterm|float\.dropterm).*"#
     opacity 1.0
     background-effect {
         blur true
