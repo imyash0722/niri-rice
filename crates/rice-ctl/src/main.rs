@@ -1266,6 +1266,7 @@ fn apply_power_profile_choice(chosen: &str) {
 pub(crate) fn set_power_profile(target: &str) {
     let flag = Path::new("/tmp/caffeine_active");
     let state_file = Path::new("/tmp/power_profile_mode");
+    let switching_file = Path::new("/tmp/power_profile_switching");
 
     let normalized = match target.to_lowercase().as_str() {
         "nine-yin" | "nine yin" | "nineyin" | "9-yin" | "9yin" | "yin"
@@ -1278,18 +1279,43 @@ pub(crate) fn set_power_profile(target: &str) {
         _ => "taiji",
     };
 
-    let (tlp_profile, notify_icon, notify_title, notify_body) = match normalized {
-        "nine-yin"  => ("low-power",   "battery-profile-powersave",   "Power Profile: Nine Yin",  "Power saving"),
-        "nine-yang" => ("performance", "battery-profile-performance", "Power Profile: Nine Yang", "Performance"),
-        _           => ("balanced",    "battery-profile-balanced",    "Power Profile: Taiji",     "Balanced"),
+    let (tlp_profile, notify_icon, notify_title, notify_body, display_name) = match normalized {
+        "nine-yin"  => ("low-power",   "battery-profile-powersave",   "Power Profile: Nine Yin",  "Power saving mode active", "Nine Yin (Power saving)"),
+        "nine-yang" => ("performance", "battery-profile-performance", "Power Profile: Nine Yang", "Performance mode active", "Nine Yang (Performance)"),
+        _           => ("balanced",    "battery-profile-balanced",    "Power Profile: Taiji",     "Balanced mode active",     "Taiji (Balanced)"),
     };
+
+    // Mark switching and signal Waybar immediately
+    let _ = fs::write(switching_file, normalized);
+    let _ = Command::new("pkill").args(["-RTMIN+13", "waybar"]).output();
+
+    // Display immediate loading message box
+    let _ = Command::new("notify-send")
+        .args([
+            "-a",
+            "Power Profile",
+            "-i",
+            "preferences-system-power",
+            "-h",
+            "string:x-canonical-private-synchronous:power_profile",
+            "-u",
+            "normal",
+            "Switching Power Profile...",
+            &format!("Applying {} — initializing hardware & TLP...", display_name),
+        ])
+        .output();
 
     // TLP owns /sys/firmware/acpi/platform_profile — patch its config and re-apply
     let sed_ac  = format!("s/^PLATFORM_PROFILE_ON_AC=.*/PLATFORM_PROFILE_ON_AC={}/",  tlp_profile);
     let sed_bat = format!("s/^PLATFORM_PROFILE_ON_BAT=.*/PLATFORM_PROFILE_ON_BAT={}/", tlp_profile);
     let _ = Command::new("sudo").args(["sed", "-i", &sed_ac,  "/etc/tlp.conf"]).output();
     let _ = Command::new("sudo").args(["sed", "-i", &sed_bat, "/etc/tlp.conf"]).output();
-    let _ = Command::new("sudo").args(["tlp", "start"]).output();
+
+    // Re-apply TLP so all init (governors, EPP, PCIe, USB, platform profile) applies
+    let tlp_cmd = Command::new("sudo").args(["tlp", "start"]).output();
+    if tlp_cmd.is_err() || !tlp_cmd.as_ref().map(|o| o.status.success()).unwrap_or(false) {
+        let _ = Command::new("systemctl").args(["restart", "tlp"]).output();
+    }
 
     // Caffeine / sleep-inhibit management
     let _ = Command::new("pkill").args(["-f", "systemd-inhibit.*caffeine"]).output();
@@ -1304,14 +1330,33 @@ pub(crate) fn set_power_profile(target: &str) {
     }
 
     let _ = fs::write(state_file, normalized);
+    let _ = fs::remove_file(switching_file);
+
+    // Update notification in-place to completion state
     let _ = Command::new("notify-send")
-        .args(["-a", "Power Profile", "-i", notify_icon, notify_title, notify_body])
+        .args([
+            "-a",
+            "Power Profile",
+            "-i",
+            notify_icon,
+            "-h",
+            "string:x-canonical-private-synchronous:power_profile",
+            "-u",
+            "normal",
+            notify_title,
+            notify_body,
+        ])
         .output();
+
     let _ = Command::new("pkill").args(["-RTMIN+13", "waybar"]).output();
     let _ = Command::new("pkill").args(["-RTMIN+2",  "waybar"]).output();
 }
 
 fn profile_cycle() {
+    if Path::new("/tmp/power_profile_switching").exists() {
+        return;
+    }
+
     // Read from state file — sysfs shows TLP's pinned value, not what we last set
     let cur = fs::read_to_string("/tmp/power_profile_mode")
         .unwrap_or_default()
@@ -1332,7 +1377,36 @@ fn profile_cycle() {
         },
     };
 
-    set_power_profile(next);
+    // Immediately mark switching and signal Waybar so UI updates instantly (<5ms)
+    let _ = fs::write("/tmp/power_profile_switching", next);
+    let _ = Command::new("pkill").args(["-RTMIN+13", "waybar"]).output();
+
+    // Show initial waiting / loading notification message box immediately
+    let target_display = match next {
+        "nine-yin"  => "Nine Yin (Power saving)",
+        "nine-yang" => "Nine Yang (Performance)",
+        _           => "Taiji (Balanced)",
+    };
+    let _ = Command::new("notify-send")
+        .args([
+            "-a",
+            "Power Profile",
+            "-i",
+            "preferences-system-power",
+            "-h",
+            "string:x-canonical-private-synchronous:power_profile",
+            "-u",
+            "normal",
+            "Switching Power Profile...",
+            &format!("Applying {} — initializing hardware & TLP...", target_display),
+        ])
+        .output();
+
+    // Spawn background worker to perform the full initialization without freezing Waybar
+    let exe = std::env::current_exe().unwrap_or_else(|_| PathBuf::from("rice-ctl"));
+    let _ = Command::new(exe)
+        .args(["profile", "apply-internal", next])
+        .spawn();
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -1677,6 +1751,21 @@ pub(crate) fn reload_desktop() {
 }
 
 fn profile_status() {
+    // Check if switching is currently in progress
+    if let Ok(target) = fs::read_to_string("/tmp/power_profile_switching") {
+        let target = target.trim();
+        let name = match target {
+            "nine-yin" => "Nine Yin (Power saving)",
+            "nine-yang" => "Nine Yang (Performance)",
+            _ => "Taiji (Balanced)",
+        };
+        println!(
+            r#"{{"text": "󰑮 switching...", "class": "switching", "tooltip": "Switching to {}...\nPlease wait while hardware & TLP initialize."}}"#,
+            name
+        );
+        return;
+    }
+
     let cur = fs::read_to_string("/tmp/power_profile_mode")
         .unwrap_or_else(|_| {
             // Fallback to sysfs on first boot before state file exists
@@ -2925,7 +3014,7 @@ fn main() {
         Commands::Profile { action, mode } => match action.as_str() {
             "cycle" | "toggle" => profile_cycle(),
             "status" => profile_status(),
-            "set" => {
+            "set" | "apply" | "apply-internal" => {
                 if let Some(m) = mode {
                     set_power_profile(&m);
                 } else {

@@ -192,6 +192,12 @@ window#waybar.hidden {
     border-color: alpha(@error, 0.6);
 }
 
+#custom-caf-waybar.switching {
+    color: @tertiary;
+    background-color: alpha(@tertiary, 0.15);
+    border-color: alpha(@tertiary, 0.6);
+}
+
 /* ===== CLOCK & DATE (TRANSPARENT FLOATING) ===== */
 #clock {
     background-color: transparent;
