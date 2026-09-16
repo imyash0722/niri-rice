@@ -1260,7 +1260,79 @@ fn apply_power_profile_choice(chosen: &str) {
         }
         let _ = c.wait();
     }
-    let _ = Command::new("pkill").args(["-RTMIN+2", "waybar"]).output();
+    set_power_profile(raw);
+}
+
+pub(crate) fn set_power_profile(target: &str) {
+    let flag = Path::new("/tmp/caffeine_active");
+    let state_file = Path::new("/tmp/power_profile_mode");
+
+    let normalized = match target.to_lowercase().as_str() {
+        "nine-yin" | "nine yin" | "nineyin" | "9-yin" | "9yin" | "yin"
+        | "yi-jin-jing" | "yijinjing" | "yi jin jing" | "shaolin"
+        | "sipping" | "sip" | "power-saver" | "powersave" | "power-saving" | "low-power" => "nine-yin",
+        "nine-yang" | "nine yang" | "nineyang" | "9-yang" | "9yang" | "yang"
+        | "plum-blossom-sword" | "plum blossom sword" | "plum-blossom" | "plum blossom"
+        | "maehwa" | "mount-hua" | "mount hua" | "mounthua" | "huashan"
+        | "caffeinated" | "caffeine" | "perf" | "performance" => "nine-yang",
+        _ => "taiji",
+    };
+
+    let (tlp_profile, notify_icon, notify_title, notify_body) = match normalized {
+        "nine-yin"  => ("low-power",   "battery-profile-powersave",   "Power Profile: Nine Yin",  "Power saving"),
+        "nine-yang" => ("performance", "battery-profile-performance", "Power Profile: Nine Yang", "Performance"),
+        _           => ("balanced",    "battery-profile-balanced",    "Power Profile: Taiji",     "Balanced"),
+    };
+
+    // TLP owns /sys/firmware/acpi/platform_profile — patch its config and re-apply
+    let sed_ac  = format!("s/^PLATFORM_PROFILE_ON_AC=.*/PLATFORM_PROFILE_ON_AC={}/",  tlp_profile);
+    let sed_bat = format!("s/^PLATFORM_PROFILE_ON_BAT=.*/PLATFORM_PROFILE_ON_BAT={}/", tlp_profile);
+    let _ = Command::new("sudo").args(["sed", "-i", &sed_ac,  "/etc/tlp.conf"]).output();
+    let _ = Command::new("sudo").args(["sed", "-i", &sed_bat, "/etc/tlp.conf"]).output();
+    let _ = Command::new("sudo").args(["tlp", "start"]).output();
+
+    // Caffeine / sleep-inhibit management
+    let _ = Command::new("pkill").args(["-f", "systemd-inhibit.*caffeine"]).output();
+    if normalized == "nine-yang" {
+        if !flag.exists() { let _ = fs::File::create(flag); }
+        let _ = Command::new("systemd-inhibit")
+            .args(["--what=idle:sleep:handle-lid-switch", "--who=Caffeine",
+                   "--why=User requested no sleep", "sleep", "infinity"])
+            .spawn();
+    } else if flag.exists() {
+        let _ = fs::remove_file(flag);
+    }
+
+    let _ = fs::write(state_file, normalized);
+    let _ = Command::new("notify-send")
+        .args(["-a", "Power Profile", "-i", notify_icon, notify_title, notify_body])
+        .output();
+    let _ = Command::new("pkill").args(["-RTMIN+13", "waybar"]).output();
+    let _ = Command::new("pkill").args(["-RTMIN+2",  "waybar"]).output();
+}
+
+fn profile_cycle() {
+    // Read from state file — sysfs shows TLP's pinned value, not what we last set
+    let cur = fs::read_to_string("/tmp/power_profile_mode")
+        .unwrap_or_default()
+        .trim()
+        .to_string();
+
+    let next = match cur.as_str() {
+        "nine-yin"  => "taiji",
+        "taiji"     => "nine-yang",
+        "nine-yang" => "nine-yin",
+        _ => match fs::read_to_string("/sys/firmware/acpi/platform_profile")
+                .unwrap_or_default().trim()
+        {
+            "low-power"   => "taiji",
+            "balanced"    => "nine-yang",
+            "performance" => "nine-yin",
+            _             => "taiji",
+        },
+    };
+
+    set_power_profile(next);
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -1604,126 +1676,28 @@ pub(crate) fn reload_desktop() {
     println!("[rice-ctl] Desktop reloaded successfully.");
 }
 
-pub(crate) fn set_power_profile(target: &str) {
-    let flag = Path::new("/tmp/caffeine_active");
-    let state_file = Path::new("/tmp/power_profile_mode");
-    let normalized = match target.to_lowercase().as_str() {
-        "nine-yin" | "nine yin" | "nineyin" | "9-yin" | "9yin" | "yin" | "yi-jin-jing" | "yijinjing" | "yi jin jing" | "shaolin" | "sipping" | "sip" | "power-saver" | "powersave" | "power-saving" | "low-power" => "nine-yin",
-        "taiji" | "tai-ji" | "wudang" | "wu-dang" | "sleep-on" | "sleep on" | "sleep" | "balanced" | "balance" => "taiji",
-        "nine-yang" | "nine yang" | "nineyang" | "9-yang" | "9yang" | "yang" | "plum-blossom-sword" | "plum blossom sword" | "plum-blossom" | "plum blossom" | "maehwa" | "mount-hua" | "mount hua" | "mounthua" | "huashan" | "caffeinated" | "caffeine" | "perf" | "performance" => "nine-yang",
-        _ => "taiji",
-    };
-
-    match normalized {
-        "nine-yin" => {
-            if flag.exists() {
-                let _ = fs::remove_file(flag);
-            }
-            let _ = Command::new("pkill")
-                .args(["-f", "systemd-inhibit.*caffeine"])
-                .output();
-            let _ = fs::write("/sys/firmware/acpi/platform_profile", "low-power");
-            let _ = fs::write(state_file, "nine-yin");
-            let _ = Command::new("notify-send")
-                .args([
-                    "-a",
-                    "Power Profile",
-                    "-i",
-                    "battery-profile-powersave",
-                    "Power Profile: Nine Yin",
-                    "Power saving",
-                ])
-                .output();
-        }
-        "nine-yang" => {
-            if !flag.exists() {
-                let _ = fs::File::create(flag);
-            }
-            let _ = Command::new("pkill")
-                .args(["-f", "systemd-inhibit.*caffeine"])
-                .output();
-            let _ = Command::new("systemd-inhibit")
-                .args([
-                    "--what=idle:sleep:handle-lid-switch",
-                    "--who=Caffeine",
-                    "--why=User requested no sleep",
-                    "sleep",
-                    "infinity",
-                ])
-                .spawn();
-            let _ = fs::write("/sys/firmware/acpi/platform_profile", "performance");
-            let _ = fs::write(state_file, "nine-yang");
-            let _ = Command::new("notify-send")
-                .args([
-                    "-a",
-                    "Power Profile",
-                    "-i",
-                    "battery-profile-performance",
-                    "Power Profile: Nine Yang",
-                    "Performance",
-                ])
-                .output();
-        }
-        _ => {
-            // taiji / balanced
-            if flag.exists() {
-                let _ = fs::remove_file(flag);
-            }
-            let _ = Command::new("pkill")
-                .args(["-f", "systemd-inhibit.*caffeine"])
-                .output();
-            let _ = fs::write("/sys/firmware/acpi/platform_profile", "balanced");
-            let _ = fs::write(state_file, "taiji");
-            let _ = Command::new("notify-send")
-                .args([
-                    "-a",
-                    "Power Profile",
-                    "-i",
-                    "battery-profile-balanced",
-                    "Power Profile: Taiji",
-                    "Balanced",
-                ])
-                .output();
-        }
-    }
-
-    let _ = Command::new("pkill")
-        .args(["-RTMIN+13", "waybar"])
-        .output();
-    let _ = Command::new("pkill")
-        .args(["-RTMIN+2", "waybar"])
-        .output();
-}
-
-fn profile_cycle() {
-    let cur = fs::read_to_string("/sys/firmware/acpi/platform_profile")
-        .unwrap_or_default()
-        .trim()
-        .to_string();
-
-    let next = match cur.as_str() {
-        "low-power" => "taiji",
-        "balanced" => "nine-yang",
-        "performance" => "nine-yin",
-        _ => "taiji",
-    };
-
-    set_power_profile(next);
-}
-
 fn profile_status() {
-    let cur = fs::read_to_string("/sys/firmware/acpi/platform_profile")
-        .unwrap_or_default()
+    let cur = fs::read_to_string("/tmp/power_profile_mode")
+        .unwrap_or_else(|_| {
+            // Fallback to sysfs on first boot before state file exists
+            fs::read_to_string("/sys/firmware/acpi/platform_profile")
+                .map(|s| match s.trim() {
+                    "low-power"   => "nine-yin".to_string(),
+                    "performance" => "nine-yang".to_string(),
+                    _             => "taiji".to_string(),
+                })
+                .unwrap_or_else(|_| "taiji".to_string())
+        })
         .trim()
         .to_string();
 
     match cur.as_str() {
-        "low-power" => {
+        "nine-yin" => {
             println!(
                 r#"{{"text": "󰜗 nine yin", "class": "nine-yin", "tooltip": "Power Profile: Nine Yin (Power saving)\nClick to cycle: nine yin ➔ taiji ➔ nine yang"}}"#
             );
         }
-        "performance" => {
+        "nine-yang" => {
             println!(
                 r#"{{"text": "󰈸 nine yang", "class": "nine-yang", "tooltip": "Power Profile: Nine Yang (Performance)\nClick to cycle: nine yin ➔ taiji ➔ nine yang"}}"#
             );
@@ -1735,6 +1709,7 @@ fn profile_status() {
         }
     }
 }
+
 
 fn bg_apps_toggle() {
     let flag = Path::new("/tmp/waybar_bg_apps.state");
