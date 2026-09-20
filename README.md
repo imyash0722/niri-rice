@@ -183,17 +183,10 @@ This project adheres to strict **[Semantic Versioning (SemVer)](https://semver.o
 
 Browse all past releases, changelogs, and source tarballs on the **[GitHub Releases](https://github.com/imyash0722/niri-rice/releases)** page.
 
-## 🖼️ Wallpaper Credits
+## 🖼️ Wallpaper C
 
-| Asset | Source |
-|:------|:-------|
-| **Silent Katana — Forest Samurai** (animated MP4, used as desktop wallpaper) | [WallsFlow](https://wallsflow.com/live-wallpapers/anime/761-silent-katana-forest-samurai-live-wallpaper.html) |
-
-> Download the `.mp4` and place it at:
-> ```
-> ~/niri-rice/Pictures/Wall/6364907-1200p-optimized.mp4
-> ```
-> The installer will symlink `~/Wallpapers` and display it via `awww` automatically.
+Wallpapers in this collection are sourced from [Wallhaven](https://wallhaven.cc), [Unsplash](https://unsplash.com), and other curated/original sources. Full credit belongs to the original photographers and artists — see the individual attribution links in the gallery table above for each image's source.
+For full credits refer [imyash0722/wallpapers](https://github.com/imyash0722/wallpapers)
 
 <div align="center">
 
